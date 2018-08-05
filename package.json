@@ -1,0 +1,12 @@
+{
+  "name": "yoot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start:fe": "cd yoot-fs && npm start"
+  },
+  "devDependencies": {
+    "@angular/cli": "^6.0.0"
+  }
+}

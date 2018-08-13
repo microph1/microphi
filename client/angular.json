@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "yoot-fs": {
+    "drugo": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/yoot-fs",
+            "outputPath": "dist/drugo",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -56,18 +56,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "yoot-fs:build"
+            "browserTarget": "drugo:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "yoot-fs:build:production"
+              "browserTarget": "drugo:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "yoot-fs:build"
+            "browserTarget": "drugo:build"
           }
         },
         "test": {
@@ -102,7 +102,7 @@
         }
       }
     },
-    "yoot-fs-e2e": {
+    "drugo-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "architect": {
@@ -110,7 +110,7 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "yoot-fs:serve"
+            "devServerTarget": "drugo:serve"
           }
         },
         "lint": {
@@ -125,5 +125,5 @@
       }
     }
   },
-  "defaultProject": "yoot-fs"
+  "defaultProject": "drugo"
 }

@@ -4,9 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start:fe": "cd drugo && npm start"
+    "start:fe": "cd drugo && npm start",
+    "ng": "ng"
   },
   "devDependencies": {
-    "@angular/cli": "^6.0.0"
+    "@angular/cli": "7.3.1"
   }
 }

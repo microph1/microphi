@@ -1,12 +1,13 @@
-@import "~@angular/material/prebuilt-themes/pink-bluegrey.css";
+@import '~@angular/material/prebuilt-themes/purple-green.css';
+
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
-@import url('https://fonts.googleapis.com/css?family=Roboto');
-
-
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
 
 /* You can add global styles to this file, and also import other style files */
 html, body {
   margin: 0;
-  height: 100%;
-  width: 100%;
+}
+
+mat-card-actions > mat-error {
+  padding-left: 16px;
 }

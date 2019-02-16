@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start:fe": "cd yoot-fs && npm start"
+    "start:fe": "cd drugo && npm start"
   },
   "devDependencies": {
     "@angular/cli": "^6.0.0"

@@ -1,18 +1,32 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Log } from '@microgamma/ts-debug';
+import { AuthService } from './services/auth/auth.service';
+import { ToolbarComponent } from './toolbar/toolbar.component';
+import { NavigationStart, Router, RouterEvent } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
-  title = 'app';
+export class AppComponent implements OnInit {
   @Log()
   private $l;
 
-  constructor() {
-    this.$l.d('constructing');
+  @ViewChild('toolbar')
+  private toolbar: ToolbarComponent;
+
+  constructor(private auth: AuthService, private router: Router) {
+
+    auth.token$.subscribe((value) => {
+      this.$l.d('got token from behavior subject', value);
+    });
+  }
+
+  ngOnInit() {
+    this.router.events.subscribe((event: RouterEvent) => {
+      this.toolbar.isLoading = event instanceof NavigationStart;
+    });
   }
 }
 

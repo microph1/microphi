@@ -1,0 +1,9 @@
+<mat-toolbar color="primary" class="app-toolbar mat-elevation-z3">
+  <span>Drugo</span>
+  <span fxFlex></span>
+
+  <button mat-icon-button *ngIf="isAuth | async">
+    <mat-icon>settings</mat-icon>
+  </button>
+</mat-toolbar>
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>

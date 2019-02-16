@@ -1,14 +1,15 @@
 import { AppPage } from './app.po';
+import { browser } from 'protractor';
 
-describe('workspace-project App', () => {
+describe('drugo', () => {
   let page: AppPage;
 
   beforeEach(() => {
     page = new AppPage();
   });
 
-  it('should display welcome message', () => {
+  it('should redirect to login if user is not authenticated', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('Welcome to app!');
+    expect(browser.getCurrentUrl()).toContain('login');
   });
 });

@@ -5,28 +5,44 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MatButtonModule,
   MatCardModule,
   MatFormFieldModule,
-  MatGridListModule, MatInputModule,
-  MatListModule,
+  MatGridListModule, MatIconModule,
+  MatInputModule,
+  MatListModule, MatProgressBarModule,
   MatToolbarModule
 } from '@angular/material';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { LoginComponent } from './login/login.component';
+import { UserService } from './services/user/user.service';
+import { XApiKeyInterceptor } from './services/http/x-api-key.interceptor';
+import { AuthService } from './services/auth/auth.service';
+import { TokenBearerInterceptor } from './services/http/token-bearer.interceptor';
+import { HomeComponent } from './home/home.component';
+import { AuthGuard } from './guards/auth.guard';
+import { setNamespace } from '@microgamma/ts-debug';
+import { ToolbarComponent } from './toolbar/toolbar.component';
+import { ProfileComponent } from './profile/profile.component';
+
+setNamespace('drugo');
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    HomeComponent,
+    ToolbarComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FormsModule,
     ReactiveFormsModule,
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
     HttpClientModule,
@@ -38,9 +54,25 @@ import { LoginComponent } from './login/login.component';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
+    MatIconModule,
+    MatProgressBarModule,
     FlexLayoutModule
   ],
-  providers: [],
+  providers: [
+    UserService,
+    AuthService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: XApiKeyInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenBearerInterceptor,
+      multi: true
+    },
+    AuthGuard
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

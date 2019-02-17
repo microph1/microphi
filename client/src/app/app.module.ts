@@ -19,6 +19,7 @@ import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ProfileComponent } from './profile/profile.component';
+import { MaterialModule } from './material.module';
 
 @NgModule({
   declarations: [
@@ -36,16 +37,8 @@ import { ProfileComponent } from './profile/profile.component';
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
     HttpClientModule,
     BrowserAnimationsModule,
-    MatToolbarModule,
-    MatGridListModule,
-    MatListModule,
-    MatCardModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatIconModule,
-    MatProgressBarModule,
-    FlexLayoutModule
+    MaterialModule
+
   ],
   providers: [
     UserService,

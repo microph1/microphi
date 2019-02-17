@@ -13,7 +13,7 @@ export class TokenBearerInterceptor implements HttpInterceptor {
     if (this.authService.token) {
       request = request.clone({
         setHeaders: {
-          'Authorization': `Bearer ${this.authService.token}`
+          'Authorization': `${this.authService.token}`
         }
       });
     }

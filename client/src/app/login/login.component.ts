@@ -12,6 +12,9 @@ import { Log } from '@microgamma/loggator';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
+  @Log()
+  private $log;
+
 
   public email = new FormControl(null, [Validators.required, Validators.email]);
   public password = new FormControl(null, Validators.required);
@@ -34,7 +37,7 @@ export class LoginComponent {
       distinctUntilChanged()
 
     ).subscribe((response) => {
-      d('values changed', response);
+      this.$log.d('values changed', response);
     });
 
   }
@@ -53,14 +56,14 @@ export class LoginComponent {
       }
     }
 
-    d('user', this.user.getRawValue());
+    this.$log.d('user', this.user.getRawValue());
 
     if (this.user.valid) {
       this.authError = false;
 
       this.authService.authenticate(this.user.getRawValue())
         .subscribe((resp) => {
-          d('got response', resp);
+          this.$log.d('got response', resp);
           this.router.navigateByUrl('');
         }, () => this.authError = true);
     }

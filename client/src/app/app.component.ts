@@ -21,6 +21,10 @@ export class AppComponent implements OnInit {
     auth.token$.subscribe((value) => {
       this.$l.d('got token from behavior subject', value);
     });
+
+    auth.isAuthenticated.subscribe((value) => {
+      this.$l.d('subscribed to isAuthenticated', value);
+    });
   }
 
   ngOnInit() {

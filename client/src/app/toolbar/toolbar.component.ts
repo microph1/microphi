@@ -9,7 +9,7 @@ import { AuthToken } from '../services/auth/auth.token.interface';
   styleUrls: ['./toolbar.component.scss']
 })
 export class ToolbarComponent {
-  public isAuth: BehaviorSubject<AuthToken> = this.authService.token$;
+  public isAuth: BehaviorSubject<string> = this.authService.token$;
   public isLoading: boolean = false;
 
   constructor(private authService: AuthService) { }

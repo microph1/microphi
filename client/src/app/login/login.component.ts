@@ -1,12 +1,10 @@
 import { Component, HostListener } from '@angular/core';
-import { getDebugger } from '@microgamma/ts-debug/build/main/lib/log.decorator';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../services/user/user.service';
 import { AuthService } from '../services/auth/auth.service';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs/internal/operators';
 import { Router } from '@angular/router';
-
-const d = getDebugger('drugo:app-login');
+import { Log } from '@microgamma/loggator';
 
 @Component({
   selector: 'app-login',

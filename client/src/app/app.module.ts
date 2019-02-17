@@ -25,11 +25,8 @@ import { AuthService } from './services/auth/auth.service';
 import { TokenBearerInterceptor } from './services/http/token-bearer.interceptor';
 import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './guards/auth.guard';
-import { setNamespace } from '@microgamma/ts-debug';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ProfileComponent } from './profile/profile.component';
-
-setNamespace('drugo');
 
 @NgModule({
   declarations: [

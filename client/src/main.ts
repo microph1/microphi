@@ -3,7 +3,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
-import { setNamespace } from '@microgamma/ts-debug/build/main/lib/log.decorator';
+import { setNamespace } from '@microgamma/loggator';
 
 if (environment.production) {
   enableProdMode();

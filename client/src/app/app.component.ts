@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Log } from '@microgamma/ts-debug';
 import { AuthService } from './services/auth/auth.service';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { NavigationStart, Router, RouterEvent } from '@angular/router';
+import { Log } from '@microgamma/loggator';
 
 @Component({
   selector: 'app-root',

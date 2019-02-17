@@ -25,7 +25,7 @@
     "@angular/pwa": "^0.13.1",
     "@angular/router": "7.2.5",
     "@angular/service-worker": "7.2.5",
-    "@microgamma/ts-debug": "^0.3.1",
+    "@microgamma/loggator": "^1.10.14",
     "@types/youtube": "^0.0.35",
     "angular-in-memory-web-api": "^0.8.0",
     "core-js": "^2.6.5",

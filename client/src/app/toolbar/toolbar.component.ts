@@ -14,4 +14,7 @@ export class ToolbarComponent {
 
   constructor(private authService: AuthService) { }
 
+  logout() {
+    this.authService.logout();
+  }
 }

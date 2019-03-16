@@ -2,8 +2,23 @@
   <span>Drugo</span>
   <span fxFlex></span>
 
-  <button mat-icon-button *ngIf="isAuth | async">
-    <mat-icon>settings</mat-icon>
-  </button>
+
+  <ng-container *ngIf="(isAuth | async); else unauth">
+    <button mat-icon-button routerLink="settings">
+      <mat-icon>settings</mat-icon>
+    </button>
+    <button mat-icon-button (click)="logout();">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </ng-container>
+
+  <ng-template #unauth>
+    <button mat-icon-button routerLink="register">
+      <mat-icon>vpn_key</mat-icon>
+    </button>
+    <button mat-icon-button routerLink="login">
+      <mat-icon>fingerprint</mat-icon>
+    </button>
+  </ng-template>
 </mat-toolbar>
 <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>

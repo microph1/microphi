@@ -62,4 +62,8 @@ export class AuthService {
       );
   }
 
+  public logout() {
+    this.token = '';
+    return this.isAuthenticated;
+  }
 }

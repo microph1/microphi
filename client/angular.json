@@ -30,7 +30,11 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              {
+                "input": "node_modules/document-register-element/build/document-register-element.js"
+              }
+            ]
           },
           "configurations": {
             "production": {
@@ -78,7 +82,6 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [
-
               "src/styles.scss"
             ],
             "scripts": [],
@@ -118,6 +121,134 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "hello-portlet": {
+      "root": "projects/hello-portlet/",
+      "sourceRoot": "projects/hello-portlet/src",
+      "projectType": "application",
+      "prefix": "app",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/hello-portlet",
+            "index": "projects/hello-portlet/src/index.html",
+            "main": "projects/hello-portlet/src/main.ts",
+            "polyfills": "projects/hello-portlet/src/polyfills.ts",
+            "tsConfig": "projects/hello-portlet/tsconfig.app.json",
+            "assets": [
+              "projects/hello-portlet/src/favicon.ico",
+              "projects/hello-portlet/src/assets"
+            ],
+            "styles": [
+              "projects/hello-portlet/src/styles.css"
+            ],
+            "scripts": [],
+            "es5BrowserSupport": true
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/hello-portlet/src/environments/environment.ts",
+                  "with": "projects/hello-portlet/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "hello-portlet:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "hello-portlet:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "hello-portlet:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/hello-portlet/src/test.ts",
+            "polyfills": "projects/hello-portlet/src/polyfills.ts",
+            "tsConfig": "projects/hello-portlet/tsconfig.spec.json",
+            "karmaConfig": "projects/hello-portlet/karma.conf.js",
+            "styles": [
+              "projects/hello-portlet/src/styles.css"
+            ],
+            "scripts": [],
+            "assets": [
+              "projects/hello-portlet/src/favicon.ico",
+              "projects/hello-portlet/src/assets"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/hello-portlet/tsconfig.app.json",
+              "projects/hello-portlet/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "hello-portlet-e2e": {
+      "root": "projects/hello-portlet-e2e/",
+      "projectType": "application",
+      "prefix": "",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/hello-portlet-e2e/protractor.conf.js",
+            "devServerTarget": "hello-portlet:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "hello-portlet:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "projects/hello-portlet-e2e/tsconfig.e2e.json",
             "exclude": [
               "**/node_modules/**"
             ]

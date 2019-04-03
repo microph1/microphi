@@ -1,28 +1,33 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { Injector, NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import { createCustomElement, NgElementConstructor } from '@angular/elements';
+import { createCustomElement } from '@angular/elements';
+import { AppRoutingModule } from './app-routing.module';
+import { ComponentAComponent } from './component-a/component-a.component';
+import { BComponent } from './b/b.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ComponentAComponent,
+    BComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    // AppRoutingModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  entryComponents: [AppComponent]
 })
 export class AppModule {
-  constructor(private injector: Injector) {
-
-  }
+  constructor(private injector: Injector) {}
 
 
   ngDoBootstrap(){
+    console.log('ngDoBootstrap custom element');
     const el = createCustomElement(AppComponent, {injector: this.injector});
 
-    customElements.define('app-greeter', el as NgElementConstructor);
+    customElements.define('hello-portlet', el as Function);
   }
 
 }

@@ -25,7 +25,12 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/manifest.json"
+              "src/manifest.json",
+              {
+                "glob": "**/*.js",
+                "input": "dist/drugo",
+                "output": "elements"
+              }
             ],
             "styles": [
               "src/styles.scss"
@@ -61,6 +66,7 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "drugo:build"
+
           },
           "configurations": {
             "production": {

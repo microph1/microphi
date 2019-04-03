@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { Injector, NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { createCustomElement } from '@angular/elements';
-import { AppRoutingModule } from './app-routing.module';
 import { ComponentAComponent } from './component-a/component-a.component';
 import { BComponent } from './b/b.component';
 
@@ -13,8 +12,7 @@ import { BComponent } from './b/b.component';
     BComponent
   ],
   imports: [
-    BrowserModule,
-    // AppRoutingModule
+    BrowserModule
   ],
   providers: [],
   entryComponents: [AppComponent]

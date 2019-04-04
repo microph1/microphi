@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 import { createCustomElement } from '@angular/elements';
 import { ComponentAComponent } from './component-a/component-a.component';
 import { BComponent } from './b/b.component';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,8 @@ import { BComponent } from './b/b.component';
     BComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    AppRoutingModule
   ],
   providers: [],
   entryComponents: [AppComponent]

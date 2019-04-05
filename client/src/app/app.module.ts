@@ -19,6 +19,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ProfileComponent } from './profile/profile.component';
 import { MaterialModule } from './material.module';
 import { PorletContainerComponent } from './porlet-container/porlet-container.component';
+import { FileService } from './services/file/file.service';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { PorletContainerComponent } from './porlet-container/porlet-container.co
       useClass: TokenBearerInterceptor,
       multi: true
     },
-    AuthGuard
+    AuthGuard,
+    FileService
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent]

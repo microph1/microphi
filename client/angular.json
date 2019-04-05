@@ -66,7 +66,6 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "drugo:build"
-
           },
           "configurations": {
             "production": {
@@ -255,6 +254,41 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "projects/hello-portlet-e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "ng-cat": {
+      "root": "projects/ng-cat",
+      "sourceRoot": "projects/ng-cat/src",
+      "projectType": "library",
+      "prefix": "cat",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ng-cat/tsconfig.lib.json",
+            "project": "projects/ng-cat/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ng-cat/src/test.ts",
+            "tsConfig": "projects/ng-cat/tsconfig.spec.json",
+            "karmaConfig": "projects/ng-cat/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ng-cat/tsconfig.lib.json",
+              "projects/ng-cat/tsconfig.spec.json"
+            ],
             "exclude": [
               "**/node_modules/**"
             ]

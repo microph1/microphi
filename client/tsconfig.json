@@ -15,6 +15,14 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "paths": {
+      "ng-cat": [
+        "dist/ng-cat"
+      ],
+      "ng-cat/*": [
+        "dist/ng-cat/*"
+      ]
+    }
   }
 }

@@ -22,6 +22,12 @@
       ],
       "ng-cat/*": [
         "dist/ng-cat/*"
+      ],
+      "core": [
+        "dist/core"
+      ],
+      "core/*": [
+        "dist/core/*"
       ]
     }
   }

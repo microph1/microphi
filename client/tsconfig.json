@@ -17,12 +17,6 @@
       "dom"
     ],
     "paths": {
-      "ng-cat": [
-        "dist/ng-cat"
-      ],
-      "ng-cat/*": [
-        "dist/ng-cat/*"
-      ],
       "core": [
         "dist/core"
       ],

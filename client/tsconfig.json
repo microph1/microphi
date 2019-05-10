@@ -17,10 +17,10 @@
       "dom"
     ],
     "paths": {
-      "core": [
+      "@microphi/core": [
         "dist/core"
       ],
-      "core/*": [
+      "@microphi/core/*": [
         "dist/core/*"
       ]
     }

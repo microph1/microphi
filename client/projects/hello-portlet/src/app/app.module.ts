@@ -1,10 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { Injector, NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import { createCustomElement } from '@angular/elements';
 import { ComponentAComponent } from './component-a/component-a.component';
 import { BComponent } from './b/b.component';
 import { AppRoutingModule } from './app-routing.module';
+import { PhiModule } from '@microphi/core';
 
 @NgModule({
   declarations: [
@@ -19,15 +19,13 @@ import { AppRoutingModule } from './app-routing.module';
   providers: [],
   entryComponents: [AppComponent]
 })
-export class AppModule {
-  constructor(private injector: Injector) {}
+export class AppModule extends PhiModule {
+  component = AppComponent;
+  tag = 'hello-portlet';
 
-
-  ngDoBootstrap(){
-    console.log('ngDoBootstrap custom element');
-    const el = createCustomElement(AppComponent, {injector: this.injector});
-
-    customElements.define('hello-portlet', el as Function);
+  constructor(private injector: Injector) {
+    super(injector);
   }
+
 
 }

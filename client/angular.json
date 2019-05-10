@@ -28,8 +28,8 @@
               "src/manifest.json",
               {
                 "glob": "**/*.js",
-                "input": "dist/drugo",
-                "output": "elements"
+                "input": "dist/hello-portlet",
+                "output": "hello-portlet"
               }
             ],
             "styles": [

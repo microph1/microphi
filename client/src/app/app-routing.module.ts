@@ -16,10 +16,10 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
-    path: 'hello-portlet',
+    path: 'hp/:subpath',
     component: PorletContainerComponent,
     data: {
-      bundleUrl: 'http://192.168.254.3:4200/elements/hello-portlet.js'
+      bundleUrl: 'http://192.168.254.2:4200/hello-portlet/bundle.js'
     }
   }
 ];

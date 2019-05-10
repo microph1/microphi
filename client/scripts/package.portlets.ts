@@ -15,5 +15,5 @@ const concat = require('concat');
   ];
 
 console.log('creating elements');
-  await concat(files, './dist/drugo/hello-portlet.js');
+  await concat(files, './dist/hello-portlet/bundle.js');
 })();

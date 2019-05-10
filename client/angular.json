@@ -141,7 +141,7 @@
       "schematics": {},
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "ngx-build-plus:build",
           "options": {
             "outputPath": "dist/hello-portlet",
             "index": "projects/hello-portlet/src/index.html",
@@ -186,7 +186,7 @@
           }
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "ngx-build-plus:dev-server",
           "options": {
             "browserTarget": "hello-portlet:build"
           },
@@ -203,7 +203,7 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "ngx-build-plus:karma",
           "options": {
             "main": "projects/hello-portlet/src/test.ts",
             "polyfills": "projects/hello-portlet/src/polyfills.ts",

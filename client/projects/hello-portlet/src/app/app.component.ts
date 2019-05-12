@@ -7,4 +7,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'hello-portlet';
+
+  constructor() {
+    console.log('xtructing AppComponent hello-portlet');
+    document.dispatchEvent(new Event('portlet:bootstrap'));
+  }
 }

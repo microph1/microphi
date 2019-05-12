@@ -25,6 +25,10 @@ export class AppComponent implements OnInit {
     auth.isAuthenticated.subscribe((value) => {
       this.$l.d('subscribed to isAuthenticated', value);
     });
+
+    document.addEventListener('portlet:bootstrap', (ev) => {
+      this.$l.d('a portlet is bootstrapping', ev);
+    });
   }
 
   ngOnInit() {

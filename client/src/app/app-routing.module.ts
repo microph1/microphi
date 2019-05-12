@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './guards/auth.guard';
-import { PorletContainerComponent } from './porlet-container/porlet-container.component';
+import { PortletContainerComponent } from './portlet-container/portlet-container.component';
 
 const routes: Routes = [
   {

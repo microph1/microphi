@@ -30,6 +30,7 @@ export class CoreService {
       if (this.bundles[bundleName]) {
         this.$log.d('bundle has already been loaded', bundleName);
         observer.next(this.bundles[bundleName]);
+        observer.complete();
         return;
       }
 
@@ -40,6 +41,7 @@ export class CoreService {
       script.onerror = (error) => {
         // resolve({script: name, loaded: false, status: 'Loaded'});
         console.error(error);
+        observer.error(error);
       };
 
 
@@ -50,6 +52,8 @@ export class CoreService {
         this.$log.d('creating element', bundleData.tag);
 
         observer.next(elm);
+        observer.complete();
+        this.$log.d('sent complete');
       };
 
       document.getElementsByTagName('head')[0].appendChild(script);

@@ -9,17 +9,17 @@
 
           <mat-form-field>
             <mat-label>Email</mat-label>
-            <input matInput placeholder="Email" formControlName="email" required>
-            <mat-error *ngIf="email.errors">{{'Email is not valid'}}</mat-error>
+            <input #emailField matInput placeholder="Email" formControlName="email" required>
+            <mat-error *ngIf="email.dirty && email.errors">{{'Email is not valid'}}</mat-error>
           </mat-form-field>
 
           <mat-form-field>
             <mat-label>Password</mat-label>
             <input type="password" matInput placeholder="Password" formControlName="password" required>
-            <mat-error *ngIf="password.errors">{{'Password is required'}}</mat-error>
+            <mat-error *ngIf="password.dirty && password.errors">{{'Password is required'}}</mat-error>
           </mat-form-field>
 
-          <input type="file" formControlName="file" (change)="onFileAttachment($event);">
+<!--          <input type="file" formControlName="file" (change)="onFileAttachment($event);">-->
 
         </form>
       </mat-card-content>

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { Log } from '@microgamma/loggator';
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +11,8 @@ export class CoreService {
     [name: string]: HTMLElement
   } = {};
 
-  private $log = {
-    d: console.log
-  };
+  @Log()
+  private $log;
 
   constructor() { }
 

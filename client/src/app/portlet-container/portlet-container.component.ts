@@ -1,9 +1,9 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Log } from '@microgamma/loggator';
 import { CoreService } from '@microphi/core';
-import { delay, map, mergeMap, tap } from 'rxjs/operators';
-import { combineLatest, Observable, Subject } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { BundleData } from '@microphi/core/lib/bundle-data.interface';
 
 
@@ -12,52 +12,41 @@ import { BundleData } from '@microphi/core/lib/bundle-data.interface';
   templateUrl: './portlet-container.component.html',
   styleUrls: ['./portlet-container.component.scss']
 })
-export class PortletContainerComponent implements OnInit, AfterViewInit {
+export class PortletContainerComponent {
 
 
   @Log()
   private $log;
 
-  @ViewChild('portletOutlet') outlet: ElementRef;
 
-  private portlet;
+  private portletOnInit$ = Observable.fromEvent(document, 'portlet:ngOnInit');
 
-  private afterViewInit$ = new Subject();
+  public isLoading: boolean = true;
 
-  constructor(private route: ActivatedRoute, private portletService: CoreService) {
+  constructor(private route: ActivatedRoute, private portletService: CoreService, private elm: ElementRef) {
 
-    const allData = combineLatest(
-      route.data.pipe(
-        map((data) => {
-          return {
-            bundleUrl: data.bundleUrl,
-            tag: data.tag
-          }
-        }),
-        mergeMap((data) => {
-          return this.portletService.loadBundle(data);
-        }),
-        tap((elm) => {
-          this.portlet = elm;
-        })
-      ),
-      this.afterViewInit$
-    );
 
-    allData.subscribe(([elm, afterViewInit]) => {
-      this.$log.d('subscribed to all data', elm, afterViewInit);
-      this.$log.d('outlet is', this.outlet);
-      this.outlet.nativeElement.appendChild(elm);
-    });
+
+    route.data.pipe(
+      mergeMap((data) => {
+        return this.portletService.loadBundle(data as BundleData);
+      })
+    ).subscribe((elm) => {
+        this.$log.d('appending elm', elm);
+        this.elm.nativeElement.appendChild(elm);
+        this.isLoading = false;
+
+      });
+
+    // TODO all events need to be put in a abstract class for ease of access
+    // TODO events must be scoped using portlet container as source
+    this.portletOnInit$.subscribe((event) => {
+      this.$log.d('portlet run ngOnInit', event);
+      this.$log.d('dispatching event update event');
+      document.dispatchEvent(new Event('portlet:update'));
+    })
 
   }
 
-  ngOnInit() {}
-
-  ngAfterViewInit() {
-    this.$log.d('running ngAfterViewInit');
-    this.afterViewInit$.next(this.outlet);
-    this.afterViewInit$.complete();
-  }
 
 }

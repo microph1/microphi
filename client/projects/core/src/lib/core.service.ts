@@ -50,6 +50,15 @@ export class CoreService {
         this.bundles[bundleName] = elm;
         this.$log.d('creating element', bundleData.tag);
 
+        for (const key of bundleData.inputs) {
+
+          this.$log.d('setting attribute for', key);
+          if (bundleData[key]) {
+            elm.setAttribute(key, JSON.stringify(bundleData[key]));
+          }
+        }
+
+
         observer.next(elm);
         observer.complete();
         this.$log.d('sent complete');

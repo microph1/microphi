@@ -20,6 +20,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { MaterialModule } from './material.module';
 import { PortletContainerComponent } from './portlet-container/portlet-container.component';
 import { FileService } from './services/file/file.service';
+import { MatProgressSpinnerModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -35,10 +36,11 @@ import { FileService } from './services/file/file.service';
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
+    ServiceWorkerModule.register('/ngsw-worker.js', {enabled: environment.production}),
     HttpClientModule,
     BrowserAnimationsModule,
-    MaterialModule
+    MaterialModule,
+    MatProgressSpinnerModule
 
   ],
   providers: [

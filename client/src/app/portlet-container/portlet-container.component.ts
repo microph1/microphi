@@ -2,8 +2,10 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angula
 import { ActivatedRoute } from '@angular/router';
 import { Log } from '@microgamma/loggator';
 import { CoreService } from '@microphi/core';
-import { last, map, mergeMap, skipUntil, tap } from 'rxjs/operators';
-import { combineLatest, forkJoin, Subject } from 'rxjs';
+import { delay, map, mergeMap, tap } from 'rxjs/operators';
+import { combineLatest, Observable, Subject } from 'rxjs';
+import { BundleData } from '@microphi/core/lib/bundle-data.interface';
+
 
 @Component({
   selector: 'app-portlet-container',
@@ -11,6 +13,7 @@ import { combineLatest, forkJoin, Subject } from 'rxjs';
   styleUrls: ['./portlet-container.component.scss']
 })
 export class PortletContainerComponent implements OnInit, AfterViewInit {
+
 
   @Log()
   private $log;

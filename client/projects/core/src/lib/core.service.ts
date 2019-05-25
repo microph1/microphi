@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Log } from '@microgamma/loggator';
+import { BundleData } from './bundle-data.interface';
+
 
 @Injectable({
   providedIn: 'root'
@@ -16,10 +18,7 @@ export class CoreService {
 
   constructor() { }
 
-  public loadBundle(bundleData: {
-    bundleUrl: string,
-    tag: string
-  }): Observable<HTMLElement> {
+  public loadBundle(bundleData: BundleData): Observable<HTMLElement> {
 
     return new Observable((observer) => {
 

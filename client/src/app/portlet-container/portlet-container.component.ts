@@ -34,7 +34,15 @@ export class PortletContainerComponent {
     ).subscribe((elm) => {
         this.$log.d('appending elm', elm);
         this.elm.nativeElement.appendChild(elm);
+
+
+        this.$log.d('firing portal:get:routes');
+        document.dispatchEvent(new Event('portal:get:routes'));
+
+
         this.isLoading = false;
+
+
 
       });
 

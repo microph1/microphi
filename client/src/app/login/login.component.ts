@@ -16,7 +16,7 @@ export class LoginComponent {
   @Log()
   private $log;
 
-  @ViewChild('emailField')
+  @ViewChild('emailField', { static: true })
   private emailField;
 
   public email = new FormControl(null, [Validators.required, Validators.email]);

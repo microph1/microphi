@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
   @Log()
   private $l;
 
-  @ViewChild('toolbar')
+  @ViewChild('toolbar', { static: true })
   private toolbar: ToolbarComponent;
 
   constructor(private auth: AuthService, private router: Router) {

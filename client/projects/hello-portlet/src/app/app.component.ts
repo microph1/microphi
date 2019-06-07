@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
   private $log;
 
 
-  // TODO this set, get pattern can we extracted to a decorator
+  // TODO this set, get pattern can b e extracted to a decorator
   private _title;
 
   @Input()
@@ -43,7 +43,6 @@ export class AppComponent implements OnInit {
     this.$log.d('xtructing AppComponent hello-portlet');
     document.dispatchEvent(new Event('portlet:bootstrap'));
     document.addEventListener('portlet:update',() => {
-      debugger;
       this.$log.d('got portlet:update');
       this.$log.d('title is', this.title);
       this.$log.d('user is', this.user);

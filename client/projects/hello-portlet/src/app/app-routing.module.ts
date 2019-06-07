@@ -1,36 +1,55 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { AppComponent } from './app.component';
+import { Router, RouterModule, Routes } from '@angular/router';
 import { ComponentAComponent } from './component-a/component-a.component';
 import { BComponent } from './b/b.component';
+import { Log } from '@microgamma/loggator';
+import { APP_BASE_HREF } from '@angular/common';
 
 
 export const routes: Routes = [
   {
     path: '',
-    component: AppComponent
+    // component: AppComponent
+    redirectTo: 'a',
+    pathMatch: 'full'
   },
   {
-    path: 'hp/a',
+    path: 'a',
     component: ComponentAComponent
   },
   {
-    path: 'hp/b',
+    path: 'b',
     component: BComponent
   }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {
-    initialNavigation: true
-  })],
-  exports: [RouterModule]
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
+  providers: [
+    {
+      provide: APP_BASE_HREF,
+      useValue: '/hp'
+
+    }
+  ]
 })
 export class AppRoutingModule {
 
 
+  @Log()
+  private $log;
 
-  constructor() {
+  constructor(private route: Router) {
+
+    this.route.events.subscribe(this.$log.d);
+
+    this.$log.d('listening to portlet:update:route');
+    document.addEventListener('portlet:update:route', (ev) => {
+      this.$log.d('got portlet:update:route', ev);
+      this.route.initialNavigation();
+
+    });
 
     console.log('setting listener for portal:get:routes');
     document.addEventListener('portal:get:routes', (ev) => {

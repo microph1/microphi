@@ -38,7 +38,7 @@ export class CoreService {
       script.src = bundleUrl;
 
       script.onerror = (error) => {
-        // resolve({script: name, loaded: false, status: 'Loaded'});
+
         console.error(error);
         observer.error(error);
       };

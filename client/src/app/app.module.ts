@@ -20,7 +20,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { MaterialModule } from './material.module';
 import { PortletContainerComponent } from './portlet-container/portlet-container.component';
 import { FileService } from './services/file/file.service';
-import { MatProgressSpinnerModule } from '@angular/material';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [

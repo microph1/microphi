@@ -15,8 +15,11 @@ export class AppComponent implements OnInit {
 
   @ViewChild('toolbar', { static: true })
   private toolbar: ToolbarComponent;
+  public user$;
 
   constructor(private auth: AuthService, private router: Router) {
+
+    this.user$ = auth.user$;
 
     auth.token$.subscribe((value) => {
       this.$l.d('got token from behavior subject', value);
@@ -36,5 +39,6 @@ export class AppComponent implements OnInit {
       this.toolbar.isLoading = event instanceof NavigationStart;
     });
   }
+
 }
 

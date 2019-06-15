@@ -1,16 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs';
+import { AuthService } from '../services/auth/auth.service';
 
 @Injectable()
 export class UserResolver implements Resolve<any> {
 
+  constructor(private authService: AuthService) {}
+
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    console.log('resolving user');
-    return Observable.of({
-      name: 'a-user',
-      role: 'pawn'
-    });
+    return this.authService.user$;
   }
 }

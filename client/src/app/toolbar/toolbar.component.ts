@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../services/auth/auth.service';
-import { BehaviorSubject } from 'rxjs/Rx';
-import { AuthToken } from '../services/auth/auth.token.interface';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-toolbar',

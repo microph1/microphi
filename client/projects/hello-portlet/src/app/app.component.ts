@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, ViewEncapsulation, ɵdetectChanges, ɵmarkDirty } from '@angular/core';
 import { Log, setNamespace } from '@microgamma/loggator';
 
 setNamespace('hello-portlet');
@@ -9,7 +9,7 @@ setNamespace('hello-portlet');
   styleUrls: ['./app.component.css'],
   encapsulation: ViewEncapsulation.ShadowDom
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
 
   @Log()
   private $log;
@@ -38,19 +38,14 @@ export class AppComponent implements OnInit {
 
   public _user;
 
+  constructor(private changeDetector: ChangeDetectorRef) {
 
-  constructor(private changes: ChangeDetectorRef) {
-    this.$log.d('xtructing AppComponent hello-portlet');
-    document.dispatchEvent(new Event('portlet:bootstrap'));
-    document.addEventListener('portlet:update',() => {
-      this.$log.d('got portlet:update');
-      this.$log.d('title is', this.title);
-      this.$log.d('user is', this.user);
-      this.changes.detectChanges();
-    });
   }
 
-  ngOnInit(): void {
-    document.dispatchEvent(new Event('portlet:ngOnInit'));
+  onActivate($event: any) {
+    const component = $event;
+
+    component.user = this.user;
+    this.changeDetector.detectChanges();
   }
 }

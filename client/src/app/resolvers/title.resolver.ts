@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs';
+import { of } from 'rxjs';
 
 @Injectable()
 export class TitleResolver implements Resolve<any> {
@@ -10,6 +10,6 @@ export class TitleResolver implements Resolve<any> {
 
     console.log('resolving title');
 
-    return Observable.of({a: 'my-awesome-title', b: 'superb!'});
+    return of({a: 'my-awesome-title', b: 'superb!'});
   }
 }

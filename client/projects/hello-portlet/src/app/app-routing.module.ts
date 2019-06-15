@@ -3,13 +3,12 @@ import { Router, RouterModule, Routes } from '@angular/router';
 import { ComponentAComponent } from './component-a/component-a.component';
 import { BComponent } from './b/b.component';
 import { Log } from '@microgamma/loggator';
-import { APP_BASE_HREF } from '@angular/common';
+import { APP_BASE_HREF, Location } from '@angular/common';
 
 
 export const routes: Routes = [
   {
     path: '',
-    // component: AppComponent
     redirectTo: 'a',
     pathMatch: 'full'
   },
@@ -20,11 +19,19 @@ export const routes: Routes = [
   {
     path: 'b',
     component: BComponent
-  }
+  },
+  {
+    path: '**',
+    redirectTo: 'a',
+    pathMatch: 'full'
+  },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {
+    // enableTracing: true,
+    initialNavigation: false
+  })],
   exports: [RouterModule],
   providers: [
     {
@@ -40,27 +47,25 @@ export class AppRoutingModule {
   @Log()
   private $log;
 
-  constructor(private route: Router) {
+  constructor(private route: Router, private location: Location) {
 
-    this.route.events.subscribe(this.$log.d);
 
-    this.$log.d('listening to portlet:update:route');
     document.addEventListener('portlet:update:route', (ev) => {
-      this.$log.d('got portlet:update:route', ev);
+      this.$log.d('setting up initial navigation');
       this.route.initialNavigation();
 
     });
 
-    console.log('setting listener for portal:get:routes');
-    document.addEventListener('portal:get:routes', (ev) => {
-      console.log('got request to provide routes', routes);
-
-      const routesResponse = new Event('portlet:provide:routes');
-      routesResponse['routes'] = routes;
-
-      console.log('firing', routesResponse);
-      document.dispatchEvent(routesResponse);
-    });
+    // console.log('setting listener for portal:get:routes');
+    // document.addEventListener('portal:get:routes', (ev) => {
+    //   console.log('got request to provide routes', routes);
+    //
+    //   const routesResponse = new Event('portlet:provide:routes');
+    //   routesResponse['routes'] = routes;
+    //
+    //   console.log('firing', routesResponse);
+    //   document.dispatchEvent(routesResponse);
+    // });
 
   }
 }

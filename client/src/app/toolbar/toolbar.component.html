@@ -4,9 +4,18 @@
 
 
   <ng-container *ngIf="(isAuth | async); else unauth">
-    <button mat-icon-button routerLink="settings">
-      <mat-icon>settings</mat-icon>
+    <button mat-icon-button routerLink="/" routerLinkActive="active-link">
+      <mat-icon>home</mat-icon>
     </button>
+    <button mat-icon-button routerLink="/hp" routerLinkActive="active-link">
+      <mat-icon>waves</mat-icon>
+    </button>
+<!--    <button mat-icon-button routerLink="/hp/a" routerLinkActive="active-link">-->
+<!--      <mat-icon>waves</mat-icon>-->
+<!--    </button>-->
+<!--    <button mat-icon-button routerLink="/hp/b" routerLinkActive="active-link">-->
+<!--      <mat-icon>waves</mat-icon>-->
+<!--    </button>-->
     <button mat-icon-button (click)="logout();">
       <mat-icon>logout</mat-icon>
     </button>

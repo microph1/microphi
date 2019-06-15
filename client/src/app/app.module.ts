@@ -18,9 +18,9 @@ import { AuthGuard } from './guards/auth.guard';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ProfileComponent } from './profile/profile.component';
 import { MaterialModule } from './material.module';
-import { PortletContainerComponent } from './portlet-container/portlet-container.component';
 import { FileService } from './services/file/file.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { PortletContainerModule } from '@microphi/core';
 
 @NgModule({
   declarations: [
@@ -28,8 +28,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     LoginComponent,
     HomeComponent,
     ToolbarComponent,
-    ProfileComponent,
-    PortletContainerComponent
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +39,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     HttpClientModule,
     BrowserAnimationsModule,
     MaterialModule,
-    MatProgressSpinnerModule
+    PortletContainerModule
 
   ],
   providers: [

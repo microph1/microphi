@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { mergeMap, tap } from 'rxjs/internal/operators';
-import { BehaviorSubject, Observable } from 'rxjs/Rx';
+import { catchError, mapTo, tap } from 'rxjs/internal/operators';
 import { AuthToken } from './auth.token.interface';
 import { environment } from '../../../environments/environment';
 import { Log } from '@microgamma/loggator';
-import { iif } from 'rxjs';
-import { flatMap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, ReplaySubject } from 'rxjs';
 
 
 @Injectable()
 export class AuthService {
+
+  public user$: ReplaySubject<{}> = new ReplaySubject(1);
 
   @Log()
   private $l;
@@ -36,7 +36,7 @@ export class AuthService {
 
   public get isAuthenticated(): Observable<boolean> {
     if  (!this.token) {
-      return Observable.of(false);
+      return of(false);
     }
 
     // we've got a token stored. Still need to see if it's valid
@@ -45,13 +45,20 @@ export class AuthService {
       headers: {
         Authorization: this._token
       }
-    })
-      .mapTo(true)
-      .catch((err) => {
+    }).pipe(
+      catchError((err) => {
         this.$l.d('unable to validate token', err);
         delete localStorage.drugoToken;
-        return Observable.of(false);
-      });
+        return of(false);
+      }),
+      tap((user) => {
+        this.$l.d('user is', user);
+        this.user$.next(user);
+        this.user$.complete();
+      }),
+      mapTo(true)
+    )
+
 
   }
 

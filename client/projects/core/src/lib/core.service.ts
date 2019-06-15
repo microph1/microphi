@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { Log } from '@microgamma/loggator';
 import { BundleData } from './bundle-data.interface';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -64,9 +64,10 @@ export class CoreService {
         this.$log.d('sent complete');
       };
 
-      document.getElementsByTagName('head')[0].appendChild(script);
+      document.body.appendChild(script);
 
     });
 
   }
+
 }

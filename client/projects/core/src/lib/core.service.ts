@@ -28,8 +28,8 @@ export class CoreService {
 
       if (this.bundles[bundleName]) {
         this.$log.d('bundle has already been loaded', bundleName);
-        observer.next(this.bundles[bundleName]);
-        observer.complete();
+        // observer.next(this.bundles[bundleName]);
+        // observer.complete();
         return;
       }
 
@@ -61,7 +61,6 @@ export class CoreService {
 
         observer.next(elm);
         observer.complete();
-        this.$log.d('sent complete');
       };
 
       document.body.appendChild(script);

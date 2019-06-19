@@ -16,20 +16,32 @@ export class PortalUrlHandlingStrategy extends UrlHandlingStrategy {
 
   merge(newUrlPart: UrlTree, rawUrl: UrlTree): UrlTree {
     this.$l.d('merging', newUrlPart.toString(), rawUrl.toString());
-    this.$l.d('newPart root', newUrlPart.root);
-    this.$l.d('newPart fragment', newUrlPart.fragment);
-    this.$l.d('rawPart root', rawUrl.root);
-    this.$l.d('rawPart fragment', rawUrl.fragment);
+    this.$l.d('newPart root', newUrlPart);
+    this.$l.d('rawPart fragment', rawUrl);
+
+    // when navigating from / to /hp/a
+    // newPart /hp/a
+    // rawUrl /
+
+    // we need to remove the 'a' part
+
+    // if (newUrlPart.toString().endsWith('a')) {
+    //   newUrlPart.root.segments.pop();
+    // }
 
     return newUrlPart;
   }
 
   shouldProcessUrl(url: UrlTree): boolean {
-    this.$l.d('shouldProcessUrl', url.toString());
-    this.$l.d('root', url.root);
-    this.$l.d('fragment', url.fragment);
+    this.$l.d('shouldProcessUrl', url.toString(), url);
+    // this.$l.d('root', url.root);
+    // this.$l.d('fragment', url.fragment);
 
+    // return url.toString().indexOf('a') < 0;
 
+    // if (url.toString().endsWith('hp/a') || url.toString().endsWith('hp/b')) {
+    //   return false;
+    // }
     return true;
   }
 

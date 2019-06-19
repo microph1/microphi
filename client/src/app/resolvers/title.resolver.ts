@@ -7,9 +7,6 @@ export class TitleResolver implements Resolve<any> {
 
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-
-    console.log('resolving title');
-
     return of({a: 'my-awesome-title', b: 'superb!'});
   }
 }

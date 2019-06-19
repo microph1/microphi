@@ -10,6 +10,7 @@ export class BComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log('component-b onInit');
   }
 
 }

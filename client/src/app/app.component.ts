@@ -19,6 +19,8 @@ export class AppComponent implements OnInit {
 
   constructor(private auth: AuthService, private router: Router) {
 
+    this.$l.d('router config', router.config);
+
     this.user$ = auth.user$;
 
     auth.token$.subscribe((value) => {

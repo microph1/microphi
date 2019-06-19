@@ -9,6 +9,8 @@ import { Log } from '@microgamma/loggator';
 import { BundleData } from '@microphi/core/lib/bundle-data.interface';
 import { PortletContainerComponent } from '@microphi/core';
 import { filter, tap } from 'rxjs/operators';
+import { BundleLoaderGuard } from './guards/bundle-loader.guard';
+import { ProfileComponent } from './profile/profile.component';
 
 
 const helloPortletData: BundleData = {
@@ -31,20 +33,35 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
+    path: 'hp2',
+    component: ProfileComponent,
+    canActivate: [AuthGuard, BundleLoaderGuard],
+    data: helloPortletData,
+    resolve: {
+      title: TitleResolver,
+      user: UserResolver
+    }
+  },
+  {
     path: 'hp',
-    canActivate: [AuthGuard],
-    children: [
-      {
-        path: '**',
-        component: PortletContainerComponent,
-        data: helloPortletData,
-        resolve: {
-          title: TitleResolver,
-          user: UserResolver
-        }
-      }
-    ]
-
+    canActivate: [AuthGuard, BundleLoaderGuard],
+    component: PortletContainerComponent,
+    data: helloPortletData,
+    resolve: {
+      title: TitleResolver,
+      user: UserResolver
+    },
+    // children: [
+    //   {
+    //     path: '**',
+    //     component: PortletContainerComponent,
+    //     data: helloPortletData,
+    //     resolve: {
+    //       title: TitleResolver,
+    //       user: UserResolver
+    //     }
+    //   }
+    // ]
   }
 ];
 
@@ -52,8 +69,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, {
-    // enableTracing: true
-
+    enableTracing: true
   })],
   exports: [RouterModule],
   providers: [
@@ -65,5 +81,18 @@ export class AppRoutingModule {
 
   @Log()
   private $log;
+
+  constructor(private router: Router) {
+    this.$log.d('running PortalRoutingModule');
+    router.events.pipe(
+      filter((ev) => {
+        return ev instanceof NavigationEnd
+      }),
+      tap((navigationEnd) => {
+        document.dispatchEvent(new Event('portal:NavigationEnd'));
+      })
+    ).subscribe()
+
+  }
 
 }

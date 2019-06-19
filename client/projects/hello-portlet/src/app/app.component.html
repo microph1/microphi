@@ -4,10 +4,34 @@
     Welcome to {{ title?.a }} {{ title?.b }}!
   </h2>
 
-  <a routerLink="a">A</a>
-  <a routerLink="b">B</a>
-  <a routerLink="c">C</a>
+  {{hash}}
+
+  <div [ngSwitch]="hash">
+    <ng-container *ngSwitchCase="'#a'">
+      <app-component-a [user]="user"></app-component-a>
+    </ng-container>
+    <ng-container *ngSwitchCase="'#b'">
+      <app-b></app-b>
+    </ng-container>
+
+    <ng-container *ngSwitchDefault>
+      none of the above
+    </ng-container>
+  </div>
+<!--  <a href="hp/a">A</a>-->
+<!--  <a href="hp/b">B</a>-->
+
+</div>
+<div>
+<!--  <a [routerLink]="['', {outlets: {portletOutlet: ['a']}}]">A</a>-->
+<!--  <a [routerLink]="['', {outlets: {portletOutlet: ['b']}}]">B</a>-->
+<!--  <a [routerLink]="['', {outlets: {portletOutlet: ['c']}}]">C</a>-->
+<!--  -->
+<!--  <a [routerLink]="['a']">A</a>-->
+<!--  <a [routerLink]="['b']">B</a>-->
+<!--  <a [routerLink]="['c']">C</a>-->
+
 </div>
 
-<router-outlet (activate)="onActivate($event);"></router-outlet>
+<!--<router-outlet (activate)="onActivate($event);"></router-outlet>-->
 

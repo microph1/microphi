@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
-
+import { CUSTOM_ELEMENTS_SCHEMA, Injector, NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -19,8 +18,12 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ProfileComponent } from './profile/profile.component';
 import { MaterialModule } from './material.module';
 import { FileService } from './services/file/file.service';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PortletContainerModule } from '@microphi/core';
+import { BundleLoaderGuard } from './guards/bundle-loader.guard';
+import { RouteReuseStrategy, UrlHandlingStrategy } from '@angular/router';
+import { PortalUrlHandlingStrategy } from './services/portal-url-handling.strategy';
+import { PortalRouteReuseStrategy } from './services/portal-route-reuse.strategy';
+import { Location } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -56,9 +59,29 @@ import { PortletContainerModule } from '@microphi/core';
       multi: true
     },
     AuthGuard,
-    FileService
+    BundleLoaderGuard,
+    FileService,
+    // {
+    //   provide: UrlHandlingStrategy,
+    //   useClass: PortalUrlHandlingStrategy
+    // },
+    // {
+    //   provide: RouteReuseStrategy,
+    //   useClass: PortalRouteReuseStrategy
+    // }
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+
+  constructor(private injector: Injector) {
+    // document.addEventListener('portal:get:injector', () => {
+    //   const ev = new Event('portal:injector');
+    //   ev['injector'] = injector;
+    //
+    //   document.dispatchEvent(ev);
+    //
+    // });
+  }
+}

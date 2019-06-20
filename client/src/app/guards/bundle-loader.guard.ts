@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from '@angular/router';
 import { BundleData } from '@microphi/core/src/lib/bundle-data.interface';
 import { Observable } from 'rxjs';
 import { Log } from '@microgamma/loggator';
@@ -10,10 +10,6 @@ export class BundleLoaderGuard implements CanActivate {
   @Log()
   private $log;
   private bundles = {};
-
-  constructor(private router: Router) {
-
-  }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return this.loadBundle(next.data as BundleData, next).pipe(mapTo(true));
@@ -37,7 +33,6 @@ export class BundleLoaderGuard implements CanActivate {
       }
 
       const script = document.createElement('script');
-      script.id = 'script-007';
       script.type = 'text/javascript';
       script.src = bundleUrl;
 
@@ -49,22 +44,12 @@ export class BundleLoaderGuard implements CanActivate {
 
 
       script.onload = () => {
-
         this.$log.d('bundle loaded', bundleName);
+
+        this.$log.d('creating element', bundleData.tag);
         const elm = document.createElement(bundleData.tag);
         this.bundles[bundleName] = elm;
-        this.$log.d('creating element', bundleData.tag);
 
-        // for (const key of bundleData.inputs) {
-        //
-        //   this.$log.d('setting attribute for', key);
-        //   if (bundleData[key]) {
-        //     elm.setAttribute(key, JSON.stringify(bundleData[key]));
-        //   }
-        // }
-
-
-        document['portlet'] = elm;
         observer.next(elm);
         observer.complete();
       };

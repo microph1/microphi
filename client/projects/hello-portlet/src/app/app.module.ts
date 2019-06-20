@@ -5,6 +5,9 @@ import { ComponentAComponent } from './component-a/component-a.component';
 import { BComponent } from './b/b.component';
 import { PhiModule } from '@microphi/core';
 import { Log } from '@microgamma/loggator';
+import { AppRoutingModule } from './app-routing.module';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -14,8 +17,7 @@ import { Log } from '@microgamma/loggator';
   ],
   imports: [
     BrowserModule,
-    // RouterModule
-    // AppRoutingModule
+    AppRoutingModule
   ],
   providers: [
   ],
@@ -29,25 +31,16 @@ export class AppModule extends PhiModule {
   component = AppComponent;
   tag = 'hello-portlet';
 
-  constructor(private injector: Injector) {
+  constructor(
+      private injector: Injector,
+      private router: Router,
+      private location: Location) {
     super(injector);
 
 
-    document.addEventListener('portlet:update:route', (ev) => {
-      // const portalRouter: Router = ev['router'];
-      //
-      // const config = portalRouter.config;
-      //
-      // config[2].children = routes;
-      //
-      // this.$log.d('portal routing configuration', portalRouter);
-      //
-      //
-      // portalRouter.resetConfig(config);
-      //
-      // this.$log.d('augmented routing configuration', portalRouter);
-      // this.router.initialNavigation();
-
+    document.addEventListener('portal:NavigationEnd', (ev) => {
+      this.$log.d('performing initial navigation');
+      this.router.navigateByUrl(location.path(true));
     });
   }
 

@@ -7,7 +7,6 @@ import { TitleResolver } from './resolvers/title.resolver';
 import { UserResolver } from './resolvers/user.resolver';
 import { Log } from '@microgamma/loggator';
 import { BundleData } from '@microphi/core/lib/bundle-data.interface';
-import { PortletContainerComponent } from '@microphi/core';
 import { filter, tap } from 'rxjs/operators';
 import { BundleLoaderGuard } from './guards/bundle-loader.guard';
 import { ProfileComponent } from './profile/profile.component';
@@ -33,35 +32,21 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
-    path: 'hp2',
+    path: 'hp',
     component: ProfileComponent,
     canActivate: [AuthGuard, BundleLoaderGuard],
     data: helloPortletData,
-    resolve: {
-      title: TitleResolver,
-      user: UserResolver
-    }
-  },
-  {
-    path: 'hp',
-    canActivate: [AuthGuard, BundleLoaderGuard],
-    component: PortletContainerComponent,
-    data: helloPortletData,
-    resolve: {
-      title: TitleResolver,
-      user: UserResolver
-    },
-    // children: [
-    //   {
-    //     path: '**',
-    //     component: PortletContainerComponent,
-    //     data: helloPortletData,
-    //     resolve: {
-    //       title: TitleResolver,
-    //       user: UserResolver
-    //     }
-    //   }
-    // ]
+    children: [
+      {
+        path: '**',
+        component: ProfileComponent,
+        data: helloPortletData,
+        resolve: {
+          title: TitleResolver,
+          user: UserResolver
+        }
+      }
+    ]
   }
 ];
 
@@ -69,7 +54,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, {
-    enableTracing: true
+    useHash: true
   })],
   exports: [RouterModule],
   providers: [
@@ -85,10 +70,14 @@ export class AppRoutingModule {
   constructor(private router: Router) {
     this.$log.d('running PortalRoutingModule');
     router.events.pipe(
-      filter((ev) => {
-        return ev instanceof NavigationEnd
+      tap((ev) => {
+        this.$log.d(ev);
       }),
-      tap((navigationEnd) => {
+      filter((ev) => {
+        // TODO here we should filter all paths that we know contain a portlet
+        return ev instanceof NavigationEnd && ev.urlAfterRedirects.indexOf('hp') > 0
+      }),
+      tap(() => {
         document.dispatchEvent(new Event('portal:NavigationEnd'));
       })
     ).subscribe()

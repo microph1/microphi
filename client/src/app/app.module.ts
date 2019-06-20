@@ -20,10 +20,6 @@ import { MaterialModule } from './material.module';
 import { FileService } from './services/file/file.service';
 import { PortletContainerModule } from '@microphi/core';
 import { BundleLoaderGuard } from './guards/bundle-loader.guard';
-import { RouteReuseStrategy, UrlHandlingStrategy } from '@angular/router';
-import { PortalUrlHandlingStrategy } from './services/portal-url-handling.strategy';
-import { PortalRouteReuseStrategy } from './services/portal-route-reuse.strategy';
-import { Location } from '@angular/common';
 
 @NgModule({
   declarations: [

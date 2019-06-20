@@ -1,10 +1,9 @@
 import { NgModule } from '@angular/core';
-import { Router, RouterModule, Routes, RoutesRecognized } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { ComponentAComponent } from './component-a/component-a.component';
 import { BComponent } from './b/b.component';
 import { Log } from '@microgamma/loggator';
-import { APP_BASE_HREF, Location } from '@angular/common';
-import { filter } from 'rxjs/operators';
+import { APP_BASE_HREF } from '@angular/common';
 
 
 export const routes: Routes = [
@@ -22,25 +21,23 @@ export const routes: Routes = [
     path: 'b',
     component: BComponent,
     // outlet: 'portletOutlet'
+  },
+  {
+    path: '**',
+    redirectTo: 'a',
+    pathMatch: 'full'
   }
 ];
 
 @NgModule({
   imports: [
-    // RouterModule.forRoot(routes, {
-    //   // enableTracing: true,
-    //   initialNavigation: false,
-    //   relativeLinkResolution: 'corrected'
-    // })
-    RouterModule.forChild(routes)
-
+    RouterModule.forRoot(routes, {
+      initialNavigation: false,
+      useHash: true
+    })
   ],
   exports: [RouterModule],
   providers: [
-    {
-      provide: Router,
-      useClass: class PortletRouter {}
-    },
     {
       provide: APP_BASE_HREF,
       useValue: '/hp'
@@ -50,27 +47,7 @@ export const routes: Routes = [
 })
 export class AppRoutingModule {
 
-
   @Log()
   private $log;
 
-
-
-  // constructor(private router: Router, private location: Location) {
-    // this.$log.d('running PortletRoutingModule', router.config);
-
-
-
-    // console.log('setting listener for portal:get:routes');
-    // document.addEventListener('portal:get:routes', (ev) => {
-    //   console.log('got request to provide routes', routes);
-    //
-    //   const routesResponse = new Event('portlet:provide:routes');
-    //   routesResponse['routes'] = routes;
-    //
-    //   console.log('firing', routesResponse);
-    //   document.dispatchEvent(routesResponse);
-    // });
-
-  // }
 }

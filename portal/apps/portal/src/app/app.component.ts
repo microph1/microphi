@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Message } from '@portal/api-interface';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'portal-root',
@@ -8,6 +7,6 @@ import { Message } from '@portal/api-interface';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  hello$ = this.http.get<Message>('/api/hello');
-  constructor(private http: HttpClient) {}
+  hello$ = of('Hello cruel world!!!!');
+
 }

@@ -1,0 +1,27 @@
+<mat-toolbar color="primary" class="app-toolbar mat-elevation-z6">
+  <span>Drugo</span>
+  <span style="display: flex; flex-grow: 1"></span>
+
+
+  <ng-container *ngIf="(isAuth$ | async); else unauth">
+    <button mat-icon-button routerLink="/" routerLinkActive="active-link">
+      <mat-icon>home</mat-icon>
+    </button>
+    <button mat-icon-button routerLink="/hp" routerLinkActive="active-link">
+      <mat-icon>waves</mat-icon>
+    </button>
+    <button mat-icon-button (click)="logout();">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </ng-container>
+
+  <ng-template #unauth>
+    <button mat-icon-button routerLink="register">
+      <mat-icon>vpn_key</mat-icon>
+    </button>
+    <button mat-icon-button routerLink="login">
+      <mat-icon>fingerprint</mat-icon>
+    </button>
+  </ng-template>
+</mat-toolbar>
+<mat-progress-bar *ngIf="false" mode="indeterminate"></mat-progress-bar>

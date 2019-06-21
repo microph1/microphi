@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { of } from 'rxjs';
+import { Log } from '@microgamma/loggator';
 
 @Component({
   selector: 'portal-root',
@@ -8,5 +9,14 @@ import { of } from 'rxjs';
 })
 export class AppComponent {
   hello$ = of('Hello cruel world!!!!');
+
+
+  @Log()
+  private $l;
+
+  constructor() {
+    this.$l.d('constructing', this.constructor.name);
+
+  }
 
 }

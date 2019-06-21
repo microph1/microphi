@@ -1,22 +1,18 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from '@angular/router';
-// import { BundleData } from '@microphi/core/src/lib/bundle-data.interface';
 import { Observable } from 'rxjs';
-// import { Log } from '@microgamma/loggator';
 import { mapTo } from 'rxjs/operators';
+import { Log } from '@microgamma/loggator';
 
 @Injectable()
 export class BundleLoaderGuard implements CanActivate {
-  // @Log()
-  private $log = {
-    d: console.log
-  };
+  @Log()
+  private $log;
   private bundles = {};
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return this.loadBundle(next.data, next).pipe(mapTo(true));
   }
-
 
   public loadBundle(bundleData, next): Observable<HTMLElement> {
 

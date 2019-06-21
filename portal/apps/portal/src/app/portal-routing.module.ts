@@ -1,8 +1,11 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { NavigationEnd, Router, RouterModule, Routes } from '@angular/router';
 import { ProfileComponent } from './profile/profile.component';
 import { BundleLoaderGuard } from './guards/bundle-loader.guard';
 import { HomeComponent } from './home/home.component';
+import { AuthGuard } from './guards/auth/auth.guard';
+import { Log } from '@microgamma/loggator';
+import { filter, tap } from 'rxjs/operators';
 
 
 const helloPortletData = {
@@ -24,7 +27,7 @@ const routes: Routes = [
     path: 'hp',
     component: ProfileComponent,
     canActivate: [
-      // AuthGuard,
+      AuthGuard,
       BundleLoaderGuard
     ],
     data: helloPortletData,
@@ -32,11 +35,7 @@ const routes: Routes = [
       {
         path: '**',
         component: ProfileComponent,
-        data: helloPortletData,
-        // resolve: {
-        //   title: TitleResolver,
-        //   user: UserResolver
-        // }
+        data: helloPortletData
       }
     ]
   }
@@ -48,28 +47,34 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, {
     useHash: true
   })],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [
+    // guards
+    AuthGuard,
+    BundleLoaderGuard
+  ]
 })
 export class PortalRoutingModule {
 
-  // @Log()
-  // private $log;
+  @Log()
+  private $log;
 
-  // constructor(private router: Router) {
-  //   this.$log.d('running PortalRoutingModule');
-  //   router.events.pipe(
-  //     tap((ev) => {
-  //       this.$log.d(ev);
-  //     }),
-  //     filter((ev) => {
-  //       // TODO here we should filter all paths that we know contain a portlet
-  //       return ev instanceof NavigationEnd && ev.urlAfterRedirects.indexOf('hp') > 0
-  //     }),
-  //     tap(() => {
-  //       document.dispatchEvent(new Event('portal:NavigationEnd'));
-  //     })
-  //   ).subscribe()
-  //
-  // }
+  constructor(private router: Router) {
+    this.$log.d('running PortalRoutingModule');
+    router.events.pipe(
+
+      filter((ev) => {
+        // TODO here we should filter all paths that we know contain a portlet
+        return ev instanceof NavigationEnd && ev.urlAfterRedirects.indexOf('hp') > 0
+      }),
+      tap((ev) => {
+        this.$log.d(ev);
+      }),
+      tap(() => {
+        document.dispatchEvent(new Event('portal:NavigationEnd'));
+      })
+    ).subscribe()
+
+  }
 
 }

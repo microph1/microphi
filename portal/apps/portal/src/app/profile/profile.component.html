@@ -3,7 +3,7 @@
 </p>
 
 <hello-portlet
-  [user]="{name: 'davide', role: 'god'}"
+  [user]="user$ | async"
   [title]="{a: 'cruel', b: 'world'}">
 
 </hello-portlet>

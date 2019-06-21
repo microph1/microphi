@@ -3,8 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  apiBase: 'https://72cigfl7hc.execute-api.eu-west-2.amazonaws.com/dev'
 };
+
 
 /*
  * For easier debugging in development mode, you can import the following file

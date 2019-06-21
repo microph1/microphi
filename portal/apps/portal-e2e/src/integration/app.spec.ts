@@ -1,9 +1,11 @@
-import { getGreeting } from '../support/app.po';
-
 describe('portal', () => {
-  beforeEach(() => cy.visit('/'));
+  beforeEach(() => cy.visit('http://localhost:4200'));
 
-  it('should display welcome message', () => {
-    getGreeting().contains('Welcome to portal!');
+  describe('the toolbar', () => {
+
+    it('should display the title', () => {
+      cy.get('portal-toolbar').contains('Drugo');
+    });
+
   });
 });

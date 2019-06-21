@@ -5,18 +5,33 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 import { ToolbarComponent } from './toolbar/toolbar.component';
-import { AppRoutingModule } from './app-routing.module';
+import { PortalRoutingModule } from './portal-routing.module';
+import { BundleLoaderGuard } from './guards/bundle-loader.guard';
+import { ProfileComponent } from './profile/profile.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
-  declarations: [AppComponent, ToolbarComponent],
+  declarations: [
+    // components
+    AppComponent,
+    ToolbarComponent,
+    HomeComponent,
+    ProfileComponent
+
+  ],
   imports: [
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule,
     MaterialModule,
-    AppRoutingModule
+    PortalRoutingModule
   ],
-  providers: [],
+  providers: [
+    // services
+
+    // guards
+    BundleLoaderGuard
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class PortalModule {}

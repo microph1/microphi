@@ -7,7 +7,7 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./toolbar.component.css']
 })
 export class ToolbarComponent implements OnInit {
-  isAuth$: BehaviorSubject = new BehaviorSubject(true);
+  public isAuth$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
   constructor() { }
 

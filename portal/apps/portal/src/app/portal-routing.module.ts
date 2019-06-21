@@ -1,45 +1,45 @@
 import { NgModule } from '@angular/core';
-import { NavigationEnd, Router, RouterModule, Routes } from '@angular/router';
-import { AppComponent } from './app.component';
-
+import { RouterModule, Routes } from '@angular/router';
+import { ProfileComponent } from './profile/profile.component';
+import { BundleLoaderGuard } from './guards/bundle-loader.guard';
+import { HomeComponent } from './home/home.component';
 
 
 const helloPortletData = {
   bundleUrl: 'http://192.168.254.2:4000/main.js',
-  tag: 'hello-portlet',
-  template: `
-        <hello-portlet [title]="title" [user]="user"></hello-portlet>
-      `,
-  inputs: ['title', 'user']
+  tag: 'hello-portlet'
 };
 
 const routes: Routes = [
   {
     path: '',
-    component: AppComponent,
+    component: HomeComponent,
     // canActivate: [AuthGuard]
   },
   // {
   //   path: 'login',
   //   component: LoginComponent
   // },
-  // {
-  //   path: 'hp',
-  //   component: ProfileComponent,
-  //   canActivate: [AuthGuard, BundleLoaderGuard],
-  //   data: helloPortletData,
-  //   children: [
-  //     {
-  //       path: '**',
-  //       component: ProfileComponent,
-  //       data: helloPortletData,
-  //       resolve: {
-  //         title: TitleResolver,
-  //         user: UserResolver
-  //       }
-  //     }
-  //   ]
-  // }
+  {
+    path: 'hp',
+    component: ProfileComponent,
+    canActivate: [
+      // AuthGuard,
+      BundleLoaderGuard
+    ],
+    data: helloPortletData,
+    children: [
+      {
+        path: '**',
+        component: ProfileComponent,
+        data: helloPortletData,
+        // resolve: {
+        //   title: TitleResolver,
+        //   user: UserResolver
+        // }
+      }
+    ]
+  }
 ];
 
 
@@ -50,7 +50,7 @@ const routes: Routes = [
   })],
   exports: [RouterModule]
 })
-export class AppRoutingModule {
+export class PortalRoutingModule {
 
   // @Log()
   // private $log;

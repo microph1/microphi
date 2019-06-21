@@ -22,10 +22,7 @@
             "main": "apps/portal/src/main.ts",
             "polyfills": "apps/portal/src/polyfills.ts",
             "tsConfig": "apps/portal/tsconfig.app.json",
-            "assets": [
-              "apps/portal/src/favicon.ico",
-              "apps/portal/src/assets"
-            ],
+            "assets": ["apps/portal/src/favicon.ico", "apps/portal/src/assets"],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "apps/portal/src/styles.scss"
@@ -84,9 +81,7 @@
               "apps/portal/tsconfig.app.json",
               "apps/portal/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
@@ -138,9 +133,7 @@
             "outputPath": "dist/apps/api",
             "main": "apps/api/src/main.ts",
             "tsConfig": "apps/api/tsconfig.app.json",
-            "assets": [
-              "apps/api/src/assets"
-            ]
+            "assets": ["apps/api/src/assets"]
           },
           "configurations": {
             "production": {
@@ -169,9 +162,7 @@
               "apps/api/tsconfig.app.json",
               "apps/api/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
@@ -196,9 +187,7 @@
               "libs/api-interface/tsconfig.lib.json",
               "libs/api-interface/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
@@ -206,6 +195,240 @@
           "options": {
             "jestConfig": "libs/api-interface/jest.config.js",
             "tsConfig": "libs/api-interface/tsconfig.spec.json"
+          }
+        }
+      }
+    },
+    "portal-apps-profile-portlet-profile-portlet": {
+      "projectType": "application",
+      "schematics": {
+        "@nrwl/workspace:component": {
+          "style": "scss"
+        }
+      },
+      "root": "apps/portal/apps/profile-portlet/profile-portlet",
+      "sourceRoot": "apps/portal/apps/profile-portlet/profile-portlet/src",
+      "prefix": "portal",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/portal/apps/profile-portlet/profile-portlet",
+            "index": "apps/portal/apps/profile-portlet/profile-portlet/src/index.html",
+            "main": "apps/portal/apps/profile-portlet/profile-portlet/src/main.ts",
+            "polyfills": "apps/portal/apps/profile-portlet/profile-portlet/src/polyfills.ts",
+            "tsConfig": "apps/portal/apps/profile-portlet/profile-portlet/tsconfig.app.json",
+            "assets": [
+              "apps/portal/apps/profile-portlet/profile-portlet/src/favicon.ico",
+              "apps/portal/apps/profile-portlet/profile-portlet/src/assets"
+            ],
+            "styles": [
+              "apps/portal/apps/profile-portlet/profile-portlet/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/portal/apps/profile-portlet/profile-portlet/src/environments/environment.ts",
+                  "with": "apps/portal/apps/profile-portlet/profile-portlet/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "portal-apps-profile-portlet-profile-portlet:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "portal-apps-profile-portlet-profile-portlet:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "portal-apps-profile-portlet-profile-portlet:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/portal/apps/profile-portlet/profile-portlet/tsconfig.app.json",
+              "apps/portal/apps/profile-portlet/profile-portlet/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/portal/apps/profile-portlet/profile-portlet/jest.config.js",
+            "tsConfig": "apps/portal/apps/profile-portlet/profile-portlet/tsconfig.spec.json",
+            "setupFile": "apps/portal/apps/profile-portlet/profile-portlet/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "portal/apps/profile-portlet-profile-portlet-e2e": {
+      "root": "apps/portal/apps/profile-portlet/profile-portlet-e2e",
+      "sourceRoot": "apps/portal/apps/profile-portlet/profile-portlet-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/portal/apps/profile-portlet/profile-portlet-e2e/cypress.json",
+            "tsConfig": "apps/portal/apps/profile-portlet/profile-portlet-e2e/tsconfig.e2e.json",
+            "devServerTarget": "portal-apps-profile-portlet-profile-portlet:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "portal-apps-profile-portlet-profile-portlet:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "apps/portal/apps/profile-portlet/profile-portlet-e2e/tsconfig.e2e.json"
+          }
+        }
+      }
+    },
+    "portlets-profile-portlet": {
+      "projectType": "application",
+      "schematics": {
+        "@nrwl/workspace:component": {
+          "style": "scss"
+        }
+      },
+      "root": "apps/portlets/profile-portlet",
+      "sourceRoot": "apps/portlets/profile-portlet/src",
+      "prefix": "portal",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/portlets/profile-portlet",
+            "index": "apps/portlets/profile-portlet/src/index.html",
+            "main": "apps/portlets/profile-portlet/src/main.ts",
+            "polyfills": "apps/portlets/profile-portlet/src/polyfills.ts",
+            "tsConfig": "apps/portlets/profile-portlet/tsconfig.app.json",
+            "assets": [
+              "apps/portlets/profile-portlet/src/favicon.ico",
+              "apps/portlets/profile-portlet/src/assets"
+            ],
+            "styles": ["apps/portlets/profile-portlet/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/portlets/profile-portlet/src/environments/environment.ts",
+                  "with": "apps/portlets/profile-portlet/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "portlets-profile-portlet:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "portlets-profile-portlet:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "portlets-profile-portlet:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/portlets/profile-portlet/tsconfig.app.json",
+              "apps/portlets/profile-portlet/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/portlets/profile-portlet/jest.config.js",
+            "tsConfig": "apps/portlets/profile-portlet/tsconfig.spec.json",
+            "setupFile": "apps/portlets/profile-portlet/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "portlets-profile-portlet-e2e": {
+      "root": "apps/portlets/profile-portlet-e2e",
+      "sourceRoot": "apps/portlets/profile-portlet-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/portlets/profile-portlet-e2e/cypress.json",
+            "tsConfig": "apps/portlets/profile-portlet-e2e/tsconfig.e2e.json",
+            "devServerTarget": "portlets-profile-portlet:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "portlets-profile-portlet:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "apps/portlets/profile-portlet-e2e/tsconfig.e2e.json"
           }
         }
       }

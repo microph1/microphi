@@ -19,6 +19,18 @@
     },
     "api-interface": {
       "tags": []
+    },
+    "portal/apps/profile-portlet-profile-portlet-e2e": {
+      "tags": []
+    },
+    "portal-apps-profile-portlet-profile-portlet": {
+      "tags": ["profile-portlet"]
+    },
+    "portlets-profile-portlet-e2e": {
+      "tags": []
+    },
+    "portlets-profile-portlet": {
+      "tags": ["profile-portlet"]
     }
   }
 }

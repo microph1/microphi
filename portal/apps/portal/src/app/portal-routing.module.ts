@@ -10,7 +10,7 @@ import { filter, tap } from 'rxjs/operators';
 
 const helloPortletData = {
   bundleUrl: 'http://192.168.254.2:4000/main.js',
-  tag: 'hello-portlet'
+  tag: 'profile-portlet'
 };
 
 const routes: Routes = [
@@ -25,6 +25,22 @@ const routes: Routes = [
   // },
   {
     path: 'hp',
+    component: ProfileComponent,
+    canActivate: [
+      AuthGuard,
+      BundleLoaderGuard
+    ],
+    data: helloPortletData,
+    children: [
+      {
+        path: '**',
+        component: ProfileComponent,
+        data: helloPortletData
+      }
+    ]
+  },
+  {
+    path: 'profile',
     component: ProfileComponent,
     canActivate: [
       AuthGuard,

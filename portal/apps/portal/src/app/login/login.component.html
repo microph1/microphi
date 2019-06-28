@@ -1,0 +1,36 @@
+<div class="mat-elevation-z1" fxLayout="row" fxFill="" fxLayoutAlign="space-around center">
+
+    <div fxLayout="column" fxFlex.sm="80" fxFlex="40" fxFlex.lg="20">
+
+    <mat-card>
+      <mat-card-title>Login</mat-card-title>
+      <mat-card-content>
+        <form fxLayout="column" [formGroup]="user">
+
+          <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input #emailField matInput placeholder="Email" formControlName="email" required>
+            <mat-error *ngIf="email.dirty && email.errors">{{'Email is not valid'}}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input type="password" matInput placeholder="Password" formControlName="password" required>
+            <mat-error *ngIf="password.dirty && password.errors">{{'Password is required'}}</mat-error>
+          </mat-form-field>
+
+<!--          <input type="file" formControlName="file" (change)="onFileAttachment($event);">-->
+
+        </form>
+      </mat-card-content>
+
+      <mat-card-actions fxLayoutAlign="end space-between">
+        <mat-error *ngIf="authError">Credentials not valid</mat-error>
+        <span fxFlex=""></span>
+        <button color="primary" (click)="submit();" mat-flat-button>Login</button>
+      </mat-card-actions>
+    </mat-card>
+
+  </div>
+
+</div>

@@ -1,4 +1,5 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, ViewEncapsulation } from '@angular/core';
+import { fromEvent } from 'rxjs';
 
 @Component({
   // selector: 'portal-root',
@@ -7,5 +8,19 @@ import { Component, ViewEncapsulation } from '@angular/core';
   encapsulation: ViewEncapsulation.ShadowDom
 })
 export class ProfileComponent {
-  title = 'portlets-profile-portlet';
+
+  @Input()
+  public title;
+
+  @Input()
+  public user;
+
+
+  private portalNavigationEnd$ = fromEvent(document, 'portal:NavigationEnd');
+
+  constructor(private changeDetection: ChangeDetectorRef) {
+    this.portalNavigationEnd$.subscribe((ev) => {
+      this.changeDetection.markForCheck();
+    });
+  }
 }

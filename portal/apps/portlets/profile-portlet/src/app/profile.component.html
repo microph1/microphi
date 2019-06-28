@@ -1,6 +1,9 @@
 <div style="text-align:center">
-  <h1>Welcome to {{ title }}!</h1>
+  <h1>Welcome to {{ title | json }}!</h1>
+
 
 </div>
-
+<code>
+  {{user | json}}
+</code>
 <router-outlet></router-outlet>

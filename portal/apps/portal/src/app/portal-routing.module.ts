@@ -6,10 +6,11 @@ import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './guards/auth/auth.guard';
 import { Log } from '@microgamma/loggator';
 import { filter, tap } from 'rxjs/operators';
+import { LoginComponent } from './login/login.component';
 
 
 const helloPortletData = {
-  bundleUrl: 'http://192.168.254.2:4000/main.js',
+  bundleUrl: 'http://localhost:4000/main.js',
   tag: 'profile-portlet'
 };
 
@@ -19,10 +20,10 @@ const routes: Routes = [
     component: HomeComponent,
     // canActivate: [AuthGuard]
   },
-  // {
-  //   path: 'login',
-  //   component: LoginComponent
-  // },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
   {
     path: 'hp',
     component: ProfileComponent,
@@ -87,6 +88,7 @@ export class PortalRoutingModule {
         this.$log.d(ev);
       }),
       tap(() => {
+        // TODO event should not be broadcast but sent to a specific portlet
         document.dispatchEvent(new Event('portal:NavigationEnd'));
       })
     ).subscribe()

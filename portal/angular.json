@@ -89,7 +89,8 @@
               "apps/portal/tsconfig.spec.json"
             ],
             "exclude": [
-              "**/node_modules/**"
+              "**/node_modules/**",
+              "!apps/portal/**"
             ]
           }
         },
@@ -124,7 +125,10 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": "apps/portal-e2e/tsconfig.e2e.json"
+            "tsConfig": "apps/portal-e2e/tsconfig.e2e.json",
+            "exclude": [
+              "!apps/portal-e2e/**"
+            ]
           }
         }
       }
@@ -174,7 +178,8 @@
               "apps/api/tsconfig.spec.json"
             ],
             "exclude": [
-              "**/node_modules/**"
+              "**/node_modules/**",
+              "!apps/api/**"
             ]
           }
         },
@@ -201,7 +206,8 @@
               "libs/api-interface/tsconfig.spec.json"
             ],
             "exclude": [
-              "**/node_modules/**"
+              "**/node_modules/**",
+              "!libs/api-interface/**"
             ]
           }
         },
@@ -298,7 +304,8 @@
               "apps/portlets/profile-portlet/tsconfig.spec.json"
             ],
             "exclude": [
-              "**/node_modules/**"
+              "**/node_modules/**",
+              "!apps/portlets/profile-portlet/**"
             ]
           }
         },
@@ -333,7 +340,10 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": "apps/portlets/profile-portlet-e2e/tsconfig.e2e.json"
+            "tsConfig": "apps/portlets/profile-portlet-e2e/tsconfig.e2e.json",
+            "exclude": [
+              "!apps/portlets/profile-portlet-e2e/**"
+            ]
           }
         }
       }

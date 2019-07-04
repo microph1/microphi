@@ -7,5 +7,6 @@
   "video": true,
   "videosFolder": "../../dist/out-tsc/apps/portal-e2e/videos",
   "screenshotsFolder": "../../dist/out-tsc/apps/portal-e2e/screenshots",
-  "chromeWebSecurity": false
+  "chromeWebSecurity": false,
+  "baseUrl": "http://localhost:4200"
 }

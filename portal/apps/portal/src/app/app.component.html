@@ -1,9 +1,10 @@
+<mat-progress-bar [mode]="'indeterminate'" class="mat-elevation-z6" *ngIf="isLoading"></mat-progress-bar>
 <portal-toolbar></portal-toolbar>
 
-<div style="height: 100px">&nbsp;</div>
+<!--&lt;!&ndash;<a [routerLink]="['hp', 'a']">to portlet A from portal</a>&ndash;&gt;-->
+<!--&lt;!&ndash;<a routerLink="hp/b">to portlet B from portal</a>&ndash;&gt;-->
 
-<a [routerLink]="['hp', 'a']">to portlet A from portal</a>
-<a routerLink="hp/b">to portlet B from portal</a>
+<div class="portal-body" fxFlex="">
+  <router-outlet></router-outlet>
+</div>
 
-
-<router-outlet></router-outlet>

@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Component } from '@angular/core';
 import { AuthService } from '../services/auth/auth.service';
 
 @Component({

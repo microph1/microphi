@@ -8,11 +8,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
-// import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatProgressSpinnerModule } from '@angular/material';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatProgressSpinnerModule, MatSnackBarModule, MatTableModule } from '@angular/material';
 
 const exportables = [
-  // FlexLayoutModule,
+  FlexLayoutModule,
   MatToolbarModule,
   MatGridListModule,
   MatListModule,

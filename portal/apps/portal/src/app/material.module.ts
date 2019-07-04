@@ -22,7 +22,9 @@ const exportables = [
   MatInputModule,
   MatIconModule,
   MatProgressBarModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatSnackBarModule,
+  MatTableModule
 ];
 
 @NgModule({

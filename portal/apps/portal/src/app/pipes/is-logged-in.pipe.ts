@@ -12,7 +12,7 @@ export class IsLoggedInPipe implements PipeTransform {
   constructor(private authService: AuthService) {}
 
   transform(value: any, args?: any): Observable<boolean> {
-    return this.authService.user$.pipe(map((user) => !!user._id));
+    return this.authService.user$.pipe(map((user) => !!user && !!user._id));
   }
 
 }

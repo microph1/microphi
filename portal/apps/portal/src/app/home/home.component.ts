@@ -60,11 +60,12 @@ export class HomeComponent implements OnInit {
 
 
     if (this.story.valid) {
+      const author = this.authService.user$.getValue();
 
       const story = {
         ...this.story.getRawValue(),
         date: new Date(),
-        author: await this.authService.user$.toPromise(),
+        author: author
       };
 
       this.$log.d('story', story);

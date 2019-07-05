@@ -7,7 +7,6 @@ import { AuthService } from '../services/auth/auth.service';
   styleUrls: ['./toolbar.component.css']
 })
 export class ToolbarComponent {
-  public isAuth$ = this.authService.isAuthenticated;
 
   constructor(private authService: AuthService) { }
 

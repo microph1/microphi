@@ -1,10 +1,10 @@
 <mat-toolbar color="primary" class="app-toolbar mat-elevation-z6">
   <img src="https://material.angular.io/assets/img/homepage/angular-white-transparent.svg" alt="angular" width="45">
-  <span style="margin-left: 12px">drugo - the angular portal</span>
+  <span style="margin-left: 12px; font-variant-caps: small-caps">drugo</span>
   <span style="display: flex; flex-grow: 1"></span>
 
 
-  <ng-container *ngIf="(isAuth$ | async); else unauth">
+  <ng-container *ngIf="('' | isLoggedIn | async); else unauth">
     <button mat-icon-button routerLink="/" routerLinkActive="active-link">
       <mat-icon>home</mat-icon>
     </button>

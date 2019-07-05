@@ -1,24 +1,58 @@
 
+<div parallax class="intro" fxFlex="50" fxLayoutAlign="center center"
+     [style.background-image]="'url(https://www.sciencealert.com/images/articles/processed/Portal2_web_1024.jpg)'">
+  <h1 class="mat-title" style="color: white">An Angular Portal</h1>
+</div>
+
+
 <div fxFlexFill fxLayoutAlign="center start">
 
-  <div fxFlex="88">
+  <div fxLayout="column" fxFlex.xs="90" fxFlex.sm="80" fxFlex.md="70" fxFlex.lg="55" fxFlex.xl="40" fxLayoutGap="30px">
 
-    <mat-card *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10 , 11]" style="margin: 30px 0">
+    <mat-card *ngIf=" '' | isLoggedIn | async">
+
+      <mat-card-content class="mat-body-1">
+
+        <form [formGroup]="story" fxLayout="column">
+          <mat-form-field>
+            <mat-label>what's up?</mat-label>
+            <input matInput placeholder="what's up?" formControlName="title" required>
+            <mat-error *ngIf="title.dirty && title.errors">{{'a title is required'}}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field fxFlex="">
+            <mat-label>tell it!</mat-label>
+            <textarea rows="5" matInput placeholder="tell it!" formControlName="body" required></textarea>
+            <mat-error *ngIf="body.dirty && body.errors">{{'a body is required'}}</mat-error>
+          </mat-form-field>
+        </form>
+      </mat-card-content>
+
+      <mat-card-actions fxLayoutAlign="end space-between">
+        <button mat-raised-button color="primary" (click)="post()">POST</button>
+      </mat-card-actions>
+    </mat-card>
+
+
+
+    <mat-card *ngFor="let i of data">
       <mat-card-header>
         <img mat-card-avatar class="example-header-image" alt="avatar" src="https://avatars2.githubusercontent.com/u/3493522?s=460&v=4">
         <mat-card-title>
-          My {{i}} card
+         {{i.title}}
         </mat-card-title>
-        <mat-card-subtitle>by dc</mat-card-subtitle>
+        <mat-card-subtitle>{{i.author.name}}/{{i.author.email}}/{{i.date | date}}</mat-card-subtitle>
       </mat-card-header>
 
       <mat-card-content class="mat-body-1">
 
-          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+        {{i.body}}
+
       </mat-card-content>
-      <mat-card-actions>
-        <button mat-button>LIKE</button>
-        <button mat-button>SHARE</button>
+
+      <mat-card-actions fxLayoutAlign="end space-between">
+        <button mat-raised-button>LIKE</button>
+        <button mat-raised-button>SHARE</button>
       </mat-card-actions>
     </mat-card>
 

@@ -1,76 +1,57 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, mapTo, tap } from 'rxjs/internal/operators';
+import { tap } from 'rxjs/internal/operators';
 import { AuthToken } from './auth.token.interface';
 import { environment } from '../../../environments/environment';
-import { BehaviorSubject, Observable, of, ReplaySubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Log } from '@microgamma/loggator';
-
+interface User {
+  _id: string
+  token: string
+  role: string
+  realms: string[]
+}
 
 @Injectable()
 export class AuthService {
 
-  public user$: ReplaySubject<{}> = new ReplaySubject(1);
+  public user$: BehaviorSubject<User> = new BehaviorSubject(null);
+  public isAuth$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   @Log()
   private $l;
-
-  private _token: string;
-  public get token() {
-    if (!this._token && localStorage.drugoToken) {
-      this._token = localStorage.drugoToken;
-    }
-
-    return this._token;
-  }
-
-  public set token(token: string) {
-    this._token = token;
-    localStorage.drugoToken = token;
-    this.token$.next(this._token);
-  }
 
   public token$: BehaviorSubject<string> = new BehaviorSubject<string>(localStorage.drugoToken);
 
   constructor(private http: HttpClient) {}
 
-  public get isAuthenticated(): Observable<boolean> {
-    if  (!this.token) {
-      return of(false);
-    }
-
-    // we've got a token stored. Still need to see if it's valid
-
-    return this.http.get(`${environment.apiBase}/users/me`, {
-      headers: {
-        Authorization: this._token
-      }
-    }).pipe(
-      catchError((err) => {
-        this.$l.d('unable to validate token', err);
-        delete localStorage.drugoToken;
-        return of(false);
-      }),
-      tap((user) => {
-        this.$l.d('user is', user);
-        this.user$.next(user);
-        this.user$.complete();
-      }),
-      mapTo(true)
-    )
-
-
+  public validateToken() {
+    return this.http.get(`${environment.apiBase}/users/me`).pipe(
+      tap((response: User) => {
+        this.$l.d('token validated, user is', response);
+        this.user$.next(response);
+        this.isAuth$.next(true);
+      })
+    );
   }
 
-  public authenticate({email, password}): Observable<{token: string}> {
+
+  public authenticate({email, password}): Observable<User> {
     return this.http.post(`${environment.apiBase}/users/auth`, {email, password})
       .pipe(
-        tap((token: AuthToken) => this.token = token.token)
+        tap((response: User) => {
+          localStorage.setItem('drugoToken', response.token);
+          this.token$.next(response.token);
+          this.user$.next(response);
+          this.isAuth$.next(true);
+        })
       );
   }
 
-  public logout() {
-    this.token = '';
-    return this.isAuthenticated;
+  public logout(): void {
+    localStorage.removeItem('drugoToken');
+    this.token$.next(null);
+    this.user$.next(null);
+    this.isAuth$.next(false);
   }
 }

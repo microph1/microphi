@@ -14,6 +14,9 @@ import { LoginComponent } from './login/login.component';
 import { UserService } from './services/user/user.service';
 import { TokenBearerInterceptor } from './services/http/token-bearer.interceptor';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DataService } from './services/data/data.service';
+import { IsLoggedInPipe } from './pipes/is-logged-in.pipe';
+import { ParallaxDirective } from './directives/parallax/parallax.directive';
 
 @NgModule({
   declarations: [
@@ -22,7 +25,11 @@ import { ReactiveFormsModule } from '@angular/forms';
     ToolbarComponent,
     HomeComponent,
     ProfileComponent,
-    LoginComponent
+    LoginComponent,
+
+    // pipes
+    IsLoggedInPipe,
+    ParallaxDirective
 
   ],
   imports: [
@@ -43,6 +50,7 @@ import { ReactiveFormsModule } from '@angular/forms';
       useClass: TokenBearerInterceptor,
       multi: true
     },
+    DataService
 
   ],
   bootstrap: [AppComponent],

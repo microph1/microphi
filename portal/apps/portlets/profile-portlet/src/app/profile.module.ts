@@ -4,12 +4,14 @@ import { Injector, NgModule } from '@angular/core';
 import { createCustomElement } from '@angular/elements';
 import { ProfileComponent } from './profile.component';
 import { ProfileRoutingModule } from './profile-routing.module';
+import { MaterialModule } from '../../../../portal/src/app/material.module';
 
 @NgModule({
   declarations: [ProfileComponent],
   imports: [
     BrowserModule,
-    ProfileRoutingModule
+    ProfileRoutingModule,
+    MaterialModule
   ],
   providers: [],
   entryComponents: [ProfileComponent]

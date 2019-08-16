@@ -1,5 +1,5 @@
 module.exports = {
-  "externals": {
+  externals: {
     "rxjs": "rxjs",
     "@angular/core": "ng.core",
     "@angular/common": "ng.common",

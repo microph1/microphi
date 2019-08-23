@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "nx": "nx",
     "ng": "ng",
     "start": "ng serve",
     "start:portal": "ng serve portal --disable-host-check --host 0.0.0.0",

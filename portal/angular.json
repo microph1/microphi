@@ -22,7 +22,10 @@
             "main": "apps/portal/src/main.ts",
             "polyfills": "apps/portal/src/polyfills.ts",
             "tsConfig": "apps/portal/tsconfig.app.json",
-            "assets": ["apps/portal/src/favicon.ico", "apps/portal/src/assets"],
+            "assets": [
+              "apps/portal/src/favicon.ico",
+              "apps/portal/src/assets"
+            ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "apps/portal/src/styles.scss"
@@ -85,7 +88,10 @@
               "apps/portal/tsconfig.app.json",
               "apps/portal/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/portal/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/portal/**"
+            ]
           }
         },
         "test": {
@@ -120,7 +126,9 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps/portal-e2e/tsconfig.e2e.json",
-            "exclude": ["!apps/portal-e2e/**"]
+            "exclude": [
+              "!apps/portal-e2e/**"
+            ]
           }
         }
       }
@@ -138,7 +146,9 @@
             "outputPath": "dist/apps/api",
             "main": "apps/api/src/main.ts",
             "tsConfig": "apps/api/tsconfig.app.json",
-            "assets": ["apps/api/src/assets"]
+            "assets": [
+              "apps/api/src/assets"
+            ]
           },
           "configurations": {
             "production": {
@@ -167,7 +177,10 @@
               "apps/api/tsconfig.app.json",
               "apps/api/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/api/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/api/**"
+            ]
           }
         },
         "test": {
@@ -192,7 +205,10 @@
               "libs/api-interface/tsconfig.lib.json",
               "libs/api-interface/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/api-interface/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/api-interface/**"
+            ]
           }
         },
         "test": {
@@ -227,7 +243,9 @@
               "apps/portlets/profile-portlet/src/favicon.ico",
               "apps/portlets/profile-portlet/src/assets"
             ],
-            "styles": ["apps/portlets/profile-portlet/src/styles.scss"],
+            "styles": [
+              "apps/portlets/profile-portlet/src/styles.scss"
+            ],
             "scripts": [
               {
                 "input": "node_modules/document-register-element/build/document-register-element.js"
@@ -323,39 +341,10 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps/portlets/profile-portlet-e2e/tsconfig.e2e.json",
-            "exclude": ["!apps/portlets/profile-portlet-e2e/**"]
+            "exclude": [
+              "!apps/portlets/profile-portlet-e2e/**"
+            ]
           }
-        }
-      }
-    },
-    "microphi-microphi": {
-      "projectType": "library",
-      "root": "libs/microphi/microphi",
-      "sourceRoot": "libs/microphi/microphi/src",
-      "prefix": "portal",
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/microphi/microphi/tsconfig.lib.json",
-              "libs/microphi/microphi/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/microphi/microphi/**"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/microphi/microphi/jest.config.js",
-            "tsConfig": "libs/microphi/microphi/tsconfig.spec.json",
-            "setupFile": "libs/microphi/microphi/src/test-setup.ts"
-          }
-        }
-      },
-      "schematics": {
-        "@nrwl/angular:component": {
-          "styleext": "scss"
         }
       }
     }

@@ -31,9 +31,6 @@
     },
     "portlets-profile-portlet": {
       "tags": ["profile-portlet"]
-    },
-    "microphi-microphi": {
-      "tags": []
     }
   }
 }

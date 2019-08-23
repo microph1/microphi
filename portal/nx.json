@@ -31,12 +31,6 @@
     },
     "portlets-profile-portlet": {
       "tags": ["profile-portlet"]
-    },
-    "portlets-tickets-e2e": {
-      "tags": []
-    },
-    "portlets-tickets": {
-      "tags": []
     }
   }
 }

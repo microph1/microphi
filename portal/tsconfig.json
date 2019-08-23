@@ -17,7 +17,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@portal/api-interface": ["libs/api-interface/src/index.ts"]
+      "@portal/api-interface": ["libs/api-interface/src/index.ts"],
+      "@portal/microphi": ["libs/microphi/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Log } from '@microgamma/loggator';
 import { AuthService } from '../services/auth/auth.service';
+import { UserService } from '../services/user/user.service';
 
 @Component({
   selector: 'app-home',
@@ -27,10 +28,72 @@ export class HomeComponent implements OnInit {
   }, {
     updateOn: 'change'
   });
+  private users;
 
-  constructor(private dataService: DataService, private authService: AuthService) { }
+  constructor(private dataService: DataService, private authService: AuthService, private userService: UserService) { }
 
   ngOnInit() {
+
+
+    setTimeout(() => {
+      this.$log.d('starting subscriber');
+      this.userService.findAll(1).subscribe((data) => {
+        this.$log.d('starting subscribed');
+        this.$log.d(data);
+        this.users = data;
+
+      })
+    }, 0);
+
+    setTimeout(() => {
+      this.$log.d('first subscriber 1 sec later');
+      this.userService.findAll(1).subscribe((data) => {
+        this.$log.d('first subscribed');
+        this.$log.d(data);
+
+      })
+    }, 1000);
+
+    setTimeout(() => {
+      this.$log.d('second subscriber 2 sec later');
+      this.userService.findAll(1).subscribe((data) => {
+        this.$log.d('second subscribed');
+        this.$log.d(data);
+
+      })
+    }, 2000);
+
+    setTimeout(() => {
+      this.$log.d('third subscriber 3 sec later, ttl expired. shoult hit the endpoint');
+      this.userService.findAll(1).subscribe((data) => {
+        this.$log.d('third subscribed');
+
+        this.$log.d(data);
+
+      })
+    }, 3000);
+
+    setTimeout(() => {
+      this.$log.d('fourth subscriber 4 sec later, argument changed. should hit the endpoint');
+      this.userService.findAll(2).subscribe((data) => {
+
+        this.$log.d(' fourth subscribed');
+
+        this.$log.d(data);
+      })
+    }, 4000);
+
+    setTimeout(() => {
+      this.$log.d('fifth subscriber 5 sec later, argument changed. should hit the endpoint');
+      this.userService.findAll(1).subscribe((data) => {
+
+        this.$log.d(' fifth subscribed');
+
+        this.$log.d(data);
+      })
+    }, 5000);
+
+
 
     this.story.valueChanges.pipe(
       debounceTime(300),
@@ -45,7 +108,7 @@ export class HomeComponent implements OnInit {
     });
 
     this.dataService.findAll().then((docs) => {
-      console.log('data', docs);
+      this.$log.d('data', docs);
       this.data = docs;
 
     }).catch((err) => {

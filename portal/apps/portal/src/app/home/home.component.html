@@ -9,6 +9,10 @@
 
   <div fxLayout="column" fxFlex.xs="90" fxFlex.sm="80" fxFlex.md="70" fxFlex.lg="55" fxFlex.xl="40" fxLayoutGap="30px">
 
+    <code>
+<!--      {{ users$ | async | json}}-->
+    </code>
+
     <mat-card *ngIf=" '' | isLoggedIn | async">
 
       <mat-card-content class="mat-body-1">

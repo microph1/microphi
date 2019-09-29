@@ -9,9 +9,18 @@
 
   <div fxLayout="column" fxFlex.xs="90" fxFlex.sm="80" fxFlex.md="70" fxFlex.lg="55" fxFlex.xl="40" fxLayoutGap="30px">
 
-    <code>
-<!--      {{ users$ | async | json}}-->
-    </code>
+    <div>
+
+      {{counter$ | async}}
+
+
+    </div>
+
+<!--    <button mat-raised-button color="primary" (click)="loadUsers()">POST</button>-->
+    <button mat-raised-button color="primary" (click)="increment()">+1</button>
+    <button mat-raised-button color="primary" (click)="decrement()">-1</button>
+
+
 
     <mat-card *ngIf=" '' | isLoggedIn | async">
 

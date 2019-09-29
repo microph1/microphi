@@ -14,14 +14,15 @@ export class UserService {
 
   constructor(private _client: HttpClient) {}
 
-  @Cache({
-    ttl: 2500
-  })
-  public findAll(id): Observable<any> {
-    return this._client.get(`https://reqres.in/api/users?page=${id}`).pipe(
+  // @Cache({
+  //   ttl: 100
+  // })
+  public findAll(): Observable<any> {
+    return this._client.get(`https://72cigfl7hc.execute-api.eu-west-2.amazonaws.com/dev/users`).pipe(
       tap(() => {
         this.$log.d('endpoint hit');
-      })
+      }),
+
     );
   }
 

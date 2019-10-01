@@ -14,9 +14,9 @@ export class UserService {
 
   constructor(private _client: HttpClient) {}
 
-  // @Cache({
-  //   ttl: 100
-  // })
+  @Cache({
+    ttl: 2000
+  })
   public findAll(): Observable<any> {
     return this._client.get(`https://72cigfl7hc.execute-api.eu-west-2.amazonaws.com/dev/users`).pipe(
       tap(() => {

@@ -17,14 +17,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DataService } from './services/data/data.service';
 import { IsLoggedInPipe } from './pipes/is-logged-in.pipe';
 import { ParallaxDirective } from './directives/parallax/parallax.directive';
-import { StoreModule } from '@ngrx/store';
-import { reducers, metaReducers } from './reducers';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { environment } from '../environments/environment';
-import { EffectsModule } from '@ngrx/effects';
-import { AppEffects } from './app.effects';
-import { EntityDataModule } from '@ngrx/data';
-import { UserEffects } from './user/user.effects';
 
 @NgModule({
   declarations: [
@@ -46,18 +38,7 @@ import { UserEffects } from './user/user.effects';
     BrowserAnimationsModule,
     MaterialModule,
     PortalRoutingModule,
-    ReactiveFormsModule,
-    // StoreModule.forRoot(reducers, {
-    //   metaReducers,
-    //   runtimeChecks: {
-    //     strictStateImmutability: true,
-    //     strictActionImmutability: true
-    //   }
-    // }),
-    // !environment.production ? StoreDevtoolsModule.instrument() : [],
-    // EffectsModule.forRoot([AppEffects, UserEffects]),
-    // EffectsModule.forFeature([UserEffects]),
-    // EntityDataModule
+    ReactiveFormsModule
   ],
   providers: [
     // services

@@ -11,7 +11,10 @@
 
     <div>
 
-      {{counter$ | async}}
+      {{ actions$ | async | json }}
+      <ul>
+        <li *ngFor="let u of counter$ | async">{{u | json}}</li>
+      </ul>
 
 
     </div>

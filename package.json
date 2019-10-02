@@ -1,5 +1,11 @@
 {
-  "name": "reticular",
+  "name": "@microphi/root",
   "version": "1.0.0",
-  "private": true
+  "private": true,
+  "scripts": {
+    "ng": "ng"
+  },
+  "devDependencies": {
+    "@angular/cli": "^8.3.6"
+  }
 }

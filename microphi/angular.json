@@ -28,6 +28,7 @@
               "projects/microphi/src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
               "projects/microphi/src/styles.scss"
             ],
             "scripts": []
@@ -93,6 +94,7 @@
               "projects/microphi/src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
               "projects/microphi/src/styles.scss"
             ],
             "scripts": []
@@ -159,6 +161,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "microphi"
 }

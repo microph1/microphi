@@ -2,7 +2,10 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../../out-tsc/app",
-    "types": []
+    "types": [],
+    "paths": {
+      "@microphi/store": ["../store"]
+    }
   },
   "files": [
     "src/main.ts",
@@ -14,5 +17,10 @@
   "exclude": [
     "src/test.ts",
     "src/**/*.spec.ts"
+  ],
+  "references": [
+    {
+      "path": "../store"
+    }
   ]
 }

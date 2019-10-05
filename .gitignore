@@ -2,3 +2,4 @@
 node_modules
 yarn.lock
 portal/apps/portal-e2e/test-results.xml
+portal

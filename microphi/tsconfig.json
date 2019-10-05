@@ -19,10 +19,10 @@
       "dom"
     ],
     "paths": {
-      "store": [
+      "@microphi/store": [
         "dist/store"
       ],
-      "store/*": [
+      "@microphi/store/*": [
         "dist/store/*"
       ]
     }

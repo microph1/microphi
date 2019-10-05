@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { AuthStore, RestActions } from './services/auth/auth.store';
+import { AuthStore } from './services/auth/auth.store';
+import { RestActions } from '@microphi/store';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,7 @@ export class AppComponent {
   auth() {
     this.authStore.dispatch(RestActions.REQUEST, {
       email: 'davide@bazooka',
-      password: 'password2'
+      password: 'password'
     });
   }
 }

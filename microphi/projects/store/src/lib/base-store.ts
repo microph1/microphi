@@ -1,108 +1,88 @@
 import { Log } from '@microgamma/loggator';
 import { BehaviorSubject, of, Subject } from 'rxjs';
 import { StoreMetadata } from './store';
-import { Actions } from './actions';
+import { Actions, RestActions } from './actions';
 import { tap } from 'rxjs/operators';
-import { RestActions } from '../../../microphi/src/app/services/auth/auth.store';
 
-
-export abstract class BaseStore {
+export abstract class BaseStore<T extends {}> {
 
   @Log()
-  private $l;
+  private _log;
 
   public loading$ = new BehaviorSubject<boolean>(false);
 
   private readonly storeMetadata: StoreMetadata;
 
-  private _state;
+  private _state: T;
 
-  get state() {
+  get state(): T {
     return this._state;
   }
 
-  set state(value) {
+  set state(value: T) {
     this.store$.next(value);
     localStorage.setItem(this.storeMetadata.name, JSON.stringify(value));
-    this.$l.d('nexting with', value);
+    this._log.d('nexting with', value);
     this._state = value;
   }
 
   public actions$ = new Subject();
 
-  public store$;
+  public store$: BehaviorSubject<T>;
 
-  constructor() {
+  protected constructor() {
     this.storeMetadata = Reflect.getMetadata('Store', this.constructor);
-    this.$l.d('@Store', this.storeMetadata);
+    this._log.d('@Store', this.storeMetadata);
 
     this.store$ = new BehaviorSubject(this.storeMetadata.initialState);
     this._state = this.storeMetadata.initialState;
+    this._log.d('InitialState', this.state);
 
     const actionsMetadata = Reflect.getMetadata('Actions', this.constructor);
-    this.$l.d('@Actions', actionsMetadata);
+    this._log.d('@Actions', actionsMetadata);
 
     const reducerMetadata = Reflect.getMetadata('Reducer', this);
-    this.$l.d('@Reducer', reducerMetadata);
+    this._log.d('@Reducer', reducerMetadata);
 
     const effectsMetadata = Reflect.getMetadata('@Effect', this);
-    this.$l.d('@Effect', effectsMetadata);
+    this._log.d('@Effect', effectsMetadata);
     /*
       effectsMetadata is something like the following
       { REQUEST: ["requestAuth"] }
      */
-
-    const functionsToPipe = [];
-
-    Object.keys(effectsMetadata).forEach((effectName) => {
-      // functions that need to be piped
-      const functionNames: string[] = effectsMetadata[effectName];
-
-      functionNames.forEach((fn) => {
-        // each function would return an observable so we can encapsulate into a mergeMap
-
-        functionsToPipe.push(tap(({event, payload}) => {
-
-          this.$l.d('running effect for', event, payload);
-
-          if (event === effectName) {
-            return this[fn](this.state, payload);
-          }
-
-          return of({event, payload});
-
-        }));
-      });
-    });
-
 
     this.actions$.pipe(
       tap(({event}) => {
 
         if (event === RestActions.REQUEST) {
           this.loading$.next(true);
-        } else if (event === RestActions.RESPONSE) {
-            this.loading$.next(false);
-        } else if (event === RestActions.ERROR) {
+        } else {
           this.loading$.next(false);
         }
 
-      }),
-      // effects are piped and we're assuming that they will return an Observable
-      ...functionsToPipe
+      })
     ).subscribe(async (action: Actions) => {
-      this.$l.d('got action', action);
+      this._log.d('got action', action);
+
+      const event = action.event;
+
+      if (effectsMetadata.hasOwnProperty(event)) {
+        const effects = effectsMetadata[event];
+        effects.forEach((effectName) => {
+          this[effectName](this.state, action.payload);
+        });
+      }
 
       // then run reducers
       if (this[reducerMetadata[action.event]]) {
         const newState = await this[reducerMetadata[action.event]](this.state, action.payload);
-        this.$l.d('newState', newState);
+        this._log.d('newState', newState);
         this.state = newState;
       }
 
 
     }, (err) => {
-      this.$l.d('got error', err);
+      this._log.d('got error', err);
       this.loading$.next(false);
     })
 
@@ -110,8 +90,6 @@ export abstract class BaseStore {
   }
 
   dispatch(event, payload) {
-    // this.em.emit(event, payload);
-
     this.actions$.next({event, payload});
   }
 }

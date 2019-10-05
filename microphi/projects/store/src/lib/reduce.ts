@@ -1,5 +1,7 @@
+import { BaseStore } from './base-store';
+
 export function Reduce(onAction: string) {
-  return (target, key, descriptor) => {
+  return <Store extends BaseStore<any>>(target: Store, key: string, descriptor: PropertyDescriptor) => {
 
     const reducer = Reflect.getMetadata('Reducer', target) || {};
 

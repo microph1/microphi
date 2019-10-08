@@ -8,23 +8,43 @@ import { MaterialModule } from './material.module';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { AuthStore } from './services/auth/auth.store';
 import { AuthService } from './services/auth/auth.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { LoginComponent } from './components/login/login.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpStatusInterceptor } from './services/http/http-status.interceptor';
+import { HttpStatusStore } from './services/http/http-status.store';
+import { HomeComponent } from './components/home/home.component';
+import { IsLoggedInPipe } from './pipes/is-logged-in.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ToolbarComponent
+    ToolbarComponent,
+    LoginComponent,
+    HomeComponent,
+
+    // pipes
+    IsLoggedInPipe
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [
     AuthStore,
-    AuthService
+    AuthService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpStatusInterceptor,
+      multi: true
+    },
+    HttpStatusStore,
+
+
   ],
   bootstrap: [AppComponent]
 })

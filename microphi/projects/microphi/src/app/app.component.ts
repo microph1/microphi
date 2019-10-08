@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthStore } from './services/auth/auth.store';
-import { RestActions } from '@microphi/store';
+import { HttpStatusStore } from './services/http/http-status.store';
 
 @Component({
   selector: 'app-root',
@@ -8,15 +7,9 @@ import { RestActions } from '@microphi/store';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'microphi';
-  isLoading$ = this.authStore.loading$;
+  public isLoading$ = this.httpStatusStore.isLoading$;
 
-  constructor(private authStore: AuthStore) {}
+  constructor(private httpStatusStore: HttpStatusStore) {
 
-  auth() {
-    this.authStore.dispatch(RestActions.REQUEST, {
-      email: 'davide@bazooka',
-      password: 'password'
-    });
   }
 }

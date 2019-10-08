@@ -1,15 +1,11 @@
-import { Log } from '@microgamma/loggator';
-import { BehaviorSubject, of, Subject } from 'rxjs';
+import { getDebugger } from '@microgamma/loggator';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { StoreMetadata } from './store';
-import { Actions, RestActions } from './actions';
-import { tap } from 'rxjs/operators';
+import { Actions } from './actions';
+
+const d = getDebugger('microphi:BaseStore');
 
 export abstract class BaseStore<T extends {}> {
-
-  @Log()
-  private _log;
-
-  public loading$ = new BehaviorSubject<boolean>(false);
 
   private readonly storeMetadata: StoreMetadata;
 
@@ -22,74 +18,62 @@ export abstract class BaseStore<T extends {}> {
   set state(value: T) {
     this.store$.next(value);
     localStorage.setItem(this.storeMetadata.name, JSON.stringify(value));
-    this._log.d('nexting with', value);
     this._state = value;
   }
 
-  public actions$ = new Subject();
+  protected actions$ = new Subject();
 
-  public store$: BehaviorSubject<T>;
+  protected store$: BehaviorSubject<T>;
 
-  protected constructor() {
+  constructor() {
     this.storeMetadata = Reflect.getMetadata('Store', this.constructor);
-    this._log.d('@Store', this.storeMetadata);
+    d('@Store', this.storeMetadata);
 
     this.store$ = new BehaviorSubject(this.storeMetadata.initialState);
     this._state = this.storeMetadata.initialState;
-    this._log.d('InitialState', this.state);
+    d('InitialState', this.state);
 
     const actionsMetadata = Reflect.getMetadata('Actions', this.constructor);
-    this._log.d('@Actions', actionsMetadata);
+    d('Actions', actionsMetadata);
 
     const reducerMetadata = Reflect.getMetadata('Reducer', this);
-    this._log.d('@Reducer', reducerMetadata);
+    d('Reducers', reducerMetadata);
 
-    const effectsMetadata = Reflect.getMetadata('@Effect', this);
-    this._log.d('@Effect', effectsMetadata);
+    const effectsMetadata = Reflect.getMetadata('@Effect', this) || {};
+    d('Effects', effectsMetadata);
     /*
       effectsMetadata is something like the following
       { REQUEST: ["requestAuth"] }
      */
 
-    this.actions$.pipe(
-      tap(({event}) => {
+    this.actions$.subscribe(async (action: Actions) => {
+      d('got action', action);
 
-        if (event === RestActions.REQUEST) {
-          this.loading$.next(true);
-        } else {
-          this.loading$.next(false);
-        }
+      const type = action.type;
 
-      })
-    ).subscribe(async (action: Actions) => {
-      this._log.d('got action', action);
-
-      const event = action.event;
-
-      if (effectsMetadata.hasOwnProperty(event)) {
-        const effects = effectsMetadata[event];
+      if (effectsMetadata.hasOwnProperty(type)) {
+        const effects = effectsMetadata[type];
         effects.forEach((effectName) => {
           this[effectName](this.state, action.payload);
         });
       }
 
       // then run reducers
-      if (this[reducerMetadata[action.event]]) {
-        const newState = await this[reducerMetadata[action.event]](this.state, action.payload);
-        this._log.d('newState', newState);
+      if (this[reducerMetadata[action.type]]) {
+        // TODO since we may not need the state in the reducer better to switch the order fo the arguments
+        const newState = await this[reducerMetadata[action.type]](this.state, action.payload);
+        d('newState', newState);
         this.state = newState;
       }
 
 
     }, (err) => {
-      this._log.d('got error', err);
-      this.loading$.next(false);
-    })
-
+      d('got error', err);
+    });
 
   }
 
-  dispatch(event, payload) {
-    this.actions$.next({event, payload});
+  dispatch(type, payload?) {
+    this.actions$.next({type, payload});
   }
 }

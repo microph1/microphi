@@ -1,41 +1,56 @@
 import { AuthService } from './auth.service';
-import { Store, BaseStore, Action, Effect, Reduce, RestActions} from '@microphi/store';
+import { BaseStore, Effect, Reduce, RestActions, Store } from '@microphi/store';
+import { map } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 
 export interface AuthState {
   isAuth: boolean;
-  user: {
+  user?: {
     id: string;
     name: string;
     email: string;
     realms: string[];
     role: string;
-    token: string;
-  }
+  };
+  token?: string;
+  error?: HttpErrorResponse
 }
 
 @Store({
   name: 'authStore',
-  initialState: localStorage.getItem('authStore') || {}
+  initialState: JSON.parse(localStorage.getItem('authStore')) || {}
 })
+@Injectable()
 export class AuthStore extends BaseStore<AuthState> {
 
-  @Action(RestActions.REQUEST)
-  public static AuthRequest;
+  public isAuth$ = this.store$.pipe(
+    map((state) => {
+      return state.isAuth;
+    })
+  );
 
-  @Action(RestActions.RESPONSE)
-  public static AuthResponse;
+  public authError$ = this.store$.pipe(map(state => state.error));
 
-  @Action(RestActions.ERROR)
-  public static AuthError;
+  public user$ = this.store$.pipe(map(state => state.user));
+
 
   constructor(private authService: AuthService) {
     super();
-    if (this.state.user) {
-      // should check token validity
-      // this.authService.validateToken();
+
+    if (this.state.error) {
+      this.state.error = null;
+    }
+
+    if (this.state.hasOwnProperty('token')) {
+      this.dispatch('VALIDATE:REQUEST', this.state.token);
     }
   }
 
+  @Effect('VALIDATE:REQUEST', RestActions.RESPONSE, RestActions.ERROR)
+  public validateToken(state, payload) {
+    return this.authService.validateToken(payload);
+  }
 
   @Effect(RestActions.REQUEST, RestActions.RESPONSE, RestActions.ERROR)
   private requestAuth(state: AuthState, payload) {
@@ -48,15 +63,29 @@ export class AuthStore extends BaseStore<AuthState> {
 
   @Reduce(RestActions.RESPONSE)
   private onAuth(state, payload) {
-    console.log('running reducer', state, payload);
-    state = payload;
-    return state;
+    const { token, ...user } = payload;
+
+    return {
+      isAuth: true,
+      user: user,
+      token: token
+    };
   }
 
   @Reduce(RestActions.ERROR)
-  public onAuthError(state, err) {
-    console.log('got error', state, err);
-    return {};
+  public onAuthError(state: AuthState, err): AuthState {
+
+    return {
+      isAuth: false,
+      error: err
+    }
+  }
+
+  @Reduce('LOGOUT')
+  private logout(): AuthState {
+    return {
+      isAuth: false
+    }
   }
 
 }

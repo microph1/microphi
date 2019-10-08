@@ -16,43 +16,21 @@ interface User {
 @Injectable()
 export class AuthService {
 
-  public user$: BehaviorSubject<User> = new BehaviorSubject(null);
-  public isAuth$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-
   @Log()
   private $l;
 
-  public token$: BehaviorSubject<string> = new BehaviorSubject<string>(localStorage.drugoToken);
-
   constructor(private http: HttpClient) {}
 
-  public validateToken() {
-    return this.http.get(`${environment.apiBase}/users/me`).pipe(
-      tap((response: User) => {
-        this.$l.d('token validated, user is', response);
-        this.user$.next(response);
-        this.isAuth$.next(true);
-      })
-    );
+  public validateToken(token: string) {
+    return this.http.get(`${environment.apiBase}/users/me`, {
+      headers: {
+        Authorization: token
+      }
+    });
   }
 
-
-  public authenticate({email, password}): Observable<User> {
-    return this.http.post(`${environment.apiBase}/users/auth`, {email, password})
-      .pipe(
-        tap((response: User) => {
-          localStorage.setItem('drugoToken', response.token);
-          this.token$.next(response.token);
-          this.user$.next(response);
-          this.isAuth$.next(true);
-        })
-      );
+  public authenticate({email, password}) {
+    return this.http.post(`${environment.apiBase}/users/auth`, {email, password});
   }
 
-  public logout(): void {
-    localStorage.removeItem('drugoToken');
-    this.token$.next(null);
-    this.user$.next(null);
-    this.isAuth$.next(false);
-  }
 }

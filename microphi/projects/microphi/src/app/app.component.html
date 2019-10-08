@@ -1,12 +1,7 @@
 <mat-progress-bar [mode]="'indeterminate'" class="mat-elevation-z6" *ngIf="isLoading$ | async"></mat-progress-bar>
 <portal-toolbar></portal-toolbar>
 
-
-
-<!--&lt;!&ndash;<a [routerLink]="['hp', 'a']">to portlet A from portal</a>&ndash;&gt;-->
-<!--&lt;!&ndash;<a routerLink="hp/b">to portlet B from portal</a>&ndash;&gt;-->
-
 <div class="portal-body" fxFlex="" fxLayout="column">
-  <button (click)="auth()">auth</button>
+
   <router-outlet></router-outlet>
 </div>

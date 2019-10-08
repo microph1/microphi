@@ -1,6 +1,6 @@
 export interface Actions {
   // TODO rename to type
-  event: string;
+  type: string;
   payload: any;
 }
 

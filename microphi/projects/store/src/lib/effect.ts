@@ -1,6 +1,6 @@
 import { getDebugger } from '@microgamma/loggator';
 import { Subscription } from 'rxjs';
-const d = getDebugger('microphi:Effect');
+const d = getDebugger('microphi:@Effect');
 
 
 /**
@@ -15,7 +15,7 @@ export function Effect(onAction: string, dispatchAction: string, errorAction: st
 
   return (target, key, descriptor) => {
 
-    d('running effect for', target, key);
+    d('decorating', target.constructor.name, ':', key);
 
     const effects = Reflect.getMetadata('@Effect', target) || {};
 
@@ -35,11 +35,11 @@ export function Effect(onAction: string, dispatchAction: string, errorAction: st
 
       subscriptions.push(
         originalFn.apply(this, args).subscribe((resp) => {
-          // pass response down triggering event to alert data arrived
+          // pass response down triggering type to alert data arrived
           d('got data', resp);
           this.dispatch(dispatchAction, resp);
         }, (err) => {
-          // dispatch event with error
+          // dispatch type with error
           d('got error', err);
           this.dispatch(`${errorAction}`, err);
 

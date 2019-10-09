@@ -24,6 +24,12 @@
       ],
       "@microphi/store/*": [
         "dist/store/*"
+      ],
+      "@microphi/cache": [
+        "dist/cache"
+      ],
+      "@microphi/cache/*": [
+        "dist/cache/*"
       ]
     }
   },

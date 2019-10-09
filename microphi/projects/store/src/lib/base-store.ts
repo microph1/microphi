@@ -1,11 +1,13 @@
 import { getDebugger } from '@microgamma/loggator';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { StoreMetadata } from './store';
-import { Actions } from './actions';
+import { Actions, RestActions } from './actions';
 
 const d = getDebugger('microphi:BaseStore');
 
 export abstract class BaseStore<T extends {}> {
+
+  public loading$ = new BehaviorSubject(false);
 
   private readonly storeMetadata: StoreMetadata;
 
@@ -48,6 +50,17 @@ export abstract class BaseStore<T extends {}> {
 
     this.actions$.subscribe(async (action: Actions) => {
       d('got action', action);
+      switch (action.type) {
+        case RestActions.REQUEST:
+          this.loading$.next(true);
+          break;
+
+        case RestActions.RESPONSE:
+          this.loading$.next(false);
+          break;
+
+      }
+
 
       const type = action.type;
 
@@ -69,6 +82,7 @@ export abstract class BaseStore<T extends {}> {
 
     }, (err) => {
       d('got error', err);
+      this.loading$.next(false);
     });
 
   }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
-import { delay, tap } from 'rxjs/operators';
+import { delay, map, tap } from 'rxjs/operators';
 import { Ticket, User } from './ticket.interface';
 
 /**
@@ -25,6 +25,12 @@ export class BackendService {
       id: 1,
       description: 'Move the desk to the new location',
       assigneeId: 111,
+      completed: false
+    },
+    {
+      id: 2,
+      description: 'This ticket assignee has been deleted',
+      assigneeId: 112,
       completed: false
     }
   ];
@@ -73,8 +79,9 @@ export class BackendService {
     if (foundTicket && user) {
       return of(foundTicket).pipe(
         delay(randomDelay()),
-        tap((ticket: Ticket) => {
+        map((ticket: Ticket) => {
           ticket.assigneeId = +userId;
+          return ticket;
         })
       );
     }
@@ -87,8 +94,9 @@ export class BackendService {
     if (foundTicket) {
       return of(foundTicket).pipe(
         delay(randomDelay()),
-        tap((ticket: Ticket) => {
-          ticket.completed = true;
+        map((ticket: Ticket) => {
+          ticket.completed = completed;
+          return ticket;
         })
       );
     }

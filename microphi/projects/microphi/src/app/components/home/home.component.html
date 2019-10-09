@@ -31,27 +31,27 @@
     </mat-card>
 
 
+    <div *ngIf="loadingTickets$ | async">loading....</div>
+    <mat-card *ngFor="let i of (tickets$ | async)">
+      <mat-card-header>
+        <mat-card-title>
+         {{i.assignee | json}}
+        </mat-card-title>
+        <mat-card-subtitle>done: {{i.completed}}</mat-card-subtitle>
+      </mat-card-header>
 
-<!--    <mat-card *ngFor="let i of data">-->
-<!--      <mat-card-header>-->
-<!--        <img mat-card-avatar class="example-header-image" alt="avatar" src="https://avatars2.githubusercontent.com/u/3493522?s=460&v=4">-->
-<!--        <mat-card-title>-->
-<!--         {{i.title}}-->
-<!--        </mat-card-title>-->
-<!--        <mat-card-subtitle>{{i.author.name}}/{{i.author.email}}/{{i.date | date}}</mat-card-subtitle>-->
-<!--      </mat-card-header>-->
+      <mat-card-content class="mat-body-1">
+        <pre>
+          {{i | json}}
+        </pre>
 
-<!--      <mat-card-content class="mat-body-1">-->
+      </mat-card-content>
 
-<!--        {{i.body}}-->
-
-<!--      </mat-card-content>-->
-
-<!--      <mat-card-actions fxLayoutAlign="end space-between">-->
-<!--        <button mat-raised-button>LIKE</button>-->
-<!--        <button mat-raised-button>SHARE</button>-->
-<!--      </mat-card-actions>-->
-<!--    </mat-card>-->
+      <mat-card-actions fxLayoutAlign="end space-between">
+        <button mat-button>assign</button>
+        <button mat-button (click)="changeStatus(i)">done/undone</button>
+      </mat-card-actions>
+    </mat-card>
 
   </div>
 

@@ -1,4 +1,4 @@
-import { Action, BaseStore, Reduce, RestActions, Store } from '@microphi/store';
+import { Reduce, BaseStore, Store } from '@microphi/store';
 import { map } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -8,24 +8,22 @@ export interface HttpState {
   error?: HttpErrorResponse
 }
 
+export enum HttpActions {
+  REQUEST,
+  RESPONSE,
+  ERROR
+}
+
 @Store({
   name: 'httpStatusStore',
   initialState: {
     isLoading: false,
     error: null
-  }
+  },
+  actions: HttpActions
 })
 @Injectable()
 export class HttpStatusStore extends BaseStore<HttpState> {
-
-  @Action(RestActions.REQUEST)
-  public static HttpRequest;
-
-  @Action(RestActions.RESPONSE)
-  public static HttpResponse;
-
-  @Action(RestActions.ERROR)
-  public static HttpError;
 
 
   public isLoading$ = this.store$.pipe(
@@ -35,21 +33,21 @@ export class HttpStatusStore extends BaseStore<HttpState> {
   );
 
 
-  @Reduce(RestActions.REQUEST)
+  @Reduce(HttpActions.REQUEST)
   private onRequest(): HttpState {
     return {
       isLoading: true
     };
   }
 
-  @Reduce(RestActions.RESPONSE)
+  @Reduce(HttpActions.RESPONSE)
   private onResponse(): HttpState {
     return {
       isLoading: false
     };
   }
 
-  @Reduce(RestActions.ERROR)
+  @Reduce(HttpActions.ERROR)
   public onError(state: HttpState, err): HttpState {
     return {
       isLoading: false,

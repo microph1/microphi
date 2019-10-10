@@ -1,25 +1,9 @@
-import { getDebugger } from '@microgamma/loggator';
+import { RestActions } from './actions';
 
-const d = getDebugger('microphi:@Action');
+export const ActionMetadata = '@Action';
 
-export function Action(actionName: string) {
-  return (target, key) => {
-    d('action decorator for', key);
+export type ActionsMetadata = RestActions[];
 
-    target[key] = actionName;
-    d('target[key]', target[key]);
-
-    const action = actionName; //new Actions<number>(key); //createAction(key);
-    d('action created', action);
-
-    const actions = Reflect.getMetadata('Actions', target) || [];
-
-    actions.push(action);
-
-
-    d('actions so far', actions);
-
-    Reflect.defineMetadata(`Actions`, actions, target);
-
-  }
+export function getActionMetadata(instance): ActionsMetadata {
+  return Reflect.getMetadata(ActionMetadata, instance.constructor);
 }

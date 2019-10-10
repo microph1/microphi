@@ -10,3 +10,5 @@ export type Ticket = {
   completed: boolean;
   assignee?: User;
 };
+
+export type TicketState = Partial<Ticket> & {loading: boolean, error: any}

@@ -1,5 +1,5 @@
 import { AuthService } from './auth.service';
-import { BaseStore, Effect, Reduce, RestActions, Store } from '@microphi/store';
+import { BaseStore, Effect, Reduce, Store } from '@microphi/store';
 import { map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -17,9 +17,16 @@ export interface AuthState {
   error?: HttpErrorResponse
 }
 
+export enum AuthActions {
+  AUTHENTICATE,
+  VALIDATE,
+  LOGOUT
+}
+
 @Store({
   name: 'authStore',
-  initialState: JSON.parse(localStorage.getItem('authStore')) || {}
+  initialState: JSON.parse(localStorage.getItem('authStore')) || {},
+  actions: AuthActions
 })
 @Injectable()
 export class AuthStore extends BaseStore<AuthState> {
@@ -43,16 +50,16 @@ export class AuthStore extends BaseStore<AuthState> {
     }
 
     if (this.state.hasOwnProperty('token')) {
-      this.dispatch('VALIDATE:REQUEST', this.state.token);
+      this.dispatch(AuthActions.VALIDATE, this.state.token);
     }
   }
 
-  @Effect('VALIDATE:REQUEST', RestActions.RESPONSE, RestActions.ERROR)
+  @Effect(AuthActions.VALIDATE)
   public validateToken(state, payload) {
     return this.authService.validateToken(payload);
   }
 
-  @Effect(RestActions.REQUEST, RestActions.RESPONSE, RestActions.ERROR)
+  @Effect(AuthActions.AUTHENTICATE)
   private requestAuth(state: AuthState, payload) {
 
     return this.authService.authenticate({
@@ -61,7 +68,7 @@ export class AuthStore extends BaseStore<AuthState> {
     });
   }
 
-  @Reduce(RestActions.RESPONSE)
+  @Reduce(AuthActions.AUTHENTICATE)
   private onAuth(state, payload) {
     const { token, ...user } = payload;
 
@@ -72,7 +79,7 @@ export class AuthStore extends BaseStore<AuthState> {
     };
   }
 
-  @Reduce(RestActions.ERROR)
+  @Reduce('onError')
   public onAuthError(state: AuthState, err): AuthState {
 
     return {
@@ -81,7 +88,7 @@ export class AuthStore extends BaseStore<AuthState> {
     }
   }
 
-  @Reduce('LOGOUT')
+  @Reduce(AuthActions.LOGOUT)
   private logout(): AuthState {
     return {
       isAuth: false

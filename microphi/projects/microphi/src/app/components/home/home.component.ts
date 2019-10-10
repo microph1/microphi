@@ -1,16 +1,15 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Log } from '@microgamma/loggator';
 import { AuthStore } from '../../services/auth/auth.store';
-import { TicketStore } from '../../services/tickets/ticket.store';
-import { RestActions } from '../../../../../store/src/lib/actions';
+import { TicketActions, TicketStore } from '../../services/tickets/ticket.store';
 import { Ticket } from '../../services/tickets/ticket.interface';
+import { filter } from 'rxjs/operators';
 
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
 
@@ -20,52 +19,28 @@ export class HomeComponent implements OnInit {
   public user$ = this.authStore.user$;
 
   public tickets$ = this.ticketStore.tickets$;
-  public loadingTickets$ = this.ticketStore.loading$;
+  public loadingTickets = false;
 
   constructor(private authStore: AuthStore, private ticketStore: TicketStore) {
+    this.ticketStore.loading$.pipe(
+      filter((event) => {
+        // TODO we should be able to have 'FIND_ALL_REQUEST' string available form somewhere like TicketStore.actions.FIND_ALL_REQUEST or something similar
+        return event.type === this.ticketStore.getRequestFromAction(TicketActions.FIND_ALL);
+      })
+    ).subscribe((status) => {
 
+      // we can't use an async pipe for this as it would subscribe to the observable after ngOnInit hence we miss
+      // the loading start event;
+      this.loadingTickets = status.status;
+
+    });
   }
 
   public ngOnInit(): void {
-    this.ticketStore.dispatch(RestActions.REQUEST);
+    this.ticketStore.dispatch(TicketActions.FIND_ALL);
   }
 
-  // constructor(private userStore: UserStore) {
-    // this.users$ = store.select(selectAllUsers(null));
-
-    // this.users$ = this.store.select('users');
-
-    // this.$log.d('userStore', userStore);
-    //
-    // this.counter$ = userStore.store$;
-    //
-    // this.counter$.subscribe((value) => {
-    //   const state = value;
-    //   this.$log.d('counting', state);
-    //   this.count = state;
-    // })
-
-    // this.counter$ = this.userStore.store$;
-  // }
-
-  //
-  // increment() {
-  //   this.$log.d('incrementing');
-  //   // this.userStore.store.dispatch(UserStore.GET_USERS(1));
-  //   this.userStore.dispatch(UserStore.GET_USERS, {
-  //     name: 'alice'
-  //   });
-  //
-  // }
-  //
-  // decrement() {
-  //   this.$log.d('decrementing');
-  //   // this.userStore.store.dispatch(UserStore.DECREMENT(2));
-  //   this.userStore.dispatch(UserStore.DECREMENT, {
-  //     name: 'bob'
-  //   });
-  // }
   changeStatus(i: Ticket) {
-    this.ticketStore.dispatch('CHANGESTATUS', i);
+    this.ticketStore.dispatch(TicketActions.CHANGE_STATUS, i);
   }
 }

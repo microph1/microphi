@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
-import { of } from 'rxjs';
 import { AuthStore } from '../../services/auth/auth.store';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'portal-toolbar',
@@ -12,6 +10,7 @@ export class ToolbarComponent {
 
 
   isLoggedIn$ = this.authStore.isAuth$;
+  user$ = this.authStore.user$;
 
   constructor(private authStore: AuthStore) { }
 

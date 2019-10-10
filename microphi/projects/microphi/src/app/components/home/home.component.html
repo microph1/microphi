@@ -6,10 +6,6 @@
     <mat-card *ngIf=" '' | isLoggedIn | async">
 
       <mat-card-content class="mat-body-1">
-
-        <code>
-          {{user$ | async | json}}
-        </code>
 <!--        <form [formGroup]="story" fxLayout="column">-->
 <!--          <mat-form-field>-->
 <!--            <mat-label>what's up?</mat-label>-->
@@ -30,14 +26,17 @@
       </mat-card-actions>
     </mat-card>
 
+    <mat-progress-bar mode="indeterminate" *ngIf="loadingTickets"></mat-progress-bar>
 
-    <div *ngIf="loadingTickets$ | async">loading....</div>
     <mat-card *ngFor="let i of (tickets$ | async)">
       <mat-card-header>
         <mat-card-title>
-         {{i.assignee | json}}
+         {{i.description| json}}
         </mat-card-title>
-        <mat-card-subtitle>done: {{i.completed}}</mat-card-subtitle>
+        <mat-card-subtitle>
+          assignee: {{i.assignee?.name}}
+          done: {{(i.isLoading) ? 'updating...' : i.completed}}
+        </mat-card-subtitle>
       </mat-card-header>
 
       <mat-card-content class="mat-body-1">

@@ -1,17 +1,29 @@
 import { getDebugger } from '@microgamma/loggator';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { StoreMetadata } from './store';
-import { Actions, RestActions } from './actions';
-
-const d = getDebugger('microphi:BaseStore');
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { getStoreMetadata, StoreOptions } from './store';
+import { Actions } from './actions';
+import { ActionsMetadata, getActionMetadata } from './action';
+import { getReduceMetadata } from './reduce';
 
 export abstract class BaseStore<T extends {}> {
+  private logger = getDebugger(`microphi:BaseStore:${this.constructor.name}`);
 
-  public loading$ = new BehaviorSubject(false);
+  public loading$ = new Subject<{
+    type: string,
+    payload: any,
+    status: boolean
+  }>();
 
-  private readonly storeMetadata: StoreMetadata;
+  private readonly storeMetadata: StoreOptions;
 
   private _state: T;
+
+  private readonly actionsMetadata: ActionsMetadata;
+
+  public error$ = new Subject<{
+    action: string,
+    error: typeof Error
+  }>();
 
   get state(): T {
     return this._state;
@@ -28,66 +40,133 @@ export abstract class BaseStore<T extends {}> {
   protected store$: BehaviorSubject<T>;
 
   constructor() {
-    this.storeMetadata = Reflect.getMetadata('Store', this.constructor);
-    d('@Store', this.storeMetadata);
+
+    this.storeMetadata = getStoreMetadata(this);
+    this.logger('@Store', this.storeMetadata);
 
     this.store$ = new BehaviorSubject(this.storeMetadata.initialState);
     this._state = this.storeMetadata.initialState;
-    d('InitialState', this.state);
+    this.logger('InitialState', this.state);
 
-    const actionsMetadata = Reflect.getMetadata('Actions', this.constructor);
-    d('Actions', actionsMetadata);
+    this.actionsMetadata = getActionMetadata(this);
+    this.logger('Actions', this.actionsMetadata);
 
-    const reducerMetadata = Reflect.getMetadata('Reducer', this);
-    d('Reducers', reducerMetadata);
+    const reducerMetadata = getReduceMetadata(this);
+    this.logger('Reducers', reducerMetadata);
+    const remappedReducers = this.parseReducers(reducerMetadata);
+    this.logger('remapped reducers', remappedReducers);
+
 
     const effectsMetadata = Reflect.getMetadata('@Effect', this) || {};
-    d('Effects', effectsMetadata);
-    /*
-      effectsMetadata is something like the following
-      { REQUEST: ["requestAuth"] }
-     */
+    this.logger('Effects', effectsMetadata);
+    const remappedEffects = this.remapEffects(effectsMetadata);
+    this.logger('remapped effects', remappedEffects);
 
     this.actions$.subscribe(async (action: Actions) => {
-      d('got action', action);
-      switch (action.type) {
-        case RestActions.REQUEST:
-          this.loading$.next(true);
-          break;
-
-        case RestActions.RESPONSE:
-          this.loading$.next(false);
-          break;
-
-      }
-
+      this.logger('got type', action);
 
       const type = action.type;
 
-      if (effectsMetadata.hasOwnProperty(type)) {
-        const effects = effectsMetadata[type];
-        effects.forEach((effectName) => {
-          this[effectName](this.state, action.payload);
+      if (remappedEffects.hasOwnProperty(type)) {
+
+        this.logger('starting loading');
+        this.loading$.next({type: type, payload: action.payload, status: true});
+
+        const effectName = remappedEffects[type];
+        this.logger('should call', effectName);
+
+        // TODO use .toPromise to trick subscription/unsubscription hassle
+        (this[effectName](this.state, action.payload) as Observable<any>).subscribe((resp) => {
+          // pass response down triggering type to alert data arrived
+          this.logger('got data', resp);
+
+
+          this.actions$.next({
+            type: remappedEffects[effectName],
+            payload: resp
+          });
+
+          this.loading$.next({type: type, payload: action.payload, status: false});
+        }, (err) => {
+          // dispatch type with error
+          this.logger('got error', err);
+
+          this.error$.next({action: type, error: err});
+          this.loading$.next({type: type, payload: action.payload, status: false});
+
         });
+
+      } else {
+
+        const fn = remappedReducers[action.type];
+        this.logger('should call fn', fn);
+
+        if (this[remappedReducers[action.type]]) {
+          // TODO since we may not need the state in the reducer better to switch the order fo the arguments
+          const newState = await this[remappedReducers[action.type]](this.state, action.payload);
+          this.logger('newState', newState);
+          this.state = newState;
+        }
+
       }
 
-      // then run reducers
-      if (this[reducerMetadata[action.type]]) {
-        // TODO since we may not need the state in the reducer better to switch the order fo the arguments
-        const newState = await this[reducerMetadata[action.type]](this.state, action.payload);
-        d('newState', newState);
-        this.state = newState;
-      }
 
 
     }, (err) => {
-      d('got error', err);
-      this.loading$.next(false);
+      this.logger('got error', err);
+      this.loading$.next({type: 'GENERAL_ERROR', payload: err, status: false});
     });
 
   }
 
-  dispatch(type, payload?) {
-    this.actions$.next({type, payload});
+  public dispatch(type, payload?) {
+    // TODO not sure we should extrapolate the request here
+    const requestAction = this.actionsMetadata[type].request;
+    this.logger('dispatching type', requestAction);
+    // instead should dispatch a request
+
+    this.actions$.next({type: requestAction, payload});
+  }
+
+  public getRequestFromAction(actionType) {
+    return this.actionsMetadata[actionType].request;
+  }
+
+  public getResponseFromAction(actionType) {
+    return this.actionsMetadata[actionType].response;
+  }
+
+  private parseReducers(reducers) {
+    const remappedReducers = {};
+
+    Object.keys(reducers).forEach((action) => {
+      if (+action >= 0) {
+        // this.logger('remapping', type, 'to');
+        const realAction = this.actionsMetadata[action].response;
+        // this.logger('real type to map to', realAction);
+        remappedReducers[realAction] = reducers[action]
+      }
+    });
+
+    return remappedReducers;
+  }
+
+  private remapEffects(effectsMetadata: {}) {
+    const remappedEffects = {};
+
+    Object.keys(effectsMetadata).forEach((action) => {
+      // effects should react to REQUEST events
+
+      if (+action >= 0) {
+
+        const realAction = this.actionsMetadata[action].request;
+
+        remappedEffects[realAction] = effectsMetadata[action];
+        // mapping the effect function so that it can return a response type
+        remappedEffects[effectsMetadata[action]] = this.actionsMetadata[action].response;
+      }
+    });
+
+    return remappedEffects;
   }
 }

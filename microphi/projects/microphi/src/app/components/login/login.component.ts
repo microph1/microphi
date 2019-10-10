@@ -1,7 +1,7 @@
 import { Component, HostListener, OnDestroy, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Log } from '@microgamma/loggator';
-import { AuthStore } from '../../services/auth/auth.store';
+import { AuthActions, AuthStore } from '../../services/auth/auth.store';
 import { RestActions } from '@microphi/store';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -32,7 +32,7 @@ export class LoginComponent implements OnDestroy {
   });
 
 
-  public authError$ = this.authStore.authError$;
+  public authError$ = this.authStore.error$;
 
   constructor(private authStore: AuthStore, private router: Router) {
     this.subSink.add(
@@ -53,7 +53,7 @@ export class LoginComponent implements OnDestroy {
     this.$log.d('user', this.user.getRawValue());
 
     if (this.user.valid) {
-      this.authStore.dispatch(RestActions.REQUEST, this.user.getRawValue());
+      this.authStore.dispatch(AuthActions.AUTHENTICATE, this.user.getRawValue());
 
     }
   }

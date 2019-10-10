@@ -4,9 +4,16 @@ export interface Actions {
   payload: any;
 }
 
-export class RestActions {
-  public static REQUEST = 'REQUEST';
-  public static RESPONSE = 'RESPONSE';
-  public static ERROR = 'ERROR';
+export type RestActions = {
+  request: string;
+  response: string;
+  error?: any;
 }
 
+export function createAction(action: string): RestActions {
+  return {
+    request: `${action}_REQUEST`,
+    response: `${action}_RESPONSE`,
+    error: `${action}_ERROR`
+  };
+}

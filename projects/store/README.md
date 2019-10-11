@@ -1,24 +1,9 @@
-# Store
+# @microphi/store
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.2.8.
+> A typescript library to handle states in a human way
 
-## Code scaffolding
+Please refer to the following post for some more info. Documentation will come at a later stage
 
-Run `ng generate component component-name --project store` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project store`.
-> Note: Don't forget to add `--project store` or else it will be added to the default project in your `angular.json` file. 
+https://dev.to/davidecavaliere/a-state-manager-for-angular-that-makes-sense-finally-at-least-for-me-2kij-temp-slug-6701935?preview=27e5680771de4a8c93dd2c825b0691b68605d25f1e4ff583e6c4116ba4d30b3b863c98dcfe41b7d059672a5bc3b6e892ceba1b8272e8123594ac0843
 
-## Build
-
-Run `ng build store` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Publishing
-
-After building your library with `ng build store`, go to the dist folder `cd dist/store` and run `npm publish`.
-
-## Running unit tests
-
-Run `ng test store` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Be aware this is just a PoC at this moment *do not use it on your production apps* 

@@ -115,6 +115,8 @@ export abstract class BaseStore<T extends {}> {
     }, (err) => {
       this.logger('got error', err);
       this.loading$.next({type: 'GENERAL_ERROR', payload: err, status: false});
+      // TODO should handle the error or should we change loading$ to a more generic status$ so we can pass altogether
+      // loadings and errors events?
     });
 
   }

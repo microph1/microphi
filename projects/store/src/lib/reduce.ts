@@ -3,13 +3,13 @@ import { getDebugger } from '@microgamma/loggator';
 
 export const ReduceMetadata = '@Reduce';
 
-export type Reducers = {
+export interface Reducers {
   [actionName: number]: string;
 }
 
 export function Reduce(onAction: any) {
   return <Store extends BaseStore<any>>(target: Store, key: string, descriptor: PropertyDescriptor) => {
-    const d = getDebugger(`microphi:AReduce:${target.constructor.name}`);
+    const d = getDebugger(`microphi:@Reduce:${target.constructor.name}`);
 
     const reducer = Reflect.getMetadata(ReduceMetadata, target) || {};
 

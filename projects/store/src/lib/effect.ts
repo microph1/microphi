@@ -1,10 +1,10 @@
 import { getDebugger } from '@microgamma/loggator';
 
-export function Effect(onAction: any, dispatchAction?: any, onErrorAction?: any) {
+export function Effect(onAction: any) {
 
-  return (target, key, descriptor) => {
+  return (target, key) => {
 
-    const d = getDebugger(`microphi:@AEffect:${target.constructor.name}`);
+    const d = getDebugger(`microphi:@Effect:${target.constructor.name}`);
 
     d('decorating', key, 'with type', onAction);
 
@@ -13,5 +13,5 @@ export function Effect(onAction: any, dispatchAction?: any, onErrorAction?: any)
     effects[onAction] = key;
 
     return Reflect.defineMetadata('@Effect', effects, target);
-  }
+  };
 }

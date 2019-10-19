@@ -4,6 +4,7 @@ import { getStoreMetadata, StoreOptions } from './store';
 import { Actions } from './actions';
 import { ActionsMetadata, getActionMetadata } from './action';
 import { getReduceMetadata } from './reduce';
+import { tap } from 'rxjs/operators';
 
 export abstract class BaseStore<T extends {}> {
   private logger = getDebugger(`microphi:BaseStore:${this.constructor.name}`);
@@ -62,41 +63,64 @@ export abstract class BaseStore<T extends {}> {
     const remappedEffects = this.remapEffects(effectsMetadata);
     this.logger('remapped effects', remappedEffects);
 
-    this.actions$.subscribe(async (action: Actions) => {
+    this.actions$.pipe(
+      tap((action: Actions) => {
+        if (action.type.includes('_REQUEST')) {
+          this.logger('starting loading');
+          this.loading$.next({type: action.type, payload: action.payload, status: true});
+        }
+      }),
+      tap((action: Actions) => {
+        if (action.type.includes('_RESPONSE')) {
+          this.logger('stopping loading');
+          this.loading$.next({type: action.type, payload: action.payload, status: false});
+        }
+      })
+    ).subscribe(async (action: Actions) => {
       this.logger('got type', action);
 
       const type = action.type;
 
-      if (remappedEffects.hasOwnProperty(type)) {
+      // effects are associated with requests
+      if (type.includes('_REQUEST')) {
+        if (remappedEffects.hasOwnProperty(type)) {
 
-        this.logger('starting loading');
-        this.loading$.next({type: type, payload: action.payload, status: true});
+          const effectName = remappedEffects[type];
+          this.logger('should call', effectName);
 
-        const effectName = remappedEffects[type];
-        this.logger('should call', effectName);
+          // TODO use .toPromise to trick subscription/unsubscription hassle
+          try {
+            const resp = await (this[effectName](this.state, action.payload) as Observable<any>).toPromise();
+            // pass response down triggering type to alert data arrived
 
-        // TODO use .toPromise to trick subscription/unsubscription hassle
-        (this[effectName](this.state, action.payload) as Observable<any>).subscribe((resp) => {
-          // pass response down triggering type to alert data arrived
-          this.logger('got data', resp);
+            this.logger('got data', resp);
+
+            this.actions$.next({
+              type: remappedEffects[effectName],
+              payload: resp
+            });
+
+          } catch (err) {
+            this.logger('got error', err);
+            // dispatch type with error
+
+            this.error$.next({action: type, error: err});
 
 
+            // TODO: to swallow or not to shallow?
+            // throw e;
+          }
+
+        } else {
+          // if there is no effect associated with this action then we can proceed calling the reducer associated
           this.actions$.next({
-            type: remappedEffects[effectName],
-            payload: resp
+            type: type.replace('_REQUEST', '_RESPONSE'),
+            payload: action.payload
           });
 
           this.loading$.next({type: type, payload: action.payload, status: false});
-        }, (err) => {
-          // dispatch type with error
-          this.logger('got error', err);
-
-          this.error$.next({action: type, error: err});
-          this.loading$.next({type: type, payload: action.payload, status: false});
-
-        });
-
-      } else {
+        }
+      } else if (type.includes('_RESPONSE')) {
 
         const fn = remappedReducers[action.type];
         this.logger('should call fn', fn);
@@ -109,8 +133,6 @@ export abstract class BaseStore<T extends {}> {
         }
 
       }
-
-
 
     }, (err) => {
       this.logger('got error', err);
@@ -170,5 +192,9 @@ export abstract class BaseStore<T extends {}> {
     });
 
     return remappedEffects;
+  }
+
+  public getActionName(type: number) {
+    return this.actionsMetadata[type];
   }
 }

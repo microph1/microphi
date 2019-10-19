@@ -12,6 +12,7 @@ export interface StoreOptions {
 }
 
 export function Store(options: StoreOptions) {
+
   const d = getDebugger(`microphi:@Store:${options.name}`);
 
   return (target) => {
@@ -28,7 +29,13 @@ export function Store(options: StoreOptions) {
           d('parsing type', action);
 
           actions[action] = createAction(options.actions[action]);
+        } else {
+          // we can parse action names here. action is a string
+          d('parsing action', action);
+          actions[action] = [`${action}_REQUEST`, `${action}_RESPONSE`];
         }
+
+
       }
 
       d('actions are', actions);

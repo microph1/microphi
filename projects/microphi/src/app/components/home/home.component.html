@@ -35,7 +35,7 @@
         </mat-card-title>
         <mat-card-subtitle>
           assignee: {{i.assignee?.name}}
-          done: {{(i.isLoading) ? 'updating...' : i.completed}}
+          done: {{i.completed}}
         </mat-card-subtitle>
       </mat-card-header>
 
@@ -47,8 +47,11 @@
       </mat-card-content>
 
       <mat-card-actions fxLayoutAlign="end space-between">
-        <button mat-button>assign</button>
-        <button mat-button (click)="changeStatus(i)">done/undone</button>
+        <button mat-button (click)="assign(i, {id: 123})">assign</button>
+        <button mat-button (click)="changeStatus(i)">
+          done/undone
+          <mat-progress-bar mode="indeterminate" *ngIf="i.isLoading"  ></mat-progress-bar>
+        </button>
       </mat-card-actions>
     </mat-card>
 

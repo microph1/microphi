@@ -24,8 +24,8 @@ export class HomeComponent implements OnInit {
   constructor(private authStore: AuthStore, private ticketStore: TicketStore) {
     this.ticketStore.loading$.pipe(
       filter((event) => {
-        // TODO we should be able to have 'FIND_ALL_REQUEST' string available form somewhere like TicketStore.actions.FIND_ALL_REQUEST or something similar
-        return event.type === this.ticketStore.getRequestFromAction(TicketActions.FIND_ALL);
+
+        return event.type.includes(TicketActions[TicketActions.FIND_ALL]);
       })
     ).subscribe((status) => {
 
@@ -40,7 +40,11 @@ export class HomeComponent implements OnInit {
     this.ticketStore.dispatch(TicketActions.FIND_ALL);
   }
 
-  changeStatus(i: Ticket) {
+  public changeStatus(i: Ticket) {
     this.ticketStore.dispatch(TicketActions.CHANGE_STATUS, i);
+  }
+
+  public assign(ticket, user) {
+    this.ticketStore.dispatch(TicketActions.ASSIGN, {ticket, user});
   }
 }

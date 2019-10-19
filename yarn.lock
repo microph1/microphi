@@ -908,6 +908,15 @@
     debug "^4.1.1"
     reflect-metadata "^0.1.12"
 
+"@microphi/store@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@microphi/store/-/store-0.0.4.tgz#60c759ce80daa8028cf27fd0bd2b37edbf189fdf"
+  integrity sha512-Pub063Jt6cpN1xIcXFAT69ocfsqzZU7jeZg6HD3/EivZvtbcjPH+YsjKQRfJUrKaojc3UEmCUs0IvtLMQNCA8A==
+  dependencies:
+    "@microgamma/loggator" "^1.10.18"
+    reflect-metadata "^0.1.13"
+    tslib "^1.9.0"
+
 "@ngtools/webpack@8.3.7":
   version "8.3.7"
   resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-8.3.7.tgz#73ca8767937932c7ab7db9c18ed6bc9f622aa0e3"
@@ -6637,7 +6646,7 @@ readdirp@~3.1.3:
   dependencies:
     picomatch "^2.0.4"
 
-reflect-metadata@^0.1.12, reflect-metadata@^0.1.2:
+reflect-metadata@^0.1.12, reflect-metadata@^0.1.13, reflect-metadata@^0.1.2:
   version "0.1.13"
   resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.13.tgz#67ae3ca57c972a2aa1642b10fe363fe32d49dc08"
   integrity sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==

@@ -2,24 +2,25 @@ import { Effect, Reduce, BaseStore, Store } from '@microphi/store';
 import { Injectable } from '@angular/core';
 import { Ticket } from './ticket.interface';
 import { BackendService } from './ticket.service';
-import { bufferCount, catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
-import { from, NEVER } from 'rxjs';
+import { bufferCount, catchError, map, mergeMap, switchMap, switchMapTo, tap } from 'rxjs/operators';
+import { from, NEVER, of } from 'rxjs';
 
-type TicketWithState = Ticket & { isLoading?: boolean}
+type TicketWithState = Ticket & { isLoading?: boolean };
 
 interface TicketsState {
-  tickets: TicketWithState[]
+  tickets: TicketWithState[];
 }
 
 export enum TicketActions {
   FIND_ALL,
   FIND_ONE,
-  CHANGE_STATUS
+  CHANGE_STATUS,
+  ASSIGN
 }
 
 @Store({
-  name: 'ticketStore',
-  initialState: { tickets: [] },
+  name: 'TicketStore',
+  initialState: JSON.parse(localStorage.getItem('TicketStore')) || { tickets: [] },
   actions: TicketActions
 })
 @Injectable()
@@ -72,13 +73,22 @@ export class TicketStore extends BaseStore<TicketsState> {
     }
 
     return this.ticketService.complete(payload.id, !payload.completed).pipe(
-      tap((t: TicketWithState )=> t.isLoading = false)
+      tap((t: TicketWithState) => ticketToUpdate.isLoading = false)
     );
   }
 
   @Reduce(TicketActions.FIND_ALL)
   private onResponse(state, payload: Ticket[]) {
-    this.state.tickets.push(...payload);
+
+    const newTickets = payload
+      .filter((remoteTicket) => {
+        return state.tickets.every((localTicket) => {
+          return localTicket.id !== remoteTicket.id;
+        });
+      });
+
+
+    state.tickets.push(...newTickets);
 
     return state;
   }
@@ -87,11 +97,18 @@ export class TicketStore extends BaseStore<TicketsState> {
   private onStatusChanged(state, payload: Ticket) {
     this.state.tickets.forEach((ticket) => {
       if (ticket.id === payload.id) {
-        ticket.completed = payload.completed
+        ticket.completed = payload.completed;
       }
 
     });
 
     return state;
   }
+
+  @Reduce(TicketActions.ASSIGN)
+  private onAssign(state, payload) {
+    return state;
+  }
+
+
 }

@@ -1,9 +1,10 @@
-import { Effect, Reduce, BaseStore, Store } from '@microphi/store';
+import { BaseStore, Effect, Reduce, Store, ObservableList } from '@microphi/store';
 import { Injectable } from '@angular/core';
 import { Ticket } from './ticket.interface';
 import { BackendService } from './ticket.service';
-import { bufferCount, catchError, map, mergeMap, switchMap, switchMapTo, tap } from 'rxjs/operators';
-import { from, NEVER, of } from 'rxjs';
+import { bufferCount, catchError, map, mergeMap, switchMap } from 'rxjs/operators';
+import { BehaviorSubject, from, NEVER } from 'rxjs';
+
 
 type TicketWithState = Ticket & { isLoading?: boolean };
 
@@ -18,15 +19,32 @@ export enum TicketActions {
   ASSIGN
 }
 
+function getTicketsFromLocalStorage() {
+  const initialState = {
+    tickets: new ObservableList<TicketWithState>([])
+  };
+
+  const ticketStore = JSON.parse(localStorage.getItem('TicketStore'));
+
+  if (ticketStore) {
+    initialState.tickets.push(...ticketStore.tickets);
+  }
+
+  return initialState;
+
+}
+
 @Store({
   name: 'TicketStore',
-  initialState: JSON.parse(localStorage.getItem('TicketStore')) || { tickets: [] },
+  initialState: getTicketsFromLocalStorage(),
   actions: TicketActions
 })
 @Injectable()
 export class TicketStore extends BaseStore<TicketsState> {
   public tickets$ = this.store$.pipe(
-    map((state) => state.tickets)
+    map((state) => {
+      return state.tickets;
+    })
   );
 
   constructor(private ticketService: BackendService) {
@@ -39,12 +57,8 @@ export class TicketStore extends BaseStore<TicketsState> {
 
     return this.ticketService.tickets().pipe(
       switchMap((tickets) => {
-        console.log('parsing tickets', tickets);
         numberOfTickets = tickets.length;
         return from(tickets);
-      }),
-      tap((ticket) => {
-        console.log('parsing ticket', ticket);
       }),
       mergeMap((ticket: Ticket) => {
 
@@ -67,42 +81,37 @@ export class TicketStore extends BaseStore<TicketsState> {
   @Effect(TicketActions.CHANGE_STATUS)
   private changeStatus(state, payload: Ticket) {
 
-    const ticketToUpdate = this.state.tickets.find((t) => t.id === payload.id);
-    if (ticketToUpdate) {
-      ticketToUpdate.isLoading = true;
-    }
+    // const ticketToUpdate = this.state.tickets.find((t) => t.id === payload.id);
+    // if (ticketToUpdate) {
+    //   ticketToUpdate.isLoading = true;
+    // }
 
-    return this.ticketService.complete(payload.id, !payload.completed).pipe(
-      tap((t: TicketWithState) => ticketToUpdate.isLoading = false)
-    );
+    state.tickets.updateOne({...payload, isLoading: true});
+
+    return this.ticketService.complete(payload.id, !payload.completed);
   }
 
   @Reduce(TicketActions.FIND_ALL)
   private onResponse(state, payload: Ticket[]) {
 
-    const newTickets = payload
-      .filter((remoteTicket) => {
-        return state.tickets.every((localTicket) => {
-          return localTicket.id !== remoteTicket.id;
-        });
-      });
+    // const newTickets = payload
+    //   .filter((remoteTicket) => {
+    //     return state.tickets.every((localTicket) => {
+    //       return localTicket.id !== remoteTicket.id;
+    //     });
+    //   });
 
-
-    state.tickets.push(...newTickets);
+    state.tickets.push(...payload);
 
     return state;
   }
 
   @Reduce(TicketActions.CHANGE_STATUS)
   private onStatusChanged(state, payload: Ticket) {
-    this.state.tickets.forEach((ticket) => {
-      if (ticket.id === payload.id) {
-        ticket.completed = payload.completed;
-      }
 
-    });
+    state.tickets.updateOne({ ...payload, isLoading: false});
 
-    return state;
+    // return state;
   }
 
   @Reduce(TicketActions.ASSIGN)

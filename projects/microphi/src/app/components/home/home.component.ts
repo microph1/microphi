@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Log } from '@microgamma/loggator';
 import { AuthStore } from '../../services/auth/auth.store';
 import { TicketActions, TicketStore } from '../../services/tickets/ticket.store';
 import { Ticket } from '../../services/tickets/ticket.interface';
 import { filter } from 'rxjs/operators';
 
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent implements OnInit {
 

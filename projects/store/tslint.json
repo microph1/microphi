@@ -12,6 +12,8 @@
       "element",
       "lib",
       "kebab-case"
-    ]
+    ],
+    "object-literal-shorthand": false,
+    "variable-name": false
   }
 }

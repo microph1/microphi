@@ -6,6 +6,9 @@ import { ActionsMetadata, getActionMetadata } from './action';
 import { getReduceMetadata } from './reduce';
 import { tap } from 'rxjs/operators';
 
+// Looks like passing the status on each effect/reducer is not needed: developer can always refer to this.state
+// TODO: Remove the state argument to effect/reducer
+
 export abstract class BaseStore<T extends {}> {
   private logger = getDebugger(`microphi:BaseStore:${this.constructor.name}`);
 
@@ -31,9 +34,9 @@ export abstract class BaseStore<T extends {}> {
   }
 
   set state(value: T) {
+    this._state = value;
     this.store$.next(value);
     localStorage.setItem(this.storeMetadata.name, JSON.stringify(value));
-    this._state = value;
   }
 
   protected actions$ = new Subject();
@@ -129,7 +132,9 @@ export abstract class BaseStore<T extends {}> {
           // TODO since we may not need the state in the reducer better to switch the order fo the arguments
           const newState = await this[remappedReducers[action.type]](this.state, action.payload);
           this.logger('newState', newState);
-          this.state = newState;
+          if (newState) {
+            this.state = newState;
+          }
         }
 
       }
@@ -166,7 +171,7 @@ export abstract class BaseStore<T extends {}> {
         // this.logger('remapping', type, 'to');
         const realAction = this.actionsMetadata[action].response;
         // this.logger('real type to map to', realAction);
-        remappedReducers[realAction] = reducers[action]
+        remappedReducers[realAction] = reducers[action];
       }
     });
 

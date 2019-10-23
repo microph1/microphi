@@ -3,7 +3,9 @@ import { Log } from '@microgamma/loggator';
 import { AuthStore } from '../../services/auth/auth.store';
 import { TicketActions, TicketStore } from '../../services/tickets/ticket.store';
 import { Ticket } from '../../services/tickets/ticket.interface';
-import { filter } from 'rxjs/operators';
+import { debounce, debounceTime, filter, map, mergeMap, multicast, tap } from 'rxjs/operators';
+import { FormControl } from '@angular/forms';
+import { BehaviorSubject, combineLatest, of } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -18,8 +20,47 @@ export class HomeComponent implements OnInit {
 
   public user$ = this.authStore.user$;
 
-  public tickets$ = this.ticketStore.tickets$;
+  public searchForm = new FormControl();
+  private searchValue$ = this.searchForm.valueChanges.pipe(
+    debounceTime(1000),
+    multicast(() => new BehaviorSubject(null))
+  );
+
+  public tickets$ = combineLatest(this.ticketStore.tickets$, this.searchValue$).pipe(
+    tap(([tickets, search]) => {
+
+      if (search === null || search === '') {
+        for (const ticket of tickets) {
+
+          ticket.next({
+            ...ticket.getValue(),
+            hidden: false
+          })
+        }
+        return;
+      }
+
+      for (const ticket of tickets) {
+        let hidden = true;
+
+        if (ticket.getValue().id == search) {
+          hidden = false;
+        }
+
+        ticket.next({
+          ...ticket.getValue(),
+          hidden
+        })
+
+      }
+
+    }),
+    map(([tickets, search]) => {
+      return tickets;
+    })
+  );
   public loadingTickets = false;
+
 
   constructor(private authStore: AuthStore, private ticketStore: TicketStore) {
     this.ticketStore.loading$.pipe(
@@ -34,6 +75,9 @@ export class HomeComponent implements OnInit {
       this.loadingTickets = status.status;
 
     });
+
+
+    this.searchValue$.connect();
   }
 
   public ngOnInit(): void {

@@ -26,6 +26,10 @@
       </mat-card-actions>
     </mat-card>
 
+    <mat-form-field>
+      <input matInput [placeholder]="'search any ticket'" [formControl]="searchForm">
+    </mat-form-field>
+
     <mat-progress-bar mode="indeterminate" *ngIf="loadingTickets"></mat-progress-bar>
 
     <div fxLayout="row" fxLayoutGap="50px">
@@ -36,54 +40,6 @@
         </app-ticket>
 
       </div>
-
-<!--      <div fxLayout="column" fxLayoutGap="50px">-->
-<!--        <cdk-virtual-scroll-viewport itemSize="1000">-->
-<!--          <mat-card *cdkVirtualFor="let i of (tickets$ | async)">-->
-<!--            test-->
-<!--            <mat-card-content class="mat-body-1" *ngIf="(i | async) as t">-->
-<!--            <pre>-->
-<!--              {{t | json}}-->
-<!--            </pre>-->
-
-<!--              <button mat-button (click)="assign(t, {id: 123})">assign</button>-->
-<!--              <button mat-button (click)="changeStatus(t)">-->
-<!--                done/undone-->
-<!--                <mat-progress-bar mode="indeterminate" *ngIf="t.isLoading"></mat-progress-bar>-->
-<!--              </button>-->
-<!--            </mat-card-content>-->
-
-
-<!--          </mat-card>-->
-
-<!--        </cdk-virtual-scroll-viewport>-->
-
-<!--      </div>-->
-
-<!--      <div fxLayout="column" fxLayoutGap="50px">-->
-
-<!--        <mat-card *ngFor="let i of tickets$$;">-->
-
-<!--          <div *ngIf="(i | async) as ticket">-->
-<!--            <mat-card-content class="mat-body-1">-->
-<!--              <pre>-->
-<!--                {{ticket | json}}-->
-<!--              </pre>-->
-
-<!--            </mat-card-content>-->
-
-<!--            <mat-card-actions fxLayoutAlign="end space-between">-->
-<!--              <button mat-button (click)="assign(ticket, {id: 123})">assign</button>-->
-<!--              <button mat-button (click)="changeStatus(ticket)">-->
-<!--                done/undone-->
-<!--                <mat-progress-bar mode="indeterminate" *ngIf="ticket.isLoading"  ></mat-progress-bar>-->
-<!--              </button>-->
-<!--            </mat-card-actions>-->
-
-<!--          </div>-->
-<!--        </mat-card>-->
-<!--      </div>-->
-
 
     </div>
 

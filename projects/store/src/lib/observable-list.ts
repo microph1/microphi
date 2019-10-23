@@ -1,23 +1,30 @@
 import { BehaviorSubject } from 'rxjs';
 
 export class ObservableList<T extends {}> {
-  private ids: string[] = [];
-  private data: {
-    [id: string]: BehaviorSubject<T>
-  } = {};
+  private ids: Set<string> = new Set<string>();
+  private data: Map<string, BehaviorSubject<T>> = new Map();
+  //
+  // private data: {
+  //   [id: string]: BehaviorSubject<T>
+  // } = {};
 
   constructor(items: any[], private idFieldName = 'id') {
     for (const item of items) {
-      this.ids.push(item.id);
-      this.data[item.id] = new BehaviorSubject(item);
+      this.ids.add(item.id);
+      // this.data[item.id] = new BehaviorSubject(item);
+      this.data.set(item.id, new BehaviorSubject(item));
     }
   }
 
   *[Symbol.iterator](): IterableIterator<BehaviorSubject<T>> {
+
+
     // tslint:disable-next-line:forin
-    for (const id in this.ids) {
-      yield this.data[id];
+    for (const id of this.ids.values()) {
+      yield this.data.get(id);
+      // yield this.data[id];
     }
+
   }
 
   public push(...items: T[]) {
@@ -25,20 +32,20 @@ export class ObservableList<T extends {}> {
 
     for (const item of items) {
 
-      if (this.data.hasOwnProperty(item[id])) {
+      if (this.data.has(item[id])) {
         // check whether the item changed;
 
-        const storedItem = this.data[item[id]].getValue();
+        const storedItem = this.data.get(item[id]).getValue();
         const shouldUpdate = Object.keys(storedItem).some((key) => {
           return storedItem[key] !== item[key];
         });
 
         if (shouldUpdate) {
-          this.data[item[id]].next(item);
+          this.data.get(item[id]).next(item);
         }
       } else {
-        this.ids.push(item[id]);
-        this.data[item[id]] = new BehaviorSubject(item);
+        this.ids.add(item[id]);
+        this.data.set(item[id], new BehaviorSubject(item));
       }
 
     }
@@ -46,7 +53,10 @@ export class ObservableList<T extends {}> {
   }
 
   public updateOne(item: T) {
-    this.data[item[this.idFieldName]].next(item);
+    if (this.data.has(item[this.idFieldName])) {
+
+      this.data.get(item[this.idFieldName]).next(item);
+    }
   }
 
   public toJSON() {

@@ -124,6 +124,29 @@
               "devServerTarget": "microphi:serve:production"
             }
           }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/microphi-server",
+            "main": "projects/microphi/src/main.server.ts",
+            "tsConfig": "projects/microphi/tsconfig.server.json"
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/microphi/src/environments/environment.ts",
+                  "with": "projects/microphi/src/environments/environment.prod.ts"
+                }
+              ],
+              "sourceMap": false,
+              "optimization": {
+                "scripts": false,
+                "styles": true
+              }
+            }
+          }
         }
       }
     },

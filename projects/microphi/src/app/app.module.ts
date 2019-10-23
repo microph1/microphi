@@ -32,7 +32,7 @@ import { TicketComponent } from './components/ticket/ticket.component';
     TicketComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,

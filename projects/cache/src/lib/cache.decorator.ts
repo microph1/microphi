@@ -75,6 +75,6 @@ export function Cache(options: CacheOptions) {
 
 export function getCachedMetadata(instance): CacheOptions {
   const metadata = Reflect.getMetadata(CacheMetadata, instance.constructor);
-  d('getting persistence metadata', metadata);
+  d('getting cache metadata', metadata);
   return metadata;
 }

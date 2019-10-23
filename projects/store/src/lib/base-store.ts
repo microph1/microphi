@@ -93,7 +93,7 @@ export abstract class BaseStore<T extends {}> {
 
           // TODO use .toPromise to trick subscription/unsubscription hassle
           try {
-            const resp = await (this[effectName](this.state, action.payload) as Observable<any>).toPromise();
+            const resp = await (this[effectName](action.payload) as Observable<any>).toPromise();
             // pass response down triggering type to alert data arrived
 
             this.logger('got data', resp);
@@ -130,7 +130,7 @@ export abstract class BaseStore<T extends {}> {
 
         if (this[remappedReducers[action.type]]) {
           // TODO since we may not need the state in the reducer better to switch the order fo the arguments
-          const newState = await this[remappedReducers[action.type]](this.state, action.payload);
+          const newState = await this[remappedReducers[action.type]](action.payload);
           this.logger('newState', newState);
           if (newState) {
             this.state = newState;

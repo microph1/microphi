@@ -8,3 +8,4 @@ export * from './lib/base-store';
 export * from './lib/effect';
 export * from './lib/reduce';
 export * from './lib/store';
+export * from './lib/observable-list';

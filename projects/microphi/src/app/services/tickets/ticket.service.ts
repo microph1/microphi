@@ -12,28 +12,24 @@ function randomDelay() {
   return Math.random() * 4000;
 }
 
+function generateTickets(total: number) {
+  const tickets = [];
+
+  for (let i = 0; i < total; i++) {
+    tickets.push({
+      id: i,
+      description: `Install a monitor arm ${i}`,
+      assigneeId: i * 2,
+      completed: false
+    });
+  }
+
+  return tickets;
+}
+
 @Injectable()
 export class BackendService {
-  storedTickets: Ticket[] = [
-    {
-      id: 0,
-      description: 'Install a monitor arm',
-      assigneeId: 111,
-      completed: false
-    },
-    {
-      id: 1,
-      description: 'Move the desk to the new location',
-      assigneeId: 111,
-      completed: false
-    },
-    {
-      id: 2,
-      description: 'This ticket assignee has been deleted',
-      assigneeId: 112,
-      completed: false
-    }
-  ];
+  storedTickets: Ticket[] = generateTickets(1000);
 
   storedUsers: User[] = [{ id: 111, name: 'Victor' }];
 
@@ -43,7 +39,7 @@ export class BackendService {
   private findUserById = id => this.storedUsers.find(user => user.id === +id);
 
   tickets() {
-    return of(this.storedTickets).pipe(delay(randomDelay()));
+    return of(this.storedTickets).pipe(delay(4000));
   }
 
   ticket(id: number): Observable<Ticket> {
@@ -55,7 +51,7 @@ export class BackendService {
   }
 
   user(id: number) {
-    return of(this.findUserById(id)).pipe(delay(randomDelay()));
+    return of(this.findUserById(id));
   }
 
   newTicket(payload: { description: string }) {

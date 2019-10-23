@@ -17,6 +17,7 @@ import { HomeComponent } from './components/home/home.component';
 import { IsLoggedInPipe } from './pipes/is-logged-in.pipe';
 import { TicketStore } from './services/tickets/ticket.store';
 import { BackendService } from './services/tickets/ticket.service';
+import { TicketComponent } from './components/ticket/ticket.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,9 @@ import { BackendService } from './services/tickets/ticket.service';
     HomeComponent,
 
     // pipes
-    IsLoggedInPipe
+    IsLoggedInPipe,
+
+    TicketComponent
   ],
   imports: [
     BrowserModule,

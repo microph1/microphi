@@ -1,0 +1,14 @@
+<mat-card>
+
+
+  <mat-card-content class="mat-body-1">
+      {{(ticket | async) | json}}
+
+    <button mat-button (click)="changeStatus()">
+      done/undone
+      <mat-progress-bar mode="indeterminate" *ngIf="(ticket | async)?.isLoading"></mat-progress-bar>
+    </button>
+  </mat-card-content>
+
+
+</mat-card>

@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card *ngIf="!(ticket | async)?.hidden">
 
 
   <mat-card-content class="mat-body-1">

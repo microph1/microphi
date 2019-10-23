@@ -1,15 +1,15 @@
-import { BaseStore, Effect, Reduce, Store, ObservableList } from '@microphi/store';
+import { BaseStore, Effect, ObservableList, Reduce, Store } from '@microphi/store';
 import { Injectable } from '@angular/core';
 import { Ticket } from './ticket.interface';
 import { BackendService } from './ticket.service';
 import { bufferCount, catchError, map, mergeMap, switchMap } from 'rxjs/operators';
-import { BehaviorSubject, from, NEVER } from 'rxjs';
+import { from, NEVER } from 'rxjs';
 
 
 type TicketWithState = Ticket & { isLoading?: boolean };
 
 interface TicketsState {
-  tickets: TicketWithState[];
+  tickets: ObservableList<TicketWithState>;
 }
 
 export enum TicketActions {
@@ -27,7 +27,7 @@ function getTicketsFromLocalStorage() {
   const ticketStore = JSON.parse(localStorage.getItem('TicketStore'));
 
   if (ticketStore) {
-    initialState.tickets.push(...ticketStore.tickets);
+    // initialState.tickets.push(...ticketStore.tickets);
   }
 
   return initialState;
@@ -52,7 +52,7 @@ export class TicketStore extends BaseStore<TicketsState> {
   }
 
   @Effect(TicketActions.FIND_ALL)
-  private getTickets(state: Ticket[], payload) {
+  private getTickets() {
     let numberOfTickets = 0;
 
     return this.ticketService.tickets().pipe(
@@ -79,44 +79,33 @@ export class TicketStore extends BaseStore<TicketsState> {
   }
 
   @Effect(TicketActions.CHANGE_STATUS)
-  private changeStatus(state, payload: Ticket) {
+  private changeStatus(payload: Ticket) {
 
-    // const ticketToUpdate = this.state.tickets.find((t) => t.id === payload.id);
-    // if (ticketToUpdate) {
-    //   ticketToUpdate.isLoading = true;
-    // }
 
-    state.tickets.updateOne({...payload, isLoading: true});
+    this.state.tickets.updateOne({...payload, isLoading: true});
 
     return this.ticketService.complete(payload.id, !payload.completed);
   }
 
   @Reduce(TicketActions.FIND_ALL)
-  private onResponse(state, payload: Ticket[]) {
+  private onResponse(payload: Ticket[]) {
+    // this is the final list of tickets
+    this.state.tickets.set(...payload);
 
-    // const newTickets = payload
-    //   .filter((remoteTicket) => {
-    //     return state.tickets.every((localTicket) => {
-    //       return localTicket.id !== remoteTicket.id;
-    //     });
-    //   });
-
-    state.tickets.push(...payload);
-
-    return state;
+    return this.state;
   }
 
   @Reduce(TicketActions.CHANGE_STATUS)
-  private onStatusChanged(state, payload: Ticket) {
+  private onStatusChanged(payload: Ticket) {
 
-    state.tickets.updateOne({ ...payload, isLoading: false});
+    this.state.tickets.updateOne({ ...payload, isLoading: false});
 
     // return state;
   }
 
   @Reduce(TicketActions.ASSIGN)
-  private onAssign(state, payload) {
-    return state;
+  private onAssign(payload) {
+    return this.state;
   }
 
 

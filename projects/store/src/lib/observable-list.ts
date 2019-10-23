@@ -8,12 +8,14 @@ export class ObservableList<T extends {}> {
   //   [id: string]: BehaviorSubject<T>
   // } = {};
 
-  constructor(items: any[], private idFieldName = 'id') {
-    for (const item of items) {
-      this.ids.add(item.id);
-      // this.data[item.id] = new BehaviorSubject(item);
-      this.data.set(item.id, new BehaviorSubject(item));
+  constructor(items: T[], private idFieldName = 'id') {
+    const ids = items.map((i) => i[this.idFieldName]);
+    this.ids = new Set(ids);
+    for (const id of ids) {
+      this.data.set(id, new BehaviorSubject(items[id]));
     }
+
+
   }
 
   *[Symbol.iterator](): IterableIterator<BehaviorSubject<T>> {
@@ -56,17 +58,82 @@ export class ObservableList<T extends {}> {
     if (this.data.has(item[this.idFieldName])) {
 
       this.data.get(item[this.idFieldName]).next(item);
+    } else {
+      console.warn('item not found', item);
     }
   }
 
   public toJSON() {
 
-    const serialized = [];
+    return this.data.values();
+  }
 
-    for (const item of this) {
-      serialized.push(item.getValue());
+  /**
+   * Will update items that are already present only if they need to be updated and remove items that are not present.
+   * @param items
+   */
+  public set(...items: T[]): void {
+    const newIds: string[] = items.map((i) => i[this.idFieldName]);
+
+    const intersection: Set<string> = this.intersection(this.ids, newIds);
+
+    for (const id of intersection) {
+      this.updateOne(items[id]);
     }
 
-    return serialized;
+    const itemsToRemove: Set<string> = this.difference(this.ids, newIds);
+
+    for (const id of itemsToRemove) {
+      this.removeItem(id);
+    }
+
+    const itemsToAdd: Set<string> = this.difference(newIds, this.ids);
+
+    for (const id of itemsToAdd) {
+      this.addItem(items[id]);
+    }
+
+  }
+
+  public removeItem(id: string) {
+    this.ids.delete(id);
+    this.data.delete(id);
+  }
+
+  private difference(setA, setB): Set<string> {
+    const _difference: Set<string> = new Set(setA);
+    for (const elem of setB) {
+      _difference.delete(elem);
+    }
+    return _difference;
+  }
+
+  private intersection(setA, setB): Set<string> {
+    const _intersection: Set<string> = new Set();
+    for (const elem of setB) {
+      if (setA.has(elem)) {
+        _intersection.add(elem);
+      }
+    }
+    return _intersection;
+  }
+
+  private symmetricDifference(setA, setB): Set<string> {
+    const _difference: Set<string> = new Set(setA);
+    for (const elem of setB) {
+      if (_difference.has(elem)) {
+        _difference.delete(elem);
+      } else {
+        _difference.add(elem);
+      }
+    }
+    return _difference;
+  }
+
+  private addItem(item: T) {
+    const id = item[this.idFieldName];
+    this.ids.add(id);
+    this.data.set(id, new BehaviorSubject(item));
+
   }
 }

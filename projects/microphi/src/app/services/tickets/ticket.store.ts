@@ -2,17 +2,18 @@ import { BaseStore, Effect, ObservableList, Reduce, Store } from '@microphi/stor
 import { Injectable } from '@angular/core';
 import { Ticket } from './ticket.interface';
 import { BackendService } from './ticket.service';
-import { bufferCount, catchError, map, mergeMap, switchMap } from 'rxjs/operators';
-import { from, NEVER } from 'rxjs';
+import { bufferCount, catchError, delay, map, mergeMap, switchMap } from 'rxjs/operators';
+import { from, NEVER, of } from 'rxjs';
 
 
-type TicketWithState = Ticket & { isLoading?: boolean };
+type TicketWithState = Ticket & { isLoading?: boolean; hidden?: boolean };
 
 interface TicketsState {
   tickets: ObservableList<TicketWithState>;
 }
 
 export enum TicketActions {
+  SEARCH,
   FIND_ALL,
   FIND_ONE,
   CHANGE_STATUS,
@@ -27,7 +28,7 @@ function getTicketsFromLocalStorage() {
   const ticketStore = JSON.parse(localStorage.getItem('TicketStore'));
 
   if (ticketStore) {
-    // initialState.tickets.push(...ticketStore.tickets);
+    initialState.tickets.push(...ticketStore.tickets);
   }
 
   return initialState;
@@ -37,7 +38,8 @@ function getTicketsFromLocalStorage() {
 @Store({
   name: 'TicketStore',
   initialState: getTicketsFromLocalStorage(),
-  actions: TicketActions
+  actions: TicketActions,
+  useLocalStorage: true
 })
 @Injectable()
 export class TicketStore extends BaseStore<TicketsState> {
@@ -100,7 +102,7 @@ export class TicketStore extends BaseStore<TicketsState> {
 
     this.state.tickets.updateOne({ ...payload, isLoading: false});
 
-    // return state;
+    return this.state;
   }
 
   @Reduce(TicketActions.ASSIGN)
@@ -108,5 +110,27 @@ export class TicketStore extends BaseStore<TicketsState> {
     return this.state;
   }
 
+  @Effect(TicketActions.SEARCH)
+  private onSearch(searchTerm) {
+
+    console.log('searching by', searchTerm);
+
+    for (const ticket of this.state.tickets) {
+      const t = ticket.getValue();
+      if (!t.description.includes(searchTerm)) {
+        ticket.next({
+          ...t,
+          hidden: true
+        });
+      } else {
+        ticket.next({
+          ...t,
+          hidden: false
+        });
+      }
+    }
+
+    return of({}).pipe(delay(2000));
+  }
 
 }

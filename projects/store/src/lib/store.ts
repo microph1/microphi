@@ -1,7 +1,6 @@
 import { getDebugger } from '@microgamma/loggator';
 import { createAction } from './actions';
 import { ActionMetadata } from './action';
-import { BaseStore } from './base-store';
 
 export const StoreMetadata = '@Store';
 
@@ -9,6 +8,7 @@ export interface StoreOptions {
   initialState: any;
   name: string;
   actions: any;
+  useLocalStorage?: boolean;
 }
 
 export function Store(options: StoreOptions) {

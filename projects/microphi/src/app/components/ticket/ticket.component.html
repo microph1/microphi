@@ -1,14 +1,19 @@
-<mat-card *ngIf="!(ticket | async)?.hidden">
+<div  *ngIf="!(ticket | async)?.hidden">
+
+  <mat-card style="margin-bottom: 50px">
 
 
-  <mat-card-content class="mat-body-1">
-      {{(ticket | async) | json}}
+    <mat-card-content class="mat-body-1">
+        {{(ticket | async) | json}}
 
-    <button mat-button (click)="changeStatus()">
-      done/undone
-      <mat-progress-bar mode="indeterminate" *ngIf="(ticket | async)?.isLoading"></mat-progress-bar>
-    </button>
-  </mat-card-content>
+      <button mat-button (click)="changeStatus()">
+        done/undone
+        <mat-progress-bar mode="indeterminate" *ngIf="(ticket | async)?.isLoading"></mat-progress-bar>
+      </button>
+    </mat-card-content>
 
 
-</mat-card>
+  </mat-card>
+
+</div>
+

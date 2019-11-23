@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthStore } from '../../services/auth/auth.store';
+import { AuthActions, AuthStore } from '../../services/auth/auth.store';
 
 @Component({
   selector: 'app-toolbar',
@@ -15,6 +15,6 @@ export class ToolbarComponent {
   constructor(private authStore: AuthStore) { }
 
   logout() {
-    this.authStore.dispatch('LOGOUT');
+    this.authStore.dispatch(AuthActions.LOGOUT);
   }
 }

@@ -1,7 +1,12 @@
 <div fxFlexFill fxLayoutAlign="center start">
 
+
   <div fxLayout="column" fxFlex.xs="90" fxFlex.sm="80" fxFlex.md="70" fxFlex.lg="55" fxFlex.xl="40" fxLayoutGap="30px">
 
+    <mat-form-field appearance="outline">
+      <mat-label>Search</mat-label>
+      <input matInput [placeholder]="'search any ticket'" [formControl]="searchForm">
+    </mat-form-field>
 
     <mat-card *ngIf=" '' | isLoggedIn | async">
 
@@ -26,15 +31,13 @@
       </mat-card-actions>
     </mat-card>
 
-    <mat-form-field>
-      <input matInput [placeholder]="'search any ticket'" [formControl]="searchForm">
-    </mat-form-field>
+
 
     <mat-progress-bar mode="indeterminate" *ngIf="loadingTickets"></mat-progress-bar>
 
     <div fxLayout="row" fxLayoutGap="50px">
 
-      <div fxLayout="column" fxLayoutGap="50px">
+      <div fxLayout="column">
 
         <app-ticket *ngFor="let ticket of (tickets$ | async)" [ticket]="ticket">
         </app-ticket>

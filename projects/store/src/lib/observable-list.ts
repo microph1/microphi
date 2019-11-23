@@ -65,7 +65,13 @@ export class ObservableList<T extends {}> {
 
   public toJSON() {
 
-    return this.data.values();
+    const data = [];
+
+    this.data.forEach((value) => {
+      data.push(value.getValue())
+    });
+
+    return data;
   }
 
   /**

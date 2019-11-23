@@ -1,17 +1,16 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Log } from '@microgamma/loggator';
 import { AuthStore } from '../../services/auth/auth.store';
 import { TicketActions, TicketStore } from '../../services/tickets/ticket.store';
 import { Ticket } from '../../services/tickets/ticket.interface';
-import { debounce, debounceTime, filter, map, mergeMap, multicast, tap } from 'rxjs/operators';
+import { debounceTime, filter, tap } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
-import { BehaviorSubject, combineLatest, of } from 'rxjs';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent implements OnInit {
 
@@ -21,44 +20,8 @@ export class HomeComponent implements OnInit {
   public user$ = this.authStore.user$;
 
   public searchForm = new FormControl();
-  private searchValue$ = this.searchForm.valueChanges.pipe(
-    debounceTime(1000),
-    multicast(() => new BehaviorSubject(null))
-  );
 
-  public tickets$ = combineLatest(this.ticketStore.tickets$, this.searchValue$).pipe(
-    tap(([tickets, search]) => {
-
-      if (search === null || search === '') {
-        for (const ticket of tickets) {
-
-          ticket.next({
-            ...ticket.getValue(),
-            hidden: false
-          })
-        }
-        return;
-      }
-
-      for (const ticket of tickets) {
-        let hidden = true;
-
-        if (ticket.getValue().id == search) {
-          hidden = false;
-        }
-
-        ticket.next({
-          ...ticket.getValue(),
-          hidden
-        })
-
-      }
-
-    }),
-    map(([tickets, search]) => {
-      return tickets;
-    })
-  );
+  public tickets$ = this.ticketStore.tickets$;
   public loadingTickets = false;
 
 
@@ -66,18 +29,26 @@ export class HomeComponent implements OnInit {
     this.ticketStore.loading$.pipe(
       filter((event) => {
 
-        return event.type.includes(TicketActions[TicketActions.FIND_ALL]);
+        console.log('filtering event', event);
+        return event.type.startsWith(TicketActions[TicketActions.FIND_ALL]) || event.type.startsWith(TicketActions[TicketActions.SEARCH])
       })
-    ).subscribe((status) => {
+    ).subscribe((event) => {
 
       // we can't use an async pipe for this as it would subscribe to the observable after ngOnInit hence we miss
       // the loading start event;
-      this.loadingTickets = status.status;
-
+      this.loadingTickets = event.status;
     });
 
-
-    this.searchValue$.connect();
+    this.searchForm.valueChanges.pipe(
+      debounceTime(1000),
+      tap((search) => {
+        if (search !== null || search !== '') {
+          this.ticketStore.dispatch(TicketActions.SEARCH, search);
+        }
+      })
+    ).subscribe(() => {
+      
+    });
   }
 
   public ngOnInit(): void {

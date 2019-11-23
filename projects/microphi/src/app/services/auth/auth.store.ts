@@ -24,8 +24,8 @@ export enum AuthActions {
 }
 
 @Store({
-  name: 'authStore',
-  initialState: JSON.parse(localStorage.getItem('authStore')) || {},
+  name: 'AuthStore',
+  initialState: JSON.parse(localStorage.getItem('AuthStore')) || {},
   actions: AuthActions
 })
 @Injectable()
@@ -55,12 +55,12 @@ export class AuthStore extends BaseStore<AuthState> {
   }
 
   @Effect(AuthActions.VALIDATE)
-  public validateToken(state, payload) {
+  public validateToken(payload) {
     return this.authService.validateToken(payload);
   }
 
   @Effect(AuthActions.AUTHENTICATE)
-  private requestAuth(state: AuthState, payload) {
+  private requestAuth(payload) {
 
     return this.authService.authenticate({
       email: payload.email,
@@ -69,7 +69,7 @@ export class AuthStore extends BaseStore<AuthState> {
   }
 
   @Reduce(AuthActions.AUTHENTICATE)
-  private onAuth(state, payload) {
+  private onAuth(payload) {
     const { token, ...user } = payload;
 
     return {
@@ -80,7 +80,7 @@ export class AuthStore extends BaseStore<AuthState> {
   }
 
   @Reduce('onError')
-  public onAuthError(state: AuthState, err): AuthState {
+  public onAuthError(err): AuthState {
 
     return {
       isAuth: false,

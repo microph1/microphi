@@ -1,6 +1,19 @@
 {
   "name": "@microphi/store",
-  "version": "0.0.2",
+  "keywords": [
+    "redux",
+    "reducer",
+    "state",
+    "predictable",
+    "functional",
+    "immutable",
+    "hot",
+    "live",
+    "replay",
+    "flux",
+    "elm"
+  ],
+  "version": "0.0.4",
   "dependencies": {
     "@microgamma/loggator": "^1.10.18",
     "reflect-metadata": "^0.1.13"

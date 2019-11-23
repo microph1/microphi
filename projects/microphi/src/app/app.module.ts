@@ -18,6 +18,7 @@ import { IsLoggedInPipe } from './pipes/is-logged-in.pipe';
 import { TicketStore } from './services/tickets/ticket.store';
 import { BackendService } from './services/tickets/ticket.service';
 import { TicketComponent } from './components/ticket/ticket.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { TicketComponent } from './components/ticket/ticket.component';
     BrowserAnimationsModule,
     MaterialModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule
   ],
   providers: [
     AuthStore,

@@ -4,13 +4,18 @@ import { getStoreMetadata, StoreOptions } from './store';
 import { Actions } from './actions';
 import { ActionsMetadata, getActionMetadata } from './action';
 import { getReduceMetadata } from './reduce';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 // Looks like passing the status on each effect/reducer is not needed: developer can always refer to this.state
 // TODO: Remove the state argument to effect/reducer
 
 export abstract class BaseStore<T extends {}> {
   private logger = getDebugger(`microphi:BaseStore:${this.constructor.name}`);
+
+  protected actions$ = new Subject<{
+    type: string,
+    payload: any
+  }>();
 
   public loading$ = new Subject<{
     type: string,
@@ -36,10 +41,13 @@ export abstract class BaseStore<T extends {}> {
   set state(value: T) {
     this._state = value;
     this.store$.next(value);
-    localStorage.setItem(this.storeMetadata.name, JSON.stringify(value));
+    if (this.storeMetadata.useLocalStorage) {
+      this.logger('saving on localStorage');
+      localStorage.setItem(this.storeMetadata.name, JSON.stringify(value));
+    }
   }
 
-  protected actions$ = new Subject();
+
 
   protected store$: BehaviorSubject<T>;
 
@@ -68,16 +76,9 @@ export abstract class BaseStore<T extends {}> {
 
     this.actions$.pipe(
       tap((action: Actions) => {
-        if (action.type.includes('_REQUEST')) {
-          this.logger('starting loading');
-          this.loading$.next({type: action.type, payload: action.payload, status: true});
-        }
-      }),
-      tap((action: Actions) => {
-        if (action.type.includes('_RESPONSE')) {
-          this.logger('stopping loading');
-          this.loading$.next({type: action.type, payload: action.payload, status: false});
-        }
+
+        this.loading$.next({type: action.type, payload: action.payload, status: action.type.endsWith('_REQUEST')});
+
       })
     ).subscribe(async (action: Actions) => {
       this.logger('got type', action);
@@ -93,10 +94,19 @@ export abstract class BaseStore<T extends {}> {
 
           // TODO use .toPromise to trick subscription/unsubscription hassle
           try {
-            const resp = await (this[effectName](action.payload) as Observable<any>).toPromise();
-            // pass response down triggering type to alert data arrived
+            let resp;
 
-            this.logger('got data', resp);
+            if (this[effectName] instanceof Function) {
+
+              const retValue = this[effectName](action.payload) as Observable<any>;
+
+              if (retValue instanceof Observable) {
+                resp = await (retValue).toPromise();
+              }
+              // pass response down triggering type to alert data arrived
+
+              this.logger('got data', resp);
+            }
 
             this.actions$.next({
               type: remappedEffects[effectName],
@@ -121,7 +131,7 @@ export abstract class BaseStore<T extends {}> {
             payload: action.payload
           });
 
-          this.loading$.next({type: type, payload: action.payload, status: false});
+          // this.loading$.next({type: type, payload: action.payload, status: false});
         }
       } else if (type.includes('_RESPONSE')) {
 
@@ -141,7 +151,7 @@ export abstract class BaseStore<T extends {}> {
 
     }, (err) => {
       this.logger('got error', err);
-      this.loading$.next({type: 'GENERAL_ERROR', payload: err, status: false});
+      // this.loading$.next({type: 'GENERAL_ERROR', payload: err, status: false});
       // TODO should handle the error or should we change loading$ to a more generic status$ so we can pass altogether
       // loadings and errors events?
     });

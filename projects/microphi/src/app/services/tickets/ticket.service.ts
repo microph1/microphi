@@ -12,7 +12,7 @@ function randomDelay() {
   return Math.random() * 4000;
 }
 
-function generateTickets(total: number) {
+function generateTickets(total: number): Ticket[] {
   const tickets = [];
 
   for (let i = 0; i < total; i++) {
@@ -29,7 +29,7 @@ function generateTickets(total: number) {
 
 @Injectable()
 export class BackendService {
-  storedTickets: Ticket[] = generateTickets(1000);
+  storedTickets: Ticket[] = generateTickets(5000);
 
   storedUsers: User[] = [{ id: 111, name: 'Victor' }];
 

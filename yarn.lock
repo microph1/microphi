@@ -257,6 +257,15 @@
   dependencies:
     tslib "^1.9.0"
 
+"@angular/platform-server@~8.2.8":
+  version "8.2.14"
+  resolved "https://registry.yarnpkg.com/@angular/platform-server/-/platform-server-8.2.14.tgz#393e42d82022ad072b652999696bd5fa0b5c6928"
+  integrity sha512-gGAgxMmac5CyLcwgB+qCD1o75An0NmpREh/lxPgz6n6Zs9JqdqpZROLSIHqGBaU6MWo1qiOfS6L08HwYPx7ipQ==
+  dependencies:
+    domino "^2.1.2"
+    tslib "^1.9.0"
+    xhr2 "^0.1.4"
+
 "@angular/router@~8.2.8":
   version "8.2.8"
   resolved "https://registry.yarnpkg.com/@angular/router/-/router-8.2.8.tgz#4058e239c2682845bd06b69be77e7b920c1ad87e"
@@ -2146,7 +2155,7 @@ chalk@^1.1.1, chalk@^1.1.3:
     strip-ansi "^3.0.0"
     supports-color "^2.0.0"
 
-chalk@^2.0.0, chalk@^2.0.1, chalk@^2.3.0, chalk@^2.3.1, chalk@^2.4.2:
+chalk@^2.0.0, chalk@^2.0.1, chalk@^2.1.0, chalk@^2.3.0, chalk@^2.3.1, chalk@^2.4.2:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.2.tgz#cd42541677a54333cf541a49108c1432b44c9424"
   integrity sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==
@@ -2984,6 +2993,11 @@ domain-browser@^1.1.1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/domain-browser/-/domain-browser-1.2.0.tgz#3d31f50191a6749dd1375a7f522e823d42e54eda"
   integrity sha512-jnjyiM6eRyZl2H+W8Q/zLMA481hzi0eszAaBUzIVnmYVDBbnLxVNnfu1HgEBvCbL+71FrxMl3E6lpKH7Ge3OXA==
+
+domino@^2.1.2:
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/domino/-/domino-2.1.3.tgz#0ca1ad02cbd316ebe2e99e0ac9fb0010407d4601"
+  integrity sha512-EwjTbUv1Q/RLQOdn9k7ClHutrQcWGsfXaRQNOnM/KgK4xDBoLFEcIRFuBSxAx13Vfa63X029gXYrNFrSy+DOSg==
 
 dot-prop@^4.1.0:
   version "4.2.0"
@@ -4894,6 +4908,15 @@ karma-jasmine@~2.0.1:
   dependencies:
     jasmine-core "^3.3"
 
+karma-mocha-reporter@^2.2.5:
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/karma-mocha-reporter/-/karma-mocha-reporter-2.2.5.tgz#15120095e8ed819186e47a0b012f3cd741895560"
+  integrity sha1-FRIAlejtgZGG5HoLAS8810GJVWA=
+  dependencies:
+    chalk "^2.1.0"
+    log-symbols "^2.1.0"
+    strip-ansi "^4.0.0"
+
 karma-source-map-support@1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/karma-source-map-support/-/karma-source-map-support-1.4.0.tgz#58526ceccf7e8730e56effd97a4de8d712ac0d6b"
@@ -5091,6 +5114,13 @@ lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
+
+log-symbols@^2.1.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/log-symbols/-/log-symbols-2.2.0.tgz#5740e1c5d6f0dfda4ad9323b5332107ef6b4c40a"
+  integrity sha512-VeIAFslyIerEJLXHziedo2basKbMKtTw3vfn5IzG0XTjhAVEJyNHnL2p7vc+wBDSdQuUpNw3M2u6xb9QsAY5Eg==
+  dependencies:
+    chalk "^2.0.1"
 
 log4js@^4.0.0:
   version "4.5.1"
@@ -8584,6 +8614,11 @@ xdg-basedir@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/xdg-basedir/-/xdg-basedir-3.0.0.tgz#496b2cc109eca8dbacfe2dc72b603c17c5870ad4"
   integrity sha1-SWsswQnsqNus/i3HK2A8F8WHCtQ=
+
+xhr2@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/xhr2/-/xhr2-0.1.4.tgz#7f87658847716db5026323812f818cadab387a5f"
+  integrity sha1-f4dliEdxbbUCYyOBL4GMras4el8=
 
 xml2js@^0.4.17:
   version "0.4.22"

@@ -29,7 +29,6 @@ export class HomeComponent implements OnInit {
     this.ticketStore.loading$.pipe(
       filter((event) => {
 
-        console.log('filtering event', event);
         return event.type.startsWith(TicketActions[TicketActions.FIND_ALL]) || event.type.startsWith(TicketActions[TicketActions.SEARCH])
       })
     ).subscribe((event) => {

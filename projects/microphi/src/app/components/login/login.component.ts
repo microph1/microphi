@@ -2,7 +2,6 @@ import { Component, HostListener, OnDestroy, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Log } from '@microgamma/loggator';
 import { AuthActions, AuthStore } from '../../services/auth/auth.store';
-import { RestActions } from '@microphi/store';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 

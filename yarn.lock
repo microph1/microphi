@@ -898,10 +898,10 @@
     debug "^4.1.1"
     reflect-metadata "^0.1.12"
 
-"@microphi/store@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@microphi/store/-/store-0.0.4.tgz#60c759ce80daa8028cf27fd0bd2b37edbf189fdf"
-  integrity sha512-Pub063Jt6cpN1xIcXFAT69ocfsqzZU7jeZg6HD3/EivZvtbcjPH+YsjKQRfJUrKaojc3UEmCUs0IvtLMQNCA8A==
+"@microphi/store@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@microphi/store/-/store-0.0.5.tgz#d5a2f1d8651df4f1423ff40f173b6a56ec0b3460"
+  integrity sha512-TgURcarXpVraAB/ZCcOTqYN+dKxxQuLjgvGciIQJXhjU8k7G2N6rFmo0vBji2cIWukhFRa5cTzKzRv7RyRkcuw==
   dependencies:
     "@microgamma/loggator" "^1.10.18"
     reflect-metadata "^0.1.13"

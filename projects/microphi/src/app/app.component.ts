@@ -9,7 +9,5 @@ import { HttpStatusStore } from './services/http/http-status.store';
 export class AppComponent {
   public isLoading$ = this.httpStatusStore.isLoading$;
 
-  constructor(private httpStatusStore: HttpStatusStore) {
-
-  }
+  constructor(private httpStatusStore: HttpStatusStore) {}
 }

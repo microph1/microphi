@@ -1,7 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ToolbarComponent } from './toolbar.component';
 import { MaterialModule } from '../../material.module';
+import { AuthStore } from '../../services/auth/auth.store';
+import { AuthService } from '../../services/auth/auth.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('ToolbarComponent', () => {
   let component: ToolbarComponent;
@@ -9,10 +11,12 @@ describe('ToolbarComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [MaterialModule],
-      declarations: [ ToolbarComponent ]
-    })
-    .compileComponents();
+      imports: [MaterialModule, HttpClientTestingModule],
+      declarations: [ToolbarComponent],
+      providers: [
+        AuthStore, AuthService
+      ]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

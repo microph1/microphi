@@ -1,24 +1,31 @@
 # Cache
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.2.8.
+A @Cache decorator for Angular.
 
-## Code scaffolding
+## install 
 
-Run `ng generate component component-name --project cache` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project cache`.
-> Note: Don't forget to add `--project cache` or else it will be added to the default project in your `angular.json` file. 
+```bash
+yarn add @microphi/cache
+``` 
 
-## Build
+```bash
+npm i @microphi/cache
+```
 
-Run `ng build cache` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Usage
 
-## Publishing
+```typescript
+@Injectable()
+export class UserService {
 
-After building your library with `ng build cache`, go to the dist folder `cd dist/cache` and run `npm publish`.
+  constructor(private _client: HttpClient) {}
 
-## Running unit tests
+  @Cache({
+    ttl: 2500
+  })
+  public findAll(id): Observable<any> {
+    return this._client.get(`https://reqres.in/api/users?page=${id}`)
+  }
 
-Run `ng test cache` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+}
+```

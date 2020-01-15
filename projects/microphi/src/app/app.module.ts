@@ -11,14 +11,13 @@ import { AuthService } from './services/auth/auth.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './components/login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpStatusInterceptor } from './services/http/http-status.interceptor';
-import { HttpStatusStore } from './services/http/http-status.store';
 import { HomeComponent } from './components/home/home.component';
 import { IsLoggedInPipe } from './pipes/is-logged-in.pipe';
 import { TicketStore } from './services/tickets/ticket.store';
 import { BackendService } from './services/tickets/ticket.service';
 import { TicketComponent } from './components/ticket/ticket.component';
 import { RouterModule } from '@angular/router';
+import { NgxHttpStatusStore, NgxHttpStatusInterceptor } from '@microphi/ngx-http-status';
 
 @NgModule({
   declarations: [
@@ -33,7 +32,7 @@ import { RouterModule } from '@angular/router';
     TicketComponent
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'serverApp' }),
+    BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
@@ -46,11 +45,10 @@ import { RouterModule } from '@angular/router';
     AuthService,
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: HttpStatusInterceptor,
+      useClass: NgxHttpStatusInterceptor,
       multi: true
     },
-    HttpStatusStore,
-
+    NgxHttpStatusStore,
     TicketStore,
     BackendService,
 

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { HttpStatusStore } from './services/http/http-status.store';
+import { NgxHttpStatusStore } from '@microphi/ngx-http-status';
 
 @Component({
   selector: 'app-root',
@@ -9,5 +9,5 @@ import { HttpStatusStore } from './services/http/http-status.store';
 export class AppComponent {
   public isLoading$ = this.httpStatusStore.isLoading$;
 
-  constructor(private httpStatusStore: HttpStatusStore) {}
+  constructor(private httpStatusStore: NgxHttpStatusStore) {}
 }

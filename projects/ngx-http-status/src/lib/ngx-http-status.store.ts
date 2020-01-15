@@ -3,12 +3,12 @@ import { map } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-export interface HttpState {
+export interface NgxHttpState {
   isLoading: boolean;
   error?: HttpErrorResponse
 }
 
-export enum HttpActions {
+export enum NgxHttpActions {
   REQUEST,
   RESPONSE,
   ERROR
@@ -20,10 +20,12 @@ export enum HttpActions {
     isLoading: false,
     error: null
   },
-  actions: HttpActions
+  actions: NgxHttpActions
 })
-@Injectable()
-export class HttpStatusStore extends BaseStore<HttpState> {
+@Injectable({
+  providedIn: 'root'
+})
+export class NgxHttpStatusStore extends BaseStore<NgxHttpState> {
 
 
   public isLoading$ = this.store$.pipe(
@@ -33,22 +35,22 @@ export class HttpStatusStore extends BaseStore<HttpState> {
   );
 
 
-  @Reduce(HttpActions.REQUEST)
-  private onRequest(): HttpState {
+  @Reduce(NgxHttpActions.REQUEST)
+  private onRequest(): NgxHttpState {
     return {
       isLoading: true
     };
   }
 
-  @Reduce(HttpActions.RESPONSE)
-  private onResponse(): HttpState {
+  @Reduce(NgxHttpActions.RESPONSE)
+  private onResponse(): NgxHttpState {
     return {
       isLoading: false
     };
   }
 
-  @Reduce(HttpActions.ERROR)
-  public onError(state: HttpState, err): HttpState {
+  @Reduce(NgxHttpActions.ERROR)
+  public onError(state: NgxHttpState, err): NgxHttpState {
     return {
       isLoading: false,
       error: err

@@ -30,6 +30,12 @@
       ],
       "@microphi/cache/*": [
         "dist/cache/*"
+      ],
+      "@microphi/ngx-http-status": [
+        "dist/ngx-http-status"
+      ],
+      "@microphi/ngx-http-status/*": [
+        "dist/ngx-http-status/*"
       ]
     }
   },

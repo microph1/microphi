@@ -14,7 +14,7 @@ export function Cache(options: CacheOptions) {
 
   let lastCallArguments: any[] = [];
 
-  return <T extends FunctionConstructor>(target: T, propertyKey: string, descriptor) => {
+  return (target, propertyKey: string, descriptor) => {
 
     d('target', target);
     d('options', options);

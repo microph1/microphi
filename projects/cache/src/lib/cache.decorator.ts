@@ -1,8 +1,7 @@
-import { getDebugger } from '@microgamma/loggator';
+/* tslint:disable:triple-equals */
 import { Observable, race, ReplaySubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-
-const d = getDebugger('Cache');
+import 'reflect-metadata';
 
 const CacheMetadata = Symbol('Cache_Cached');
 
@@ -16,11 +15,8 @@ export function Cache(options: CacheOptions) {
 
   return (target, propertyKey: string, descriptor) => {
 
-    d('target', target);
-    d('options', options);
 
     Reflect.metadata(CacheMetadata, options)(target);
-    d('metadata stored', Reflect.getMetadata(CacheMetadata, target));
 
     const originalFunction = descriptor.value;
 
@@ -28,7 +24,6 @@ export function Cache(options: CacheOptions) {
     target[`${propertyKey}_cached`] = new ReplaySubject(1, options.ttl);
 
     descriptor.value = function(...args) {
-      d('arguments are', args);
 
       // i'm not able to capture a defaulting that happens at function level
       /*
@@ -50,7 +45,6 @@ export function Cache(options: CacheOptions) {
         argsNotChanged = argsNotChanged && lastCallArguments[i] == args[i];
       }
 
-      d('argsNotChanged', argsNotChanged);
 
       if (!argsNotChanged) { // args change
         this[`${propertyKey}_cached`] = new ReplaySubject(1, options.ttl);
@@ -74,7 +68,5 @@ export function Cache(options: CacheOptions) {
 }
 
 export function getCachedMetadata(instance): CacheOptions {
-  const metadata = Reflect.getMetadata(CacheMetadata, instance.constructor);
-  d('getting cache metadata', metadata);
-  return metadata;
+  return Reflect.getMetadata(CacheMetadata, instance.constructor);
 }

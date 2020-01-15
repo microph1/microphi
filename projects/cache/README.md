@@ -1,6 +1,6 @@
 # Cache
 
-A @Cache decorator for Angular.
+A @Cache decorator for Angular. To be used to annotate a method that return an observable (i.e.: HttpClient's methods). It will cache the returned observable for a `ttl` in milliseconds timespan. If `ttl` is not specified the cache will be valid forever until the annotated method is called with different arguments. 
 
 ## install 
 
@@ -15,6 +15,8 @@ npm i @microphi/cache
 ## Usage
 
 ```typescript
+import { Cache } from '@microphi/cache';
+
 @Injectable()
 export class UserService {
 

@@ -29,7 +29,7 @@ function generateTickets(total: number): Ticket[] {
 
 @Injectable()
 export class BackendService {
-  storedTickets: Ticket[] = generateTickets(5000);
+  storedTickets: Ticket[] = generateTickets(12);
 
   storedUsers: User[] = [{ id: 111, name: 'Victor' }];
 

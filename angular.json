@@ -254,6 +254,41 @@
           }
         }
       }
+    },
+    "phi": {
+      "projectType": "library",
+      "root": "projects/phi",
+      "sourceRoot": "projects/phi/src",
+      "prefix": "phi",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/phi/tsconfig.lib.json",
+            "project": "projects/phi/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/phi/src/test.ts",
+            "tsConfig": "projects/phi/tsconfig.spec.json",
+            "karmaConfig": "projects/phi/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/phi/tsconfig.lib.json",
+              "projects/phi/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "microphi"

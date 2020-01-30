@@ -36,6 +36,12 @@
       ],
       "@microphi/ngx-http-status/*": [
         "dist/ngx-http-status/*"
+      ],
+      "@microphi/phi": [
+        "dist/phi"
+      ],
+      "@microphi/phi/*": [
+        "dist/phi/*"
       ]
     }
   },

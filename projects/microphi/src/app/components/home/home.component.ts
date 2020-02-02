@@ -1,10 +1,54 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Log } from '@microgamma/loggator';
 import { AuthStore } from '../../services/auth/auth.store';
-import { TicketActions, TicketStore } from '../../services/tickets/ticket.store';
-import { Ticket } from '../../services/tickets/ticket.interface';
-import { debounceTime, filter, tap } from 'rxjs/operators';
-import { FormControl } from '@angular/forms';
+
+
+// tslint:disable-next-line:no-unused-expression
+function BeforeDecorator(fn: (...args: any[]) => any) {
+  return (target: typeof MyBaseClass, key, descriptor) => {
+    return class extends MyBaseClass {
+
+      // constructor() {
+      //   this.[key] =
+      // }
+    };
+
+
+  };
+}
+
+class MixInA {
+  public methodA() {
+    console.log('running mixing method');
+  }
+}
+
+@ClassDecoratorMixing(MixInA)
+class MyBaseClass {
+  public methodA() {
+    console.log('original methodA');
+  }
+}
+
+function ClassDecoratorMixing(MixIn: typeof MixInA) {
+  return (Class: typeof MyBaseClass) => {
+    return class extends Class {
+      mixinA = new MixInA();
+
+      constructor() {
+        super();
+        console.log('runs after original constructor');
+      }
+
+      public methodA() {
+        console.log('runs before');
+        this.mixinA.methodA();
+        super.methodA();
+        console.log('runs after');
+      }
+    };
+  };
+}
 
 @Component({
   selector: 'app-home',
@@ -12,53 +56,21 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./home.component.scss'],
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
 
   @Log()
   private $log;
 
-  public user$ = this.authStore.user$;
 
-  public searchForm = new FormControl();
+  constructor(private authStore: AuthStore) {
+    console.log('creating BaseClass');
 
-  public tickets$ = this.ticketStore.tickets$;
-  public loadingTickets = false;
+    const base = new MyBaseClass();
+    console.log({base});
 
+    base.methodA();
 
-  constructor(private authStore: AuthStore, private ticketStore: TicketStore) {
-    this.ticketStore.loading$.pipe(
-      filter((event) => {
-
-        return event.type.startsWith(TicketActions[TicketActions.FIND_ALL]) || event.type.startsWith(TicketActions[TicketActions.SEARCH])
-      })
-    ).subscribe((event) => {
-
-      // we can't use an async pipe for this as it would subscribe to the observable after ngOnInit hence we miss
-      // the loading start event;
-      this.loadingTickets = event.status;
-    });
-
-    this.searchForm.valueChanges.pipe(
-      debounceTime(1000),
-      tap((search) => {
-        if (search !== null || search !== '') {
-          this.ticketStore.dispatch(TicketActions.SEARCH, search);
-        }
-      })
-    ).subscribe(() => {
-      
-    });
+    console.log('typeof MyBaseClass', base instanceof MyBaseClass);
   }
 
-  public ngOnInit(): void {
-    this.ticketStore.dispatch(TicketActions.FIND_ALL);
-  }
-
-  public changeStatus(i: Ticket) {
-    this.ticketStore.dispatch(TicketActions.CHANGE_STATUS, i);
-  }
-
-  public assign(ticket, user) {
-    this.ticketStore.dispatch(TicketActions.ASSIGN, {ticket, user});
-  }
 }

@@ -1,51 +1,20 @@
-<div fxFlexFill fxLayoutAlign="center start">
+<div fxFill fxLayoutAlign="center center">
+
+
 
 
   <div fxLayout="column" fxFlex.xs="90" fxFlex.sm="80" fxFlex.md="70" fxFlex.lg="55" fxFlex.xl="40" fxLayoutGap="30px">
 
-    <mat-form-field appearance="outline">
-      <mat-label>Search</mat-label>
-      <input matInput [placeholder]="'search any ticket'" [formControl]="searchForm">
-    </mat-form-field>
-
-    <mat-card *ngIf=" '' | isLoggedIn | async">
-
-      <mat-card-content class="mat-body-1">
-<!--        <form [formGroup]="story" fxLayout="column">-->
-<!--          <mat-form-field>-->
-<!--            <mat-label>what's up?</mat-label>-->
-<!--            <input matInput placeholder="what's up?" formControlName="title" required>-->
-<!--            <mat-error *ngIf="title.dirty && title.errors">{{'a title is required'}}</mat-error>-->
-<!--          </mat-form-field>-->
-
-<!--          <mat-form-field fxFlex="">-->
-<!--            <mat-label>tell it!</mat-label>-->
-<!--            <textarea rows="5" matInput placeholder="tell it!" formControlName="body" required></textarea>-->
-<!--            <mat-error *ngIf="body.dirty && body.errors">{{'a body is required'}}</mat-error>-->
-<!--          </mat-form-field>-->
-<!--        </form>-->
-      </mat-card-content>
-
-      <mat-card-actions fxLayoutAlign="end space-between">
-<!--        <button mat-raised-button color="primary" (click)="post()">POST</button>-->
-      </mat-card-actions>
-    </mat-card>
-
-
-
-    <mat-progress-bar mode="indeterminate" *ngIf="loadingTickets"></mat-progress-bar>
-
-    <div fxLayout="row" fxLayoutGap="50px">
-
-      <div fxLayout="column">
-
-        <app-ticket *ngFor="let ticket of (tickets$ | async)" [ticket]="ticket">
-        </app-ticket>
-
+    <blockquote style="text-align: center">
+      <div class="mat-display-4">
+        Microphi (µφ)
       </div>
 
-    </div>
+      <div  class="mat-display-2">
+        Please check the <a href="//github.com/microgamma/microgamma">repo</a>
+      </div>
 
+    </blockquote>
 
   </div>
 

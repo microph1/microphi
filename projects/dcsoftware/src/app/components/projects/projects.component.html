@@ -1,0 +1,39 @@
+
+
+
+<div *ngFor="let section of sections">
+  <div fxLayout="column" fxLayoutGap="50px" fxLayoutAlign="space-evenly" class="phi-background phi-backdrop-fixed" [style.backgroundImage]="'url(' + section.imageUrl + ')'">
+
+    <div class="mat-display-2" style="color: white; text-shadow: 0 0 5px #000;">{{section.label}}</div>
+
+    <div
+      fxLayout="row wrap"
+      fxLayout.lt-sm="column"
+      fxLayoutAlign="space-evenly">
+      <ng-container *ngFor="let project of section.projects">
+        <mat-card
+          fxLayout="column"
+          fxFlex="0 1 calc(30%)"
+          fxFlex.md="0 1 calc(30%)"
+          fxFlex.sm="80%"
+          fxFlex.lt-sm="100%" style="margin-bottom: 25px;"
+        >
+          <mat-card-title>{{project.name}}</mat-card-title>
+          <mat-card-subtitle>{{project?.description?.title}}</mat-card-subtitle>
+          <mat-card-content fxFlex="">
+            {{project?.description?.text}}
+          </mat-card-content>
+          <mat-card-actions fxLayoutAlign="end">
+            <button mat-button *ngIf="!!project.files && project.files.length > 0" (click)="openProject(project)"><mat-icon>play_arrow</mat-icon>Screenshots</button>
+            <button mat-button *ngIf="project.link" (click)="goToProject(project.link.url)"><mat-icon>open_in_new</mat-icon>Open Link</button>
+
+          </mat-card-actions>
+
+        </mat-card>
+      </ng-container>
+    </div>
+
+  </div>
+
+
+</div>

@@ -1,0 +1,14 @@
+@import "../../phi/src/lib/styles/styles";
+@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+//@import '~@angular/cdk/overlay-prebuilt.css';
+
+
+html{
+  height: 100%;
+  transition: none;
+}
+body{
+  overflow: auto;
+  height: 100%;
+  transition: none;
+}

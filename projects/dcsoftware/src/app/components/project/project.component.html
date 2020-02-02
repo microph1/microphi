@@ -1,0 +1,20 @@
+<div fxFill fxLayout="column">
+  <div><strong>{{project.name}}</strong></div>
+  <div fxFlex=""
+         class="phi-background-image-contain"
+       [style.backgroundImage]="'url(' + encodeURI(project?.files[index]?.url) + ')'">
+  </div>
+
+  <div>{{project?.description?.text}}</div>
+  <div fxLayout="row" fxLayoutAlign="space-evenly">
+    <button mat-button (click)="skip(-1)">
+      <mat-icon>skip_previous</mat-icon>
+    </button>
+    <button mat-button (click)="stop()">
+      <mat-icon>stop</mat-icon>
+    </button>
+    <button mat-button (click)="skip(1)">
+      <mat-icon>skip_next</mat-icon>
+    </button>
+  </div>
+</div>

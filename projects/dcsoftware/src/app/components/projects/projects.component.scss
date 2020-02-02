@@ -1,0 +1,22 @@
+.vh40 {
+  height: 40vh;
+  padding-bottom: 10vh;
+}
+
+.thumbnail {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+//mat-card-content {
+//  height: 44vh;
+//
+//  & div {
+//    background-size: cover;
+//  }
+//}
+.responsive {
+  width: 100%;
+  height: auto;
+}

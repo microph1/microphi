@@ -1,13 +1,20 @@
 {
   "name": "microphi",
   "version": "0.0.0",
+  "workspaces": [
+    "projects/*"
+  ],
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --disable-host-check --host 0.0.0.0",
+    "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "predeploy:dcsoftware": "ng build dcsoftware --prod",
+    "deploy:dcsoftware": "cd projects/dcsoftware && yarn sls client deploy --no-confirm",
+    "predeploy:microphi": "ng build microphi --prod",
+    "deploy:microphi": "cd projects/microphi && yarn sls client deploy --no-confirm"
   },
   "private": true,
   "dependencies": {
@@ -49,6 +56,8 @@
     "karma-mocha-reporter": "^2.2.5",
     "ng-packagr": "^5.4.0",
     "protractor": "~5.4.0",
+    "serverless": "^1.62.0",
+    "serverless-finch": "^2.5.2",
     "ts-node": "~7.0.0",
     "tsickle": "^0.37.0",
     "tslint": "~5.15.0",

@@ -1,5 +1,6 @@
 {
-  "name": "y",
+  "name": "@microphi/docs",
+  "private": true,
   "version": "1.0.0",
   "description": "",
   "main": "karma.conf.js",

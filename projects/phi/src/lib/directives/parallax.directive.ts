@@ -4,18 +4,11 @@ import { AfterViewInit, Directive, ElementRef, Input } from '@angular/core';
   selector: '[phiParallax]'
 })
 export class ParallaxDirective implements AfterViewInit {
+  private parent: HTMLElement;
+
 
   @Input()
-  get parallax(): number {
-    return this._parallax || 1;
-  }
-
-  set parallax(value: number) {
-    this._parallax = value;
-  }
-
-  // tslint:disable-next-line:variable-name
-  private _parallax;
+  public phiParallax: number;
 
   @Input()
   public parallaxStartOffset = 0;
@@ -24,21 +17,33 @@ export class ParallaxDirective implements AfterViewInit {
 
   ngAfterViewInit(): void {
 
+    if (!this.phiParallax) {
+      this.phiParallax = 1;
+    }
+
+    this.elm.nativeElement.style.transition = 'none';
+
+    if (this.elm.nativeElement.offsetParent === document.body) {
+      this.parent = document.scrollingElement as HTMLElement;
+      document.addEventListener('scroll', () => this.updateParallax());
+    } else {
+      this.parent = this.elm.nativeElement.offsetParent;
+      this.elm.nativeElement.offsetParent.addEventListener('scroll', () => this.updateParallax());
+    }
+
     this.updateParallax();
-    this.elm.nativeElement.offsetParent.addEventListener('scroll', () => this.updateParallax());
   }
 
   private updateParallax() {
-    const parentHeight = this.elm.nativeElement.offsetParent.offsetHeight;
+
+    const parentHeight = this.parent.offsetHeight;
     const elementPosition = this.elm.nativeElement.offsetTop;
-    const elementHeight = this.elm.nativeElement.offsetHeight;
-    const scrollTop = this.elm.nativeElement.offsetParent.scrollTop;
+    const scrollTop = this.parent.scrollTop;
 
     if ((scrollTop + parentHeight) >= elementPosition) {
+      const positionY = Math.floor((scrollTop - elementPosition) * this.phiParallax);
 
-      this.elm.nativeElement.style.backgroundPositionY = `${this.parallaxStartOffset - ((scrollTop - elementHeight - elementPosition) * this.parallax)}px`;
-
-      this.elm.nativeElement.style.backgroundPositionY = `${(scrollTop - elementPosition) * this.parallax}px`;
+      this.elm.nativeElement.style.backgroundPositionY = `${positionY}px`;
 
     }
   }

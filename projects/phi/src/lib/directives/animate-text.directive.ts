@@ -21,10 +21,9 @@ export class AnimateTextDirective implements AfterViewInit {
   constructor(private elm: ElementRef) {}
 
   public ngAfterViewInit(): void {
-
     // same an array of the words to `retype`
     this.text = this.elm.nativeElement.textContent.split('');
-    console.log(this.text);
+
     this.elm.nativeElement.textContent = '';
     // ['crafting software with love', 'asdfasldkfj', 'asdfasdkfjasdf']
     this.typer$ = from(this.text);

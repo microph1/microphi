@@ -7,6 +7,6 @@ import { AnimateTextDirective } from './directives/animate-text.directive';
   declarations: [PhiComponent, ParallaxDirective, AnimateTextDirective],
   imports: [
   ],
-  exports: [PhiComponent, ParallaxDirective]
+  exports: [PhiComponent, ParallaxDirective, AnimateTextDirective]
 })
 export class PhiModule { }

@@ -1,0 +1,14 @@
+service: mp-microphi-website
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: eu-central-1 # EU (Frankfurt) Region
+
+plugins:
+  - serverless-finch
+
+custom:
+  client:
+    bucketName: mp-microphi-website # Change this to a universally unique bucket name
+    distributionFolder: ../../dist/microphi

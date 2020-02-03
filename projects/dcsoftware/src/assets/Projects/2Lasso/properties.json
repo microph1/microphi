@@ -1,7 +1,0 @@
-{
-  "name" : "2Lasso",
-  "description" : {
-    "title" : "Customers Manager",
-    "text" : "2Lasso is a web application to manage schools, teachers, pupils, classrooms and multi school groups developed specifically for 2Simple ltd and their Purple Mash. Its been developed on angularJs and backed with Yii framework."
-  }
-}

@@ -42,13 +42,10 @@ export class GoogleTagManagerModule {
 
     function gtag(...args) {
       // @ts-ignore
-      dataLayer.push(args);
+      dataLayer.push(arguments);
     }
 
-
-    console.log({uid});
-
-    if (!GOOGLE_TAG_MANAGER_UID) {
+    if (!uid) {
       console.warn(this.constructor.name, ': You should provide a UID. Skipping GTM registration');
     } else {
       gtag('js', new Date());

@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { NgxHttpStatusStore } from './ngx-http-status.store';
+import { HttpStatusStore } from './http-status.store';
 
 xdescribe('NgxHttpStatusService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: NgxHttpStatusStore = TestBed.get(NgxHttpStatusStore);
+    const service: HttpStatusStore = TestBed.get(HttpStatusStore);
     expect(service).toBeTruthy();
   });
 });

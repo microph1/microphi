@@ -1,11 +1,11 @@
 import { delay, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { NgxHttpActions, NgxHttpStatusStore } from './ngx-http-status.store';
+import { NgxHttpActions, HttpStatusStore } from './http-status.store';
 
 @Injectable()
-export class NgxHttpStatusInterceptor implements HttpInterceptor {
-  constructor(private httpStatusStore: NgxHttpStatusStore) {}
+export class HttpStatusInterceptor implements HttpInterceptor {
+  constructor(private httpStatusStore: HttpStatusStore) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
 

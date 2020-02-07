@@ -231,47 +231,6 @@
         }
       }
     },
-    "ngx-http-status": {
-      "projectType": "library",
-      "root": "projects/ngx-http-status",
-      "sourceRoot": "projects/ngx-http-status/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/ngx-http-status/tsconfig.lib.json",
-            "project": "projects/ngx-http-status/ng-package.json"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/ngx-http-status/src/test.ts",
-            "tsConfig": "projects/ngx-http-status/tsconfig.spec.json",
-            "karmaConfig": "projects/ngx-http-status/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/ngx-http-status/tsconfig.lib.json",
-              "projects/ngx-http-status/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        },
-        "deploy": {
-          "builder": "ngx-deploy-npm:deploy",
-          "options": {
-            "access": "public"
-          }
-        }
-      }
-    },
     "phi": {
       "projectType": "library",
       "root": "projects/phi",

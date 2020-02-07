@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 
 export interface NgxHttpState {
   isLoading: boolean;
-  error?: HttpErrorResponse
+  error?: HttpErrorResponse;
 }
 
 export enum NgxHttpActions {
@@ -25,7 +25,7 @@ export enum NgxHttpActions {
 @Injectable({
   providedIn: 'root'
 })
-export class NgxHttpStatusStore extends BaseStore<NgxHttpState> {
+export class HttpStatusStore extends BaseStore<NgxHttpState> {
 
 
   public isLoading$ = this.store$.pipe(
@@ -54,8 +54,7 @@ export class NgxHttpStatusStore extends BaseStore<NgxHttpState> {
     return {
       isLoading: false,
       error: err
-    }
+    };
   }
-
 
 }

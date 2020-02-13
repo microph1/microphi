@@ -1,0 +1,13 @@
+<div fxLayout="column" fxLayoutGap="4vh">
+
+  <ng-container *ngIf="project$ | async as project" >
+
+    <div class="mat-display-1">Modules</div>
+
+    <mat-card fxFlex="" *ngFor="let mod of project?.modules">
+      <mat-card-title>{{mod.name}}</mat-card-title>
+      {{mod | json}}
+    </mat-card>
+  </ng-container>
+</div>
+

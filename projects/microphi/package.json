@@ -1,11 +1,12 @@
 {
-  "name": "@microphi/docs",
+  "name": "microphi",
   "private": true,
   "version": "0.1.1",
   "description": "",
   "main": "karma.conf.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy": "sls client deploy --no-confirm"
+
   },
   "author": "",
   "license": "ISC"

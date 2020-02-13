@@ -1,0 +1,223 @@
+{
+    "pipes": [],
+    "interfaces": [
+        {
+            "name": "CacheOptions",
+            "id": "interface-CacheOptions-d0287e4b39b04e47171afce644f5a09a",
+            "file": "src/lib/cache.decorator.ts",
+            "type": "interface",
+            "sourceCode": "import { Observable, race, ReplaySubject } from 'rxjs';\nimport { tap } from 'rxjs/operators';\nimport 'reflect-metadata';\n\nconst CacheMetadata = Symbol('Cache_Cached');\n\nexport interface CacheOptions {\n  ttl: number;\n}\n\nexport function Cache(options: CacheOptions) {\n\n  let lastCallArguments: any[] = [];\n\n  return (target, propertyKey: string, descriptor) => {\n\n\n    Reflect.metadata(CacheMetadata, options)(target);\n\n    const originalFunction = descriptor.value;\n\n\n    target[`${propertyKey}_cached`] = new ReplaySubject(1, options.ttl);\n\n    descriptor.value = function(...args) {\n\n      // i'm not able to capture a defaulting that happens at function level\n      /*\n        ie:\n        ```\n        @Cache(...)\n        public findAll(id: number = 1) { ... }\n        ```\n\n        if the function is called like`service.findAll();` then args would be [] but `originalFunction` will actually call the service with [1]\n\n        Is there a way to capture the defaulting mechanism?\n       */\n\n      // args changed?\n      let argsNotChanged = true;\n\n      for (let i = 0; i < lastCallArguments.length; i++) {\n        argsNotChanged = argsNotChanged && lastCallArguments[i] == args[i];\n      }\n\n\n      if (!argsNotChanged) { // args change\n        this[`${propertyKey}_cached`] = new ReplaySubject(1, options.ttl);\n      }\n\n      lastCallArguments = args;\n\n      const req: Observable<any> = originalFunction.apply(this, args).pipe(\n        tap((response) => {\n          this[`${propertyKey}_cached`].next(response);\n        })\n      );\n\n      // despite what the documentation says i can't find that the complete is ever called\n      return race(this[`${propertyKey}_cached`], req);\n\n    };\n\n    return descriptor;\n  };\n}\n\nexport function getCachedMetadata(instance): CacheOptions {\n  return Reflect.getMetadata(CacheMetadata, instance.constructor);\n}\n",
+            "properties": [
+                {
+                    "name": "ttl",
+                    "type": "number",
+                    "optional": false,
+                    "description": "",
+                    "line": 9
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 150,
+            "methods": []
+        }
+    ],
+    "injectables": [],
+    "classes": [],
+    "directives": [],
+    "components": [],
+    "modules": [
+        {
+            "name": "CacheModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": []
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        }
+    ],
+    "miscellaneous": {
+        "variables": [
+            {
+                "name": "CacheMetadata",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/lib/cache.decorator.ts",
+                "type": "",
+                "defaultValue": "Symbol('Cache_Cached')"
+            }
+        ],
+        "functions": [
+            {
+                "name": "Cache",
+                "file": "src/lib/cache.decorator.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "options"
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "options",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "getCachedMetadata",
+                "file": "src/lib/cache.decorator.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "instance",
+                        "type": ""
+                    }
+                ],
+                "returnType": "CacheOptions",
+                "jsdoctags": [
+                    {
+                        "name": "instance",
+                        "type": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            }
+        ],
+        "typealiases": [],
+        "enumerations": [],
+        "groupedVariables": {
+            "src/lib/cache.decorator.ts": [
+                {
+                    "name": "CacheMetadata",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/lib/cache.decorator.ts",
+                    "type": "",
+                    "defaultValue": "Symbol('Cache_Cached')"
+                }
+            ]
+        },
+        "groupedFunctions": {
+            "src/lib/cache.decorator.ts": [
+                {
+                    "name": "Cache",
+                    "file": "src/lib/cache.decorator.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "options"
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "options",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getCachedMetadata",
+                    "file": "src/lib/cache.decorator.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "instance",
+                            "type": ""
+                        }
+                    ],
+                    "returnType": "CacheOptions",
+                    "jsdoctags": [
+                        {
+                            "name": "instance",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "groupedEnumerations": {},
+        "groupedTypeAliases": {}
+    },
+    "routes": [],
+    "coverage": {
+        "count": 0,
+        "status": "low",
+        "files": [
+            {
+                "filePath": "src/lib/cache.decorator.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "CacheOptions",
+                "coveragePercent": 0,
+                "coverageCount": "0/2",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/cache.decorator.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "Cache",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/cache.decorator.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "getCachedMetadata",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/cache.decorator.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "CacheMetadata",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            }
+        ]
+    }
+}

@@ -5,5 +5,8 @@
   "peerDependencies": {
     "@angular/common": "^8.2.8",
     "@angular/core": "^8.2.8"
+  },
+  "scripts": {
+    "docs": "compodoc -p ./tsconfig.lib.json -e json -a ../microphi/src/assets/docs -d ../microphi/src/assets/docs/cache"
   }
 }

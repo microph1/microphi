@@ -1,0 +1,21 @@
+$font-weight-light: 300;
+$font-weight-heavy: 400;
+
+
+.phi-display-4 {
+  font: $font-weight-light 9vw Roboto,"Helvetica Neue",sans-serif;
+  letter-spacing: -.05em;
+  margin: 0 0 56px;
+}
+
+.phi-display-3 {
+  font: $font-weight-heavy 4.6vw Roboto,"Helvetica Neue",sans-serif;
+  letter-spacing: -.02em;
+  margin: 0 0 64px;
+}
+
+.phi-display-2 {
+  font: $font-weight-heavy 3.54vw Roboto,"Helvetica Neue",sans-serif;
+  letter-spacing: -.005em;
+  margin: 0 0 64px;
+}

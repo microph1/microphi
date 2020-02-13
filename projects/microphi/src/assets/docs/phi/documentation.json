@@ -1,0 +1,1022 @@
+{
+    "pipes": [],
+    "interfaces": [
+        {
+            "name": "GoogleTagManagerOptions",
+            "id": "interface-GoogleTagManagerOptions-0c58515db5390b39732afdbde34e9f43",
+            "file": "src/lib/google-tag-manager/google-tag-manager.module.ts",
+            "type": "interface",
+            "sourceCode": "import { Inject, ModuleWithProviders, NgModule } from '@angular/core';\nimport { CommonModule } from '@angular/common';\nimport { GoogleTagManagerService } from './google-tag-manager.service';\nimport { GOOGLE_TAG_MANAGER_UID } from './tokens';\n\n\nexport interface GoogleTagManagerOptions {\n  enable?: boolean;\n  trackId: string;\n  commands?: {string, any}[];\n\n}\n\n\n/**\n * Import GoogleTagManagerModule to enable analytics\n * Usage:\n * ```typescript\n *   @NgModule({\n *   declarations: [AppComponent],\n *   imports: [\n *     [...]\n *     GoogleTagManagerModule.forRoot({\n *       trackId: 'UA-xxxxx-xx'\n *     })\n *   ]\n *   })\n *   export class AppModule {}\n * ```\n */\n@NgModule({\n  declarations: [],\n  imports: [\n    CommonModule,\n  ],\n  providers: [\n    GoogleTagManagerService\n  ]\n})\nexport class GoogleTagManagerModule {\n\n  constructor(@Inject(GOOGLE_TAG_MANAGER_UID) trackId) {\n    this.initializeGTM({\n      trackId: trackId\n    });\n  }\n\n  public static forRoot(options: GoogleTagManagerOptions): ModuleWithProviders<GoogleTagManagerModule> {\n\n    return {\n      ngModule: GoogleTagManagerModule,\n      providers: [\n        {\n          provide: GOOGLE_TAG_MANAGER_UID,\n          useValue: options.trackId\n        }\n      ]\n    };\n  }\n\n  private initializeGTM(options: GoogleTagManagerOptions) {\n\n\n    window['dataLayer'] = window['dataLayer'] || [];\n    // tslint:disable-next-line:only-arrow-functions\n    window['gtag'] = window['gtag'] || function() {\n      window['dataLayer'].push(arguments);\n    };\n\n    // for (const command of $settings.initCommands) {\n    //   window['gtag'](command.command, ...command.values);\n    // }\n\n    window['gtag']('js', new Date());\n    window['gtag']('config', options.trackId);\n\n\n    const s: HTMLScriptElement = document.createElement('script');\n    s.async = true;\n    s.src = `https://www.googletagmanager.com/gtag/js?id=${options.trackId}`;\n\n    const head: HTMLHeadElement = document.getElementsByTagName('head')[0];\n    head.appendChild(s);\n  }\n}\n",
+            "properties": [
+                {
+                    "name": "commands",
+                    "type": "literal type[]",
+                    "optional": true,
+                    "description": "",
+                    "line": 11
+                },
+                {
+                    "name": "enable",
+                    "type": "boolean",
+                    "optional": true,
+                    "description": "",
+                    "line": 9
+                },
+                {
+                    "name": "trackId",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 10
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 150,
+            "methods": []
+        },
+        {
+            "name": "NgxHttpState",
+            "id": "interface-NgxHttpState-13145c4587c8c7c6e52f6440990312d6",
+            "file": "src/lib/http-status/http-status.store.ts",
+            "type": "interface",
+            "sourceCode": "import { Reduce, BaseStore, Store } from '@microphi/store';\nimport { map } from 'rxjs/operators';\nimport { HttpErrorResponse } from '@angular/common/http';\nimport { Injectable } from '@angular/core';\n\nexport interface NgxHttpState {\n  isLoading: boolean;\n  error?: HttpErrorResponse;\n}\n\nexport enum NgxHttpActions {\n  REQUEST,\n  RESPONSE,\n  ERROR\n}\n\n@Store({\n  name: 'httpStatusStore',\n  initialState: {\n    isLoading: false,\n    error: null\n  },\n  actions: NgxHttpActions\n})\n@Injectable({\n  providedIn: 'root'\n})\nexport class HttpStatusStore extends BaseStore<NgxHttpState> {\n\n\n  public isLoading$ = this.store$.pipe(\n    map((state) => {\n      return state.isLoading;\n    })\n  );\n\n\n  @Reduce(NgxHttpActions.REQUEST)\n  private onRequest(): NgxHttpState {\n    return {\n      isLoading: true\n    };\n  }\n\n  @Reduce(NgxHttpActions.RESPONSE)\n  private onResponse(): NgxHttpState {\n    return {\n      isLoading: false\n    };\n  }\n\n  @Reduce(NgxHttpActions.ERROR)\n  public onError(state: NgxHttpState, err): NgxHttpState {\n    return {\n      isLoading: false,\n      error: err\n    };\n  }\n\n}\n",
+            "properties": [
+                {
+                    "name": "error",
+                    "type": "HttpErrorResponse",
+                    "optional": true,
+                    "description": "",
+                    "line": 8
+                },
+                {
+                    "name": "isLoading",
+                    "type": "boolean",
+                    "optional": false,
+                    "description": "",
+                    "line": 7
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 150,
+            "methods": []
+        }
+    ],
+    "injectables": [
+        {
+            "name": "GoogleTagManagerService",
+            "id": "injectable-GoogleTagManagerService-5cca5eb1b7768fe40fd7ef894f9e3a28",
+            "file": "src/lib/google-tag-manager/google-tag-manager.service.ts",
+            "properties": [
+                {
+                    "name": "dataLayer",
+                    "defaultValue": "window['dataLayer'] || []",
+                    "type": "any[]",
+                    "optional": false,
+                    "description": "",
+                    "line": 7,
+                    "modifierKind": [
+                        112
+                    ]
+                }
+            ],
+            "methods": [],
+            "description": "",
+            "sourceCode": "import { Injectable, Optional } from '@angular/core';\nimport { Router } from '@angular/router';\n\n@Injectable()\nexport class GoogleTagManagerService {\n  private dataLayer: any[] =  window['dataLayer'] || [];\n\n\n  constructor(\n    @Optional() router: Router\n  ) {\n\n    if (router) {\n      console.log('router is available, should register virtual pageviews');\n      // TODO: this.service.registerRouterEvents(router.events)\n    }\n\n\n    // TODO: check if production. we want to set things up only on prod\n\n    // TODO inject library programmatically\n    /*\n      <!-- Global site tag (gtag.js) - Google Analytics -->\n      <script async src=\"https://www.googletagmanager.com/gtag/js?id=UA-85728222-3\"></script>\n     */\n\n\n\n\n  }\n\n}\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "router",
+                        "type": "Router"
+                    }
+                ],
+                "line": 7,
+                "jsdoctags": [
+                    {
+                        "name": "router",
+                        "type": "Router",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "injectable"
+        },
+        {
+            "name": "HttpStatusStore",
+            "id": "injectable-HttpStatusStore-13145c4587c8c7c6e52f6440990312d6",
+            "file": "src/lib/http-status/http-status.store.ts",
+            "properties": [
+                {
+                    "name": "isLoading$",
+                    "defaultValue": "this.store$.pipe(\n    map((state) => {\n      return state.isLoading;\n    })\n  )",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 31,
+                    "modifierKind": [
+                        114
+                    ]
+                }
+            ],
+            "methods": [
+                {
+                    "name": "onError",
+                    "args": [
+                        {
+                            "name": "state",
+                            "type": "NgxHttpState"
+                        },
+                        {
+                            "name": "err",
+                            "type": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "NgxHttpState",
+                    "typeParameters": [],
+                    "line": 53,
+                    "decorators": [
+                        {
+                            "name": "Reduce",
+                            "stringifiedArguments": "NgxHttpActions.ERROR"
+                        }
+                    ],
+                    "modifierKind": [
+                        114
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "state",
+                            "type": "NgxHttpState",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "err",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "onRequest",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "NgxHttpState",
+                    "typeParameters": [],
+                    "line": 39,
+                    "decorators": [
+                        {
+                            "name": "Reduce",
+                            "stringifiedArguments": "NgxHttpActions.REQUEST"
+                        }
+                    ],
+                    "modifierKind": [
+                        112
+                    ]
+                },
+                {
+                    "name": "onResponse",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "NgxHttpState",
+                    "typeParameters": [],
+                    "line": 46,
+                    "decorators": [
+                        {
+                            "name": "Reduce",
+                            "stringifiedArguments": "NgxHttpActions.RESPONSE"
+                        }
+                    ],
+                    "modifierKind": [
+                        112
+                    ]
+                }
+            ],
+            "description": "",
+            "sourceCode": "import { Reduce, BaseStore, Store } from '@microphi/store';\nimport { map } from 'rxjs/operators';\nimport { HttpErrorResponse } from '@angular/common/http';\nimport { Injectable } from '@angular/core';\n\nexport interface NgxHttpState {\n  isLoading: boolean;\n  error?: HttpErrorResponse;\n}\n\nexport enum NgxHttpActions {\n  REQUEST,\n  RESPONSE,\n  ERROR\n}\n\n@Store({\n  name: 'httpStatusStore',\n  initialState: {\n    isLoading: false,\n    error: null\n  },\n  actions: NgxHttpActions\n})\n@Injectable({\n  providedIn: 'root'\n})\nexport class HttpStatusStore extends BaseStore<NgxHttpState> {\n\n\n  public isLoading$ = this.store$.pipe(\n    map((state) => {\n      return state.isLoading;\n    })\n  );\n\n\n  @Reduce(NgxHttpActions.REQUEST)\n  private onRequest(): NgxHttpState {\n    return {\n      isLoading: true\n    };\n  }\n\n  @Reduce(NgxHttpActions.RESPONSE)\n  private onResponse(): NgxHttpState {\n    return {\n      isLoading: false\n    };\n  }\n\n  @Reduce(NgxHttpActions.ERROR)\n  public onError(state: NgxHttpState, err): NgxHttpState {\n    return {\n      isLoading: false,\n      error: err\n    };\n  }\n\n}\n",
+            "extends": "BaseStore",
+            "type": "injectable"
+        },
+        {
+            "name": "PhiService",
+            "id": "injectable-PhiService-96a04acb8bc3c26b885fa4cb9d2e7730",
+            "file": "src/lib/phi.service.ts",
+            "properties": [],
+            "methods": [],
+            "description": "",
+            "sourceCode": "import { Injectable } from '@angular/core';\n\n@Injectable({\n  providedIn: 'root'\n})\nexport class PhiService {\n\n  constructor() { }\n}\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [],
+                "line": 6
+            },
+            "type": "injectable"
+        }
+    ],
+    "classes": [],
+    "directives": [
+        {
+            "name": "AnimateTextDirective",
+            "id": "directive-AnimateTextDirective-7c54b620ef18bd18d4efb385249b3ef0",
+            "file": "src/lib/directives/animate-text.directive.ts",
+            "type": "directive",
+            "description": "<p>Animates the textContent of the referenced element</p>\n",
+            "sourceCode": "import { AfterViewInit, Directive, ElementRef } from '@angular/core';\nimport { asyncScheduler, from, interval, Observable } from 'rxjs';\nimport { delayWhen, observeOn, switchMap } from 'rxjs/operators';\n\n\n/**\n * Animates the textContent of the referenced element\n *\n */\n@Directive({\n  selector: '[phiAnimateText]'\n})\nexport class AnimateTextDirective implements AfterViewInit {\n\n  /**\n   * It will contain an array with the words that will be `retyped` into the\n   * containing element.\n   *\n   */\n  private text: string[];\n\n  private typer$: Observable<string>;\n\n  private lastDelay = 0;\n\n  constructor(private elm: ElementRef) {}\n\n  public ngAfterViewInit(): void {\n    // same an array of the words to `retype`\n    this.text = this.elm.nativeElement.textContent.split('');\n\n    this.elm.nativeElement.textContent = '';\n    // ['crafting software with love', 'asdfasldkfj', 'asdfasdkfjasdf']\n    this.typer$ = from(this.text);\n\n\n    // subscribe to type trigger\n    this.typer$.pipe(\n      switchMap((word) => word),\n      observeOn(asyncScheduler),\n      delayWhen(this.randomDelay.bind(this))\n    ).subscribe((letter) => {\n      this.elm.nativeElement.textContent += letter;\n    });\n\n  }\n\n  private randomDelay() {\n    const delay = this.lastDelay + (Math.random() * 500);\n    this.lastDelay = delay;\n\n    return interval(delay);\n  }\n}\n",
+            "selector": "[phiAnimateText]",
+            "providers": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": [],
+            "propertiesClass": [
+                {
+                    "name": "lastDelay",
+                    "defaultValue": "0",
+                    "type": "number",
+                    "optional": false,
+                    "description": "",
+                    "line": 24,
+                    "modifierKind": [
+                        112
+                    ]
+                },
+                {
+                    "name": "text",
+                    "type": "string[]",
+                    "optional": false,
+                    "description": "<p>It will contain an array with the words that will be <code>retyped</code> into the\ncontaining element.</p>\n",
+                    "line": 20,
+                    "modifierKind": [
+                        112
+                    ]
+                },
+                {
+                    "name": "typer$",
+                    "type": "Observable<string>",
+                    "optional": false,
+                    "description": "",
+                    "line": 22,
+                    "modifierKind": [
+                        112
+                    ]
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "ngAfterViewInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 28,
+                    "modifierKind": [
+                        114
+                    ]
+                },
+                {
+                    "name": "randomDelay",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 48,
+                    "modifierKind": [
+                        112
+                    ]
+                }
+            ],
+            "implements": [
+                "AfterViewInit"
+            ],
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "elm",
+                        "type": "ElementRef"
+                    }
+                ],
+                "line": 24,
+                "jsdoctags": [
+                    {
+                        "name": "elm",
+                        "type": "ElementRef",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "ParallaxDirective",
+            "id": "directive-ParallaxDirective-6c9932b2a9ba8513d05165371ef84ce3",
+            "file": "src/lib/directives/parallax.directive.ts",
+            "type": "directive",
+            "description": "",
+            "sourceCode": "import { AfterViewInit, Directive, ElementRef, HostListener, Input } from '@angular/core';\nimport { fromEvent } from 'rxjs';\n\n@Directive({\n  selector: '[phiParallax]'\n})\nexport class ParallaxDirective implements AfterViewInit {\n\n  @Input()\n  public phiParallax: number;\n\n  @Input()\n  public parallaxStartOffset = 0;\n\n  @Input()\n  public phiParallaxParent: HTMLElement = document.scrollingElement as HTMLElement;\n\n  constructor(private elm: ElementRef) {}\n\n  ngAfterViewInit(): void {\n\n    if (!this.phiParallax) {\n      this.phiParallax = 1;\n    }\n\n    console.log({assignedParent: this.phiParallaxParent});\n\n    fromEvent(this.phiParallaxParent, 'scroll').subscribe(() => {\n      this.updateParallax();\n    });\n\n    this.updateParallax();\n  }\n\n  private updateParallax() {\n\n    const parentHeight = this.phiParallaxParent.offsetHeight;\n    const elementPosition = this.elm.nativeElement.offsetTop;\n    const scrollTop = this.phiParallaxParent.scrollTop;\n\n    if ((scrollTop + parentHeight) >= elementPosition) {\n      const positionY = Math.floor((scrollTop - elementPosition) * this.phiParallax);\n\n      this.elm.nativeElement.style.backgroundPositionY = `${positionY}px`;\n\n    }\n  }\n\n}\n",
+            "selector": "[phiParallax]",
+            "providers": [],
+            "inputsClass": [
+                {
+                    "name": "parallaxStartOffset",
+                    "defaultValue": "0",
+                    "line": 13
+                },
+                {
+                    "name": "phiParallax",
+                    "line": 10,
+                    "type": "number"
+                },
+                {
+                    "name": "phiParallaxParent",
+                    "defaultValue": "document.scrollingElement as HTMLElement",
+                    "line": 16,
+                    "type": "HTMLElement"
+                }
+            ],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": [],
+            "propertiesClass": [],
+            "methodsClass": [
+                {
+                    "name": "ngAfterViewInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 20
+                },
+                {
+                    "name": "updateParallax",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 35,
+                    "modifierKind": [
+                        112
+                    ]
+                }
+            ],
+            "implements": [
+                "AfterViewInit"
+            ],
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "elm",
+                        "type": "ElementRef"
+                    }
+                ],
+                "line": 16,
+                "jsdoctags": [
+                    {
+                        "name": "elm",
+                        "type": "ElementRef",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "components": [
+        {
+            "name": "PhiComponent",
+            "id": "component-PhiComponent-d8163ec04823c32cb37185e64681a493",
+            "file": "src/lib/phi.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "phi-phi",
+            "styleUrls": [],
+            "styles": [],
+            "template": "<p>\n  phi works!\n</p>\n",
+            "templateUrl": [],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 16
+                }
+            ],
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "",
+            "type": "component",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\n\n@Component({\n  selector: 'phi-phi',\n  template: `\n    <p>\n      phi works!\n    </p>\n  `,\n  styles: []\n})\nexport class PhiComponent implements OnInit {\n\n  constructor() { }\n\n  ngOnInit() {\n  }\n\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": "",
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [],
+                "line": 12
+            },
+            "implements": [
+                "OnInit"
+            ]
+        }
+    ],
+    "modules": [
+        {
+            "name": "GoogleTagManagerModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": [
+                        {
+                            "name": "GoogleTagManagerService"
+                        }
+                    ]
+                },
+                {
+                    "type": "declarations",
+                    "elements": []
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "HttpStatusModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": []
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "PhiModule",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "AnimateTextDirective"
+                        },
+                        {
+                            "name": "ParallaxDirective"
+                        },
+                        {
+                            "name": "PhiComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": [
+                        {
+                            "name": "AnimateTextDirective"
+                        },
+                        {
+                            "name": "ParallaxDirective"
+                        },
+                        {
+                            "name": "PhiComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        }
+    ],
+    "miscellaneous": {
+        "variables": [
+            {
+                "name": "DocsMetadata",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/lib/decorators/docs/docs.decorator.ts",
+                "type": "",
+                "defaultValue": "Symbol.for('Docs')"
+            },
+            {
+                "name": "GOOGLE_TAG_MANAGER_UID",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/lib/google-tag-manager/tokens.ts",
+                "type": "",
+                "defaultValue": "new InjectionToken<string>('GoogleTagManagerUID')"
+            }
+        ],
+        "functions": [
+            {
+                "name": "Docs",
+                "file": "src/lib/decorators/docs/docs.decorator.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "doc"
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "doc",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "getDataLayer",
+                "file": "src/lib/google-tag-manager/data-layer.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [],
+                "returnType": "any[]"
+            },
+            {
+                "name": "getDocsMetadata",
+                "file": "src/lib/decorators/docs/docs.decorator.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "target",
+                        "type": ""
+                    }
+                ],
+                "returnType": "string",
+                "jsdoctags": [
+                    {
+                        "name": "target",
+                        "type": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "HydrateFrom",
+                "file": "src/lib/decorators/hydrate.decorator.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "storage"
+                    }
+                ],
+                "returnType": "PropertyDecorator",
+                "jsdoctags": [
+                    {
+                        "name": "storage",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "setUpTestBedForDirective",
+                "file": "src/lib/testing/set-up-test-bed.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "Directive",
+                        "type": "any"
+                    },
+                    {
+                        "name": "moduleDef",
+                        "optional": true
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "Directive",
+                        "type": "any",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "moduleDef",
+                        "optional": true,
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            }
+        ],
+        "typealiases": [],
+        "enumerations": [
+            {
+                "name": "NgxHttpActions",
+                "childs": [
+                    {
+                        "name": "REQUEST"
+                    },
+                    {
+                        "name": "RESPONSE"
+                    },
+                    {
+                        "name": "ERROR"
+                    }
+                ],
+                "ctype": "miscellaneous",
+                "subtype": "enum",
+                "description": "",
+                "file": "src/lib/http-status/http-status.store.ts"
+            }
+        ],
+        "groupedVariables": {
+            "src/lib/decorators/docs/docs.decorator.ts": [
+                {
+                    "name": "DocsMetadata",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/lib/decorators/docs/docs.decorator.ts",
+                    "type": "",
+                    "defaultValue": "Symbol.for('Docs')"
+                }
+            ],
+            "src/lib/google-tag-manager/tokens.ts": [
+                {
+                    "name": "GOOGLE_TAG_MANAGER_UID",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/lib/google-tag-manager/tokens.ts",
+                    "type": "",
+                    "defaultValue": "new InjectionToken<string>('GoogleTagManagerUID')"
+                }
+            ]
+        },
+        "groupedFunctions": {
+            "src/lib/decorators/docs/docs.decorator.ts": [
+                {
+                    "name": "Docs",
+                    "file": "src/lib/decorators/docs/docs.decorator.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "doc"
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "doc",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getDocsMetadata",
+                    "file": "src/lib/decorators/docs/docs.decorator.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "target",
+                            "type": ""
+                        }
+                    ],
+                    "returnType": "string",
+                    "jsdoctags": [
+                        {
+                            "name": "target",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "src/lib/google-tag-manager/data-layer.ts": [
+                {
+                    "name": "getDataLayer",
+                    "file": "src/lib/google-tag-manager/data-layer.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [],
+                    "returnType": "any[]"
+                }
+            ],
+            "src/lib/decorators/hydrate.decorator.ts": [
+                {
+                    "name": "HydrateFrom",
+                    "file": "src/lib/decorators/hydrate.decorator.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "storage"
+                        }
+                    ],
+                    "returnType": "PropertyDecorator",
+                    "jsdoctags": [
+                        {
+                            "name": "storage",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "src/lib/testing/set-up-test-bed.ts": [
+                {
+                    "name": "setUpTestBedForDirective",
+                    "file": "src/lib/testing/set-up-test-bed.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "Directive",
+                            "type": "any"
+                        },
+                        {
+                            "name": "moduleDef",
+                            "optional": true
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "Directive",
+                            "type": "any",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "moduleDef",
+                            "optional": true,
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "groupedEnumerations": {
+            "src/lib/http-status/http-status.store.ts": [
+                {
+                    "name": "NgxHttpActions",
+                    "childs": [
+                        {
+                            "name": "REQUEST"
+                        },
+                        {
+                            "name": "RESPONSE"
+                        },
+                        {
+                            "name": "ERROR"
+                        }
+                    ],
+                    "ctype": "miscellaneous",
+                    "subtype": "enum",
+                    "description": "",
+                    "file": "src/lib/http-status/http-status.store.ts"
+                }
+            ]
+        },
+        "groupedTypeAliases": {}
+    },
+    "routes": [],
+    "coverage": {
+        "count": 1,
+        "status": "low",
+        "files": [
+            {
+                "filePath": "src/lib/decorators/docs/docs.decorator.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "Docs",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/decorators/docs/docs.decorator.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "getDocsMetadata",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/decorators/docs/docs.decorator.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "DocsMetadata",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/decorators/hydrate.decorator.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "HydrateFrom",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/directives/animate-text.directive.ts",
+                "type": "directive",
+                "linktype": "directive",
+                "name": "AnimateTextDirective",
+                "coveragePercent": 28,
+                "coverageCount": "2/7",
+                "status": "medium"
+            },
+            {
+                "filePath": "src/lib/directives/parallax.directive.ts",
+                "type": "directive",
+                "linktype": "directive",
+                "name": "ParallaxDirective",
+                "coveragePercent": 0,
+                "coverageCount": "0/7",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/google-tag-manager/data-layer.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "getDataLayer",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/google-tag-manager/google-tag-manager.module.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "GoogleTagManagerOptions",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/google-tag-manager/google-tag-manager.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "GoogleTagManagerService",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/google-tag-manager/tokens.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "GOOGLE_TAG_MANAGER_UID",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/http-status/http-status.interceptor.ts",
+                "type": "interceptor",
+                "linktype": "interceptor",
+                "name": "HttpStatusInterceptor",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/http-status/http-status.store.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "HttpStatusStore",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/http-status/http-status.store.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "NgxHttpState",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/phi.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "PhiComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/phi.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "PhiService",
+                "coveragePercent": 0,
+                "coverageCount": "0/2",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/testing/set-up-test-bed.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "setUpTestBedForDirective",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            }
+        ]
+    }
+}

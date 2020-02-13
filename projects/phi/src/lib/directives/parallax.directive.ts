@@ -1,17 +1,19 @@
-import { AfterViewInit, Directive, ElementRef, Input } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, HostListener, Input } from '@angular/core';
+import { fromEvent } from 'rxjs';
 
 @Directive({
   selector: '[phiParallax]'
 })
 export class ParallaxDirective implements AfterViewInit {
-  private parent: HTMLElement;
-
 
   @Input()
   public phiParallax: number;
 
   @Input()
   public parallaxStartOffset = 0;
+
+  @Input()
+  public phiParallaxParent: HTMLElement = document.scrollingElement as HTMLElement;
 
   constructor(private elm: ElementRef) {}
 
@@ -21,24 +23,20 @@ export class ParallaxDirective implements AfterViewInit {
       this.phiParallax = 1;
     }
 
-    this.elm.nativeElement.style.transition = 'none';
+    console.log({assignedParent: this.phiParallaxParent});
 
-    if (this.elm.nativeElement.offsetParent === document.body) {
-      this.parent = document.scrollingElement as HTMLElement;
-      document.addEventListener('scroll', () => this.updateParallax());
-    } else {
-      this.parent = this.elm.nativeElement.offsetParent;
-      this.elm.nativeElement.offsetParent.addEventListener('scroll', () => this.updateParallax());
-    }
+    fromEvent(this.phiParallaxParent, 'scroll').subscribe(() => {
+      this.updateParallax();
+    });
 
     this.updateParallax();
   }
 
   private updateParallax() {
 
-    const parentHeight = this.parent.offsetHeight;
+    const parentHeight = this.phiParallaxParent.offsetHeight;
     const elementPosition = this.elm.nativeElement.offsetTop;
-    const scrollTop = this.parent.scrollTop;
+    const scrollTop = this.phiParallaxParent.scrollTop;
 
     if ((scrollTop + parentHeight) >= elementPosition) {
       const positionY = Math.floor((scrollTop - elementPosition) * this.phiParallax);

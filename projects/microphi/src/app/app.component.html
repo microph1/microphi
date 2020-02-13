@@ -1,7 +1,54 @@
-<mat-progress-bar [mode]="'indeterminate'" class="mat-elevation-z6" *ngIf="isLoading$ | async"></mat-progress-bar>
-<app-toolbar></app-toolbar>
+<mat-progress-bar style="position: fixed" [mode]="'indeterminate'" class="mat-elevation-z6" *ngIf="isLoading$ | async"></mat-progress-bar>
 
-<div class="portal-body" fxFlex="" fxLayout="column">
+<mat-toolbar color="primary" class="mat-elevation-z4">
+  <a mat-button routerLink="/" style="font-size: 3.4vh">
+    <img width="38px" src="/assets/microphi_icon.png" alt="microphi_icon">
+    Microphi µφ
+  </a>
+  <span fxFlex></span>
+  <a mat-button
+      [routerLink]="project.name"
+      routerLinkActive="phi-active"
+      style="text-transform: capitalize;"
+      *ngFor="let project of (projects$ | async)">
+    {{project.name}}
+  </a>
 
+  <span>
+    <a mat-icon-button href="//github.com/microph1/microphi" target="_blank">
+      <mat-icon>code</mat-icon>
+    </a>
+  </span>
+</mat-toolbar>
+
+<div fxFlex style="overflow: auto">
   <router-outlet></router-outlet>
+
+  <mat-toolbar>
+    <a mat-button href="//www.dcsoftware.io" target="_blank">
+      <mat-icon>favorite</mat-icon>
+    </a>
+  </mat-toolbar>
 </div>
+
+
+<!--  <mat-sidenav-container fxFlex>-->
+<!--    <mat-sidenav fxFlex="calc(12vw)" mode="side" [opened]="opened">-->
+<!--      <mat-nav-list>-->
+
+<!--        <mat-list-item-->
+<!--          style="text-transform: capitalize;"-->
+<!--          *ngFor="let project of (projects$ | async)"-->
+<!--          routerLinkActive="phi-active"-->
+<!--          [routerLink]="project.name">-->
+<!--            {{project.name}}-->
+<!--        </mat-list-item>-->
+
+<!--      </mat-nav-list>-->
+<!--    </mat-sidenav>-->
+
+<!--    <mat-sidenav-content>-->
+<!--      <router-outlet></router-outlet>-->
+<!--    </mat-sidenav-content>-->
+
+<!--  </mat-sidenav-container>-->

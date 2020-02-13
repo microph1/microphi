@@ -14,7 +14,9 @@
     "predeploy:dcsoftware": "ng build dcsoftware --prod",
     "deploy:dcsoftware": "cd projects/dcsoftware && yarn sls client deploy --no-confirm",
     "predeploy:microphi": "ng build microphi --prod",
-    "deploy:microphi": "cd projects/microphi && yarn sls client deploy --no-confirm"
+    "deploy": "lerna run deploy --stream --scope",
+    "docs": "lerna run docs --stream",
+    "postdocs": "node --experimental-modules scripts/post-doc.mjs"
   },
   "private": true,
   "dependencies": {
@@ -31,8 +33,10 @@
     "@angular/platform-server": "~8.2.8",
     "@angular/router": "~8.2.14",
     "@microgamma/loggator": "^1.10.18",
+    "@unbounded/unbounded": "^0.9.9",
     "hammerjs": "^2.0.8",
     "ngx-deploy-npm": "^1.2.0",
+    "ngx-markdown": "^8.2.2",
     "rxjs": "~6.5.3",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"
@@ -43,6 +47,7 @@
     "@angular/cli": "~8.3.19",
     "@angular/compiler-cli": "~8.2.14",
     "@angular/language-service": "~8.2.14",
+    "@compodoc/compodoc": "^1.1.11",
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
@@ -60,9 +65,10 @@
     "protractor": "~5.4.0",
     "serverless": "^1.62.0",
     "serverless-finch": "^2.5.2",
-    "ts-node": "~7.0.0",
+    "ts-node": "^8.6.2",
     "tsickle": "^0.37.0",
     "tslint": "~5.15.0",
+    "typedoc": "^0.16.9",
     "typescript": "~3.5.3"
   }
 }

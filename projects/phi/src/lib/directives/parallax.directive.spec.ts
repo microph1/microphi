@@ -1,8 +1,18 @@
 import { ParallaxDirective } from './parallax.directive';
+import { TestBed } from '@angular/core/testing';
+import { setUpTestBedForDirective } from '../testing/set-up-test-bed';
 
-describe('ParallaxDirective', () => {
+fdescribe('ParallaxDirective', () => {
+
+
+  let directive: ParallaxDirective;
+
+  beforeEach(setUpTestBedForDirective(ParallaxDirective));
+
+  beforeEach(() => {
+  });
+
   it('should create an instance', () => {
-    const directive = new ParallaxDirective();
     expect(directive).toBeTruthy();
   });
 });

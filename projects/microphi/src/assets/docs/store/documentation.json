@@ -1,0 +1,1464 @@
+{
+    "pipes": [],
+    "interfaces": [
+        {
+            "name": "Actions",
+            "id": "interface-Actions-208982df3e53a81a309294385564ff87",
+            "file": "src/lib/actions.ts",
+            "type": "interface",
+            "sourceCode": "export interface Actions {\n  // TODO rename to type\n  type: string;\n  payload: any;\n}\n\nexport type RestActions = {\n  request: string;\n  response: string;\n  error?: any;\n}\n\nexport function createAction(action: string): RestActions {\n  return {\n    request: `${action}_REQUEST`,\n    response: `${action}_RESPONSE`,\n    error: `${action}_ERROR`\n  };\n}\n",
+            "properties": [
+                {
+                    "name": "payload",
+                    "type": "any",
+                    "optional": false,
+                    "description": "",
+                    "line": 4
+                },
+                {
+                    "name": "type",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 3
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 150,
+            "methods": []
+        },
+        {
+            "name": "Reducers",
+            "id": "interface-Reducers-d1671c07fa4b8c75d014af7d2c4c40f5",
+            "file": "src/lib/reduce.ts",
+            "type": "interface",
+            "sourceCode": "import { BaseStore } from './base-store';\nimport { getDebugger } from '@microgamma/loggator';\n\nexport const ReduceMetadata = '@Reduce';\n\nexport interface Reducers {\n  [actionName: number]: string;\n}\n\nexport function Reduce(onAction: any) {\n  return <Store extends BaseStore<any>>(target: Store, key: string, descriptor: PropertyDescriptor) => {\n    const d = getDebugger(`microphi:@Reduce:${target.constructor.name}`);\n\n    const reducer = Reflect.getMetadata(ReduceMetadata, target) || {};\n\n\n    reducer[onAction] = key;\n\n    d('stored reducers', reducer);\n\n    Reflect.defineMetadata(ReduceMetadata, reducer, target);\n\n    return descriptor;\n  };\n}\n\nexport function getReduceMetadata(instance): Reducers {\n  return Reflect.getMetadata(ReduceMetadata, instance);\n}\n",
+            "properties": [],
+            "indexSignatures": [
+                {
+                    "id": "index-declaration-d1671c07fa4b8c75d014af7d2c4c40f5",
+                    "args": [
+                        {
+                            "name": "actionName",
+                            "type": "number"
+                        }
+                    ],
+                    "returnType": "string",
+                    "line": 6
+                }
+            ],
+            "kind": 159,
+            "methods": []
+        },
+        {
+            "name": "Schema",
+            "id": "interface-Schema-03a1766cc0c9b1855364f6a2dc9fc5bd",
+            "file": "schematics/store/Schema.ts",
+            "type": "interface",
+            "sourceCode": "export interface Schema {\n  name: string;\n  path?: string;\n  project?: string;\n}\n",
+            "properties": [
+                {
+                    "name": "name",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 2
+                },
+                {
+                    "name": "path",
+                    "type": "string",
+                    "optional": true,
+                    "description": "",
+                    "line": 3
+                },
+                {
+                    "name": "project",
+                    "type": "string",
+                    "optional": true,
+                    "description": "",
+                    "line": 4
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 150,
+            "methods": []
+        },
+        {
+            "name": "StoreOptions",
+            "id": "interface-StoreOptions-a8ceb863e5d265af35d921127bb1816f",
+            "file": "src/lib/store.ts",
+            "type": "interface",
+            "sourceCode": "import { getDebugger } from '@microgamma/loggator';\nimport { createAction } from './actions';\nimport { ActionMetadata } from './action';\n\nexport const StoreMetadata = '@Store';\n\nexport interface StoreOptions {\n  initialState: any;\n  name: string;\n  actions: any;\n  useLocalStorage?: boolean;\n}\n\nexport function Store(options: StoreOptions) {\n\n  const d = getDebugger(`microphi:@Store:${options.name}`);\n\n  return (target) => {\n\n    d('running store decorator');\n\n    const actions = {};\n\n    if (options.actions) {\n\n      for (let action in options.actions) {\n        // actions is an enum: only parse numeric fields\n        if (+action >= 0) {\n          d('parsing type', action);\n\n          actions[action] = createAction(options.actions[action]);\n        } else {\n          // we can parse action names here. action is a string\n          d('parsing action', action);\n          actions[action] = [`${action}_REQUEST`, `${action}_RESPONSE`];\n        }\n\n\n      }\n\n      d('actions are', actions);\n    }\n\n    Reflect.defineMetadata(StoreMetadata, options, target);\n    Reflect.defineMetadata(ActionMetadata, actions, target);\n  }\n}\n\nexport function getStoreMetadata(instance): StoreOptions {\n  return Reflect.getMetadata(StoreMetadata, instance.constructor);\n}\n\n\n",
+            "properties": [
+                {
+                    "name": "actions",
+                    "type": "any",
+                    "optional": false,
+                    "description": "",
+                    "line": 10
+                },
+                {
+                    "name": "initialState",
+                    "type": "any",
+                    "optional": false,
+                    "description": "",
+                    "line": 8
+                },
+                {
+                    "name": "name",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 9
+                },
+                {
+                    "name": "useLocalStorage",
+                    "type": "boolean",
+                    "optional": true,
+                    "description": "",
+                    "line": 11
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 150,
+            "methods": []
+        }
+    ],
+    "injectables": [],
+    "classes": [
+        {
+            "name": "BaseStore",
+            "id": "class-BaseStore-8ec9472f0e4308aef6e75060e3534df7",
+            "file": "src/lib/base-store.ts",
+            "type": "class",
+            "sourceCode": "import { getDebugger } from '@microgamma/loggator';\nimport { BehaviorSubject, Observable, Subject } from 'rxjs';\nimport { getStoreMetadata, StoreOptions } from './store';\nimport { Actions } from './actions';\nimport { ActionsMetadata, getActionMetadata } from './action';\nimport { getReduceMetadata } from './reduce';\nimport { map, tap } from 'rxjs/operators';\n\n// Looks like passing the status on each effect/reducer is not needed: developer can always refer to this.state\n// TODO: Remove the state argument to effect/reducer\n\nexport abstract class BaseStore<T extends {}> {\n  private logger = getDebugger(`microphi:BaseStore:${this.constructor.name}`);\n\n  protected actions$ = new Subject<{\n    type: string,\n    payload: any\n  }>();\n\n  public loading$ = new Subject<{\n    type: string,\n    payload: any,\n    status: boolean\n  }>();\n\n  private readonly storeMetadata: StoreOptions;\n\n  private _state: T;\n\n  private readonly actionsMetadata: ActionsMetadata;\n\n  public error$ = new Subject<{\n    action: string,\n    error: typeof Error\n  }>();\n\n  get state(): T {\n    return this._state;\n  }\n\n  set state(value: T) {\n    this._state = value;\n    this.store$.next(value);\n    if (this.storeMetadata.useLocalStorage) {\n      this.logger('saving on localStorage');\n      localStorage.setItem(this.storeMetadata.name, JSON.stringify(value));\n    }\n  }\n\n\n\n  protected store$: BehaviorSubject<T>;\n\n  constructor() {\n\n    this.storeMetadata = getStoreMetadata(this);\n    this.logger('@Store', this.storeMetadata);\n\n    this.store$ = new BehaviorSubject(this.storeMetadata.initialState);\n    this._state = this.storeMetadata.initialState;\n    this.logger('InitialState', this.state);\n\n    this.actionsMetadata = getActionMetadata(this);\n    this.logger('Actions', this.actionsMetadata);\n\n    const reducerMetadata = getReduceMetadata(this);\n    this.logger('Reducers', reducerMetadata);\n    const remappedReducers = this.parseReducers(reducerMetadata);\n    this.logger('remapped reducers', remappedReducers);\n\n\n    const effectsMetadata = Reflect.getMetadata('@Effect', this) || {};\n    this.logger('Effects', effectsMetadata);\n    const remappedEffects = this.remapEffects(effectsMetadata);\n    this.logger('remapped effects', remappedEffects);\n\n    this.actions$.pipe(\n      tap((action: Actions) => {\n\n        this.loading$.next({type: action.type, payload: action.payload, status: action.type.endsWith('_REQUEST')});\n\n      })\n    ).subscribe(async (action: Actions) => {\n      this.logger('got type', action);\n\n      const type = action.type;\n\n      // effects are associated with requests\n      if (type.includes('_REQUEST')) {\n        if (remappedEffects.hasOwnProperty(type)) {\n\n          const effectName = remappedEffects[type];\n          this.logger('should call', effectName);\n\n          // TODO use .toPromise to trick subscription/unsubscription hassle\n          try {\n            let resp;\n\n            if (this[effectName] instanceof Function) {\n\n              const retValue = this[effectName](action.payload) as Observable<any>;\n\n              if (retValue instanceof Observable) {\n                resp = await (retValue).toPromise();\n              }\n              // pass response down triggering type to alert data arrived\n\n              this.logger('got data', resp);\n            }\n\n            this.actions$.next({\n              type: remappedEffects[effectName],\n              payload: resp\n            });\n\n          } catch (err) {\n            this.logger('got error', err);\n            // dispatch type with error\n\n            this.error$.next({action: type, error: err});\n\n\n            // TODO: to swallow or not to shallow?\n            // throw e;\n          }\n\n        } else {\n          // if there is no effect associated with this action then we can proceed calling the reducer associated\n          this.actions$.next({\n            type: type.replace('_REQUEST', '_RESPONSE'),\n            payload: action.payload\n          });\n\n          // this.loading$.next({type: type, payload: action.payload, status: false});\n        }\n      } else if (type.includes('_RESPONSE')) {\n\n        const fn = remappedReducers[action.type];\n        this.logger('should call fn', fn);\n\n        if (this[remappedReducers[action.type]]) {\n          // TODO since we may not need the state in the reducer better to switch the order fo the arguments\n          const newState = await this[remappedReducers[action.type]](action.payload);\n          this.logger('newState', newState);\n          if (newState) {\n            this.state = newState;\n          }\n        }\n\n      }\n\n    }, (err) => {\n      this.logger('got error', err);\n      // this.loading$.next({type: 'GENERAL_ERROR', payload: err, status: false});\n      // TODO should handle the error or should we change loading$ to a more generic status$ so we can pass altogether\n      // loadings and errors events?\n    });\n\n  }\n\n  public dispatch(type, payload?) {\n    // TODO not sure we should extrapolate the request here\n    const requestAction = this.actionsMetadata[type].request;\n    this.logger('dispatching type', requestAction);\n    // instead should dispatch a request\n\n    this.actions$.next({type: requestAction, payload});\n  }\n\n  public getRequestFromAction(actionType) {\n    return this.actionsMetadata[actionType].request;\n  }\n\n  public getResponseFromAction(actionType) {\n    return this.actionsMetadata[actionType].response;\n  }\n\n  private parseReducers(reducers) {\n    const remappedReducers = {};\n\n    Object.keys(reducers).forEach((action) => {\n      if (+action >= 0) {\n        // this.logger('remapping', type, 'to');\n        const realAction = this.actionsMetadata[action].response;\n        // this.logger('real type to map to', realAction);\n        remappedReducers[realAction] = reducers[action];\n      }\n    });\n\n    return remappedReducers;\n  }\n\n  private remapEffects(effectsMetadata: {}) {\n    const remappedEffects = {};\n\n    Object.keys(effectsMetadata).forEach((action) => {\n      // effects should react to REQUEST events\n\n      if (+action >= 0) {\n\n        const realAction = this.actionsMetadata[action].request;\n\n        remappedEffects[realAction] = effectsMetadata[action];\n        // mapping the effect function so that it can return a response type\n        remappedEffects[effectsMetadata[action]] = this.actionsMetadata[action].response;\n      }\n    });\n\n    return remappedEffects;\n  }\n\n  public getActionName(type: number) {\n    return this.actionsMetadata[type];\n  }\n}\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [],
+                "line": 52
+            },
+            "properties": [
+                {
+                    "name": "_state",
+                    "type": "T",
+                    "optional": false,
+                    "description": "",
+                    "line": 28,
+                    "modifierKind": [
+                        112
+                    ]
+                },
+                {
+                    "name": "actions$",
+                    "defaultValue": "new Subject<{\n    type: string,\n    payload: any\n  }>()",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 15,
+                    "modifierKind": [
+                        113
+                    ]
+                },
+                {
+                    "name": "actionsMetadata",
+                    "type": "ActionsMetadata",
+                    "optional": false,
+                    "description": "",
+                    "line": 30,
+                    "modifierKind": [
+                        112,
+                        132
+                    ]
+                },
+                {
+                    "name": "error$",
+                    "defaultValue": "new Subject<{\n    action: string,\n    error: typeof Error\n  }>()",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 32,
+                    "modifierKind": [
+                        114
+                    ]
+                },
+                {
+                    "name": "loading$",
+                    "defaultValue": "new Subject<{\n    type: string,\n    payload: any,\n    status: boolean\n  }>()",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 20,
+                    "modifierKind": [
+                        114
+                    ]
+                },
+                {
+                    "name": "logger",
+                    "defaultValue": "getDebugger(`microphi:BaseStore:${this.constructor.name}`)",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 13,
+                    "modifierKind": [
+                        112
+                    ]
+                },
+                {
+                    "name": "store$",
+                    "type": "BehaviorSubject<T>",
+                    "optional": false,
+                    "description": "",
+                    "line": 52,
+                    "modifierKind": [
+                        113
+                    ]
+                },
+                {
+                    "name": "storeMetadata",
+                    "type": "StoreOptions",
+                    "optional": false,
+                    "description": "",
+                    "line": 26,
+                    "modifierKind": [
+                        112,
+                        132
+                    ]
+                }
+            ],
+            "methods": [
+                {
+                    "name": "dispatch",
+                    "args": [
+                        {
+                            "name": "type",
+                            "type": ""
+                        },
+                        {
+                            "name": "payload",
+                            "type": "",
+                            "optional": true
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 161,
+                    "modifierKind": [
+                        114
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "type",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "payload",
+                            "type": "",
+                            "optional": true,
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getActionName",
+                    "args": [
+                        {
+                            "name": "type",
+                            "type": "number"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 212,
+                    "modifierKind": [
+                        114
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "type",
+                            "type": "number",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getRequestFromAction",
+                    "args": [
+                        {
+                            "name": "actionType",
+                            "type": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 170,
+                    "modifierKind": [
+                        114
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "actionType",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getResponseFromAction",
+                    "args": [
+                        {
+                            "name": "actionType",
+                            "type": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 174,
+                    "modifierKind": [
+                        114
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "actionType",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "parseReducers",
+                    "args": [
+                        {
+                            "name": "reducers",
+                            "type": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "{}",
+                    "typeParameters": [],
+                    "line": 178,
+                    "modifierKind": [
+                        112
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "reducers",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "remapEffects",
+                    "args": [
+                        {
+                            "name": "effectsMetadata",
+                            "type": "literal type"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "{}",
+                    "typeParameters": [],
+                    "line": 193,
+                    "modifierKind": [
+                        112
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "effectsMetadata",
+                            "type": "literal type",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "indexSignatures": [],
+            "accessors": {
+                "state": {
+                    "name": "state",
+                    "setSignature": {
+                        "name": "state",
+                        "type": "void",
+                        "args": [
+                            {
+                                "name": "value",
+                                "type": ""
+                            }
+                        ],
+                        "returnType": "void",
+                        "line": 41,
+                        "jsdoctags": [
+                            {
+                                "name": "value",
+                                "type": "",
+                                "tagName": {
+                                    "text": "param"
+                                }
+                            }
+                        ]
+                    },
+                    "getSignature": {
+                        "name": "state",
+                        "type": "",
+                        "returnType": "T",
+                        "line": 37
+                    }
+                }
+            },
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": []
+        },
+        {
+            "name": "ObservableList",
+            "id": "class-ObservableList-029197bf494b90d4e63ab698073a2c69",
+            "file": "src/lib/observable-list.ts",
+            "type": "class",
+            "sourceCode": "import { BehaviorSubject } from 'rxjs';\n\nexport class ObservableList<T extends {}> {\n  private ids: Set<string> = new Set<string>();\n  private data: Map<string, BehaviorSubject<T>> = new Map();\n  //\n  // private data: {\n  //   [id: string]: BehaviorSubject<T>\n  // } = {};\n\n  constructor(items: T[], private idFieldName = 'id') {\n    const ids = items.map((i) => i[this.idFieldName]);\n    this.ids = new Set(ids);\n    for (const id of ids) {\n      this.data.set(id, new BehaviorSubject(items[id]));\n    }\n\n\n  }\n\n  *[Symbol.iterator](): IterableIterator<BehaviorSubject<T>> {\n\n\n    // tslint:disable-next-line:forin\n    for (const id of this.ids.values()) {\n      yield this.data.get(id);\n      // yield this.data[id];\n    }\n\n  }\n\n  public push(...items: T[]) {\n    const id = this.idFieldName;\n\n    for (const item of items) {\n\n      if (this.data.has(item[id])) {\n        // check whether the item changed;\n\n        const storedItem = this.data.get(item[id]).getValue();\n        const shouldUpdate = Object.keys(storedItem).some((key) => {\n          return storedItem[key] !== item[key];\n        });\n\n        if (shouldUpdate) {\n          this.data.get(item[id]).next(item);\n        }\n      } else {\n        this.ids.add(item[id]);\n        this.data.set(item[id], new BehaviorSubject(item));\n      }\n\n    }\n\n  }\n\n  public updateOne(item: T) {\n    if (this.data.has(item[this.idFieldName])) {\n\n      this.data.get(item[this.idFieldName]).next(item);\n    } else {\n      console.warn('item not found', item);\n    }\n  }\n\n  public toJSON() {\n\n    const data = [];\n\n    this.data.forEach((value) => {\n      data.push(value.getValue())\n    });\n\n    return data;\n  }\n\n  /**\n   * Will update items that are already present only if they need to be updated and remove items that are not present.\n   * @param items\n   */\n  public set(...items: T[]): void {\n    const newIds: string[] = items.map((i) => i[this.idFieldName]);\n\n    const intersection: Set<string> = this.intersection(this.ids, newIds);\n\n    for (const id of intersection) {\n      this.updateOne(items[id]);\n    }\n\n    const itemsToRemove: Set<string> = this.difference(this.ids, newIds);\n\n    for (const id of itemsToRemove) {\n      this.removeItem(id);\n    }\n\n    const itemsToAdd: Set<string> = this.difference(newIds, this.ids);\n\n    for (const id of itemsToAdd) {\n      this.addItem(items[id]);\n    }\n\n  }\n\n  public removeItem(id: string) {\n    this.ids.delete(id);\n    this.data.delete(id);\n  }\n\n  private difference(setA, setB): Set<string> {\n    const _difference: Set<string> = new Set(setA);\n    for (const elem of setB) {\n      _difference.delete(elem);\n    }\n    return _difference;\n  }\n\n  private intersection(setA, setB): Set<string> {\n    const _intersection: Set<string> = new Set();\n    for (const elem of setB) {\n      if (setA.has(elem)) {\n        _intersection.add(elem);\n      }\n    }\n    return _intersection;\n  }\n\n  private symmetricDifference(setA, setB): Set<string> {\n    const _difference: Set<string> = new Set(setA);\n    for (const elem of setB) {\n      if (_difference.has(elem)) {\n        _difference.delete(elem);\n      } else {\n        _difference.add(elem);\n      }\n    }\n    return _difference;\n  }\n\n  private addItem(item: T) {\n    const id = item[this.idFieldName];\n    this.ids.add(id);\n    this.data.set(id, new BehaviorSubject(item));\n\n  }\n}\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "args": [
+                    {
+                        "name": "items",
+                        "type": "T[]"
+                    },
+                    {
+                        "name": "idFieldName",
+                        "type": "string",
+                        "defaultValue": "'id'"
+                    }
+                ],
+                "line": 5,
+                "jsdoctags": [
+                    {
+                        "name": "items",
+                        "type": "T[]",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "idFieldName",
+                        "type": "string",
+                        "defaultValue": "'id'",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "properties": [
+                {
+                    "name": "data",
+                    "defaultValue": "new Map()",
+                    "type": "Map<string | BehaviorSubject<T>>",
+                    "optional": false,
+                    "description": "",
+                    "line": 5,
+                    "modifierKind": [
+                        112
+                    ]
+                },
+                {
+                    "name": "ids",
+                    "defaultValue": "new Set<string>()",
+                    "type": "Set<string>",
+                    "optional": false,
+                    "description": "",
+                    "line": 4,
+                    "modifierKind": [
+                        112
+                    ]
+                }
+            ],
+            "methods": [
+                {
+                    "name": "addItem",
+                    "args": [
+                        {
+                            "name": "item",
+                            "type": "T"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 139,
+                    "modifierKind": [
+                        112
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "item",
+                            "type": "T",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "difference",
+                    "args": [
+                        {
+                            "name": "setA",
+                            "type": ""
+                        },
+                        {
+                            "name": "setB",
+                            "type": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Set<string>",
+                    "typeParameters": [],
+                    "line": 109,
+                    "modifierKind": [
+                        112
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "setA",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "setB",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "intersection",
+                    "args": [
+                        {
+                            "name": "setA",
+                            "type": ""
+                        },
+                        {
+                            "name": "setB",
+                            "type": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Set<string>",
+                    "typeParameters": [],
+                    "line": 117,
+                    "modifierKind": [
+                        112
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "setA",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "setB",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "push",
+                    "args": [
+                        {
+                            "name": "items",
+                            "type": "T[]",
+                            "dotDotDotToken": true
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 32,
+                    "modifierKind": [
+                        114
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "items",
+                            "type": "T[]",
+                            "dotDotDotToken": true,
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "removeItem",
+                    "args": [
+                        {
+                            "name": "id",
+                            "type": "string"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 104,
+                    "modifierKind": [
+                        114
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "id",
+                            "type": "string",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "set",
+                    "args": [
+                        {
+                            "name": "items",
+                            "type": "T[]",
+                            "dotDotDotToken": true
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 81,
+                    "description": "<p>Will update items that are already present only if they need to be updated and remove items that are not present.</p>\n",
+                    "modifierKind": [
+                        114
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": {
+                                "pos": 1798,
+                                "end": 1803,
+                                "flags": 0,
+                                "escapedText": "items"
+                            },
+                            "type": "T[]",
+                            "dotDotDotToken": true,
+                            "tagName": {
+                                "pos": 1792,
+                                "end": 1797,
+                                "flags": 0,
+                                "escapedText": "param"
+                            },
+                            "comment": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "symmetricDifference",
+                    "args": [
+                        {
+                            "name": "setA",
+                            "type": ""
+                        },
+                        {
+                            "name": "setB",
+                            "type": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Set<string>",
+                    "typeParameters": [],
+                    "line": 127,
+                    "modifierKind": [
+                        112
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "setA",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "setB",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "toJSON",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "{}",
+                    "typeParameters": [],
+                    "line": 66,
+                    "modifierKind": [
+                        114
+                    ]
+                },
+                {
+                    "args": [],
+                    "optional": false,
+                    "returnType": "IterableIterator<BehaviorSubject<T>>",
+                    "typeParameters": [],
+                    "line": 21
+                },
+                {
+                    "name": "updateOne",
+                    "args": [
+                        {
+                            "name": "item",
+                            "type": "T"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 57,
+                    "modifierKind": [
+                        114
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "item",
+                            "type": "T",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "indexSignatures": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": []
+        }
+    ],
+    "directives": [],
+    "components": [],
+    "modules": [],
+    "miscellaneous": {
+        "variables": [
+            {
+                "name": "ActionMetadata",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/lib/action.ts",
+                "type": "string",
+                "defaultValue": "'@Action'"
+            },
+            {
+                "name": "ReduceMetadata",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/lib/reduce.ts",
+                "type": "string",
+                "defaultValue": "'@Reduce'"
+            },
+            {
+                "name": "StoreMetadata",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/lib/store.ts",
+                "type": "string",
+                "defaultValue": "'@Store'"
+            }
+        ],
+        "functions": [
+            {
+                "name": "createAction",
+                "file": "src/lib/actions.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "action"
+                    }
+                ],
+                "returnType": "RestActions",
+                "jsdoctags": [
+                    {
+                        "name": "action",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "Effect",
+                "file": "src/lib/effect.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "onAction",
+                        "type": "any"
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "onAction",
+                        "type": "any",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "getActionMetadata",
+                "file": "src/lib/action.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "instance",
+                        "type": ""
+                    }
+                ],
+                "returnType": "ActionsMetadata",
+                "jsdoctags": [
+                    {
+                        "name": "instance",
+                        "type": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "getReduceMetadata",
+                "file": "src/lib/reduce.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "instance",
+                        "type": ""
+                    }
+                ],
+                "returnType": "Reducers",
+                "jsdoctags": [
+                    {
+                        "name": "instance",
+                        "type": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "getStoreMetadata",
+                "file": "src/lib/store.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "instance",
+                        "type": ""
+                    }
+                ],
+                "returnType": "StoreOptions",
+                "jsdoctags": [
+                    {
+                        "name": "instance",
+                        "type": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "ngAdd",
+                "file": "schematics/ng-add/index.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "_options",
+                        "type": "any"
+                    }
+                ],
+                "returnType": "Rule",
+                "jsdoctags": [
+                    {
+                        "name": "_options",
+                        "type": "any",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "Reduce",
+                "file": "src/lib/reduce.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "onAction",
+                        "type": "any"
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "onAction",
+                        "type": "any",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "store",
+                "file": "schematics/store/index.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "options"
+                    }
+                ],
+                "returnType": "Rule",
+                "jsdoctags": [
+                    {
+                        "name": "options",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "Store",
+                "file": "src/lib/store.ts",
+                "ctype": "miscellaneous",
+                "subtype": "function",
+                "description": "",
+                "args": [
+                    {
+                        "name": "options"
+                    }
+                ],
+                "jsdoctags": [
+                    {
+                        "name": "options",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            }
+        ],
+        "typealiases": [
+            {
+                "name": "ActionsMetadata",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "RestActions[]",
+                "file": "src/lib/action.ts",
+                "description": "",
+                "kind": 166
+            },
+            {
+                "name": "RestActions",
+                "ctype": "miscellaneous",
+                "subtype": "typealias",
+                "rawtype": "literal type",
+                "file": "src/lib/actions.ts",
+                "description": "",
+                "kind": 165
+            }
+        ],
+        "enumerations": [],
+        "groupedVariables": {
+            "src/lib/action.ts": [
+                {
+                    "name": "ActionMetadata",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/lib/action.ts",
+                    "type": "string",
+                    "defaultValue": "'@Action'"
+                }
+            ],
+            "src/lib/reduce.ts": [
+                {
+                    "name": "ReduceMetadata",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/lib/reduce.ts",
+                    "type": "string",
+                    "defaultValue": "'@Reduce'"
+                }
+            ],
+            "src/lib/store.ts": [
+                {
+                    "name": "StoreMetadata",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/lib/store.ts",
+                    "type": "string",
+                    "defaultValue": "'@Store'"
+                }
+            ]
+        },
+        "groupedFunctions": {
+            "src/lib/actions.ts": [
+                {
+                    "name": "createAction",
+                    "file": "src/lib/actions.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "action"
+                        }
+                    ],
+                    "returnType": "RestActions",
+                    "jsdoctags": [
+                        {
+                            "name": "action",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "src/lib/effect.ts": [
+                {
+                    "name": "Effect",
+                    "file": "src/lib/effect.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "onAction",
+                            "type": "any"
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "onAction",
+                            "type": "any",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "src/lib/action.ts": [
+                {
+                    "name": "getActionMetadata",
+                    "file": "src/lib/action.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "instance",
+                            "type": ""
+                        }
+                    ],
+                    "returnType": "ActionsMetadata",
+                    "jsdoctags": [
+                        {
+                            "name": "instance",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "src/lib/reduce.ts": [
+                {
+                    "name": "getReduceMetadata",
+                    "file": "src/lib/reduce.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "instance",
+                            "type": ""
+                        }
+                    ],
+                    "returnType": "Reducers",
+                    "jsdoctags": [
+                        {
+                            "name": "instance",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Reduce",
+                    "file": "src/lib/reduce.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "onAction",
+                            "type": "any"
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "onAction",
+                            "type": "any",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "src/lib/store.ts": [
+                {
+                    "name": "getStoreMetadata",
+                    "file": "src/lib/store.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "instance",
+                            "type": ""
+                        }
+                    ],
+                    "returnType": "StoreOptions",
+                    "jsdoctags": [
+                        {
+                            "name": "instance",
+                            "type": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Store",
+                    "file": "src/lib/store.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "options"
+                        }
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "options",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "schematics/ng-add/index.ts": [
+                {
+                    "name": "ngAdd",
+                    "file": "schematics/ng-add/index.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "_options",
+                            "type": "any"
+                        }
+                    ],
+                    "returnType": "Rule",
+                    "jsdoctags": [
+                        {
+                            "name": "_options",
+                            "type": "any",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "schematics/store/index.ts": [
+                {
+                    "name": "store",
+                    "file": "schematics/store/index.ts",
+                    "ctype": "miscellaneous",
+                    "subtype": "function",
+                    "description": "",
+                    "args": [
+                        {
+                            "name": "options"
+                        }
+                    ],
+                    "returnType": "Rule",
+                    "jsdoctags": [
+                        {
+                            "name": "options",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "groupedEnumerations": {},
+        "groupedTypeAliases": {
+            "src/lib/action.ts": [
+                {
+                    "name": "ActionsMetadata",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "RestActions[]",
+                    "file": "src/lib/action.ts",
+                    "description": "",
+                    "kind": 166
+                }
+            ],
+            "src/lib/actions.ts": [
+                {
+                    "name": "RestActions",
+                    "ctype": "miscellaneous",
+                    "subtype": "typealias",
+                    "rawtype": "literal type",
+                    "file": "src/lib/actions.ts",
+                    "description": "",
+                    "kind": 165
+                }
+            ]
+        }
+    },
+    "routes": [],
+    "coverage": {
+        "count": 0,
+        "status": "low",
+        "files": [
+            {
+                "filePath": "schematics/ng-add/index.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "ngAdd",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "schematics/store/Schema.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "Schema",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "schematics/store/index.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "store",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/action.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "getActionMetadata",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/action.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "ActionMetadata",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/actions.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "Actions",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/actions.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "createAction",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/base-store.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "BaseStore",
+                "coveragePercent": 0,
+                "coverageCount": "0/16",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/effect.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "Effect",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/observable-list.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "ObservableList",
+                "coveragePercent": 7,
+                "coverageCount": "1/14",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/reduce.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "Reducers",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/reduce.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "getReduceMetadata",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/reduce.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "Reduce",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/reduce.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "ReduceMetadata",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/store.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "StoreOptions",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/store.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "getStoreMetadata",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/store.ts",
+                "type": "function",
+                "linksubtype": "function",
+                "name": "Store",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/lib/store.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "StoreMetadata",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            }
+        ]
+    }
+}

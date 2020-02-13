@@ -1,5 +1,11 @@
 import { Component } from '@angular/core';
-import { NgxHttpStatusStore } from '@microphi/ngx-http-status';
+import { HttpStatusStore, HydrateFrom } from '@microphi/phi';
+import { HttpClient } from '@angular/common/http';
+
+export interface ProjectDef {
+  name: string;
+  uri: string;
+}
 
 @Component({
   selector: 'app-root',
@@ -9,5 +15,11 @@ import { NgxHttpStatusStore } from '@microphi/ngx-http-status';
 export class AppComponent {
   public isLoading$ = this.httpStatusStore.isLoading$;
 
-  constructor(private httpStatusStore: NgxHttpStatusStore) {}
+  public projects$ = this.http.get<ProjectDef[]>('/assets/docs/index.json');
+
+  @HydrateFrom(localStorage)
+  public opened: boolean;
+
+
+  constructor(private httpStatusStore: HttpStatusStore, private http: HttpClient) {}
 }

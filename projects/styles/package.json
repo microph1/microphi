@@ -1,0 +1,21 @@
+{
+  "name": "@microphi/styles",
+  "version": "0.0.0",
+  "description": "helper styles",
+  "main": " ",
+  "scripts": {
+    "test": " "
+  },
+  "repository": {
+    "type": "git",
+    "url": " "
+  },
+  "keywords": [
+    "styles",
+    "css",
+    "scss",
+    "helpers"
+  ],
+  "author": "cavaliere.davide@gmail.com",
+  "license": "ISC"
+}

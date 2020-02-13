@@ -1,11 +1,10 @@
+@import '~@angular/material/theming';
+@include mat-core();
+
 :host {
   flex-direction: column;
-  margin-top: 30px;
 }
 
 .intro {
-  background-repeat: no-repeat;
-  background-size: cover;
-  min-height: 50%;
-  margin-bottom: 25px;
+  //background-color: mat-color($primary);
 }

@@ -17,7 +17,11 @@ import { TicketStore } from './services/tickets/ticket.store';
 import { BackendService } from './services/tickets/ticket.service';
 import { TicketComponent } from './components/ticket/ticket.component';
 import { RouterModule } from '@angular/router';
-import { NgxHttpStatusStore, NgxHttpStatusInterceptor } from '@microphi/ngx-http-status';
+
+import { MatSidenavModule } from '@angular/material';
+import { DemoDirectivesComponent } from './components/demo-directives/demo-directives.component';
+import { GoogleTagManagerModule, PhiModule, HttpStatusStore, HttpStatusInterceptor } from '@microphi/phi';
+import { MarkdownModule } from 'ngx-markdown';
 
 @NgModule({
   declarations: [
@@ -29,7 +33,8 @@ import { NgxHttpStatusStore, NgxHttpStatusInterceptor } from '@microphi/ngx-http
     // pipes
     IsLoggedInPipe,
 
-    TicketComponent
+    TicketComponent,
+    DemoDirectivesComponent
   ],
   imports: [
     BrowserModule,
@@ -38,21 +43,27 @@ import { NgxHttpStatusStore, NgxHttpStatusInterceptor } from '@microphi/ngx-http
     MaterialModule,
     HttpClientModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    MatSidenavModule,
+    PhiModule,
+
+    GoogleTagManagerModule.forRoot({
+      trackId: 'UA-85728222-4'
+    }),
+    MarkdownModule.forRoot()
+
   ],
   providers: [
     AuthStore,
     AuthService,
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: NgxHttpStatusInterceptor,
+      useClass: HttpStatusInterceptor,
       multi: true
     },
-    NgxHttpStatusStore,
+    HttpStatusStore,
     TicketStore,
-    BackendService,
-
-
+    BackendService
   ],
   bootstrap: [AppComponent]
 })

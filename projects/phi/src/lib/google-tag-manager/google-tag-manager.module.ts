@@ -1,25 +1,22 @@
 /* tslint:disable:no-string-literal */
-import { Inject, NgModule } from '@angular/core';
+import { Inject, ModuleWithProviders, NgModule, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GoogleTagManagerService } from './google-tag-manager.service';
 import { GOOGLE_TAG_MANAGER_UID } from './tokens';
+import { GoogleTagManagerOptions } from './googlet-tag-manager-options';
+import { NavigationEnd, Router } from '@angular/router';
 
 /**
- * Import GoogleTagManagerModule to enable analytics
+ * # GoogleTagManager
  * Usage:
  * ```typescript
  *   @NgModule({
  *   declarations: [AppComponent],
  *   imports: [
  *     [...]
- *     GoogleTagManagerModule
- *   ],
- *
- *   providers: [
- *     {
- *       provide: GOOGLE_TAG_MANAGER_UID,
- *       useValue: 'UA-85728222-2'
- *     }
+ *     GoogleTagManagerModule.forRoot({
+ *       trackId: 'UA-xxxxx-xx'
+ *     })
  *   ]
  *   })
  *   export class AppModule {}
@@ -36,20 +33,63 @@ import { GOOGLE_TAG_MANAGER_UID } from './tokens';
 })
 export class GoogleTagManagerModule {
 
-  constructor(@Inject(GOOGLE_TAG_MANAGER_UID) uid) {
+  constructor(
+    @Inject(GOOGLE_TAG_MANAGER_UID) trackId,
+    @Optional() router: Router
+  ) {
+
+    this.initializeGTM({
+      trackId: trackId
+    });
+
+    // if (router) {
+    //   console.log('router is available, registering virtual pageviews');
+    //
+    //   router.events.subscribe((event) => {
+    //     if (event instanceof NavigationEnd) {
+    //
+    //
+    //     }
+    //   })
+    // }
+
+  }
+
+  public static forRoot(options: GoogleTagManagerOptions): ModuleWithProviders<GoogleTagManagerModule> {
+
+    return {
+      ngModule: GoogleTagManagerModule,
+      providers: [
+        {
+          provide: GOOGLE_TAG_MANAGER_UID,
+          useValue: options.trackId
+        }
+      ]
+    };
+  }
+
+  private initializeGTM(options: GoogleTagManagerOptions) {
+
 
     window['dataLayer'] = window['dataLayer'] || [];
+    // tslint:disable-next-line:only-arrow-functions
+    window['gtag'] = window['gtag'] || function() {
+      window['dataLayer'].push(arguments);
+    };
 
-    function gtag(...args) {
-      // @ts-ignore
-      dataLayer.push(arguments);
-    }
+    // for (const command of $settings.initCommands) {
+    //   window['gtag'](command.command, ...command.values);
+    // }
 
-    if (!uid) {
-      console.warn(this.constructor.name, ': You should provide a UID. Skipping GTM registration');
-    } else {
-      gtag('js', new Date());
-      gtag('config', uid);
-    }
+    window['gtag']('js', new Date());
+    window['gtag']('config', options.trackId);
+
+
+    const s: HTMLScriptElement = document.createElement('script');
+    s.async = true;
+    s.src = `https://www.googletagmanager.com/gtag/js?id=${options.trackId}`;
+
+    const head: HTMLHeadElement = document.getElementsByTagName('head')[0];
+    head.appendChild(s);
   }
 }

@@ -13,7 +13,7 @@ export class ParallaxDirective implements AfterViewInit {
   public parallaxStartOffset = 0;
 
   @Input()
-  public phiParallaxParent: HTMLElement = document.scrollingElement as HTMLElement;
+  public phiParallaxParent = window;
 
   constructor(private elm: ElementRef) {}
 
@@ -34,9 +34,18 @@ export class ParallaxDirective implements AfterViewInit {
 
   private updateParallax() {
 
-    const parentHeight = this.phiParallaxParent.offsetHeight;
+    let parentHeight;
+    let scrollTop;
+
+    if (this.phiParallaxParent === window) {
+      parentHeight = this.phiParallaxParent.innerHeight;
+      scrollTop = this.phiParallaxParent.pageYOffset;
+    } else if (this.phiParallaxParent instanceof HTMLElement) {
+      parentHeight = this.phiParallaxParent.offsetHeight;
+      scrollTop = this.phiParallaxParent.scrollTop;
+    }
+
     const elementPosition = this.elm.nativeElement.offsetTop;
-    const scrollTop = this.phiParallaxParent.scrollTop;
 
     if ((scrollTop + parentHeight) >= elementPosition) {
       const positionY = Math.floor((scrollTop - elementPosition) * this.phiParallax);

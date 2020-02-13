@@ -1,12 +1,11 @@
 {
   "name": "microphi",
   "private": true,
-  "version": "0.1.1",
+  "version": "0.1.3",
   "description": "",
   "main": "karma.conf.js",
   "scripts": {
     "deploy": "sls client deploy --no-confirm"
-
   },
   "author": "",
   "license": "ISC"

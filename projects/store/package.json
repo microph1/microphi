@@ -13,7 +13,7 @@
     "flux",
     "elm"
   ],
-  "version": "0.1.0",
+  "version": "0.1.3",
   "dependencies": {
     "@microgamma/loggator": "^1.10.18",
     "reflect-metadata": "^0.1.13"

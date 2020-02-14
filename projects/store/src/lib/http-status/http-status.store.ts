@@ -26,6 +26,8 @@ export enum HttpActions {
   providedIn: 'root'
 })
 export class HttpStatusStore extends BaseStore<HttpState> {
+  // TODO: add explicit constructor
+
 
 
   public isLoading$ = this.store$.pipe(

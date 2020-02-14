@@ -22,7 +22,7 @@
             "main": "projects/microphi/src/main.ts",
             "polyfills": "projects/microphi/src/polyfills.ts",
             "tsConfig": "projects/microphi/tsconfig.app.json",
-            "aot": false,
+            "aot": true,
             "assets": [
               "projects/microphi/src/favicon.ico",
               "projects/microphi/src/assets"
@@ -47,7 +47,6 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -142,10 +141,7 @@
                 }
               ],
               "sourceMap": false,
-              "optimization": {
-                "scripts": false,
-                "styles": true
-              }
+              "optimization": true
             }
           }
         }
@@ -163,7 +159,12 @@
             "tsConfig": "projects/store/tsconfig.lib.json",
             "project": "projects/store/ng-package.json"
           }
-        },
+        ,          "configurations": {
+            "production": {
+              "tsConfig": "projects/store/tsconfig.lib.prod.json"
+            }
+          }
+},
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
@@ -204,7 +205,12 @@
             "tsConfig": "projects/cache/tsconfig.lib.json",
             "project": "projects/cache/ng-package.json"
           }
-        },
+        ,          "configurations": {
+            "production": {
+              "tsConfig": "projects/cache/tsconfig.lib.prod.json"
+            }
+          }
+},
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
@@ -245,7 +251,12 @@
             "tsConfig": "projects/phi/tsconfig.lib.json",
             "project": "projects/phi/ng-package.json"
           }
-        },
+        ,          "configurations": {
+            "production": {
+              "tsConfig": "projects/phi/tsconfig.lib.prod.json"
+            }
+          }
+},
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {

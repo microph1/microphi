@@ -1,7 +1,7 @@
 {
   "name": "@microphi/cache",
   "description": "a typescript decorator to cache observables",
-  "version": "0.1.3",
+  "version": "0.1.5",
   "peerDependencies": {
     "@angular/common": "^8.2.8",
     "@angular/core": "^8.2.8"

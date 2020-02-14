@@ -1,5 +1,4 @@
-import { AfterViewInit, Directive, ElementRef, HostListener, Input } from '@angular/core';
-import { fromEvent } from 'rxjs';
+import { AfterViewInit, Directive, ElementRef, Input } from '@angular/core';
 
 @Directive({
   selector: '[phiParallax]'
@@ -23,9 +22,7 @@ export class ParallaxDirective implements AfterViewInit {
       this.phiParallax = 1;
     }
 
-    console.log({assignedParent: this.phiParallaxParent});
-
-    fromEvent(this.phiParallaxParent, 'scroll').subscribe(() => {
+    this.phiParallaxParent.addEventListener('scroll', () => {
       this.updateParallax();
     });
 
@@ -47,11 +44,10 @@ export class ParallaxDirective implements AfterViewInit {
 
     const elementPosition = this.elm.nativeElement.offsetTop;
 
+    const positionY = Math.floor((scrollTop - elementPosition) * this.phiParallax);
+
     if ((scrollTop + parentHeight) >= elementPosition) {
-      const positionY = Math.floor((scrollTop - elementPosition) * this.phiParallax);
-
       this.elm.nativeElement.style.backgroundPositionY = `${positionY}px`;
-
     }
   }
 

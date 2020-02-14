@@ -36,7 +36,7 @@
     "@unbounded/unbounded": "^0.9.9",
     "ngx-deploy-npm": "^1.2.0",
     "ngx-markdown": "^8.2.2",
-    "rxjs": "~6.5.3",
+    "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
   },

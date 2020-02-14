@@ -16,7 +16,8 @@
     "predeploy:microphi": "ng build microphi --prod",
     "deploy": "lerna run deploy --stream --scope",
     "docs": "lerna run docs --stream",
-    "postdocs": "node --experimental-modules scripts/post-doc.mjs"
+    "postdocs": "node --experimental-modules scripts/post-doc.mjs",
+    "postinstall": "ngcc"
   },
   "private": true,
   "dependencies": {

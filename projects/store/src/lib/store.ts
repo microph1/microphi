@@ -23,7 +23,7 @@ export function Store(options: StoreOptions) {
 
     if (options.actions) {
 
-      for (let action in options.actions) {
+      for (const action in options.actions) {
         // actions is an enum: only parse numeric fields
         if (+action >= 0) {
           d('parsing type', action);
@@ -43,7 +43,7 @@ export function Store(options: StoreOptions) {
 
     Reflect.defineMetadata(StoreMetadata, options, target);
     Reflect.defineMetadata(ActionMetadata, actions, target);
-  }
+  };
 }
 
 export function getStoreMetadata(instance): StoreOptions {

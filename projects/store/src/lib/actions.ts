@@ -4,7 +4,7 @@ export interface Actions {
   payload: any;
 }
 
-export type RestActions = {
+export interface RestActions {
   request: string;
   response: string;
   error?: any;

@@ -11,5 +11,4 @@ export * from './lib/store';
 export * from './lib/observable-list';
 
 export * from './lib/http-status/http-status.interceptor';
-export * from './lib/http-status/http-status.module';
 export * from './lib/http-status/http-status.store';

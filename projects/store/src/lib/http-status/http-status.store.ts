@@ -1,7 +1,9 @@
-import { Reduce, BaseStore, Store } from '@microphi/store';
 import { map } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Store } from '../store';
+import { BaseStore } from '../base-store';
+import { Reduce } from '../reduce';
 
 export interface HttpState {
   isLoading: boolean;

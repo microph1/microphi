@@ -1,9 +1,9 @@
-import { BaseStore, Effect, ObservableList, Reduce, Store } from '@microphi/store';
 import { Injectable } from '@angular/core';
 import { Ticket } from './ticket.interface';
 import { BackendService } from './ticket.service';
 import { bufferCount, catchError, delay, map, mergeMap, switchMap } from 'rxjs/operators';
 import { from, NEVER, of } from 'rxjs';
+import { ObservableList, Store, BaseStore, Effect, Reduce } from '@microphi/store';
 
 
 type TicketWithState = Ticket & { isLoading?: boolean; hidden?: boolean };

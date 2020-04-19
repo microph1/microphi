@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { HttpStatusStore, HydrateFrom } from '@microphi/phi';
+import { HydrateFrom } from '@microphi/phi';
 import { HttpClient } from '@angular/common/http';
+import { HttpStatusStore } from '@microphi/store';
 
 export interface ProjectDef {
   name: string;

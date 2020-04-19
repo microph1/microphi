@@ -20,8 +20,11 @@ import { RouterModule } from '@angular/router';
 
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { DemoDirectivesComponent } from './components/demo-directives/demo-directives.component';
-import { GoogleTagManagerModule, PhiModule, HttpStatusStore, HttpStatusInterceptor } from '@microphi/phi';
+import { GoogleTagManagerModule, PhiModule } from '@microphi/phi';
 import { MarkdownModule } from 'ngx-markdown';
+import { HttpStatusInterceptor } from '@microphi/store';
+import { HttpStatusStore } from '@microphi/store';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -48,7 +51,9 @@ import { MarkdownModule } from 'ngx-markdown';
     PhiModule,
 
     GoogleTagManagerModule.forRoot({
-      trackId: 'UA-85728222-4'
+      enable: environment.production,
+      trackId: 'UA-85728222-4',
+      trackPageViews: true
     }),
     MarkdownModule.forRoot()
 

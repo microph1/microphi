@@ -1,12 +1,38 @@
 import { BehaviorSubject } from 'rxjs';
 
 export class ObservableList<T extends {}> {
-  private ids: Set<string> = new Set<string>();
+  private readonly ids: Set<string> = new Set<string>();
   private data: Map<string, BehaviorSubject<T>> = new Map();
-  //
-  // private data: {
-  //   [id: string]: BehaviorSubject<T>
-  // } = {};
+
+  private static difference(setA, setB): Set<string> {
+    const _difference: Set<string> = new Set(setA);
+    for (const elem of setB) {
+      _difference.delete(elem);
+    }
+    return _difference;
+  }
+
+  private static intersection(setA, setB): Set<string> {
+    const _intersection: Set<string> = new Set();
+    for (const elem of setB) {
+      if (setA.has(elem)) {
+        _intersection.add(elem);
+      }
+    }
+    return _intersection;
+  }
+
+  private static symmetricDifference(setA, setB): Set<string> {
+    const _difference: Set<string> = new Set(setA);
+    for (const elem of setB) {
+      if (_difference.has(elem)) {
+        _difference.delete(elem);
+      } else {
+        _difference.add(elem);
+      }
+    }
+    return _difference;
+  }
 
   constructor(items: T[], private idFieldName = 'id') {
     const ids = items.map((i) => i[this.idFieldName]);
@@ -68,7 +94,7 @@ export class ObservableList<T extends {}> {
     const data = [];
 
     this.data.forEach((value) => {
-      data.push(value.getValue())
+      data.push(value.getValue());
     });
 
     return data;
@@ -76,24 +102,24 @@ export class ObservableList<T extends {}> {
 
   /**
    * Will update items that are already present only if they need to be updated and remove items that are not present.
-   * @param items
+   * @param items items of the list
    */
   public set(...items: T[]): void {
     const newIds: string[] = items.map((i) => i[this.idFieldName]);
 
-    const intersection: Set<string> = this.intersection(this.ids, newIds);
+    const intersection: Set<string> = ObservableList.intersection(this.ids, newIds);
 
     for (const id of intersection) {
       this.updateOne(items[id]);
     }
 
-    const itemsToRemove: Set<string> = this.difference(this.ids, newIds);
+    const itemsToRemove: Set<string> = ObservableList.difference(this.ids, newIds);
 
     for (const id of itemsToRemove) {
       this.removeItem(id);
     }
 
-    const itemsToAdd: Set<string> = this.difference(newIds, this.ids);
+    const itemsToAdd: Set<string> = ObservableList.difference(newIds, this.ids);
 
     for (const id of itemsToAdd) {
       this.addItem(items[id]);
@@ -101,41 +127,19 @@ export class ObservableList<T extends {}> {
 
   }
 
+  /**
+   * Remove an item from the list given its id
+   * @param id id of the item to remove
+   */
   public removeItem(id: string) {
     this.ids.delete(id);
     this.data.delete(id);
   }
 
-  private difference(setA, setB): Set<string> {
-    const _difference: Set<string> = new Set(setA);
-    for (const elem of setB) {
-      _difference.delete(elem);
-    }
-    return _difference;
-  }
-
-  private intersection(setA, setB): Set<string> {
-    const _intersection: Set<string> = new Set();
-    for (const elem of setB) {
-      if (setA.has(elem)) {
-        _intersection.add(elem);
-      }
-    }
-    return _intersection;
-  }
-
-  private symmetricDifference(setA, setB): Set<string> {
-    const _difference: Set<string> = new Set(setA);
-    for (const elem of setB) {
-      if (_difference.has(elem)) {
-        _difference.delete(elem);
-      } else {
-        _difference.add(elem);
-      }
-    }
-    return _difference;
-  }
-
+  /**
+   * Adds an new item to the list
+   * @param item the item to be added
+   */
   private addItem(item: T) {
     const id = item[this.idFieldName];
     this.ids.add(id);

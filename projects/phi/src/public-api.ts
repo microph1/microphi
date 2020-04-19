@@ -13,4 +13,3 @@ export * from './lib/google-tag-manager/google-tag-manager.service';
 export * from './lib/google-tag-manager/tokens';
 
 export * from './lib/decorators/hydrate.decorator';
-export * from './lib/decorators/docs/docs.decorator';

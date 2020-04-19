@@ -33,29 +33,42 @@ import { NavigationEnd, Router } from '@angular/router';
 })
 export class GoogleTagManagerModule {
 
+  private static options: GoogleTagManagerOptions;
+
   constructor(
     @Inject(GOOGLE_TAG_MANAGER_UID) trackId,
     @Optional() router: Router
   ) {
 
-    this.initializeGTM({
-      trackId: trackId
-    });
+    console.log({router});
 
-    // if (router) {
-    //   console.log('router is available, registering virtual pageviews');
-    //
-    //   router.events.subscribe((event) => {
-    //     if (event instanceof NavigationEnd) {
-    //
-    //
-    //     }
-    //   })
-    // }
+    if (GoogleTagManagerModule.options.enable) {
+
+      this.initializeGTM({
+        trackId: trackId
+      });
+
+      if (GoogleTagManagerModule.options.trackPageViews && router) {
+
+        if (router) {
+          console.log('router is available, registering virtual pageviews');
+
+          router.events.subscribe((event) => {
+            if (event instanceof NavigationEnd) {
+              console.log('tracking pageview');
+              window['dataLayer'].push('pageview');
+
+            }
+          });
+        }
+      }
+    }
+
 
   }
 
   public static forRoot(options: GoogleTagManagerOptions): ModuleWithProviders<GoogleTagManagerModule> {
+    GoogleTagManagerModule.options = options;
 
     return {
       ngModule: GoogleTagManagerModule,
@@ -77,12 +90,16 @@ export class GoogleTagManagerModule {
       window['dataLayer'].push(arguments);
     };
 
-    // for (const command of $settings.initCommands) {
-    //   window['gtag'](command.command, ...command.values);
-    // }
-
     window['gtag']('js', new Date());
     window['gtag']('config', options.trackId);
+
+    if (options.commands) {
+      for (const command of options.commands) {
+        const {k, v} = command;
+        window['gtag'](k, v);
+      }
+    }
+
 
 
     const s: HTMLScriptElement = document.createElement('script');

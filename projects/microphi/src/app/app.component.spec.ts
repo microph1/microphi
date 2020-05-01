@@ -3,10 +3,10 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { MaterialModule } from './material.module';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
-import { HttpStatusStore } from './services/http/http-status.store';
 import { AuthStore } from './services/auth/auth.store';
 import { AuthService } from './services/auth/auth.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpStatusStore } from '@microphi/store';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {

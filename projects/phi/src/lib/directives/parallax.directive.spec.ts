@@ -1,15 +1,20 @@
 import { ParallaxDirective } from './parallax.directive';
-import { TestBed } from '@angular/core/testing';
 import { setUpTestBedForDirective } from '../testing/set-up-test-bed';
+import { TestBed } from '@angular/core/testing';
 
-fdescribe('ParallaxDirective', () => {
-
+xdescribe('ParallaxDirective', () => {
 
   let directive: ParallaxDirective;
 
   beforeEach(setUpTestBedForDirective(ParallaxDirective));
 
   beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [ParallaxDirective]
+
+    });
+
+    directive = TestBed.inject(ParallaxDirective);
   });
 
   it('should create an instance', () => {

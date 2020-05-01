@@ -2,7 +2,6 @@ import { AfterViewInit, Directive, ElementRef } from '@angular/core';
 import { asyncScheduler, from, interval, Observable } from 'rxjs';
 import { delayWhen, observeOn, switchMap } from 'rxjs/operators';
 
-
 /**
  * Animates the textContent of the referenced element
  *

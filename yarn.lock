@@ -1857,6 +1857,15 @@
     debug "^4.1.1"
     reflect-metadata "^0.1.12"
 
+"@microgamma/loggator@^1.16.0":
+  version "1.16.0"
+  resolved "https://registry.yarnpkg.com/@microgamma/loggator/-/loggator-1.16.0.tgz#c44a551bb0168556975b893b135cb18eabadd4a0"
+  integrity sha512-81LDzvmU5jRJllsGcJnd4aFDTM0PFAuWQdsDNOaLereAuevZBsXvVZnZR0f5BPndxyXz0ZXgEYNjVeshb5Oorw==
+  dependencies:
+    "@types/debug" "^0.0.30"
+    debug "^4.1.1"
+    reflect-metadata "^0.1.12"
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"

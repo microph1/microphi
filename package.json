@@ -33,7 +33,7 @@
     "@angular/platform-browser-dynamic": "~9.0.1",
     "@angular/platform-server": "~9.0.1",
     "@angular/router": "~9.0.1",
-    "@microgamma/loggator": "^1.10.18",
+    "@microgamma/loggator": "^1.16.0",
     "@unbounded/unbounded": "^0.9.9",
     "ngx-deploy-npm": "^1.2.0",
     "ngx-markdown": "^8.2.2",

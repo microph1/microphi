@@ -1,0 +1,19 @@
+<mat-toolbar fxLayoutGap="33px">
+  <a mat-flat-button routerLink="immutables">Immutables</a>
+  <a mat-flat-button routerLink="observables">Observables</a>
+  <a mat-flat-button routerLink="store">Store</a>
+  <a mat-flat-button routerLink="list">List</a>
+  <span fxFlex></span>
+
+  <form [formGroup]="searchForm" autocomplete="off">
+    <mat-form-field>
+      <mat-label>Search</mat-label>
+      <input  matInput formControlName="search" type="search">
+    </mat-form-field>
+  </form>
+</mat-toolbar>
+
+<div fxFlexFill>
+  <router-outlet></router-outlet>
+</div>
+

@@ -4,8 +4,6 @@ import { LoginComponent } from './components/login/login.component';
 import { NoAuthGuard } from './gards/auth/no-auth.guard';
 import { AuthGuard } from './gards/auth/auth.guard';
 import { HomeComponent } from './components/home/home.component';
-import { DemoDirectivesComponent } from './components/demo-directives/demo-directives.component';
-
 
 const routes: Routes = [
   {
@@ -17,9 +15,13 @@ const routes: Routes = [
     component: LoginComponent,
     canActivate: [NoAuthGuard]
   },
+  // {
+  //   path: ':project',
+  //   component: DemoDirectivesComponent
+  // },
   {
-    path: ':project',
-    component: DemoDirectivesComponent
+    path: 'demo-change-detection',
+    loadChildren:  () => import('./components/demo-change-detection/demo-change-detection.module').then(m => m.DemoChangeDetectionModule)
   }
 ];
 

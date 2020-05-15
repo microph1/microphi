@@ -22,8 +22,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { DemoDirectivesComponent } from './components/demo-directives/demo-directives.component';
 import { GoogleTagManagerModule, PhiModule } from '@microphi/phi';
 import { MarkdownModule } from 'ngx-markdown';
-import { HttpStatusInterceptor } from '@microphi/store';
-import { HttpStatusStore } from '@microphi/store';
+import { HttpStatusInterceptor, HttpStatusStore } from '@microphi/store';
 import { environment } from '../environments/environment';
 
 @NgModule({
@@ -37,7 +36,7 @@ import { environment } from '../environments/environment';
     IsLoggedInPipe,
 
     TicketComponent,
-    DemoDirectivesComponent
+    DemoDirectivesComponent,
   ],
   imports: [
     BrowserModule,
@@ -68,7 +67,7 @@ import { environment } from '../environments/environment';
     },
     HttpStatusStore,
     TicketStore,
-    BackendService
+    BackendService,
   ],
   bootstrap: [AppComponent]
 })

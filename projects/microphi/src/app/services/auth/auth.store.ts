@@ -14,7 +14,7 @@ export interface AuthState {
     role: string;
   };
   token?: string;
-  error?: HttpErrorResponse
+  error?: HttpErrorResponse;
 }
 
 export enum AuthActions {
@@ -31,16 +31,9 @@ export enum AuthActions {
 @Injectable()
 export class AuthStore extends BaseStore<AuthState> {
 
-  public isAuth$ = this.store$.pipe(
-    map((state) => {
-      return state.isAuth;
-    })
-  );
-
+  public isAuth$ = this.store$.pipe(map(state => state.isAuth));
   public authError$ = this.store$.pipe(map(state => state.error));
-
   public user$ = this.store$.pipe(map(state => state.user));
-
 
   constructor(private authService: AuthService) {
     super();
@@ -85,14 +78,14 @@ export class AuthStore extends BaseStore<AuthState> {
     return {
       isAuth: false,
       error: err
-    }
+    };
   }
 
   @Reduce(AuthActions.LOGOUT)
   private logout(): AuthState {
     return {
       isAuth: false
-    }
+    };
   }
 
 }

@@ -12,3 +12,4 @@ export * from './lib/observable-list/observable-list';
 
 export * from './lib/http-status/http-status.interceptor';
 export * from './lib/http-status/http-status.store';
+export * from './lib/list/list';

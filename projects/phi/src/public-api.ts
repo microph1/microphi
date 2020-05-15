@@ -3,7 +3,7 @@
  */
 
 export * from './lib/phi.service';
-export * from './lib/phi.component';
+export * from './lib/phi-component/phi.component';
 export * from './lib/phi.module';
 export * from './lib/directives/animate-text.directive';
 export * from './lib/directives/parallax.directive';

@@ -1,44 +1,32 @@
 import { getDebugger } from '@microgamma/loggator';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { getStoreMetadata, StoreOptions } from './store';
 import { Actions } from './actions';
 import { ActionsMetadata, getActionMetadata } from './action';
 import { getReduceMetadata } from './reduce';
-import { map, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
+import { OnDestroy } from '@angular/core';
 
 // Looks like passing the status on each effect/reducer is not needed: developer can always refer to this.state
 // TODO: Remove the state argument to effect/reducer
 
-export abstract class BaseStore<T extends {}> {
-  private logger = getDebugger(`microphi:BaseStore:${this.constructor.name}`);
+export abstract class BaseStore<T extends {}> implements OnDestroy {
 
+  private logger = getDebugger(`microphi:BaseStore:${this.constructor.name}`);
+  private storeSubscription: Subscription;
+  private readonly storeMetadata: StoreOptions;
+  private _state: T;
+  private readonly actionsMetadata: ActionsMetadata;
+
+  protected store$: BehaviorSubject<T>;
   protected actions$ = new Subject<{
     type: string,
     payload: any
   }>();
-
-  public loading$ = new Subject<{
-    type: string,
-    payload: any,
-    status: boolean
-  }>();
-
-  private readonly storeMetadata: StoreOptions;
-
-  private _state: T;
-
-  private readonly actionsMetadata: ActionsMetadata;
-
-  public error$ = new Subject<{
-    action: string,
-    error: typeof Error
-  }>();
-
-  get state(): T {
+  protected get state(): T {
     return this._state;
   }
-
-  set state(value: T) {
+  protected set state(value: T) {
     this._state = value;
     this.store$.next(value);
     if (this.storeMetadata.useLocalStorage) {
@@ -47,9 +35,15 @@ export abstract class BaseStore<T extends {}> {
     }
   }
 
-
-
-  protected store$: BehaviorSubject<T>;
+  public loading$ = new Subject<{
+    type: string,
+    payload: any,
+    status: boolean
+  }>();
+  public error$ = new Subject<{
+    action: string,
+    error: typeof Error
+  }>();
 
   constructor() {
 
@@ -74,7 +68,7 @@ export abstract class BaseStore<T extends {}> {
     const remappedEffects = this.remapEffects(effectsMetadata);
     this.logger('remapped effects', remappedEffects);
 
-    this.actions$.pipe(
+    this.storeSubscription = this.actions$.pipe(
       tap((action: Actions) => {
 
         this.loading$.next({type: action.type, payload: action.payload, status: action.type.endsWith('_REQUEST')});
@@ -139,7 +133,7 @@ export abstract class BaseStore<T extends {}> {
         this.logger('should call fn', fn);
 
         if (this[remappedReducers[action.type]]) {
-          // TODO since we may not need the state in the reducer better to switch the order fo the arguments
+          // TODO since we may not need the state in the reducer better to switch the order of the arguments
           const newState = await this[remappedReducers[action.type]](action.payload);
           this.logger('newState', newState);
           if (newState) {
@@ -211,5 +205,9 @@ export abstract class BaseStore<T extends {}> {
 
   public getActionName(type: number) {
     return this.actionsMetadata[type];
+  }
+
+  public ngOnDestroy() {
+    this.storeSubscription.unsubscribe();
   }
 }

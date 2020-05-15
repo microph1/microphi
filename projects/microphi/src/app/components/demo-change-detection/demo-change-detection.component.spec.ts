@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DemoChangeDetectionComponent } from './demo-change-detection.component';
+import { ItemsStore } from './items-store';
+import { MockService } from '@microphi/phi';
 
 describe('DemoChangeDetectionComponent', () => {
   let component: DemoChangeDetectionComponent;
@@ -8,7 +10,13 @@ describe('DemoChangeDetectionComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DemoChangeDetectionComponent ]
+      declarations: [DemoChangeDetectionComponent],
+      providers: [
+        {
+          provide: ItemsStore,
+          useClass: MockService(ItemsStore)(class {})
+        }
+      ]
     })
     .compileComponents();
   }));

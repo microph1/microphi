@@ -1,7 +1,7 @@
 /* tslint:disable:no-string-literal */
 import { List } from './list';
 
-fdescribe('list', () => {
+describe('list', () => {
 
   interface Entity {
     id: string;

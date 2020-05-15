@@ -4,7 +4,7 @@ import { PhiComponent } from './phi.component';
 import { Component, OnInit } from '@angular/core';
 import { interval } from 'rxjs';
 
-fdescribe('PhiComponent', () => {
+describe('PhiComponent', () => {
 
   @Component({
     // tslint:disable-next-line:component-selector

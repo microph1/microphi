@@ -17,10 +17,8 @@ export class List<EntityType extends {}> implements Iterable<EntityType> {
 
     return this.entities.size;
   }
+
   public get(id) {
-    if (!this.entities.has(id)) {
-      throw new Error(`Entity ${id} not found`);
-    }
     return this.entities.get(id);
   }
   private getId(entity: EntityType) {
@@ -49,7 +47,6 @@ export class List<EntityType extends {}> implements Iterable<EntityType> {
   public upsert(...entities: EntityType[]) {
     entities.forEach((e) => {
       const id = this.getId(e);
-      console.log('editing entity', e, id);
 
       if (!this.entities.has(id)) {
         this.ids.push(id);
@@ -64,7 +61,7 @@ export class List<EntityType extends {}> implements Iterable<EntityType> {
       const id = this.getId(e);
 
       if (this.entities.has(id)) {
-        console.warn(`Entity with id '${id}' already exists, moving to the top of the list. Update may occur`);
+        console.warn(`Entity with id '${id}' already exists, moving to the top of the list. Entity will be updated`);
         this.delete(e);
       }
 
@@ -81,7 +78,7 @@ export class List<EntityType extends {}> implements Iterable<EntityType> {
       const indexOfId = this.ids.findIndex((_id) => _id === id);
 
       if (indexOfId < 0) {
-        console.warn(`cannot find id: ${id}`);
+        console.warn(`Cannot find id: ${id}`);
       } else {
         this.ids.splice(indexOfId, 1);
         this.entities.delete(id);
@@ -93,9 +90,8 @@ export class List<EntityType extends {}> implements Iterable<EntityType> {
   public append(...entities: EntityType[]) {
     entities.forEach((e) => {
       const id = this.getId(e);
-      console.log('appending entity with id', id);
       if (this.entities.has(id)) {
-        console.warn(`Entity with id '${id}' already exists, moving to the end of the list. Update may occur`);
+        console.warn(`Entity with id '${id}' already exists, moving to the end of the list. Entity will be updated.`);
         this.delete(e);
       }
 

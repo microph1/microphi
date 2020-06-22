@@ -13,7 +13,6 @@ export function Reduce(onAction: any) {
 
     const reducer = Reflect.getMetadata(ReduceMetadata, target) || {};
 
-
     reducer[onAction] = key;
 
     d('stored reducers', reducer);
@@ -25,5 +24,5 @@ export function Reduce(onAction: any) {
 }
 
 export function getReduceMetadata(instance): Reducers {
-  return Reflect.getMetadata(ReduceMetadata, instance);
+  return Reflect.getMetadata(ReduceMetadata, instance) || {};
 }

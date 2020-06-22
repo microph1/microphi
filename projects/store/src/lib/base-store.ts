@@ -1,10 +1,9 @@
 import { getDebugger } from '@microgamma/loggator';
 import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { getStoreMetadata, StoreOptions } from './store';
-import { Actions } from './actions';
-import { ActionsMetadata, getActionMetadata } from './action';
+import { Actions, Action, REQUEST_SUFFIX, RESPONSE_SUFFIX } from './actions';
 import { getReduceMetadata } from './reduce';
-import { tap } from 'rxjs/operators';
+import { takeUntil, tap } from 'rxjs/operators';
 import { OnDestroy } from '@angular/core';
 
 // Looks like passing the status on each effect/reducer is not needed: developer can always refer to this.state
@@ -13,16 +12,11 @@ import { OnDestroy } from '@angular/core';
 export abstract class BaseStore<T extends {}> implements OnDestroy {
 
   private logger = getDebugger(`microphi:BaseStore:${this.constructor.name}`);
-  private storeSubscription: Subscription;
-  private readonly storeMetadata: StoreOptions;
-  private _state: T;
-  private readonly actionsMetadata: ActionsMetadata;
 
-  protected store$: BehaviorSubject<T>;
-  protected actions$ = new Subject<{
-    type: string,
-    payload: any
-  }>();
+  private readonly storeMetadata: StoreOptions;
+  private readonly actionsMetadata: Actions<any>;
+
+  private _state: T;
   protected get state(): T {
     return this._state;
   }
@@ -35,15 +29,26 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
     }
   }
 
+  protected store$: BehaviorSubject<T>;
+
+  protected actions$ = new Subject<{
+    type: string,
+    payload: any
+  }>();
+
   public loading$ = new Subject<{
     type: string,
+    code?: number,
     payload: any,
     status: boolean
   }>();
+
   public error$ = new Subject<{
     action: string,
     error: typeof Error
   }>();
+
+  private destroy$: Subject<any> = new Subject<any>();
 
   constructor() {
 
@@ -54,8 +59,8 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
     this._state = this.storeMetadata.initialState;
     this.logger('InitialState', this.state);
 
-    this.actionsMetadata = getActionMetadata(this);
-    this.logger('Actions', this.actionsMetadata);
+    this.actionsMetadata = new Actions(this.storeMetadata.actions);
+    console.log('create new action metadata', this.actionsMetadata);
 
     const reducerMetadata = getReduceMetadata(this);
     this.logger('Reducers', reducerMetadata);
@@ -68,54 +73,53 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
     const remappedEffects = this.remapEffects(effectsMetadata);
     this.logger('remapped effects', remappedEffects);
 
-    this.storeSubscription = this.actions$.pipe(
-      tap((action: Actions) => {
+    this.actions$.pipe(
+      tap((action: Action) => {
+        this.loading$.next({
+          type: action.type,
+          code: this.actionsMetadata.getActionCodeFromChild(action.type),
+          payload: action.payload,
+          status: action.type.endsWith('_REQUEST')
+        });
 
-        this.loading$.next({type: action.type, payload: action.payload, status: action.type.endsWith('_REQUEST')});
-
-      })
-    ).subscribe(async (action: Actions) => {
+      }),
+      takeUntil(this.destroy$),
+    ).subscribe(async (action: Action) => {
       this.logger('got type', action);
 
       const type = action.type;
 
       // effects are associated with requests
-      if (type.includes('_REQUEST')) {
+      if (type.endsWith(REQUEST_SUFFIX)) {
         if (remappedEffects.hasOwnProperty(type)) {
 
           const effectName = remappedEffects[type];
           this.logger('should call', effectName);
 
-          // TODO use .toPromise to trick subscription/unsubscription hassle
-          try {
-            let resp;
 
-            if (this[effectName] instanceof Function) {
+          if (this[effectName] instanceof Function) {
 
-              const retValue = this[effectName](action.payload) as Observable<any>;
+            const retValue = this[effectName](action.payload) as Observable<any>;
 
-              if (retValue instanceof Observable) {
-                resp = await (retValue).toPromise();
-              }
-              // pass response down triggering type to alert data arrived
+            if (retValue instanceof Observable) {
+              retValue.pipe(
+                takeUntil(this.destroy$)
+              ).subscribe((value) => {
+                this.logger('got data', value);
 
-              this.logger('got data', resp);
+                this.actions$.next({
+                  type: remappedEffects[effectName],
+                  payload: value
+                });
+              }, (err) => {
+                this.logger('got error', err);
+                // dispatch type with error
+
+                this.error$.thrownError({action: type, error: err});
+
+              });
             }
 
-            this.actions$.next({
-              type: remappedEffects[effectName],
-              payload: resp
-            });
-
-          } catch (err) {
-            this.logger('got error', err);
-            // dispatch type with error
-
-            this.error$.next({action: type, error: err});
-
-
-            // TODO: to swallow or not to shallow?
-            // throw e;
           }
 
         } else {
@@ -125,48 +129,37 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
             payload: action.payload
           });
 
-          // this.loading$.next({type: type, payload: action.payload, status: false});
         }
-      } else if (type.includes('_RESPONSE')) {
+      } else if (type.endsWith(RESPONSE_SUFFIX)) {
 
         const fn = remappedReducers[action.type];
         this.logger('should call fn', fn);
 
         if (this[remappedReducers[action.type]]) {
-          // TODO since we may not need the state in the reducer better to switch the order of the arguments
           const newState = await this[remappedReducers[action.type]](action.payload);
           this.logger('newState', newState);
-          if (newState) {
-            this.state = newState;
-          }
+
+          this.state = newState;
+
         }
 
       }
 
     }, (err) => {
       this.logger('got error', err);
-      // this.loading$.next({type: 'GENERAL_ERROR', payload: err, status: false});
       // TODO should handle the error or should we change loading$ to a more generic status$ so we can pass altogether
       // loadings and errors events?
+      console.error(err);
     });
 
   }
 
-  public dispatch(type, payload?) {
-    // TODO not sure we should extrapolate the request here
-    const requestAction = this.actionsMetadata[type].request;
+  public dispatch(type: number, payload?: any) {
+
+    const requestAction = this.actionsMetadata.getActionsByCode(type).request;
     this.logger('dispatching type', requestAction);
-    // instead should dispatch a request
 
     this.actions$.next({type: requestAction, payload});
-  }
-
-  public getRequestFromAction(actionType) {
-    return this.actionsMetadata[actionType].request;
-  }
-
-  public getResponseFromAction(actionType) {
-    return this.actionsMetadata[actionType].response;
   }
 
   private parseReducers(reducers) {
@@ -174,8 +167,9 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
 
     Object.keys(reducers).forEach((action) => {
       if (+action >= 0) {
+        const _action: number = Number(action);
         // this.logger('remapping', type, 'to');
-        const realAction = this.actionsMetadata[action].response;
+        const realAction = this.actionsMetadata.getActionsByCode(_action).response;
         // this.logger('real type to map to', realAction);
         remappedReducers[realAction] = reducers[action];
       }
@@ -191,23 +185,22 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
       // effects should react to REQUEST events
 
       if (+action >= 0) {
+        const _action = Number(action);
 
-        const realAction = this.actionsMetadata[action].request;
+        const realAction = this.actionsMetadata.getActionsByCode(_action).request;
 
         remappedEffects[realAction] = effectsMetadata[action];
         // mapping the effect function so that it can return a response type
-        remappedEffects[effectsMetadata[action]] = this.actionsMetadata[action].response;
+        remappedEffects[effectsMetadata[action]] = this.actionsMetadata.getActionsByCode(_action).response;
       }
     });
 
     return remappedEffects;
   }
 
-  public getActionName(type: number) {
-    return this.actionsMetadata[type];
+  public ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  public ngOnDestroy() {
-    this.storeSubscription.unsubscribe();
-  }
 }

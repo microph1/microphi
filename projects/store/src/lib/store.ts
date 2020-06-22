@@ -1,6 +1,4 @@
 import { getDebugger } from '@microgamma/loggator';
-import { createAction } from './actions';
-import { ActionMetadata } from './action';
 
 export const StoreMetadata = '@Store';
 
@@ -19,30 +17,7 @@ export function Store(options: StoreOptions) {
 
     d('running store decorator');
 
-    const actions = {};
-
-    if (options.actions) {
-
-      for (const action in options.actions) {
-        // actions is an enum: only parse numeric fields
-        if (+action >= 0) {
-          d('parsing type', action);
-
-          actions[action] = createAction(options.actions[action]);
-        } else {
-          // we can parse action names here. action is a string
-          d('parsing action', action);
-          actions[action] = [`${action}_REQUEST`, `${action}_RESPONSE`];
-        }
-
-
-      }
-
-      d('actions are', actions);
-    }
-
     Reflect.defineMetadata(StoreMetadata, options, target);
-    Reflect.defineMetadata(ActionMetadata, actions, target);
   };
 }
 

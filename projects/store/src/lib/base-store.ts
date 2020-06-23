@@ -56,7 +56,8 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
     this.logger('@Store', this.storeMetadata);
 
     this.store$ = new BehaviorSubject(this.storeMetadata.initialState);
-    this._state = this.storeMetadata.initialState;
+    // dereference initial state so that is does not leak between instances
+    this._state = Object.assign( {},  this.storeMetadata.initialState);
     this.logger('InitialState', this.state);
 
     this.actionsMetadata = new Actions(this.storeMetadata.actions);

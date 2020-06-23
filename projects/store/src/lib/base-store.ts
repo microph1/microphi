@@ -60,7 +60,6 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
     this.logger('InitialState', this.state);
 
     this.actionsMetadata = new Actions(this.storeMetadata.actions);
-    console.log('create new action metadata', this.actionsMetadata);
 
     const reducerMetadata = getReduceMetadata(this);
     this.logger('Reducers', reducerMetadata);

@@ -141,10 +141,19 @@ describe('base-store', () => {
 
     });
 
-    it('should update the state', () => {
+    it('should update the state', async(() => {
 
+      store.items$.subscribe((items) => {
+        expect(items).toEqual([{a: '1'}, {b: '2'}]);
+      }, fail);
+
+    }));
+
+    it('should work with marble testing', () => {
       testScheduler.run(({ expectObservable }) => {
-        expectObservable(store.items$).toBe('a', {a: [{a: '1'},{ b: '2'}]});
+        const unsub = '^-------- !';
+        expectObservable(store.items$, unsub).toBe('a-----', {a: [{a: '1'}, { b: '2'}]});
+
       });
     });
 

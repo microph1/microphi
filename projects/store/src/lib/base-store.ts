@@ -84,7 +84,7 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
 
       }),
       takeUntil(this.destroy$),
-    ).subscribe(async (action: Action) => {
+    ).subscribe( (action: Action) => {
       this.logger('got type', action);
 
       const type = action.type;
@@ -125,7 +125,7 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
         } else {
           // if there is no effect associated with this action then we can proceed calling the reducer associated
           this.actions$.next({
-            type: type.replace('_REQUEST', '_RESPONSE'),
+            type: type.replace(REQUEST_SUFFIX, RESPONSE_SUFFIX),
             payload: action.payload
           });
 
@@ -136,7 +136,7 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
         this.logger('should call fn', fn);
 
         if (this[remappedReducers[action.type]]) {
-          const newState = await this[remappedReducers[action.type]](action.payload);
+          const newState = this[remappedReducers[action.type]](action.payload);
           this.logger('newState', newState);
 
           this.state = newState;

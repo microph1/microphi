@@ -8,8 +8,6 @@ import { map } from 'rxjs/operators';
 import { async } from '@angular/core/testing';
 import createSpy = jasmine.createSpy;
 
-// localStorage.debug = 'microphi:*:MyStore';
-
 describe('base-store', () => {
 
   describe('create an empty store', () => {
@@ -31,14 +29,22 @@ describe('base-store', () => {
     })
     class MyStore extends BaseStore<ItemsState> {
 
-      public setState(items: any[]) {
-        this.state.items = items;
-        return this.state;
+      public items$ = this.store$.pipe(
+        map((state) => {
+          return state.items;
+        })
+      );
+
+      @Reduce(ItemsActions.ACTION_ONE)
+      protected setState(state: ItemsState, items: any[]): ItemsState {
+
+        return {
+          ...state,
+          items: items
+        };
+
       }
 
-      public getItems() {
-        return this.state.items;
-      }
     }
 
     let store: MyStore;
@@ -56,15 +62,19 @@ describe('base-store', () => {
       let storeSecondInstance: MyStore;
 
       beforeEach(() => {
-        store.setState([1, 2, 3]);
+        store.dispatch(ItemsActions.ACTION_ONE, [1, 2, 3]);
         storeSecondInstance = new MyStore();
       });
 
       it('should start with an empty state', () => {
-        expect(storeSecondInstance.getItems().length).toBe(0);
+
+        storeSecondInstance.items$.subscribe((items) => {
+          expect(items).toEqual([]);
+        }, fail);
       });
 
     });
+
   });
 
 
@@ -91,25 +101,23 @@ describe('base-store', () => {
         })
       );
 
-      public reduceSpy = createSpy('reduceSpy').and.callFake(() => {
-        console.log('running reduceSpy');
-      });
+      public reduceSpy = createSpy('reduceSpy');
       public effectSpy = createSpy('effectSpy');
 
       @Effect(ItemsActions.GET_ALL)
       public onGetAll(payload) {
-        console.log('running effect');
         this.effectSpy(payload);
         return of([{a: '1'}, {b: '2'}]);
       }
 
       @Reduce(ItemsActions.GET_ALL)
       @Reduce(ItemsActions.ANOTHER_ACTION)
-      public onGotAll(payload) {
-        console.log('running reducer', payload);
-        this.state.items = payload;
+      public onGotAll(state, payload) {
         this.reduceSpy(payload);
-        return this.state;
+        return {
+          ...state,
+          items: payload,
+        };
       }
 
     }
@@ -164,7 +172,5 @@ describe('base-store', () => {
 
     });
   });
-
-
 
 });

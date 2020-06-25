@@ -11,25 +11,31 @@ import { OnDestroy } from '@angular/core';
 
 export abstract class BaseStore<T extends {}> implements OnDestroy {
 
+
   private logger = getDebugger(`microphi:BaseStore:${this.constructor.name}`);
 
   private readonly storeMetadata: StoreOptions;
   private readonly actionsMetadata: Actions<any>;
 
   private _state: T;
-  protected get state(): T {
+  private get state(): T {
     return this._state;
   }
-  protected set state(value: T) {
+  private set state(value: T) {
+    this.logger('setting new state', value);
     this._state = value;
-    this.store$.next(value);
+    this._store$.next(value);
     if (this.storeMetadata.useLocalStorage) {
       this.logger('saving on localStorage');
       localStorage.setItem(this.storeMetadata.name, JSON.stringify(value));
     }
   }
 
-  protected store$: BehaviorSubject<T>;
+  private _store$: BehaviorSubject<T>;
+
+  public get store$(): Observable<T> {
+    return this._store$.asObservable();
+  }
 
   protected actions$ = new Subject<{
     type: string,
@@ -55,7 +61,7 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
     this.storeMetadata = getStoreMetadata(this);
     this.logger('@Store', this.storeMetadata);
 
-    this.store$ = new BehaviorSubject(this.storeMetadata.initialState);
+    this._store$ = new BehaviorSubject(this.storeMetadata.initialState);
     // dereference initial state so that is does not leak between instances
     this._state = Object.assign( {},  this.storeMetadata.initialState);
     this.logger('InitialState', this.state);
@@ -136,11 +142,7 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
         this.logger('should call fn', fn);
 
         if (this[remappedReducers[action.type]]) {
-          const newState = this[remappedReducers[action.type]](action.payload);
-          this.logger('newState', newState);
-
-          this.state = newState;
-
+          this.state = this[remappedReducers[action.type]](this.state, action.payload);
         }
 
       }

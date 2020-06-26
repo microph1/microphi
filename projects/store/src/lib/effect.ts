@@ -1,8 +1,9 @@
 import { getDebugger } from '@microgamma/loggator';
+import { BaseStore } from './base-store';
 
-export function Effect(onAction: any) {
+export function Effect(onAction: number) {
 
-  return (target, key) => {
+  return <Store extends BaseStore<any>>(target: Store, key: string) => {
 
     const d = getDebugger(`microphi:@Effect:${target.constructor.name}`);
 

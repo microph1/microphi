@@ -3,14 +3,10 @@ import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { getStoreMetadata, StoreOptions } from './store';
 import { Actions, Action, REQUEST_SUFFIX, RESPONSE_SUFFIX } from './actions';
 import { getReduceMetadata } from './reduce';
-import { takeUntil, tap } from 'rxjs/operators';
+import { catchError, takeUntil, tap } from 'rxjs/operators';
 import { OnDestroy } from '@angular/core';
 
-// Looks like passing the status on each effect/reducer is not needed: developer can always refer to this.state
-// TODO: Remove the state argument to effect/reducer
-
 export abstract class BaseStore<T extends {}> implements OnDestroy {
-
 
   private logger = getDebugger(`microphi:BaseStore:${this.constructor.name}`);
 
@@ -37,22 +33,30 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
     return this._store$.asObservable();
   }
 
-  protected actions$ = new Subject<{
+  private actions$ = new Subject<{
     type: string,
     payload: any
   }>();
 
-  public loading$ = new Subject<{
+  private _loading$ = new Subject<{
     type: string,
     code?: number,
     payload: any,
     status: boolean
   }>();
 
-  public error$ = new Subject<{
+  get loading$(): Observable<{ type: string; code?: number; payload: any; status: boolean }> {
+    return this._loading$.asObservable();
+  }
+
+  private _error$ = new Subject<{
     action: string,
     error: typeof Error
   }>();
+
+  get error$(): Observable<{ action: string; error: typeof Error }> {
+    return this._error$.asObservable();
+  }
 
   private destroy$: Subject<any> = new Subject<any>();
 
@@ -81,7 +85,7 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
 
     this.actions$.pipe(
       tap((action: Action) => {
-        this.loading$.next({
+        this._loading$.next({
           type: action.type,
           code: this.actionsMetadata.getActionCodeFromChild(action.type),
           payload: action.payload,
@@ -109,6 +113,17 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
 
             if (retValue instanceof Observable) {
               retValue.pipe(
+                catchError((err) => {
+                  console.error(`@Effect ${effectName} thrown an error`, err);
+                  this._loading$.next({
+                    status: false,
+                    payload: action.payload,
+                    code: this.actionsMetadata.getActionCodeFromChild(action.type),
+                    type: action.type,
+                  });
+
+                  return err;
+                }),
                 takeUntil(this.destroy$)
               ).subscribe((value) => {
                 this.logger('got data', value);
@@ -117,12 +132,6 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
                   type: remappedEffects[effectName],
                   payload: value
                 });
-              }, (err) => {
-                this.logger('got error', err);
-                // dispatch type with error
-
-                this.error$.thrownError({action: type, error: err});
-
               });
             }
 
@@ -142,7 +151,15 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
         this.logger('should call fn', fn);
 
         if (this[remappedReducers[action.type]]) {
-          this.state = this[remappedReducers[action.type]](this.state, action.payload);
+          try {
+            this.state = this[remappedReducers[action.type]](this.state, action.payload);
+          } catch (e) {
+
+            // we don't need to stop loading here at it has already been stopped
+
+            console.error(`@Reduce ${fn} thrown an error`, e);
+            this._error$.error({action: this.actionsMetadata.getActionCodeFromChild(action.type), error: e});
+          }
         }
 
       }
@@ -151,6 +168,7 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
       this.logger('got error', err);
       // TODO should handle the error or should we change loading$ to a more generic status$ so we can pass altogether
       // loadings and errors events?
+      this._error$.error(err);
       console.error(err);
     });
 

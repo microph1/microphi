@@ -9,17 +9,26 @@ import { async } from '@angular/core/testing';
 import createSpy = jasmine.createSpy;
 
 describe('base-store', () => {
+  let testScheduler: TestScheduler;
+
+  beforeEach(() => {
+    testScheduler = new TestScheduler((actual, expected) => {
+      expect(actual).toEqual(expected);
+    });
+  });
 
   describe('create an empty store', () => {
     interface ItemsState {
       items: any[];
     }
 
+
     enum ItemsActions {
       ACTION_ONE,
       ACTION_TWO,
       ACTION_THREE,
     }
+
 
     @Store({
       actions: ItemsActions,
@@ -35,6 +44,12 @@ describe('base-store', () => {
         })
       );
 
+      @Reduce(ItemsActions.ACTION_TWO)
+      protected thisWillThrow() {
+        console.log('calling method that will throw');
+        throw new Error('my awesome error!');
+      }
+
       @Reduce(ItemsActions.ACTION_ONE)
       protected setState(state: ItemsState, items: any[]): ItemsState {
 
@@ -44,7 +59,6 @@ describe('base-store', () => {
         };
 
       }
-
     }
 
     let store: MyStore;
@@ -56,6 +70,7 @@ describe('base-store', () => {
     it('should create', () => {
       expect(store).toBeTruthy();
     });
+
 
     describe('BUG: initialState reference get stuck between instances', () => {
 
@@ -71,6 +86,32 @@ describe('base-store', () => {
         storeSecondInstance.items$.subscribe((items) => {
           expect(items).toEqual([]);
         }, fail);
+      });
+
+    });
+
+    describe('errors', () => {
+      it('should throw an error through the error subject', () => {
+
+
+        store.error$.subscribe(fail, (err) => {
+          console.log('error', err);
+          expect(err).toEqual({ action: ItemsActions.ACTION_TWO, error: Error('my awesome error!')});
+        });
+
+        store.dispatch(ItemsActions.ACTION_TWO);
+      });
+
+      it('should not follow the error through the items$ stream', () => {
+
+        store.dispatch(ItemsActions.ACTION_TWO);
+        testScheduler.run(({ expectObservable }) => {
+
+          const unsub = '^-------- !';
+          expectObservable(store.items$, unsub).toBe('a--', {a: []}, 'my awesome error!');
+        });
+
+
       });
 
     });
@@ -107,7 +148,7 @@ describe('base-store', () => {
       @Effect(ItemsActions.GET_ALL)
       public onGetAll(payload) {
         this.effectSpy(payload);
-        return of([{a: '1'}, {b: '2'}]);
+        return of(payload);
       }
 
       @Reduce(ItemsActions.GET_ALL)
@@ -120,19 +161,19 @@ describe('base-store', () => {
         };
       }
 
+      public dispatchGetAll(items: { [key: string]: string; }[]) {
+
+        super.dispatch(ItemsActions.GET_ALL, items);
+      }
+
     }
 
     let store: MyStore;
-    let testScheduler: TestScheduler;
 
     beforeEach(() => {
       store = new MyStore();
 
-      testScheduler = new TestScheduler((actual, expected) => {
-        expect(actual).toEqual(expected);
-      });
-
-      store.dispatch(ItemsActions.GET_ALL, {my: 'payload'});
+      store.dispatch(ItemsActions.GET_ALL, [{my: 'payload'}]);
 
     });
 
@@ -141,18 +182,18 @@ describe('base-store', () => {
     });
 
     it('should run the effect', () => {
-      expect(store.effectSpy).toHaveBeenCalledWith({my: 'payload'});
+      expect(store.effectSpy).toHaveBeenCalledWith([{my: 'payload'}]);
     });
 
     it('should run the reducer', () => {
-      expect(store.reduceSpy).toHaveBeenCalledWith([{a: '1'}, {b: '2'}]);
+      expect(store.reduceSpy).toHaveBeenCalledWith([{my: 'payload'}]);
 
     });
 
     it('should update the state', async(() => {
 
       store.items$.subscribe((items) => {
-        expect(items).toEqual([{a: '1'}, {b: '2'}]);
+        expect(items).toEqual([{my: 'payload'}]);
       }, fail);
 
     }));
@@ -160,16 +201,24 @@ describe('base-store', () => {
     it('should work with marble testing', () => {
       testScheduler.run(({ expectObservable }) => {
         const unsub = '^-------- !';
-        expectObservable(store.items$, unsub).toBe('a-----', {a: [{a: '1'}, { b: '2'}]});
+        expectObservable(store.items$, unsub).toBe('a-----', {a: [{my: 'payload'}]});
+      });
+    });
+
+    it('should use custom dispatch', () => {
+      store.dispatchGetAll([{a: '1'}, {b: '2'}, {c: '3'}]);
+
+      testScheduler.run(({ expectObservable }) => {
+        const unsub = '^-------- !';
+        expectObservable(store.items$, unsub).toBe('a', {a: [{a: '1'}, { b: '2'}, {c: '3'}]});
 
       });
     });
 
+
     it('should be able to bind a reducer to one or more actions', () => {
       store.dispatch(ItemsActions.ANOTHER_ACTION, []);
       expect(store.reduceSpy).toHaveBeenCalledWith([]);
-
-
     });
   });
 

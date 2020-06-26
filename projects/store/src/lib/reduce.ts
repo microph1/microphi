@@ -7,8 +7,8 @@ export interface Reducers {
   [actionName: number]: string;
 }
 
-export function Reduce(onAction: any) {
-  return <Store extends BaseStore<any>>(target: Store, key: string, descriptor: PropertyDescriptor) => {
+export function Reduce(onAction: number) {
+  return <Store extends BaseStore<any>>(target: Store, key: string) => {
     const d = getDebugger(`microphi:@Reduce:${target.constructor.name}`);
 
     const reducer = Reflect.getMetadata(ReduceMetadata, target) || {};
@@ -17,9 +17,8 @@ export function Reduce(onAction: any) {
 
     d('stored reducers', reducer);
 
-    Reflect.defineMetadata(ReduceMetadata, reducer, target);
+    return Reflect.defineMetadata(ReduceMetadata, reducer, target);
 
-    return descriptor;
   };
 }
 

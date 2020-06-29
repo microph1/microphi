@@ -1,52 +1,38 @@
+/*
+  This is a "Solution Style" tsconfig.json file, and is used by editors and TypeScript’s language server to improve development experience.
+  It is not intended to be used to perform a compilation.
+
+  To learn more about this file see: https://angular.io/config/solution-tsconfig.
+*/
 {
-  "compileOnSave": false,
-  "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
-    "sourceMap": true,
-    "declaration": false,
-    "downlevelIteration": true,
-    "experimentalDecorators": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "target": "es2015",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es2018",
-      "dom"
-    ],
-    "paths": {
-      "@microphi/store": [
-        "dist/store"
-      ],
-      "@microphi/store/*": [
-        "dist/store/*"
-      ],
-      "@microphi/cache": [
-        "dist/cache"
-      ],
-      "@microphi/cache/*": [
-        "dist/cache/*"
-      ],
-      "@microphi/ngx-http-status": [
-        "dist/ngx-http-status"
-      ],
-      "@microphi/ngx-http-status/*": [
-        "dist/ngx-http-status/*"
-      ],
-      "@microphi/phi": [
-        "dist/phi"
-      ],
-      "@microphi/phi/*": [
-        "dist/phi/*"
-      ]
+  "files": [],
+  "references": [
+    {
+      "path": "./projects/microphi/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/microphi/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/microphi/tsconfig.server.json"
+    },
+    {
+      "path": "./projects/store/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/store/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/cache/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/cache/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/phi/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/phi/tsconfig.spec.json"
     }
-  },
-  "angularCompilerOptions": {
-    "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
-  }
+  ]
 }

@@ -1,4 +1,4 @@
-import { OnDestroy } from '@angular/core';
+import { Component, Directive, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 /**
@@ -16,6 +16,8 @@ import { Subscription } from 'rxjs';
  * }
  *
  */
+@Directive()
+// tslint:disable-next-line:directive-class-suffix
 export abstract class PhiComponent implements OnDestroy {
 
   private subscriptions: Subscription[] = [];

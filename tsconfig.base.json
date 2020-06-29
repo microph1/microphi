@@ -1,0 +1,52 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "paths": {
+      "@microphi/store": [
+        "dist/store"
+      ],
+      "@microphi/store/*": [
+        "dist/store/*"
+      ],
+      "@microphi/cache": [
+        "dist/cache"
+      ],
+      "@microphi/cache/*": [
+        "dist/cache/*"
+      ],
+      "@microphi/ngx-http-status": [
+        "dist/ngx-http-status"
+      ],
+      "@microphi/ngx-http-status/*": [
+        "dist/ngx-http-status/*"
+      ],
+      "@microphi/phi": [
+        "dist/phi"
+      ],
+      "@microphi/phi/*": [
+        "dist/phi/*"
+      ]
+    }
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  }
+}

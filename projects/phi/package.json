@@ -7,5 +7,8 @@
   },
   "scripts": {
     "docs": "compodoc -p ./tsconfig.lib.json -e json -a ../microphi/src/assets/docs -d ../microphi/src/assets/docs/phi --includes ./"
+  },
+  "dependencies": {
+    "tslib": "^2.0.0"
   }
 }

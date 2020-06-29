@@ -7,6 +7,7 @@ import { TestScheduler } from 'rxjs/testing';
 import { map } from 'rxjs/operators';
 import { async } from '@angular/core/testing';
 import createSpy = jasmine.createSpy;
+import anything = jasmine.anything;
 
 describe('base-store', () => {
   let testScheduler: TestScheduler;
@@ -96,13 +97,13 @@ describe('base-store', () => {
     });
 
     describe('errors', () => {
-      it('should throw an error through the error subject', () => {
+      it('should get an error through the error subject', () => {
 
 
-        store.error$.subscribe(fail, (err) => {
+        store.error$.subscribe((err) => {
           console.log('error', err);
           expect(err).toEqual({ action: ItemsActions.ACTION_TWO, error: Error('my awesome error!')});
-        });
+        }, fail);
 
         store.dispatch(ItemsActions.ACTION_TWO);
       });
@@ -120,18 +121,19 @@ describe('base-store', () => {
 
       it('should handle error from an effect', () => {
 
-        store.dispatch(ItemsActions.ACTION_THREE);
 
-        testScheduler.run(({ expectObservable }) => {
+        store.error$.subscribe((err) => {
+          console.log('saw error', err);
+          expect(err).toEqual({
+            action: anything(),
+            error: anything()
 
-          expectObservable(store.error$).toBe('#', {}, {
-            action: ItemsActions.ACTION_THREE,
-            error: new Error('Effect error')
           });
 
-          const unsub = '^-------- !';
-          expectObservable(store.items$, unsub).toBe('a--', {a: []}, 'my awesome error!');
-        });
+
+        }, fail);
+        store.dispatch(ItemsActions.ACTION_THREE);
+
       });
 
     });

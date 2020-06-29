@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Item, ItemsActions, ItemsStore } from './items-store';
 import { combineLatest, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
+import { Item, ItemsActions, ItemsStore } from './items-store';
 
 
 @Component({

@@ -20,9 +20,11 @@ export enum ItemsActions {
   REMOVE,
   GET,
   SEARCH,
+  VALIDATE_STORED_TOKEN,
 }
 
 export function fibonacci(num) {
+  // tslint:disable-next-line:one-variable-per-declaration
   let a = 1, b = 0, temp;
 
   while (num >= 0) {
@@ -66,31 +68,11 @@ export class ItemsStore extends BaseStore<ItemsState> {
     this.search$.next(search);
   }
 
-  // @Reduce(ItemsActions.SEARCH)
-  // public search(items) {
-  //   this.state.items = items;
-  //   return this.state;
-  // }
-
   @Reduce(ItemsActions.REMOVE)
-  public removeItem(item) {
-    const idx = this.state.items.findIndex((i) => i === item);
-    this.state.items.splice(idx, 1);
-    return this.state;
-  }
-
-  @Effect(ItemsActions.UPDATE)
-  public onUpdate(item) {
-    console.log('@Effect(UPDATE)', item);
-    const itemIdx = this.state.items.findIndex((i) => {
-      console.log('parsing', i);
-      return i.a === item.a && i.b === item.b;
-    });
-    if (itemIdx < 0) {
-      console.error('cannot find item', item);
-    }
-    console.log('original index', itemIdx);
-    return of([createItem(), itemIdx]);
+  public removeItem(state, item) {
+    const idx = state.items.findIndex((i) => i === item);
+    state.items.splice(idx, 1);
+    return state;
   }
 
   @Effect(ItemsActions.ADD)
@@ -99,22 +81,25 @@ export class ItemsStore extends BaseStore<ItemsState> {
   }
 
   @Reduce(ItemsActions.ADD)
-  public addItem(total) {
+  public addItem(state, total) {
     for (let i = 0; i < total; i++) {
-      this.state.items.push(createItem());
+      state.items.push(createItem());
     }
-    return this.state;
+    return state;
   }
 
   @Reduce(ItemsActions.UPDATE)
-  public updateItem([item, itemIdx]) {
-    this.state.items[itemIdx] = item;
-    return this.state;
+  public updateItem(state, item) {
+    const itemIdx = state.items.findIndex((i) => {
+      return i === item;
+    });
+    state.items[itemIdx] = item;
+    return state;
   }
 
   @Reduce(ItemsActions.GET)
-  public getAll() {
-    return this.state;
+  public getAll(state) {
+    return state;
   }
 
 }

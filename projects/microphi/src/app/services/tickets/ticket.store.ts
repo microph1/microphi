@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Ticket } from './ticket.interface';
 import { BackendService } from './ticket.service';
-import { bufferCount, catchError, delay, map, mergeMap, switchMap } from 'rxjs/operators';
-import { from, NEVER, of } from 'rxjs';
-import { ObservableList, Store, BaseStore, Effect, Reduce } from '@microphi/store';
+import { bufferCount, catchError, map, mergeMap, switchMap } from 'rxjs/operators';
+import { from, NEVER } from 'rxjs';
+import { BaseStore, Effect, ObservableList, Reduce, Store } from '@microphi/store';
 
 
 type TicketWithState = Ticket & { isLoading?: boolean; hidden?: boolean };
@@ -83,39 +83,36 @@ export class TicketStore extends BaseStore<TicketsState> {
   @Effect(TicketActions.CHANGE_STATUS)
   private changeStatus(payload: Ticket) {
 
-
-    this.state.tickets.updateOne({...payload, isLoading: true});
-
     return this.ticketService.complete(payload.id, !payload.completed);
   }
 
   @Reduce(TicketActions.FIND_ALL)
-  private onResponse(payload: Ticket[]) {
+  private onResponse(state, payload: Ticket[]) {
     // this is the final list of tickets
-    this.state.tickets.set(...payload);
+    state.tickets.set(...payload);
 
-    return this.state;
+    return state;
   }
 
   @Reduce(TicketActions.CHANGE_STATUS)
-  private onStatusChanged(payload: Ticket) {
+  private onStatusChanged(state, payload: Ticket) {
 
-    this.state.tickets.updateOne({ ...payload, isLoading: false});
+    state.tickets.updateOne({ ...payload, isLoading: false});
 
-    return this.state;
+    return state;
   }
 
   @Reduce(TicketActions.ASSIGN)
-  private onAssign(payload) {
-    return this.state;
+  private onAssign(state, payload) {
+    return state;
   }
 
-  @Effect(TicketActions.SEARCH)
-  private onSearch(searchTerm) {
+  @Reduce(TicketActions.SEARCH)
+  private onSearch(state, searchTerm) {
 
     console.log('searching by', searchTerm);
 
-    for (const ticket of this.state.tickets) {
+    for (const ticket of state.tickets) {
       const t = ticket.getValue();
       if (!t.description.includes(searchTerm)) {
         ticket.next({
@@ -130,7 +127,7 @@ export class TicketStore extends BaseStore<TicketsState> {
       }
     }
 
-    return of({}).pipe(delay(2000));
+    return state;
   }
 
 }

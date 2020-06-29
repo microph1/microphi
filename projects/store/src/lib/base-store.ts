@@ -1,7 +1,7 @@
 import { getDebugger } from '@microgamma/loggator';
-import { BehaviorSubject, Observable, Subject, Subscription, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { getStoreMetadata, StoreOptions } from './store';
-import { Actions, Action, REQUEST_SUFFIX, RESPONSE_SUFFIX } from './actions';
+import { Action, Actions, REQUEST_SUFFIX, RESPONSE_SUFFIX } from './actions';
 import { getReduceMetadata } from './reduce';
 import { catchError, takeUntil, tap } from 'rxjs/operators';
 import { OnDestroy } from '@angular/core';

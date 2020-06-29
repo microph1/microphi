@@ -10389,10 +10389,10 @@ ng-packagr@^10.0.0:
     terser "^4.3.8"
     update-notifier "^4.0.0"
 
-ngx-deploy-npm@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/ngx-deploy-npm/-/ngx-deploy-npm-1.2.0.tgz#8eeac47696971ea74b7cf994a04e64f7ee7cb2e9"
-  integrity sha512-PF96bO2hcybl/ytC4HbEIdDbgpCJ15iUBI0jrycNqYdN5PUxvcpM7bO8bsfLKnpNXt+ldwylEcd0jwdgDpH7Kg==
+ngx-deploy-npm@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/ngx-deploy-npm/-/ngx-deploy-npm-1.2.2.tgz#054c4c11db2160e1f1a055404f00abb1f32904e9"
+  integrity sha512-ricBgnV+WxfdrnvHkanMAEAXJrnGPbXjix/EIhdSXJimTUhIIyUWhb8A6x/Oxv998wn2YGOw5ZbxhTWzY8Be5w==
 
 ngx-markdown@^8.2.2:
   version "8.2.2"

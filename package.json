@@ -37,7 +37,7 @@
     "@angular/router": "~10.0.1",
     "@microgamma/loggator": "^1.16.0",
     "@unbounded/unbounded": "^0.9.9",
-    "ngx-deploy-npm": "^1.2.0",
+    "ngx-deploy-npm": "^1.2.2",
     "ngx-markdown": "^8.2.2",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",

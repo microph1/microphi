@@ -4,11 +4,8 @@ import { getStoreMetadata, StoreOptions } from './store';
 import { Action, Actions, REQUEST_SUFFIX, RESPONSE_SUFFIX } from './actions';
 import { getReduceMetadata } from './reduce';
 import { catchError, takeUntil, tap } from 'rxjs/operators';
-import { Injectable, OnDestroy } from '@angular/core';
+import { OnDestroy } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root'
-})
 export abstract class BaseStore<T extends {}> implements OnDestroy {
 
   private logger = getDebugger(`microphi:BaseStore:${this.constructor.name}`);

@@ -27,7 +27,7 @@
         </mat-card-content>
 
         <mat-card-actions fxLayoutAlign="end space-between">
-          <mat-error *ngIf="(authError$ | async) as error">{{error.action | json}} - {{error.error.message}}</mat-error>
+          <mat-error *ngIf="(authError$ | async) as error">{{error }}</mat-error>
           <span fxFlex=""></span>
           <button color="primary" (click)="authenticate();" mat-flat-button>Login</button>
         </mat-card-actions>

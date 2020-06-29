@@ -19,7 +19,8 @@ export interface AuthState {
 export enum AuthActions {
   AUTHENTICATE,
   VALIDATE,
-  LOGOUT
+  LOGOUT,
+  VALIDATE_INITIAL_STATE
 }
 
 @Store({
@@ -38,15 +39,15 @@ export class AuthStore extends BaseStore<AuthState> {
   constructor(private authService: AuthService) {
     super();
 
-    this.dispatch(ItemsActions.VALIDATE_STORED_TOKEN);
+    this.dispatch(AuthActions.VALIDATE_INITIAL_STATE);
+  }
 
-    // if (this.state.error) {
-    //   this.state.error = null;
-    // }
-    //
-    // if (this.state.hasOwnProperty('token')) {
-    //   this.dispatch(AuthActions.VALIDATE, this.state.token);
-    // }
+  @Reduce(AuthActions.VALIDATE_INITIAL_STATE)
+  protected validateStoredToken(state: AuthState) {
+    if (state.token) {
+      this.dispatch(AuthActions.VALIDATE, state.token);
+    }
+    return state;
   }
 
   @Effect(AuthActions.VALIDATE)

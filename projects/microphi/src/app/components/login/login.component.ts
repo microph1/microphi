@@ -3,7 +3,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Log } from '@microgamma/loggator';
 import { AuthActions, AuthStore } from '../../services/auth/auth.store';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { of, Subscription, throwError } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +15,8 @@ import { Subscription } from 'rxjs';
 export class LoginComponent implements OnDestroy {
 
   private subSink = new Subscription();
+
+  private attempts = 0;
 
   @Log()
   private $log;
@@ -31,7 +35,19 @@ export class LoginComponent implements OnDestroy {
   });
 
 
-  public authError$ = this.authStore.error$;
+  public authError$ = this.authStore.error$.pipe(
+    map((err) => {
+      console.log('got error', err.error.message);
+
+      if (!(err.error instanceof HttpErrorResponse)) {
+        console.log('not an error from backend');
+        throw throwError('Something weird is happening!');
+      }
+
+      this.attempts++;
+      return err.error.message + ' ' + this.attempts;
+    })
+  );
 
   constructor(private authStore: AuthStore, private router: Router) {
     this.subSink.add(
@@ -45,7 +61,7 @@ export class LoginComponent implements OnDestroy {
   }
 
   public authenticate() {
-    for (let field in this.user.controls) {
+    for (const field in this.user.controls) {
       this.user.controls[field].markAsTouched({onlySelf: true});
     }
 

@@ -53,11 +53,11 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
   }
 
   private _error$ = new Subject<{
-    action: string,
-    error: typeof Error
+    action: number,
+    error: any
   }>();
 
-  get error$(): Observable<{ action: string; error: typeof Error }> {
+  get error$(): Observable<{ action: number; error: any }> {
     return this._error$.asObservable();
   }
 
@@ -125,7 +125,7 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
                     code: this.actionsMetadata.getActionCodeFromChild(action.type),
                     type: action.type,
                   });
-                  this._error$.error({action: this.actionsMetadata.getActionCodeFromChild(action.type), error: err});
+                  this._error$.next({action: this.actionsMetadata.getActionCodeFromChild(action.type), error: err});
                   return throwError(err);
                 }),
                 takeUntil(this.destroy$)
@@ -162,7 +162,7 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
             // we don't need to stop loading here at it has already been stopped
 
             console.error(`@Reduce ${fn} thrown an error`, e);
-            this._error$.error({action: this.actionsMetadata.getActionCodeFromChild(action.type), error: e});
+            this._error$.next({action: this.actionsMetadata.getActionCodeFromChild(action.type), error: e});
           }
         }
 
@@ -172,7 +172,7 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
       this.logger('got error', err);
       // TODO should handle the error or should we change loading$ to a more generic status$ so we can pass altogether
       // loadings and errors events?
-      this._error$.error(err);
+      this._error$.next(err);
       console.error(err);
     });
 

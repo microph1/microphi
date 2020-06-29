@@ -1,5 +1,5 @@
 import { getDebugger } from '@microgamma/loggator';
-import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription, throwError } from 'rxjs';
 import { getStoreMetadata, StoreOptions } from './store';
 import { Actions, Action, REQUEST_SUFFIX, RESPONSE_SUFFIX } from './actions';
 import { getReduceMetadata } from './reduce';
@@ -114,15 +114,16 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
             if (retValue instanceof Observable) {
               retValue.pipe(
                 catchError((err) => {
-                  console.error(`@Effect ${effectName} thrown an error`, err);
+                  console.error(`@Effect: ${effectName} thrown the following error`);
+                  console.error(err);
                   this._loading$.next({
                     status: false,
                     payload: action.payload,
                     code: this.actionsMetadata.getActionCodeFromChild(action.type),
                     type: action.type,
                   });
-
-                  return err;
+                  this._error$.error({action: this.actionsMetadata.getActionCodeFromChild(action.type), error: err});
+                  return throwError(err);
                 }),
                 takeUntil(this.destroy$)
               ).subscribe((value) => {

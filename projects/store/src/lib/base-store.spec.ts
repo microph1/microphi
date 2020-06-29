@@ -2,7 +2,7 @@ import { Store } from './store';
 import { BaseStore } from './base-store';
 import { Reduce } from './reduce';
 import { Effect } from './effect';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
 import { map } from 'rxjs/operators';
 import { async } from '@angular/core/testing';
@@ -43,6 +43,11 @@ describe('base-store', () => {
           return state.items;
         })
       );
+
+      @Effect(ItemsActions.ACTION_THREE)
+      public effectThatThrows() {
+        return throwError(new Error('Effect error'));
+      }
 
       @Reduce(ItemsActions.ACTION_TWO)
       protected thisWillThrow() {
@@ -111,7 +116,22 @@ describe('base-store', () => {
           expectObservable(store.items$, unsub).toBe('a--', {a: []}, 'my awesome error!');
         });
 
+      });
 
+      it('should handle error from an effect', () => {
+
+        store.dispatch(ItemsActions.ACTION_THREE);
+
+        testScheduler.run(({ expectObservable }) => {
+
+          expectObservable(store.error$).toBe('#', {}, {
+            action: ItemsActions.ACTION_THREE,
+            error: new Error('Effect error')
+          });
+
+          const unsub = '^-------- !';
+          expectObservable(store.items$, unsub).toBe('a--', {a: []}, 'my awesome error!');
+        });
       });
 
     });

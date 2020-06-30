@@ -1,7 +1,7 @@
 import { AuthService } from './auth.service';
-import { BaseStore, Effect, Reduce, Store } from '@microphi/store';
 import { map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
+import { BaseStore, Effect, Reduce, Store } from '@microphi/store';
 
 export interface AuthState {
   isAuth: boolean;

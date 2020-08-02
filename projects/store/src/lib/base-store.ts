@@ -4,9 +4,8 @@ import { getStoreMetadata, StoreOptions } from './store';
 import { Action, Actions, REQUEST_SUFFIX, RESPONSE_SUFFIX } from './actions';
 import { getReduceMetadata } from './reduce';
 import { catchError, takeUntil, tap } from 'rxjs/operators';
-import { OnDestroy } from '@angular/core';
 
-export abstract class BaseStore<T extends {}> implements OnDestroy {
+export abstract class BaseStore<T extends {}> {
 
   private logger = getDebugger(`microphi:BaseStore:${this.constructor.name}`);
 
@@ -58,8 +57,6 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
     return this._error$.asObservable();
   }
 
-  private destroy$: Subject<any> = new Subject<any>();
-
   constructor() {
 
     this.storeMetadata = getStoreMetadata(this);
@@ -93,7 +90,8 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
         });
 
       }),
-      takeUntil(this.destroy$),
+      // removing angular hook to make this more generic
+      // TODO still we should  to find a way to unsubscribe
     ).subscribe( (action: Action) => {
       this.logger('got type', action);
 
@@ -125,7 +123,8 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
                   this._error$.next({action: this.actionsMetadata.getActionCodeFromChild(action.type), error: err});
                   return throwError(err);
                 }),
-                takeUntil(this.destroy$)
+                // removing angular hook to make this more generic
+                // TODO still we should  to find a way to unsubscribe
               ).subscribe((value) => {
                 this.logger('got data', value);
 
@@ -217,11 +216,6 @@ export abstract class BaseStore<T extends {}> implements OnDestroy {
     });
 
     return remappedEffects;
-  }
-
-  public ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
 }

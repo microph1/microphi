@@ -22,7 +22,7 @@
             "main": "projects/microphi/src/main.ts",
             "polyfills": "projects/microphi/src/polyfills.ts",
             "tsConfig": "projects/microphi/tsconfig.app.json",
-            "aot": true,
+            "aot": false,
             "assets": [
               "projects/microphi/src/favicon.ico",
               "projects/microphi/src/assets"

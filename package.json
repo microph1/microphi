@@ -42,6 +42,7 @@
     "ngx-markdown": "^8.2.2",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
+    "utility-types": "^3.10.0",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {

@@ -82,10 +82,7 @@ export class ObservableList<T extends {}> {
 
   public updateOne(item: T) {
     if (this.data.has(item[this.idFieldName])) {
-
       this.data.get(item[this.idFieldName]).next(item);
-    } else {
-      console.warn('item not found', item);
     }
   }
 

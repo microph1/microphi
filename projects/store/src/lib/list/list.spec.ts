@@ -36,11 +36,11 @@ describe('list', () => {
   };
 
   beforeEach(() => {
-    list = new List<Entity>(users, 'id');
+    list = new List<Entity>('id', users);
   });
 
   it('should create an empty list', () => {
-    const emptyList = new List<Entity>([], 'id');
+    const emptyList = new List<Entity>('id');
     expect(emptyList).toBeTruthy();
   });
 

@@ -11,7 +11,6 @@ describe('@Store', () => {
     initialState: [],
     name: 'MyStore',
     actions: Actions,
-    useLocalStorage: true,
   })
   class MyStore {}
 
@@ -26,7 +25,6 @@ describe('@Store', () => {
       initialState: [],
       name: 'MyStore',
       actions: Actions,
-      useLocalStorage: true,
     });
 
   });

@@ -6,7 +6,6 @@ export interface StoreOptions {
   initialState: any;
   name: string;
   actions: any;
-  useLocalStorage?: boolean;
 }
 
 export function Store(options: StoreOptions) {
@@ -22,7 +21,7 @@ export function Store(options: StoreOptions) {
 }
 
 export function getStoreMetadata(instance): StoreOptions {
-  return Reflect.getMetadata(StoreMetadata, instance.constructor);
+  return Reflect.getMetadata(StoreMetadata, instance.constructor) || {};
 }
 
 

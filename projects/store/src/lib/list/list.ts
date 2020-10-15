@@ -25,7 +25,7 @@ export class List<EntityType extends {}> implements Iterable<EntityType> {
     return entity[this.IDField];
   }
 
-  constructor(entities: EntityType[], private IDField: $Keys<EntityType>) {
+  constructor(private IDField: $Keys<EntityType>, entities: EntityType[] = []) {
 
     this.ids = entities.map((e) => this.getId(e));
 
@@ -61,7 +61,6 @@ export class List<EntityType extends {}> implements Iterable<EntityType> {
       const id = this.getId(e);
 
       if (this.entities.has(id)) {
-        console.warn(`Entity with id '${id}' already exists, moving to the top of the list. Entity will be updated`);
         this.delete(e);
       }
 
@@ -77,21 +76,18 @@ export class List<EntityType extends {}> implements Iterable<EntityType> {
       const id = this.getId(e);
       const indexOfId = this.ids.findIndex((_id) => _id === id);
 
-      if (indexOfId < 0) {
-        console.warn(`Cannot find id: ${id}`);
-      } else {
+      if (indexOfId >= 0) {
         this.ids.splice(indexOfId, 1);
         this.entities.delete(id);
       }
-
     });
   }
 
   public append(...entities: EntityType[]) {
     entities.forEach((e) => {
       const id = this.getId(e);
+
       if (this.entities.has(id)) {
-        console.warn(`Entity with id '${id}' already exists, moving to the end of the list. Entity will be updated.`);
         this.delete(e);
       }
 

@@ -2,15 +2,9 @@ import { getStoreMetadata, Store } from './store';
 
 describe('@Store', () => {
 
-  enum Actions {
-    ACTION_ONE,
-    ACTION_TWO,
-  }
 
   @Store({
     initialState: [],
-    name: 'MyStore',
-    actions: Actions,
   })
   class MyStore {}
 
@@ -23,8 +17,6 @@ describe('@Store', () => {
   it('should decorate a class', () => {
     expect(getStoreMetadata(store)).toEqual({
       initialState: [],
-      name: 'MyStore',
-      actions: Actions,
     });
 
   });

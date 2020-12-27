@@ -11,6 +11,7 @@ import { PhiComponent } from '@microphi/phi';
 })
 export class DemoChangeDetectionComponent extends PhiComponent implements OnInit {
 
+
   searchForm = new FormGroup({
     search: new FormControl('')
   });

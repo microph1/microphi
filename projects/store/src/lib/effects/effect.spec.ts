@@ -1,24 +1,25 @@
 import { Effect, getEffectMetadata } from './effect';
-import { BaseStore } from '../base-store';
+import { Actions, BaseStore } from '../base-store';
+import { Observable } from 'rxjs';
 
 describe('@Effect', () => {
 
-  enum MyEffects {
-    ONE,
-    TWO,
-    THREE,
+  interface MyEffects extends Actions {
+    ONE: () => Observable<any>;
+    TWO: () => Observable<any>;
+    THREE: () => Observable<any>;
   }
 
 
   class TestEffect extends BaseStore<any, MyEffects> {
 
-    @Effect(MyEffects.ONE)
+    @Effect<MyEffects>('ONE')
     public onEffectOne() {}
 
-    @Effect(MyEffects.TWO, 'switchMap')
-    public withSwitchMan() {}
+    @Effect<MyEffects>('TWO', 'switchMap')
+    public withSwitchMap() {}
 
-    @Effect(MyEffects.THREE, 'concatMap')
+    @Effect<MyEffects>('THREE', 'concatMap')
     public withConcatMap() {}
 
   }
@@ -32,25 +33,25 @@ describe('@Effect', () => {
   it('should store metadata on the instance of the decorated class', () => {
 
     expect(getEffectMetadata(store)).toEqual({
-      0: {functionName: 'onEffectOne', strategy: 'mergeMap'},
-      1: {functionName: 'withSwitchMan', strategy: 'switchMap'},
-      2: {functionName: 'withConcatMap', strategy: 'concatMap'},
+      ONE: { functionName: 'onEffectOne', strategy: 'mergeMap'},
+      TWO: { functionName: 'withSwitchMap', strategy: 'switchMap'},
+      THREE: { functionName: 'withConcatMap', strategy: 'concatMap'},
     });
   });
 
   it('should throw an error if effect is used on more than one method', () => {
     try {
-      class Offending extends BaseStore<any> {
+      class Offending extends BaseStore<any, MyEffects> {
 
-        @Effect(MyEffects.ONE)
+        @Effect<MyEffects>('ONE')
         public onEffectOne() {}
 
-        @Effect(MyEffects.ONE)
+        @Effect<MyEffects>('ONE')
         public onEffectOne2() {}
 
       }
     } catch (e) {
-      expect(e.message).toEqual('Effect 0 already used on onEffectOne');
+      expect(e.message).toEqual('Effect ONE already used on onEffectOne');
     }
   });
 

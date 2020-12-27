@@ -37,15 +37,15 @@ export class LoginComponent implements OnDestroy {
 
   public authError$ = this.authStore.error$.pipe(
     map((err) => {
-      console.log('got error', err.error.message);
+      // console.log('got error', err.error.message);
 
-      if (!(err.error instanceof HttpErrorResponse)) {
-        console.log('not an error from backend');
-        throw throwError('Something weird is happening!');
-      }
+      // if (!(err.error instanceof HttpErrorResponse)) {
+      //   console.log('not an error from backend');
+      //   throw throwError('Something weird is happening!');
+      // }
 
       this.attempts++;
-      return err.error.message + ' ' + this.attempts;
+      // return err.error.message + ' ' + this.attempts;
     })
   );
 

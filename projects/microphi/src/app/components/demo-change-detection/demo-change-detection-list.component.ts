@@ -46,7 +46,7 @@ export interface Entity {
 })
 export class DemoChangeDetectionListComponent {
 
-  items: List<Entity> = new List([], 'id');
+  items: List<Entity> = new List('id');
 
 
   addItem(total = 1) {

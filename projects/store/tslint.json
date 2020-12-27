@@ -16,6 +16,7 @@
     "object-literal-shorthand": false,
     "variable-name": false,
     "max-line-length": false,
-    "no-string-literal": false
+    "no-string-literal": false,
+    "no-namespace": false
   }
 }

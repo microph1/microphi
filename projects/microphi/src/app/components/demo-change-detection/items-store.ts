@@ -51,15 +51,13 @@ export function createItem() {
   name: 'ItemsStore',
   initialState: {items: []},
   actions: ItemsActions,
-  useLocalStorage: false,
 })
 @Injectable()
-export class ItemsStore extends BaseStore<ItemsState> {
+export class ItemsStore extends BaseStore<ItemsState, ItemsActions> {
 
   search$ = new BehaviorSubject<string>('');
 
   items$ = this.store$.pipe(
-
     map((state) => state.items)
   );
 

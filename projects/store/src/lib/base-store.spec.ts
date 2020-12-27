@@ -1,11 +1,12 @@
 import { Store, StoreOptions } from './store';
-import { BaseStore } from './base-store';
+import { Action, Actions, BaseStore, Reducer, Updater } from './base-store';
 import { Reduce } from './reduce';
 import { Effect } from './effects/effect';
-import { of, ReplaySubject, throwError } from 'rxjs';
+import { Observable, of, ReplaySubject, throwError } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
 import { map, multicast } from 'rxjs/operators';
 import createSpy = jasmine.createSpy;
+
 
 describe('base-store', () => {
   let testScheduler: TestScheduler;
@@ -19,63 +20,126 @@ describe('base-store', () => {
   });
 
   interface ItemsState {
-    items: any[];
+    users: string[];
+    selected?: [number, string];
   }
 
-  enum ItemsActions {
-    GET_ALL,
-    ANOTHER_ACTION,
-    ASYNC_ACTION,
-    OBSERVER_ARGS,
-    ACTION_EFFECT_THROWS,
-    REDUCER_THROWS,
+  interface NewItemsActions {
+    findAll2: Action<void, string[], ItemsState>;
+    findOne: Action<string, number, ItemsState>;
   }
 
-  const initialState = {items: [{a: 0}]};
+  class Test implements NewItemsActions {
+    findAll2: Action<void, string[], ItemsState> = {
+      reduce: (state, users) => {
+        return {
+          ...state,
+          users
+        };
+      }
+    };
+    findOne: Action<string, number, ItemsState> = {
+      effect: (name) => {
+        return of(1);
+      },
+      reduce: (s, args) => {
+        return s;
+      }
+    };
+  }
+
+  interface ItemsActions extends Actions {
+    findAll: () => Observable<string[]>;
+    // actions that only have reducers!
+    findOne: (name: string) => Observable<string>;
+    updateOne: (payload: {name: string, newName: string}) => Observable<{ name: string, newName: string }>;
+    removeOne: (name: string) => Observable<boolean>;
+
+    actionEffectThrows: () => Observable<number>;
+    reducerThrows: () => Observable<ItemsState>;
+
+    // ----------------- //
+    // ----------------- //
+
+    // todo remove those below
+    asyncEffect: (id: string, email: string) => Observable<string>;
+    observerArgs: () => Observable<boolean>;
+  }
+
+  const initialState: ItemsState = {
+    users: ['alice', 'bob'],
+};
 
   const options: StoreOptions = {
-    actions: ItemsActions,
-    name: 'MyStore',
     initialState
   };
 
   @Store(options)
   class MyStore extends BaseStore<ItemsState, ItemsActions> {
-    public items$ = this.store$.pipe(
+    public users$ = this.store$.pipe(
       map((state) => {
-        return state.items;
+        return state;
       })
     );
 
     public reduceSpy = createSpy('reduceSpy');
     public effectSpy = createSpy('effectSpy');
 
-    private httpStub$ = (payload) => of(payload).pipe(
-      // delay(1000)
-    )
-
-    @Effect(ItemsActions.OBSERVER_ARGS, 'switchMap')
-    public testObserveArgs(payload: string) {
-
-      return of('test').pipe(
-        // delay(100)
-
-      );
+    constructor() {
+      super();
     }
 
-    @Reduce(ItemsActions.OBSERVER_ARGS, )
-    public testObserveArgsReducer(state) {
+
+    @Effect<ItemsActions>('findAll')
+    public getAll: Updater<ItemsActions, 'findAll'> = () => {
+      console.log('running onGetAll effect');
+      this.effectSpy('payload');
+      return of(['carl', 'denise']);
+    }
+
+    @Reduce<ItemsActions>('findAll')
+    public onGotAll: Reducer<ItemsState, ItemsActions, 'findAll'> = (state, payload) => {
+      this.reduceSpy(payload);
+      return {
+        users: [...state.users, ...payload],
+      };
+    }
+
+    @Reduce<ItemsActions>('findOne')
+    public onFindOne: Reducer<ItemsState, ItemsActions, 'findOne'> = (state, name) => {
+      const selectedIdx = state.users.findIndex((u) => u === name);
+      return {
+        ...state,
+        selected: [selectedIdx, name]
+      };
+    }
+
+    @Reduce<ItemsActions>('updateOne')
+    public updateUser: Reducer<ItemsState, ItemsActions, 'updateOne'> = (state, {name, newName}) => {
+      const userIdx = state.users.findIndex((u) => u === name);
+      state.users[userIdx] = newName;
       return state;
     }
 
-    @Effect(ItemsActions.ASYNC_ACTION, 'switchMap')
-    public onAsyncAction(payload: any[]) {
-      console.log('running async effect');
-      return this.httpStub$(payload);
+    // todo refactor methods below
+    @Effect<ItemsActions>('observerArgs', 'switchMap')
+    public observeArgs: Updater<ItemsActions, 'observerArgs'> = () => {
+      return of(true);
     }
 
-    @Reduce(ItemsActions.ASYNC_ACTION)
-    public asyncAction(state, payload) {
+
+    @Reduce<ItemsActions>('observerArgs')
+    public onObserveArgs: Reducer<ItemsState, ItemsActions, 'observerArgs'> = (state) => {
+      return state;
+    }
+
+    @Effect<ItemsActions>('asyncEffect', 'switchMap')
+    public asyncAction: Updater<ItemsActions, 'asyncEffect'> = (id, email) => {
+      return of('test');
+    }
+
+    @Reduce<ItemsActions>('asyncEffect')
+    public onAsyncAction: Reducer<ItemsState, ItemsActions, 'asyncEffect'> = (state, payload) => {
       console.log('reducing async action', payload);
       this.reduceSpy();
       console.log('reduce spy called');
@@ -85,30 +149,14 @@ describe('base-store', () => {
       };
     }
 
-    @Effect(ItemsActions.GET_ALL, )
-    public onGetAll(payload) {
-      console.log('running onGetAll effect');
-      this.effectSpy(payload);
-      return of(payload);
-    }
 
-    @Reduce(ItemsActions.GET_ALL)
-    @Reduce(ItemsActions.ANOTHER_ACTION)
-    public onGotAll(state, payload) {
-      console.log('reducing onGotAll');
-      this.reduceSpy(payload);
-      return {
-        ...state,
-        items: payload
-      };
-    }
 
-    @Effect(ItemsActions.ACTION_EFFECT_THROWS)
-    public effectThatThrows() {
+    @Effect<ItemsActions>('actionEffectThrows')
+    public actionEffectThrows() {
       return throwError(new Error('Effect error'));
     }
 
-    @Reduce(ItemsActions.REDUCER_THROWS)
+    @Reduce<ItemsActions>('reducerThrows')
     public reducerThrows() {
       throw new Error('from reducer!');
     }
@@ -137,19 +185,13 @@ describe('base-store', () => {
       );
       storeHistory$.connect();
 
-      store.dispatch(ItemsActions.ASYNC_ACTION, [1, 2, 3]);
       storeSecondInstance = new MyStore();
     });
 
     it('should set initial state', () => {
       testScheduler.run(({expectObservable}) => {
-        expectObservable(storeHistory$).toBe('(ab)', {
-          a: {
-            items: [{a: 0}]
-          },
-          b: {
-            items: [1, 2, 3]
-          }
+        expectObservable(storeHistory$).toBe('a', {
+          a: initialState
         });
       });
     });
@@ -157,9 +199,8 @@ describe('base-store', () => {
     it('should not be shared between different instances', () => {
 
       testScheduler.run(({expectObservable}) => {
-        expectObservable(storeSecondInstance.items$).toBe('a', {
-          a: initialState.items
-
+        expectObservable(storeSecondInstance.users$).toBe('a', {
+          a: initialState
         });
       });
 
@@ -167,26 +208,67 @@ describe('base-store', () => {
 
   });
 
-  it('should call a reducer that does not have any effect', () => {
-    const payload = [{a: 1}, {b: 2}];
-    store.dispatch(ItemsActions.ANOTHER_ACTION, payload);
+  describe('state mutations', () => {
 
-    testScheduler.run(({expectObservable}) => {
-      expectObservable(store.store$).toBe('a', {
-        a: {
-          items: [{a: 1}, {b: 2}]
-        }
+    it('should find all users', () => {
+      testScheduler.run(({expectObservable}) => {
+        store.dispatch('findAll');
+        expectObservable(store.users$).toBe('a', {
+          a: {
+            users: [...initialState.users, 'carl', 'denise']
+          }
+        });
       });
     });
 
-    expect(store.reduceSpy).toHaveBeenCalledWith(payload);
+    it('should find a user', () => {
+      testScheduler.run(({expectObservable}) => {
+        store.dispatch('findOne', 'bob');
+        expectObservable(store.users$).toBe('a', {
+          a: {
+            users: [...initialState.users],
+            selected: [1, 'bob']
+          }
+        });
+      });
+    });
+
+    it('should update a user', () => {
+      testScheduler.run(({expectObservable}) => {
+        store.dispatch('updateOne', {
+          name: 'bob',
+          newName: 'robert',
+        });
+        expectObservable(store.users$).toBe('a', {
+          a: {
+            users: ['alice', 'robert'],
+          }
+        });
+      });
+    });
+
 
   });
 
-  it('should call an effect and reduce the state', () => {
+  // it('should call a reducer that does not have any effect', () => {
+  //   store.dispatch('findOne', 'payload');
+  //
+  //   testScheduler.run(({expectObservable}) => {
+  //     expectObservable(store.store$).toBe('a', {
+  //       a: {
+  //         items: [...initialState.items, 'payload']
+  //       },
+  //     });
+  //   });
+  //
+  //   expect(store.reduceSpy).toHaveBeenCalledWith('payload');
+  //
+  // });
+
+  xit('should call an effect and reduce the state', () => {
 
     const payload = [{a: 1}, {b: 2}];
-    store.dispatch(ItemsActions.GET_ALL, payload);
+    store.dispatch('findAll');
 
     testScheduler.run(({expectObservable}) => {
       expectObservable(store.store$).toBe('a', {
@@ -218,9 +300,9 @@ describe('base-store', () => {
         expect(store.reduceSpy).toHaveBeenCalledTimes(1);
       });
 
-      store.dispatch(ItemsActions.ASYNC_ACTION, payload);
-      store.dispatch(ItemsActions.ASYNC_ACTION, payload);
-      store.dispatch(ItemsActions.ASYNC_ACTION, payload);
+      store.dispatch('asyncAction');
+      store.dispatch('asyncAction');
+      store.dispatch('asyncAction');
 
       // testScheduler.run(({expectObservable}) => {
       //
@@ -241,8 +323,8 @@ describe('base-store', () => {
       });
       //
       const payload = [{a: 1}, {b: 2}];
-      store.dispatch(ItemsActions.ASYNC_ACTION, payload);
-      store.dispatch(ItemsActions.ASYNC_ACTION, payload);
+      store.dispatch('asyncAction');
+      store.dispatch('asyncAction');
 
       // debugger;
       // store.dispatch(ItemsActions.GET_ALL, payload);
@@ -280,7 +362,7 @@ describe('base-store', () => {
         done();
       }, fail);
 
-      store.dispatch(ItemsActions.ACTION_EFFECT_THROWS);
+      store.dispatch('actionEffectThrows');
 
     });
 
@@ -292,22 +374,22 @@ describe('base-store', () => {
       }, fail);
 
 
-      store.dispatch(ItemsActions.REDUCER_THROWS);
+      store.dispatch('reducerThrows');
 
     });
 
-    it('should not follow the error through the items$ stream', () => {
-
-      store.dispatch(ItemsActions.ACTION_EFFECT_THROWS);
-      store.dispatch(ItemsActions.GET_ALL, [{a: 1}]);
-
-      testScheduler.run(({expectObservable}) => {
-
-        const unsub = '^-------- !';
-        expectObservable(store.items$, unsub).toBe('a--', {a: [{a: 1}]});
-      });
-
-    });
+    // it('should not follow the error through the items$ stream', () => {
+    //
+    //   store.dispatch('actionEffectThrows');
+    //   store.dispatch('findAll');
+    //
+    //   testScheduler.run(({expectObservable}) => {
+    //
+    //     const unsub = '^-------- !';
+    //     expectObservable(store.items$, unsub).toBe('a--', {a: [{a: 1}]});
+    //   });
+    //
+    // });
   });
 
   // xdescribe('create an empty store', () => {

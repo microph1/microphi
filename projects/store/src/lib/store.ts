@@ -1,20 +1,12 @@
-import { getDebugger } from '@microgamma/loggator';
-
 export const StoreMetadata = '@Store';
 
 export interface StoreOptions {
   initialState: any;
-  name: string;
-  actions: any;
 }
 
 export function Store(options: StoreOptions) {
 
-  const d = getDebugger(`microphi:@Store:${options.name}`);
-
   return (target) => {
-
-    d('running store decorator');
 
     Reflect.defineMetadata(StoreMetadata, options, target);
   };

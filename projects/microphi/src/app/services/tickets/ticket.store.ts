@@ -39,7 +39,6 @@ function getTicketsFromLocalStorage() {
   name: 'TicketStore',
   initialState: getTicketsFromLocalStorage(),
   actions: TicketActions,
-  useLocalStorage: true
 })
 @Injectable()
 export class TicketStore extends BaseStore<TicketsState> {

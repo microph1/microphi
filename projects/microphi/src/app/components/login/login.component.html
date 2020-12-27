@@ -4,34 +4,35 @@
   <div fxLayout="row" fxFlexFill fxLayoutAlign="center center">
     <div fxLayout="column" fxFlex.xs="90" fxFlex.sm="65" fxFlex.md="50" fxFlex.lg="40" fxFlex.xl="40" fxLayoutGap="30px">
 
+      <phi-login></phi-login>
 
-      <mat-card>
+<!--      <mat-card>-->
 
-        <mat-card-title>Login</mat-card-title>
-        <mat-card-content>
-          <form fxLayout="column" [formGroup]="user">
+<!--        <mat-card-title>Login</mat-card-title>-->
+<!--        <mat-card-content>-->
+<!--          <form fxLayout="column" [formGroup]="user">-->
 
-            <mat-form-field>
-              <mat-label>Email</mat-label>
-              <input #emailField matInput placeholder="Email" formControlName="email" required>
-              <mat-error *ngIf="email.dirty && email.errors">{{'Email is not valid'}}</mat-error>
-            </mat-form-field>
+<!--            <mat-form-field>-->
+<!--              <mat-label>Email</mat-label>-->
+<!--              <input #emailField matInput placeholder="Email" formControlName="email" required>-->
+<!--              <mat-error *ngIf="email.dirty && email.errors">{{'Email is not valid'}}</mat-error>-->
+<!--            </mat-form-field>-->
 
-            <mat-form-field>
-              <mat-label>Password</mat-label>
-              <input type="password" matInput placeholder="Password" formControlName="password" required>
-              <mat-error *ngIf="password.dirty && password.errors">{{'Password is required'}}</mat-error>
-            </mat-form-field>
+<!--            <mat-form-field>-->
+<!--              <mat-label>Password</mat-label>-->
+<!--              <input type="password" matInput placeholder="Password" formControlName="password" required>-->
+<!--              <mat-error *ngIf="password.dirty && password.errors">{{'Password is required'}}</mat-error>-->
+<!--            </mat-form-field>-->
 
-          </form>
-        </mat-card-content>
+<!--          </form>-->
+<!--        </mat-card-content>-->
 
-        <mat-card-actions fxLayoutAlign="end space-between">
-          <mat-error *ngIf="(authError$ | async) as error">{{error }}</mat-error>
-          <span fxFlex=""></span>
-          <button color="primary" (click)="authenticate();" mat-flat-button>Login</button>
-        </mat-card-actions>
-      </mat-card>
+<!--        <mat-card-actions fxLayoutAlign="end space-between">-->
+<!--          <mat-error *ngIf="(authError$ | async) as error">{{error }}</mat-error>-->
+<!--          <span fxFlex=""></span>-->
+<!--          <button color="primary" (click)="authenticate();" mat-flat-button>Login</button>-->
+<!--        </mat-card-actions>-->
+<!--      </mat-card>-->
 
 
     </div>

@@ -17,10 +17,9 @@ import { TicketStore } from './services/tickets/ticket.store';
 import { BackendService } from './services/tickets/ticket.service';
 import { TicketComponent } from './components/ticket/ticket.component';
 import { RouterModule } from '@angular/router';
-
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { DemoDirectivesComponent } from './components/demo-directives/demo-directives.component';
-import { GoogleTagManagerModule, PhiModule } from '@microphi/phi';
+import { GoogleTagManagerModule, LoginModule, PhiModule } from '@microphi/phi';
 import { MarkdownModule } from 'ngx-markdown';
 import { HttpStatusInterceptor, HttpStatusStore } from '@microphi/store';
 import { environment } from '../environments/environment';
@@ -54,8 +53,8 @@ import { environment } from '../environments/environment';
       trackId: 'UA-85728222-4',
       trackPageViews: true
     }),
-    MarkdownModule.forRoot()
-
+    MarkdownModule.forRoot(),
+    LoginModule,
   ],
   providers: [
     AuthStore,

@@ -22,6 +22,10 @@ const routes: Routes = [
   {
     path: 'demo-change-detection',
     loadChildren:  () => import('./components/demo-change-detection/demo-change-detection.module').then(m => m.DemoChangeDetectionModule)
+  },
+  {
+    path: 'game',
+    loadChildren:  () => import('./cards/cards.module').then(m => m.CardsModule)
   }
 ];
 

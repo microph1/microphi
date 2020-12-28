@@ -1,0 +1,15 @@
+:host {
+  margin: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.hand > span {
+  width: 50px;
+  height: 74px;
+  display: inline-block;
+  background: wheat;
+  border: 1px solid;
+  margin-right: 4px;
+  margin-bottom: 4px;
+}

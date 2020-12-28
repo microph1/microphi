@@ -1,0 +1,44 @@
+<div>
+
+  <input [(ngModel)]="item">
+  <button (click)="addItem(item)">Add</button>
+
+  <button (click)="deck = shuffle(deck)">shuffle</button>
+  <button (click)="deck = cut(deck)">cut</button>
+  <button (click)="serve(deck, [alice, bob])">serve all one card</button>
+</div>
+<pre>
+
+  {{ data$ | async | json}}
+</pre>
+<h2>deck</h2>
+<div class="hand" >
+  <span *ngFor="let card of deck" cdkDrag>
+<!--    * # * #-->
+<!--    * # * #-->
+<!--    * # * #-->
+<!--    * # * #-->
+    {{card}}
+  </span>
+</div>
+
+<h2>table</h2>
+<div class="hand">
+  <span *ngFor="let card of table">
+    {{card}}
+  </span>
+</div>
+
+<h2>alice</h2>
+<div class="hand">
+  <span *ngFor="let card of alice">
+    {{card}}
+  </span>
+</div>
+
+<h2>bob</h2>
+<div class="hand">
+    <span *ngFor="let card of bob">
+      {{card}}
+    </span>
+</div>

@@ -1,0 +1,7 @@
+<ng-container *ngIf="card.side === 'front'; else back">
+  <div class="card" [class]="card.suit + ' _' + card.value"  (dblclick)="card.side = 'back'"></div>
+</ng-container>
+<ng-template #back>
+  <div class="card back" (dblclick)="card.side = 'front'"></div>
+
+</ng-template>

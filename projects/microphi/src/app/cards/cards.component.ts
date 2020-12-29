@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { Card } from './card/card.component';
 
 
 function getRandomInt(max) {
@@ -7,9 +9,9 @@ function getRandomInt(max) {
 }
 
 @Component({
-  selector: 'app-gundb',
-  templateUrl: './gundb.component.html',
-  styleUrls: ['./gundb.component.scss']
+  selector: 'app-cards',
+  templateUrl: './cards.component.html',
+  styleUrls: ['./cards.component.scss']
 })
 export class CardsComponent implements OnInit {
 
@@ -18,7 +20,6 @@ export class CardsComponent implements OnInit {
 
   cards = [
     'a',
-    // '1',
     // '2',
     // '3',
     // '4',
@@ -35,19 +36,25 @@ export class CardsComponent implements OnInit {
 
   suits = ['♥', '♦', '♣', '♠'];
 
-  deck = [];
+  deck: Card[] = [];
 
-  alice = [];
-  bob = [];
+  alice = { hand: [], balance: 500 };
+  bob = { hand: [], balance: 500 };
 
   table = [];
+  stash = [];
+  pot = 0;
 
   constructor() {
     this.suits.forEach((suit) => {
 
       this.cards.forEach((card) => {
 
-        this.deck.push([card, suit]);
+        this.deck.push({
+          value: card,
+          suit,
+          side: 'back',
+        });
       });
     });
   }
@@ -110,9 +117,29 @@ export class CardsComponent implements OnInit {
 
     for (const player of players) {
       // console.log(player, stack.pop());
-      player.push(stack.pop());
+      player.hand.push(stack.pop());
     }
 
 
+  }
+
+  drop(event: CdkDragDrop<any[], any>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+
+
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.container.data.length
+      );
+    }
+  }
+
+  bet(alice: { balance: number; hand: any[] }) {
+    alice.balance -= 10;
+    this.pot += 10;
   }
 }

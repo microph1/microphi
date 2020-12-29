@@ -1,0 +1,16 @@
+<h2>{{player.name}}</h2>
+<div class="hand"
+     cdkDropList
+     #bobList="cdkDropList"
+     [cdkDropListConnectedTo]="connectedLists"
+     [cdkDropListData]="player.hand"
+>
+<!--     (cdkDropListDropped)="drop($event)"-->
+    <span *ngFor="let card of player.hand" cdkDrag>
+      {{card}}
+    </span>
+  <pre>Balance: {{player.balance}}</pre>
+  <div fxLayout="row">
+    <button (click)="onBet();">bet</button>
+  </div>
+</div>

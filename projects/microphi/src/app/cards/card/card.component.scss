@@ -1,0 +1,58 @@
+.card {
+  width: 81px;
+  height: 117px;
+  background: url('http://i.stack.imgur.com/WZ9Od.gif') no-repeat;
+  background-size: 1300% 500%;
+}
+
+.back {
+  background-position-y: 100%;
+}
+
+
+/**
+ * Backgrouns position of all the cards
+ *
+ * x offset in %: i * (100/x); i = 0, 1, ..., (x - 1); x = the number of cols in the sprite
+ * y offset in %: j * (100/y); j = 0, 1, ..., (y - 1); y = the number of rows in the sprite
+ */
+
+$y-gap: 25;
+$x-gap: 8.33;
+
+$suites: '♥', '♦', '♣', '♠';
+
+//@each $suit in $suites {
+//  .#{$suit} {
+//    background-position-y: ;
+//  }
+//}
+
+@for $i from 1 through length($suites) {
+  $s: nth($suites, $i);
+
+  .#{$s} {
+    background-position-y: #{($i - 1) * $y-gap + '%'};
+  }
+}
+
+$values: '2', '3', '4', '5', '6', '7', '8', '9', '10', 'j', 'q', 'k', 'a';
+
+
+@for $i from 1 through length($values) {
+  $v: nth($values, $i);
+
+  ._#{$v} {
+    background-position-x: #{($i - 1) * $x-gap + '%'};
+  }
+}
+
+.card-hearts-2 { background-position: 0 0; }
+.card-hearts-3 { background-position: 8.33% 0; }
+.card-hearts-4 { background-position: 16.667% 0; }
+/* ... */
+
+/* ... */
+.card-clubs-q { background-position: 83.333% 50%; }
+.card-clubs-k { background-position: 91.667% 50%; }
+.card-clubs-a { background-position: 100% 50%; }

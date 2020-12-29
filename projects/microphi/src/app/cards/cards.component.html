@@ -1,44 +1,95 @@
-<div>
-
-  <input [(ngModel)]="item">
-  <button (click)="addItem(item)">Add</button>
-
+<div fxLayout="row">
   <button (click)="deck = shuffle(deck)">shuffle</button>
   <button (click)="deck = cut(deck)">cut</button>
   <button (click)="serve(deck, [alice, bob])">serve all one card</button>
+  <span fxFlex=""></span>
+  <div>
+    Pot: <span cdkDrag>{{ pot | json}}</span>
+  </div>
 </div>
-<pre>
 
-  {{ data$ | async | json}}
-</pre>
+
+
+
 <h2>deck</h2>
-<div class="hand" >
-  <span *ngFor="let card of deck" cdkDrag>
-<!--    * # * #-->
-<!--    * # * #-->
-<!--    * # * #-->
-<!--    * # * #-->
-    {{card}}
-  </span>
+<div class="hand"
+     cdkDropList
+     #deckList="cdkDropList"
+     [cdkDropListData]="deck"
+     [cdkDropListConnectedTo]="[stashList, tableList, aliceList, bobList]"
+     (cdkDropListDropped)="drop($event)"
+     fxLayout="row wrap"
+>
+  <app-card cdkDrag [card]="deck[deck.length - 1]"></app-card>
 </div>
 
-<h2>table</h2>
-<div class="hand">
-  <span *ngFor="let card of table">
-    {{card}}
-  </span>
+<div fxLayout="row">
+  <h2>stash</h2>
+  <div class="hand"
+       cdkDropList
+       #stashList="cdkDropList"
+       [cdkDropListConnectedTo]="[deckList]"
+       [cdkDropListData]="stash"
+       (cdkDropListDropped)="drop($event)"
+       fxLayout="row"
+  >
+    <app-card *ngFor="let card of stash" [card]="card"></app-card>
+  </div>
+
+
+  <h2>table</h2>
+  <div class="hand"
+       cdkDropList
+       #tableList="cdkDropList"
+       [cdkDropListConnectedTo]="[deckList, aliceList, bobList]"
+       [cdkDropListData]="table"
+       (cdkDropListDropped)="drop($event)"
+       fxLayout="row"
+  >
+    <app-card *ngFor="let card of table" cdkDrag [card]="card">
+    </app-card>
+  </div>
+
 </div>
 
-<h2>alice</h2>
-<div class="hand">
-  <span *ngFor="let card of alice">
-    {{card}}
-  </span>
+
+<div fxLayout="row">
+
+  <div fxFlex="" class="player">
+    <h2>alice</h2>
+    <div class="hand"
+         cdkDropList
+         #aliceList="cdkDropList"
+         [cdkDropListConnectedTo]="[deckList, tableList, stashList]"
+         [cdkDropListData]="alice.hand"
+         (cdkDropListDropped)="drop($event)"
+         fxLayout="row"
+    >
+      <app-card *ngFor="let card of alice.hand" cdkDrag [card]="card"></app-card>
+    </div>
+    <pre>Balance: {{alice.balance}}</pre>
+    <div fxLayout="row">
+      <button (click)="bet(alice);" >bet</button>
+    </div>
+  </div>
+
+  <div fxFlex="" class="player">
+    <h2>bob</h2>
+    <div class="hand"
+         cdkDropList
+         #bobList="cdkDropList"
+         [cdkDropListConnectedTo]="[deckList, tableList, stashList]"
+         [cdkDropListData]="bob.hand"
+         (cdkDropListDropped)="drop($event)"
+         fxLayout="row"
+    >
+      <app-card *ngFor="let card of bob.hand" cdkDrag [card]="card"></app-card>
+    </div>
+    <pre>Balance: {{bob.balance}}</pre>
+    <div fxLayout="row">
+      <button (click)="bet(bob);">bet</button>
+    </div>
+  </div>
 </div>
 
-<h2>bob</h2>
-<div class="hand">
-    <span *ngFor="let card of bob">
-      {{card}}
-    </span>
-</div>
+

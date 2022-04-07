@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Directive } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 import 'reflect-metadata';
@@ -32,6 +32,7 @@ export function BindToParam(name: string): PropertyDecorator {
   };
 }
 
+@Directive()
 export abstract class RxComponent implements OnInit {
   protected sources$: Observable<any>[];
 

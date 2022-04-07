@@ -16,6 +16,7 @@ import { Subscription } from 'rxjs';
  * }
  *
  */
+// TODO: Add Angular decorator.
 export abstract class PhiComponent implements OnDestroy {
 
   private subscriptions: Subscription[] = [];

@@ -20,7 +20,6 @@ import { RouterModule } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { DemoDirectivesComponent } from './components/demo-directives/demo-directives.component';
 import { GoogleTagManagerModule, LoginModule, PhiModule } from '@microphi/phi';
-import { MarkdownModule } from 'ngx-markdown';
 import { HttpStatusInterceptor, HttpStatusStore } from '@microphi/store';
 import { environment } from '../environments/environment';
 
@@ -53,7 +52,6 @@ import { environment } from '../environments/environment';
       trackId: 'UA-85728222-4',
       trackPageViews: true
     }),
-    MarkdownModule.forRoot(),
     LoginModule,
   ],
   providers: [

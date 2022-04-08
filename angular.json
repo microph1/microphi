@@ -106,19 +106,6 @@
             "scripts": []
           }
         },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/microphi/tsconfig.app.json",
-              "projects/microphi/tsconfig.spec.json",
-              "projects/microphi/e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        },
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
@@ -182,18 +169,6 @@
             "karmaConfig": "projects/store/karma.conf.js"
           }
         },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/store/tsconfig.lib.json",
-              "projects/store/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        },
         "deploy": {
           "builder": "ngx-deploy-npm:deploy",
           "options": {
@@ -228,18 +203,6 @@
             "karmaConfig": "projects/cache/karma.conf.js"
           }
         },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/cache/tsconfig.lib.json",
-              "projects/cache/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        },
         "deploy": {
           "builder": "ngx-deploy-npm:deploy",
           "options": {
@@ -272,18 +235,6 @@
             "main": "projects/phi/src/test.ts",
             "tsConfig": "projects/phi/tsconfig.spec.json",
             "karmaConfig": "projects/phi/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/phi/tsconfig.lib.json",
-              "projects/phi/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
           }
         },
         "deploy": {
@@ -387,19 +338,6 @@
               "projects/flux/src/styles.css"
             ],
             "scripts": []
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/flux/tsconfig.app.json",
-              "projects/flux/tsconfig.spec.json",
-              "projects/flux/e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
           }
         },
         "e2e": {

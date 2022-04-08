@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { DemoChangeDetectionComponent } from './demo-change-detection.component';
 import { ItemsStore } from './items-store';
@@ -7,7 +7,7 @@ xdescribe('DemoChangeDetectionComponent', () => {
   let component: DemoChangeDetectionComponent;
   let fixture: ComponentFixture<DemoChangeDetectionComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [DemoChangeDetectionComponent],
       providers: [

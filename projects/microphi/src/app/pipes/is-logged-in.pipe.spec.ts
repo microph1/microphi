@@ -1,5 +1,5 @@
 import { IsLoggedInPipe } from './is-logged-in.pipe';
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import { AuthService } from '../services/auth/auth.service';
 import { AuthStore } from '../services/auth/auth.store';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -8,7 +8,7 @@ describe('IsLoggedInPipe', () => {
 
   let pipe: IsLoggedInPipe;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ToolbarComponent } from './toolbar.component';
 import { MaterialModule } from '../../material.module';
 import { AuthStore } from '../../services/auth/auth.store';
@@ -9,7 +9,7 @@ describe('ToolbarComponent', () => {
   let component: ToolbarComponent;
   let fixture: ComponentFixture<ToolbarComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [MaterialModule, HttpClientTestingModule],
       declarations: [ToolbarComponent],

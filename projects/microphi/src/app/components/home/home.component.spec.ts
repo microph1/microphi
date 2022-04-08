@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HomeComponent } from './home.component';
 import { MaterialModule } from '../../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -15,7 +15,7 @@ describe('HomeComponent', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [MaterialModule, ReactiveFormsModule, HttpClientTestingModule, NoopAnimationsModule],
       declarations: [HomeComponent, TicketComponent, IsLoggedInPipe],

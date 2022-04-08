@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { TicketComponent } from './ticket.component';
 import { MaterialModule } from '../../material.module';
 import { TicketStore } from '../../services/tickets/ticket.store';
@@ -8,7 +8,7 @@ describe('TicketComponent', () => {
   let component: TicketComponent;
   let fixture: ComponentFixture<TicketComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [MaterialModule],
       declarations: [TicketComponent],

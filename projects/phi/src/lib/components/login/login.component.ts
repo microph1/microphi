@@ -1,5 +1,5 @@
 import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { PhiComponent } from '../../phi-component/phi.component';
 import { ENTER } from '@angular/cdk/keycodes';
 import { Observable } from 'rxjs';
@@ -16,10 +16,10 @@ export interface LoginData {
 })
 export class LoginComponent extends PhiComponent {
 
-  public email = new FormControl(null, [Validators.required, Validators.email]);
-  public password =  new FormControl(null, Validators.required);
+  public email = new UntypedFormControl(null, [Validators.required, Validators.email]);
+  public password =  new UntypedFormControl(null, Validators.required);
 
-  public userForm = new FormGroup({
+  public userForm = new UntypedFormGroup({
     email: this.email,
     password: this.password,
   }, {

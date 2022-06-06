@@ -1,5 +1,5 @@
 import { Component, HostListener, OnDestroy, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Log } from '@microgamma/loggator';
 import { AuthActions, AuthStore } from '../../services/auth/auth.store';
 import { Router } from '@angular/router';
@@ -24,10 +24,10 @@ export class LoginComponent implements OnDestroy {
   @ViewChild('emailField', { static: true })
   private emailField;
 
-  public email = new FormControl(null, [Validators.required, Validators.email]);
-  public password = new FormControl(null, Validators.required);
+  public email = new UntypedFormControl(null, [Validators.required, Validators.email]);
+  public password = new UntypedFormControl(null, Validators.required);
 
-  public user = new FormGroup({
+  public user = new UntypedFormGroup({
     email: this.email,
     password: this.password,
   }, {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { ItemsActions, ItemsStore } from './items-store';
 import { debounceTime } from 'rxjs/operators';
 import { PhiComponent } from '@microphi/phi';
@@ -12,8 +12,8 @@ import { PhiComponent } from '@microphi/phi';
 export class DemoChangeDetectionComponent extends PhiComponent implements OnInit {
 
 
-  searchForm = new FormGroup({
-    search: new FormControl('')
+  searchForm = new UntypedFormGroup({
+    search: new UntypedFormControl('')
   });
 
   constructor(private itemsStore: ItemsStore) {

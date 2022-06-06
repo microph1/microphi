@@ -2,7 +2,7 @@ import { Component, OnInit, Directive } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 import 'reflect-metadata';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Primitive } from 'utility-types';
 
 
@@ -97,15 +97,15 @@ export class AppComponent extends RxComponent implements OnInit {
 
   private routerParam = 'my-route-param';
 
-  private formA = new FormGroup({
-    name: new FormControl(),
-    email: new FormControl(),
-    age: new FormControl()
+  private formA = new UntypedFormGroup({
+    name: new UntypedFormControl(),
+    email: new UntypedFormControl(),
+    age: new UntypedFormControl()
   });
 
-  private formControlB = new FormControl();
+  private formControlB = new UntypedFormControl();
 
-  private formControlC = new FormControl();
+  private formControlC = new UntypedFormControl();
 
   @Source()
   private sourceA$ = this.formA.valueChanges.pipe(

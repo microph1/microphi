@@ -43,8 +43,11 @@
       "@microphi/phi/*": [
         "dist/phi/*"
       ],
-      "test": [
+      "@microphi/test": [
         "dist/test"
+      ],
+      "@microphi/test/*": [
+        "dist/test/*"
       ]
     }
   },

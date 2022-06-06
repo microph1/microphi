@@ -7,6 +7,9 @@ import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting
 } from '@angular/platform-browser-dynamic/testing';
+import { setMatchers } from './lib/expect-observable/expect-observable';
+import objectContaining = jasmine.objectContaining;
+import arrayContaining = jasmine.arrayContaining;
 
 declare const require: {
   context(path: string, deep?: boolean, filter?: RegExp): {
@@ -25,3 +28,16 @@ getTestBed().initTestEnvironment(
 const context = require.context('./', true, /\.spec\.ts$/);
 // And load the modules.
 context.keys().forEach(context);
+
+// Set matches for expect-observable
+setMatchers(
+  (actual, expected) => {
+
+    expect(actual).toEqual(arrayContaining(expected));
+  },
+  (actual, expected) => {
+
+    expect(actual).toEqual(expected);
+  }
+);
+

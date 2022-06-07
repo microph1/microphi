@@ -2,7 +2,7 @@
  * Public API Surface of store
  */
 
-export * from './lib/base-store';
+export * from './lib/base-store/base-store';
 export * from './lib/effects/effect';
 export * from './lib/reduce';
 export * from './lib/store';

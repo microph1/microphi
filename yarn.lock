@@ -2360,15 +2360,6 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@microgamma/loggator@^1.10.18":
-  version "1.10.18"
-  resolved "https://registry.yarnpkg.com/@microgamma/loggator/-/loggator-1.10.18.tgz#19b8479f792c190a6f164653dfc4deb153a371d7"
-  integrity sha512-UwSuoLk4IzsvjccB4wy4jSQ8phDA7KgZZRHRnwdHJnwzIh8HbOS9tQ6508t0AL1lkO0FSRIxSe/uBnauLzM+pA==
-  dependencies:
-    "@types/debug" "^0.0.30"
-    debug "^4.1.1"
-    reflect-metadata "^0.1.12"
-
 "@microgamma/loggator@^1.16.0":
   version "1.16.0"
   resolved "https://registry.yarnpkg.com/@microgamma/loggator/-/loggator-1.16.0.tgz#c44a551bb0168556975b893b135cb18eabadd4a0"
@@ -15043,7 +15034,7 @@ ts-simple-ast@12.4.0:
     tslib "^1.9.0"
     typescript "2.9.1"
 
-tslib@2.4.0:
+tslib@2.4.0, tslib@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
   integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==

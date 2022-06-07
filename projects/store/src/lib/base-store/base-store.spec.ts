@@ -1,84 +1,70 @@
-import { Store, StoreOptions } from './store';
-import { Action, Actions, BaseStore, Reducer, Updater } from './base-store';
-import { Reduce } from './reduce';
-import { Effect } from './effects/effect';
-import { Observable, of, ReplaySubject, throwError } from 'rxjs';
-import { map, multicast } from 'rxjs/operators';
+import { Store } from '../store';
+import { Actions, BaseStore, Reducer, Updater } from './base-store';
+import { Reduce } from '../reduce';
+import { Effect } from '../effects/effect';
+import { Observable, of, throwError } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { expect } from '@angular/flex-layout/_private-utils/testing';
 import { expectObservable } from '@microphi/test';
 import createSpy = jasmine.createSpy;
 
 
-describe('base-store', () => {
+fdescribe('base-store', () => {
   interface ItemsState {
     users: string[];
     selected?: [number, string];
   }
 
-  interface NewItemsActions {
-
-    findAll2: Action<void, string[], ItemsState>;
-    findOne: Action<string, number, ItemsState>;
-  }
-
-  class Test implements NewItemsActions {
-    findAll2: Action<void, string[], ItemsState>;
-    findOne: Action<string, number, ItemsState>;
-  }
-
   interface ItemsActions extends Actions {
-    findAll(): Observable<string[]>;
-
-    // actions that only have reducers!
-    findOne(name: string): Observable<string>;
-
+    findAll: () => Observable<string[]>;
+    findOne: (name: string) => Observable<string>;
     updateOne: (payload: { name: string, newName: string }) => Observable<{ name: string, newName: string }>;
     removeOne: (name: string) => Observable<boolean>;
 
     actionEffectThrows: () => Observable<number>;
     reducerThrows: () => Observable<ItemsState>;
 
-    // ----------------- //
-    // ----------------- //
-
-    // todo remove those below
     asyncEffect: (id: string, email: string) => Observable<string>;
     observerArgs: () => Observable<boolean>;
   }
 
-  const initialState: ItemsState = {
+  const initialState = {
     users: ['alice', 'bob']
   };
 
-  const options: StoreOptions = {
-    initialState
-  };
 
-  @Store(options)
+  @Store({
+    initialState,
+  })
   class MyStore extends BaseStore<ItemsState, ItemsActions> {
-    public users$ = this.store$.pipe(
-      map((state) => {
-        return state;
-      })
+    public users$ = this.state$.pipe(
+      map(({users}) => users)
     );
 
     public reduceSpy = createSpy('reduceSpy');
     public effectSpy = createSpy('effectSpy');
 
-    constructor() {
-      super();
-    }
-
-
     @Effect<ItemsActions>('findAll')
     public getAll: Updater<ItemsActions, 'findAll'> = () => {
-      console.log('running onGetAll effect');
       this.effectSpy('payload');
       return of(['carl', 'denise']);
     };
 
+    // @Effect<ItemsActions>('findAll')
+    // public getAllFireAction() {
+    //   console.log('this function is called. here we should fire another action');
+    // }
+
     @Reduce<ItemsActions>('findAll')
     public onGotAll: Reducer<ItemsState, ItemsActions, 'findAll'> = (state, payload) => {
+      this.reduceSpy(payload);
+      return {
+        users: [...state.users, ...payload]
+      };
+    };
+
+    @Reduce<ItemsActions>('findAll')
+    public onGotAllA: Reducer<ItemsState, ItemsActions, 'findAll'> = (state, payload) => {
       this.reduceSpy(payload);
       return {
         users: [...state.users, ...payload]
@@ -99,6 +85,7 @@ describe('base-store', () => {
       const userIdx = state.users.findIndex((u) => u === name);
       state.users[userIdx] = newName;
       return state;
+
     };
 
     // todo refactor methods below
@@ -120,9 +107,7 @@ describe('base-store', () => {
 
     @Reduce<ItemsActions>('asyncEffect')
     public onAsyncAction: Reducer<ItemsState, ItemsActions, 'asyncEffect'> = (state, payload) => {
-      console.log('reducing async action', payload);
       this.reduceSpy();
-      console.log('reduce spy called');
       return {
         ...state,
         items: payload
@@ -156,24 +141,33 @@ describe('base-store', () => {
 
     let storeSecondInstance: MyStore;
 
-    let storeHistory$;
-
     beforeEach(() => {
-      storeHistory$ = store.store$.pipe(
-        multicast(() => new ReplaySubject())
-      );
-      storeHistory$.connect();
-
       storeSecondInstance = new MyStore();
     });
 
     it('should set initial state', () => {
-      expectObservable(storeHistory$).toEqual(initialState);
+
+      expectObservable(storeSecondInstance.state$).toEqual({
+        users: ['alice', 'bob']
+      });
+
     });
 
     it('should not be shared between different instances', () => {
+      store.dispatch('updateOne', {name: 'bob', newName: 'bobo'});
 
-      expectObservable(storeSecondInstance.users$).toEqual(initialState);
+      expectObservable(store.users$).toEqual(['alice', 'bobo']);
+      expectObservable(storeSecondInstance.users$).toEqual(['alice', 'bob']);
+
+    });
+
+    it('should update initial state', () => {
+      store.dispatch('updateOne', {name: 'alice', newName: 'joy'});
+      expectObservable(store.users$).toEqual(['joy', 'bob']);
+
+    });
+
+    it('should always provide initial state', () => {
 
     });
 
@@ -183,30 +177,25 @@ describe('base-store', () => {
 
     it('should find all users', () => {
       store.dispatch('findAll');
-      expectObservable(store.users$).toBe('a', {
-        a: {
-          users: [...initialState.users, 'carl', 'denise']
-        }
-      });
+      expectObservable(store.users$).toEqual(['alice', 'bob', 'carl', 'denise']);
     });
-
 
     it('should find a user', () => {
       store.dispatch('findOne', 'bob');
-      expectObservable(store.users$).toEqual({
-        users: [...initialState.users],
+      expectObservable(store.state$).toEqual({
+        users: ['alice', 'bob'],
         selected: [1, 'bob']
       });
     });
 
     it('should update a user', () => {
+      console.log('running test that updated a user');
+      debugger;
       store.dispatch('updateOne', {
         name: 'bob',
         newName: 'robert'
       });
-      expectObservable(store.users$).toEqual({
-        users: ['alice', 'robert']
-      });
+      expectObservable(store.users$).toEqual(['alice', 'robert']);
     });
 
   });
@@ -214,22 +203,19 @@ describe('base-store', () => {
   it('should call a reducer that does not have any effect', () => {
     store.dispatch('findOne', 'alice');
 
-    store.store$.subscribe((users) => {
+    store.state$.subscribe((users) => {
       console.log(users);
 
     });
 
-
-    expectObservable(store.store$).toEqual({users: ['alice', 'bob'], selected: [0, 'alice']});
-
-
+    expectObservable(store.state$).toEqual({users: ['alice', 'bob'], selected: [0, 'alice']});
   });
 
   it('should call an effect and reduce the state', () => {
 
     store.dispatch('findAll');
 
-    expectObservable(store.store$).toEqual({users: ['alice', 'bob', 'carl', 'denise']});
+    expectObservable(store.state$).toEqual({users: ['alice', 'bob', 'carl', 'denise']});
     expect(store.effectSpy).toHaveBeenCalledWith('payload');
     expect(store.reduceSpy).toHaveBeenCalledWith(['carl', 'denise']);
 
@@ -246,7 +232,7 @@ describe('base-store', () => {
 
       const payload = [{a: 1}, {b: 2}];
 
-      store.store$.subscribe((state) => {
+      store.state$.subscribe((state) => {
 
         console.log('got state', state);
         expect(store.reduceSpy).toHaveBeenCalledTimes(1);
@@ -269,7 +255,7 @@ describe('base-store', () => {
 
     xit('should handle dispatch of several actions at once', () => {
 
-      store.store$.subscribe((state) => {
+      store.state$.subscribe((state) => {
         console.log('got state', state);
 
       });

@@ -4,9 +4,7 @@
   "lib": {
     "entryFile": "src/public-api.ts"
   },
-  "whitelistedNonPeerDependencies": [
-    "@microgamma/loggator",
-    "reflect-metadata",
-    "utility-types"
+  "allowedNonPeerDependencies": [
+    "reflect-metadata"
   ]
 }

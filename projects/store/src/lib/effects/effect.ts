@@ -1,4 +1,4 @@
-import { Actions, BaseStore } from '../base-store';
+import { Actions, BaseStore } from '../base-store/base-store';
 import { $Keys } from 'utility-types';
 import { Observable } from 'rxjs';
 

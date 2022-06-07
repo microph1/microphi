@@ -15,9 +15,10 @@
   ],
   "version": "0.2.10",
   "dependencies": {
-    "@microgamma/loggator": "^1.10.18",
     "reflect-metadata": "^0.1.13",
-    "tslib": "^2.0.0",
+    "tslib": "^2.4.0"
+  },
+  "devDependencies": {
     "utility-types": "^3.10.0"
   },
   "schematics": "./schematics/collection.json",

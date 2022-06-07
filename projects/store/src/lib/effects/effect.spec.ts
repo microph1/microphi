@@ -1,6 +1,7 @@
 import { Effect, getEffectMetadata } from './effect';
-import { Actions, BaseStore } from '../base-store';
+import { Actions, BaseStore } from '../base-store/base-store';
 import { Observable } from 'rxjs';
+import { Store } from '../store';
 
 describe('@Effect', () => {
 
@@ -11,6 +12,9 @@ describe('@Effect', () => {
   }
 
 
+  @Store({
+    initialState: {}
+  })
   class TestEffect extends BaseStore<any, MyEffects> {
 
     @Effect<MyEffects>('ONE')

@@ -1,7 +1,7 @@
-import { Actions, BaseStore } from './base-store';
-import { getDebugger } from '@microgamma/loggator';
+import { Actions, BaseStore } from './base-store/base-store';
+import 'reflect-metadata';
 
-export const ReduceMetadata = '@Reduce';
+export const ReduceMetadata = Symbol('@Reduce');
 
 export type Reducers<A extends Actions> = {
   [name in keyof A]: string;
@@ -9,14 +9,9 @@ export type Reducers<A extends Actions> = {
 
 export function Reduce<A extends Actions>(onAction: keyof A) {
   return <Store extends BaseStore<any, any>>(target: Store, key: string) => {
-    const d = getDebugger(`microphi:@Reduce:${target.constructor.name}`);
 
     const reducer = Reflect.getMetadata(ReduceMetadata, target) || {};
-
     reducer[onAction] = key;
-
-    d('stored reducers', reducer);
-
     return Reflect.defineMetadata(ReduceMetadata, reducer, target);
 
   };

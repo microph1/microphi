@@ -1,4 +1,4 @@
-export const StoreMetadata = '@Store';
+export const StoreMetadata = Symbol('@Store');
 
 export interface StoreOptions {
   initialState: any;
@@ -13,14 +13,5 @@ export function Store(options: StoreOptions) {
 }
 
 export function getStoreMetadata(instance): StoreOptions {
-  return Reflect.getMetadata(StoreMetadata, instance.constructor) || {};
+  return JSON.parse(JSON.stringify(Reflect.getMetadata(StoreMetadata, instance.constructor))) || {};
 }
-
-
-export class StaticStore {
-  static (options: StoreOptions): ClassDecorator {
-    return (target) => {
-      Reflect.defineMetadata(StoreMetadata, options, target);
-    };
-  }
-} 

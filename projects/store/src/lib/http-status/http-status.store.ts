@@ -2,7 +2,7 @@ import { map } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '../store';
-import { Actions, BaseStore, Reducer, Updater } from '../base-store';
+import { Actions, BaseStore, Reducer, Updater } from '../base-store/base-store';
 import { Reduce } from '../reduce';
 import { Observable } from 'rxjs';
 
@@ -29,7 +29,7 @@ export interface HttpActions extends Actions {
 export class HttpStatusStore extends BaseStore<HttpState, HttpActions> {
   // TODO: add explicit constructor
 
-  public isLoading$ = this.store$.pipe(
+  public isLoading$ = this.state$.pipe(
     map((state) => {
       return state.isLoading;
     })

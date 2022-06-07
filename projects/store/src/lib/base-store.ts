@@ -172,23 +172,23 @@ export abstract class BaseStore<
   //   P = Actions[C] extends () => any ? never : Actions[C] extends (...args: infer T) => any ? T : never
   // >(action: C, payload?: P) {}
 
-  reduce<
-    C extends keyof A,
-    R = A[C] extends (...args: any[]) => any ? ReturnType<A[C]> extends Observable<infer Return> ? Return : never : never,
-    >(action: C, reducer?: (state: State, response: R) => State): State {
-
-    // console.log('reducing', action, 'with reducer', reducer);
-    // todo reducer is the function that needs to be called on reduce
-    return undefined;
-  }
-
-
-  _reduce<C extends keyof A>(action: C, state: State, ...response: getResponseFromActionType<A, C>): State {
-    // const reduceFn =
-
-    // return this[action](state, [...response]);
-    return undefined;
-  }
+  // reduce<
+  //   C extends keyof A,
+  //   R = A[C] extends (...args: any[]) => any ? ReturnType<A[C]> extends Observable<infer Return> ? Return : never : never,
+  //   >(action: C, reducer?: (state: State, response: R) => State): State {
+  //
+  //   // console.log('reducing', action, 'with reducer', reducer);
+  //   // todo reducer is the function that needs to be called on reduce
+  //   return undefined;
+  // }
+  //
+  //
+  // _reduce<C extends keyof A>(action: C, state: State, ...response: getResponseFromActionType<A, C>): State {
+  //   // const reduceFn =
+  //
+  //   // return this[action](state, [...response]);
+  //   return undefined;
+  // }
 
   private noopEffect(payload: any) {
     return of(payload);

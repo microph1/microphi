@@ -9,7 +9,7 @@ export class HttpStatusInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
 
-    this.httpStatusStore.dispatch(HttpActions.REQUEST);
+    this.httpStatusStore.dispatch('REQUEST');
 
     // extend server response observable with logging
     return next.handle(req)
@@ -18,12 +18,12 @@ export class HttpStatusInterceptor implements HttpInterceptor {
         tap(
           // Succeeds when there is a response; ignore other events
           () => {
-            this.httpStatusStore.dispatch(HttpActions.RESPONSE);
+            this.httpStatusStore.dispatch('RESPONSE');
 
           },
           // Operation failed; error is an HttpErrorResponse
           (error) => {
-            this.httpStatusStore.dispatch(HttpActions.ERROR, error);
+            this.httpStatusStore.dispatch('ERROR');
           }
         )
       );

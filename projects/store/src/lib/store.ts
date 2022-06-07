@@ -17,3 +17,10 @@ export function getStoreMetadata(instance): StoreOptions {
 }
 
 
+export class StaticStore {
+  static (options: StoreOptions): ClassDecorator {
+    return (target) => {
+      Reflect.defineMetadata(StoreMetadata, options, target);
+    };
+  }
+} 

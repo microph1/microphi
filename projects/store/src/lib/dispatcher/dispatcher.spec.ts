@@ -1,9 +1,7 @@
 import { Dispatcher, EffectFn, PureReducerFn, ReduceFn } from './dispatcher';
 import { Observable } from 'rxjs';
 
-
-
-fdescribe('dispatcher', () => {
+xdescribe('dispatcher', () => {
 
   interface State {
     names: string[];

@@ -135,13 +135,11 @@ describe('list', () => {
         id: 'xyz',
         user: {
           email: 'email',
-          name: name,
+          name: 'name'
         }
       });
 
       expect(list.size).toEqual(3);
-
-
     });
 
     it('should delete many', () => {

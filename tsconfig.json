@@ -1,53 +1,35 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
+    "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
-    "downlevelIteration": true,
-    "experimentalDecorators": true,
-    "module": "es2020",
     "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es2020",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es2018",
-      "dom"
-    ],
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2017", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "allowSyntheticDefaultImports": true,
     "paths": {
       "@microphi/store": [
-        "dist/store"
-      ],
-      "@microphi/store/*": [
-        "dist/store/*"
+        "projects/store/src/public-api.ts"
       ],
       "@microphi/cache": [
-        "dist/cache"
-      ],
-      "@microphi/cache/*": [
-        "dist/cache/*"
-      ],
-      "@microphi/ngx-http-status": [
-        "dist/ngx-http-status"
-      ],
-      "@microphi/ngx-http-status/*": [
-        "dist/ngx-http-status/*"
+        "projects/cache/src/index.ts"
       ],
       "@microphi/phi": [
-        "dist/phi"
+        "projects/phi/src/public-api.ts"
       ],
       "@microphi/phi/*": [
-        "dist/phi/*"
+        "projects/phi/*"
       ],
       "@microphi/test": [
-        "dist/test"
-      ],
-      "@microphi/test/*": [
-        "dist/test/*"
+        "projects/test/src/public-api.ts"
       ]
     }
   },

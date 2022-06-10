@@ -1,0 +1,7 @@
+projects/styles
+projects/cache
+dist
+coverage
+scripts
+**/*/jest.config.js
+test-setup.ts

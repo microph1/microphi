@@ -13,7 +13,7 @@ export type Effects<A> = {
 export const EffectSymbol = Symbol.for('@Effect');
 
 /**
- * Tags a method<br> as an effect for the give `action`
+ * Tags a method as an effect for the give `action`<br>
  *
  * Strategy is one of the following rxjs pipe-able operators:
  * - `mergeMap`
@@ -21,13 +21,11 @@ export const EffectSymbol = Symbol.for('@Effect');
  * - `switchMap`
  *
  * As an example consider the following:
- *
- * suppose there's an effect that takes 10 ms to return and then a reducer is called.
- *
- * Suppose we dispatch its event, the following diagram demonstrate what happens
- *
- * `D -> E -> (10) -> R`
- *
+ * suppose there's an effect that takes 10 ms to return and then a reducer is called.<br>
+ * Suppose we dispatch its event, the following diagram demonstrate what happens<br>
+ *  <code>
+ * `D -> E -> (10) -> R`<br>
+ *  </code>
  * Event is dispatched `D`, event is executed `E`, takes 10ms and finally reducer is called with result from `E`
  *
  * Now let's suppose we dispatch again the same while `E` is still pending (executing) and suppose we call it with a different argument.

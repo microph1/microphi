@@ -10,25 +10,25 @@
           "style": "scss"
         }
       },
-      "root": "projects/microphi",
-      "sourceRoot": "projects/microphi/src",
+      "root": "apps/microphi",
+      "sourceRoot": "apps/microphi/src",
       "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/microphi",
-            "index": "projects/microphi/src/index.html",
-            "main": "projects/microphi/src/main.ts",
-            "polyfills": "projects/microphi/src/polyfills.ts",
-            "tsConfig": "projects/microphi/tsconfig.app.json",
+            "index": "apps/microphi/src/index.html",
+            "main": "apps/microphi/src/main.ts",
+            "polyfills": "apps/microphi/src/polyfills.ts",
+            "tsConfig": "apps/microphi/tsconfig.app.json",
             "aot": false,
             "assets": [
-              "projects/microphi/src/favicon.ico",
-              "projects/microphi/src/assets"
+              "apps/microphi/src/favicon.ico",
+              "apps/microphi/src/assets"
             ],
             "styles": [
-              "projects/microphi/src/styles.scss"
+              "apps/microphi/src/styles.scss"
             ],
             "scripts": [
               "node_modules/marked/lib/marked.js"
@@ -44,8 +44,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "projects/microphi/src/environments/environment.ts",
-                  "with": "projects/microphi/src/environments/environment.prod.ts"
+                  "replace": "apps/microphi/src/environments/environment.ts",
+                  "with": "apps/microphi/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -91,17 +91,17 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/microphi/src/test.ts",
-            "polyfills": "projects/microphi/src/polyfills.ts",
-            "tsConfig": "projects/microphi/tsconfig.spec.json",
-            "karmaConfig": "projects/microphi/karma.conf.js",
+            "main": "apps/microphi/src/test.ts",
+            "polyfills": "apps/microphi/src/polyfills.ts",
+            "tsConfig": "apps/microphi/tsconfig.spec.json",
+            "karmaConfig": "apps/microphi/karma.conf.js",
             "assets": [
-              "projects/microphi/src/favicon.ico",
-              "projects/microphi/src/assets"
+              "apps/microphi/src/favicon.ico",
+              "apps/microphi/src/assets"
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "projects/microphi/src/styles.scss"
+              "apps/microphi/src/styles.scss"
             ],
             "scripts": []
           }
@@ -109,7 +109,7 @@
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
-            "protractorConfig": "projects/microphi/e2e/protractor.conf.js",
+            "protractorConfig": "apps/microphi/e2e/protractor.conf.js",
             "devServerTarget": "microphi:serve"
           },
           "configurations": {
@@ -122,8 +122,8 @@
           "builder": "@angular-devkit/build-angular:server",
           "options": {
             "outputPath": "dist/microphi-server",
-            "main": "projects/microphi/src/main.server.ts",
-            "tsConfig": "projects/microphi/tsconfig.server.json",
+            "main": "apps/microphi/src/main.server.ts",
+            "tsConfig": "apps/microphi/tsconfig.server.json",
             "sourceMap": true,
             "optimization": false
           },
@@ -131,8 +131,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "projects/microphi/src/environments/environment.ts",
-                  "with": "projects/microphi/src/environments/environment.prod.ts"
+                  "replace": "apps/microphi/src/environments/environment.ts",
+                  "with": "apps/microphi/src/environments/environment.prod.ts"
                 }
               ],
               "sourceMap": false,
@@ -248,24 +248,24 @@
     "flux": {
       "projectType": "application",
       "schematics": {},
-      "root": "projects/flux",
-      "sourceRoot": "projects/flux/src",
+      "root": "apps/flux",
+      "sourceRoot": "apps/flux/src",
       "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/flux",
-            "index": "projects/flux/src/index.html",
-            "main": "projects/flux/src/main.ts",
-            "polyfills": "projects/flux/src/polyfills.ts",
-            "tsConfig": "projects/flux/tsconfig.app.json",
+            "index": "apps/flux/src/index.html",
+            "main": "apps/flux/src/main.ts",
+            "polyfills": "apps/flux/src/polyfills.ts",
+            "tsConfig": "apps/flux/tsconfig.app.json",
             "assets": [
-              "projects/flux/src/favicon.ico",
-              "projects/flux/src/assets"
+              "apps/flux/src/favicon.ico",
+              "apps/flux/src/assets"
             ],
             "styles": [
-              "projects/flux/src/styles.css"
+              "apps/flux/src/styles.css"
             ],
             "scripts": [],
             "vendorChunk": true,
@@ -279,8 +279,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "projects/flux/src/environments/environment.ts",
-                  "with": "projects/flux/src/environments/environment.prod.ts"
+                  "replace": "apps/flux/src/environments/environment.ts",
+                  "with": "apps/flux/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -326,16 +326,16 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/flux/src/test.ts",
-            "polyfills": "projects/flux/src/polyfills.ts",
-            "tsConfig": "projects/flux/tsconfig.spec.json",
-            "karmaConfig": "projects/flux/karma.conf.js",
+            "main": "apps/flux/src/test.ts",
+            "polyfills": "apps/flux/src/polyfills.ts",
+            "tsConfig": "apps/flux/tsconfig.spec.json",
+            "karmaConfig": "apps/flux/karma.conf.js",
             "assets": [
-              "projects/flux/src/favicon.ico",
-              "projects/flux/src/assets"
+              "apps/flux/src/favicon.ico",
+              "apps/flux/src/assets"
             ],
             "styles": [
-              "projects/flux/src/styles.css"
+              "apps/flux/src/styles.css"
             ],
             "scripts": []
           }
@@ -343,7 +343,7 @@
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
-            "protractorConfig": "projects/flux/e2e/protractor.conf.js",
+            "protractorConfig": "apps/flux/e2e/protractor.conf.js",
             "devServerTarget": "flux:serve"
           },
           "configurations": {

@@ -69,7 +69,11 @@ export abstract class Store<State, A> {
 
       this.actions.set(key, new Subject());
 
-      const operator = BaseStore.getOperator(this.effects[key]?.strategy);
+      if (key === 'findOne') {
+
+        console.log('getting operator type for', key, ': ', this.effects[key]?.strategy);
+      }
+      const operator = Store.getOperator(this.effects[key]?.strategy);
 
 
       this.actions.get(key).pipe(

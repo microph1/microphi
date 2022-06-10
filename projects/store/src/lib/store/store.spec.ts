@@ -1,10 +1,10 @@
 import { Store, makeStore } from './store';
-import { Reduce } from '../reduce';
-import { Effect } from '../effects/effect';
-import { Observable, of, throwError } from 'rxjs';
-import { expectObservable } from '@microphi/test';
+import { Reduce } from '../reduce/reduce';
+import { Effect } from '../effect/effect';
+import { delay, Observable, of, throwError } from 'rxjs';
+import { expectObservable, expectObservableWithCallback } from '@microphi/test';
 
-describe('base-store', () => {
+describe('store', () => {
   interface ItemsState {
     users: string[];
     selected?: [number, string];
@@ -55,13 +55,17 @@ describe('base-store', () => {
       };
     };
 
-    @Effect<ItemsActions>('findOne')
+    @Effect<ItemsActions>('findOne', 'concatMap')
     public findOne(name: string): Observable<string> {
-      return of(name);
+      console.log('effect findOne', name);
+      return of(name).pipe(
+        delay(500),
+      );
     }
 
     @Reduce<ItemsActions>('findOne')
     public onFindOne(state, name) {
+      console.log('reducer findOne', name);
       const selectedIdx = state.users.findIndex((u) => u === name);
       return {
         ...state,
@@ -176,10 +180,6 @@ describe('base-store', () => {
 
     });
 
-    it('should always provide initial state', () => {
-
-    });
-
   });
 
   describe('state mutations', () => {
@@ -205,29 +205,42 @@ describe('base-store', () => {
       expectObservable(store.users$).toEqual(['alice', 'robert']);
     });
 
+    it('should call an effect and reduce the state', () => {
+
+      store.dispatch('findAll');
+
+      expectObservable(store.state$).toEqual({users: ['alice', 'bob', 'carl', 'denise']});
+      expect(store.effectSpy).toHaveBeenCalledWith('payload');
+      expect(store.reduceSpy).toHaveBeenCalledWith(['carl', 'denise']);
+
+    });
+
+    it('should call a reducer that does not have any effect', () => {
+      store.dispatch('findOne', 'alice');
+
+      expectObservable(store.state$).toEqual({users: ['alice', 'bob'], selected: [0, 'alice']});
+    });
+
   });
 
-  it('should call a reducer that does not have any effect', () => {
-    store.dispatch('findOne', 'alice');
 
-    expectObservable(store.state$).toEqual({users: ['alice', 'bob'], selected: [0, 'alice']});
-  });
-
-  it('should call an effect and reduce the state', () => {
-
-    store.dispatch('findAll');
-
-    expectObservable(store.state$).toEqual({users: ['alice', 'bob', 'carl', 'denise']});
-    expect(store.effectSpy).toHaveBeenCalledWith('payload');
-    expect(store.reduceSpy).toHaveBeenCalledWith(['carl', 'denise']);
-
-  });
 
   describe('handling concurrency', () => {
-    describe('default strategy mergeMap', () => {
+
+    fdescribe('default strategy mergeMap', () => {
+
       it('should run the effect every time the event is dispatched', () => {
-        // store.dispatch()
+
+
+        expectObservableWithCallback(({expectObservable}) => {
+          store.dispatch('findOne', 'alice');
+          store.dispatch('findOne', 'bob');
+
+          expectObservable(store.state$).toBe('---- --- --- ');
+        });
+
       });
+
     });
 
     xit('should handle async actions', (done) => {
@@ -306,7 +319,7 @@ describe('base-store', () => {
 
     });
 
-    fit('should handle error from a reducer', () => {
+    it('should handle error from a reducer', () => {
       store.dispatch('reducerThrows', {name: 'name'})
     });
 

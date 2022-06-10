@@ -19,7 +19,8 @@
     "tslib": "^2.4.0"
   },
   "devDependencies": {
-    "utility-types": "^3.10.0"
+    "utility-types": "^3.10.0",
+    "@microphi/test": "*"
   },
   "schematics": "./schematics/collection.json",
   "scripts": {
@@ -27,8 +28,6 @@
     "copy:schemas": "cp --parents schematics/*/schema.json ../../dist/store/",
     "copy:files": "cp --parents -p schematics/*/files/** ../../dist/store/",
     "copy:collection": "cp schematics/collection.json ../../dist/store/schematics/collection.json",
-    "postbuild": "npm run copy:schemas && npm run copy:files && npm run copy:collection",
-    "docs": "compodoc -p ./tsconfig.lib.json -e json -a ../microphi/src/assets/docs -d ../microphi/src/assets/docs/store",
-    "deploy": "ng deploy"
+    "postbuild": "npm run copy:schemas && npm run copy:files && npm run copy:collection"
   }
 }

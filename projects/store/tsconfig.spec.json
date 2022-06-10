@@ -2,13 +2,11 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../../out-tsc/spec",
-    "types": [
-      "jasmine",
-      "node"
-    ]
+    "types": ["jest", "node"],
+    "esModuleInterop": true
   },
   "files": [
-    "src/test.ts"
+    "src/test-setup.ts"
   ],
   "include": [
     "**/*.spec.ts",

@@ -7,7 +7,7 @@
     "declaration": true,
     "inlineSources": true,
     "types": [
-      "jasmine"
+      "node"
     ],
     "lib": [
       "dom",
@@ -22,7 +22,7 @@
     "enableResourceInlining": true
   },
   "exclude": [
-    "src/test.ts",
+    "src/test-setup.ts",
     "**/*.spec.ts"
   ]
 }

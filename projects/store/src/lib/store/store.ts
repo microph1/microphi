@@ -1,9 +1,8 @@
 import { BehaviorSubject, EMPTY, Observable, of, Subject } from 'rxjs';
-import { getReduceMetadata, Reducers } from '../reduce';
+import { getReduceMetadata, Reducers } from '../reduce/reduce';
 import { catchError, concatMap, filter, finalize, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
-import { Effects, EffectStrategy, getEffectMetadata } from '../effects/effect';
+import { Effects, EffectStrategy, getEffectMetadata } from '../effect/effect';
 import { PickByValue } from 'utility-types';
-import { capitalise } from '../utilities/capitalise';
 
 export type getPayloadFromActionType<A, C extends keyof A> = A[C] extends Function ? A[C] extends () => any ? never[] : A[C] extends (...args: infer T) => any ? T : never[] : A[C][];
 
@@ -24,7 +23,7 @@ interface LoadingState<A> {
   status: boolean;
 }
 
-export abstract class BaseStore<State, A> {
+export abstract class Store<State, A> {
 
   private readonly actions: Map<string, Subject<{ name: string, payload?: any }>> = new Map();
 
@@ -89,9 +88,8 @@ export abstract class BaseStore<State, A> {
               return EMPTY;
             }),
             map((response) => {
-              const reducer = `on${key[0].toUpperCase()}${key.slice(1)}`
 
-              return this[this.reducers[reducer]](this._store$.getValue(), response);
+              return this[this.reducers[name]](this._store$.getValue(), response);
             }),
 
             finalize(() => {
@@ -133,20 +131,11 @@ export abstract class BaseStore<State, A> {
     ...payload: getPayloadFromActionType<A, C>
   ) {
 
-    const effect = action as string;
-    const reducer = `on${capitalise(action as string)}`
-
-    let a = effect;
-
-    if (!this.actions.has(effect)) {
-      if (!this.actions.has(reducer)) {
-        throw new Error(`Cannot find action ${action}`);
-      } else {
-        a = reducer;
-      }
+    if (!this.actions.has(action as string)) {
+      throw new Error(`Cannot find action ${action}`);
     }
 
-    this.actions.get(a).next({name: this.effects[action as string]?.functionName || 'noopEffect', payload});
+    this.actions.get(action as string).next({name: this.effects[action as string]?.functionName || 'noopEffect', payload});
   }
 
   private static noopEffect(payload: any) {
@@ -154,12 +143,12 @@ export abstract class BaseStore<State, A> {
   }
 
   private static getOperator(effectElement: EffectStrategy) {
-    if (effectElement === 'switchMap') {
-      return switchMap;
+    if (effectElement === 'mergeMap') {
+      return mergeMap;
     } else if (effectElement === 'concatMap') {
       return concatMap;
     } else {
-      return mergeMap;
+      return switchMap;
     }
   }
 }

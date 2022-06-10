@@ -3,7 +3,7 @@ import { Ticket } from './ticket.interface';
 import { BackendService } from './ticket.service';
 import { bufferCount, catchError, map, mergeMap, switchMap } from 'rxjs/operators';
 import { from, NEVER } from 'rxjs';
-import { BaseStore, Effect, ObservableList, Reduce, Store } from '@microphi/store';
+import { Store, Effect, ObservableList, Reduce, Store } from '@microphi/store';
 
 
 type TicketWithState = Ticket & { isLoading?: boolean; hidden?: boolean };
@@ -41,7 +41,7 @@ function getTicketsFromLocalStorage() {
   actions: TicketActions,
 })
 @Injectable()
-export class TicketStore extends BaseStore<TicketsState> {
+export class TicketStore extends Store<TicketsState> {
   public tickets$ = this.store$.pipe(
     map((state) => {
       return state.tickets;

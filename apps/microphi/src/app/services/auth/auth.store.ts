@@ -1,6 +1,6 @@
 import { AuthService } from './auth.service';
 import { Injectable } from '@angular/core';
-import { Actions, BaseStore, Effect, Reduce, Reducer, Store, Updater } from '@microphi/store';
+import { Actions, Store, Effect, Reduce, Reducer, Store, Updater } from '@microphi/store';
 import { Observable } from 'rxjs';
 
 
@@ -29,7 +29,7 @@ export interface AuthActions extends Actions {
   initialState: JSON.parse(localStorage.getItem('AuthStore')) || {},
 })
 @Injectable()
-export class AuthStore extends BaseStore<AuthState, AuthActions> {
+export class AuthStore extends Store<AuthState, AuthActions> {
 
   public isAuth$ = this.select(({isAuth}) => isAuth);
   public user$ = this.select(({user}) => user);

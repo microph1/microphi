@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BaseStore, Effect, Reduce, Store } from '@microphi/store';
+import { Store, Effect, Reduce, Store } from '@microphi/store';
 import { delay, map } from 'rxjs/operators';
 import { BehaviorSubject, of } from 'rxjs';
 
@@ -53,7 +53,7 @@ export function createItem() {
   actions: ItemsActions,
 })
 @Injectable()
-export class ItemsStore extends BaseStore<ItemsState, ItemsActions> {
+export class ItemsStore extends Store<ItemsState, ItemsActions> {
 
   search$ = new BehaviorSubject<string>('');
 

@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { Store } from './store/store';
+import { Store } from '../store/store';
 
 export const ReduceMetadata = Symbol('@Reduce');
 

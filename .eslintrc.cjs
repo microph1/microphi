@@ -1,5 +1,8 @@
 module.exports = {
   root: true,
+  ignorePatterns: [
+    "projects/**/*"
+  ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     tsconfigRootDir: __dirname,

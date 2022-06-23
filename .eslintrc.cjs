@@ -1,7 +1,9 @@
 module.exports = {
   root: true,
   ignorePatterns: [
-    "projects/**/*"
+    "projects/**/*",
+    "apps/**/*.html",
+    "**/*.js",
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {

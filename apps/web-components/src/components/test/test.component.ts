@@ -4,14 +4,14 @@ import { Component } from '../../lib/component';
 import { Input } from '../../lib/input';
 
 @Injectable()
-@Component({
-  selector: 'fx-test',
-  template: `
-    <h1>Hello Mr. <span (click)="clickMe();">{{name}}<i>({{uid}})</i></span></h1>
-       <slot></slot>
-  `,
-  templateUrl: './test.component.html',
-})
+// @Component({
+//   selector: 'fx-test',
+//   template: `
+//     <h1>Hello Mr. <span (click)="clickMe();">{{name}}<i>({{uid}})</i></span></h1>
+//        <slot></slot>
+//   `,
+//   templateUrl: './test.component.html',
+// })
 export class FxTestComponent extends FxElement implements OnDestroy {
 
   @Input() name: string;

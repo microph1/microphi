@@ -28,7 +28,7 @@ export function getNodesWithVariables(nodes: NodeListOf<ChildNode>): {
   }[] = [];
 
   for (const node of nodes) {
-    const varName = (node.nodeValue?.match(/\{\{(.+)}}/));
+    const varName = (node.nodeValue?.match(/\{\{([^}]+)}}/));
     if (varName?.length) {
       nodesWithVariables.push({
         node,
@@ -48,7 +48,7 @@ export function getChildrenWithBoundAttributes(children: HTMLCollection) {
 
   for (const child of children) {
     for (const attribute of child.attributes) {
-      const varName = attribute.value?.match(/\{\{(.+)}}/);
+      const varName = attribute.value?.match(/\{\{([^}]+)}}/);
       if (varName?.length) {
         nodes.push({
           node: child,

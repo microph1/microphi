@@ -1,53 +1,56 @@
 import { Injectable } from '@microgamma/digator';
 import { Component } from './component';
-import { FxElement, html, OnDestroy, OnInit } from './fx.element';
+import { FxElement } from './fx.element';
 import { Input } from './input';
-import { Log, Logger } from '@microgamma/loggator';
-import { faker } from '@faker-js/faker';
 
 
 @Injectable()
-@Component({
-  selector: 'fx-for',
-  template: `<slot></slot>`,
-  templateUrl: './test.component.html',
-})
-export class FxForElement extends FxElement implements OnInit, OnDestroy {
+// @Component({
+//   selector: 'fx-for',
+//   template: `
+//     <div>for {{for}} of {{of}}</div>
+//   `,
+//   templateUrl: './test.component.html',
+// })
+export class FxForElement extends FxElement {
 
-  @Log()
-  log: Logger;
-
-  @Input() items: string;
-
-  interval;
+  @Input() of: string[];
+  @Input() for: string;
+  //
+  // interval;
 
   constructor() {
     super();
-    this.log('constructing FxForElement');
-    this.metadata.inputs.push('item');
-    // @ts-ignore
-    this.item = 1;
+    this.logger('*************************************************************************************88');
+    // this.metadata.inputs.push('item');
+    // // @ts-ignore
+    // this.item = 1;
 
   }
 
+  override attributeChangedCallback(name, oldValue, newValue) {
+    this.logger('attribute changed', name)
+    super.attributeChangedCallback(name, oldValue, newValue);
+  }
+
   fxOnInit(): void {
-    this;
+    // this;
     debugger;
   }
 
 
   protected override render() {
-    debugger;
-    const items = [faker.name.firstName(), faker.name.firstName(), faker.name.firstName()];
-
-    const content = html`
-        <ul>
-          ${items.map((i) => `<li>${i}</li>`).join('')}
-        </ul>
-    `;
-
-    this.shadowRoot.innerHTML = content;
-
+    // debugger;
+    // const items = [];
+    //
+    // const content = html`
+    //     <ul>
+    //       ${items.map((i) => `<li>${i}</li>`).join('')}
+    //     </ul>
+    // `;
+    //
+    // this.shadowRoot.innerHTML = content;
+    //
 
   }
 

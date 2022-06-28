@@ -3,8 +3,10 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   mode: 'development',
+  optimization: {
+    usedExports: true
+  },
   entry: './src/main.ts',
-  // context: path.resolve(__dirname, 'src'),
   module: {
     rules: [
       {
@@ -40,5 +42,5 @@ module.exports = {
       template: './src/index.html'
     }),
   ],
-  devtool: 'source-map'
+  devtool: 'source-map',
 }

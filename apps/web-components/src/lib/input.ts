@@ -1,3 +1,5 @@
+import 'reflect-metadata';
+
 const InputSymbol = Symbol('@Input');
 
 export function Input() {

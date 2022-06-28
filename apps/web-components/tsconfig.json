@@ -10,7 +10,15 @@
     "target": "es2019",
     "module": "es2020",
     "lib": ["es2020", "DOM", "DOM.Iterable"],
-    "baseUrl": "."
+    "baseUrl": ".",
+    "plugins": [
+      {
+        "name": "flux-language-service"
+      },
+      {
+        "name": "@angular/language-service"
+      }
+    ]
   },
   "include": [
     "src/**/*.ts"

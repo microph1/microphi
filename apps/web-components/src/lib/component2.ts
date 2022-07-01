@@ -2,9 +2,17 @@
 import { getDebugger } from '@microgamma/loggator';
 import { Subject } from 'rxjs';
 import { getInputMetadata } from './input';
-import { EventEmitter } from 'events';
 
 export const webComponents = [];
+
+export type Pipe = (values: any, options?: any) => any;
+
+const pipes: { [name: string]: Pipe } = {};
+
+export function registerPipe(name: string, fn: Pipe) {
+  pipes[name] = fn;
+}
+
 
 export type Directive = (node: Element, value: any) => void;
 
@@ -65,6 +73,9 @@ export function Component(options: Options) {
     if (node.nodeType === 3) {
       if (node.textContent.match(/\{\{([^}]+)}}/)) {
         data = document.createProcessingInstruction('fx', node.textContent);
+        data.addEventListener('click', () => {
+          console.log(data, 'clicked');
+        })
         node.parentNode.insertBefore(data, node);
       }
     }
@@ -73,16 +84,23 @@ export function Component(options: Options) {
 
       // @ts-ignore
       for (const attr of [...node.attributes]) {
+
+        // scan attributes with value such as {{name}}
         if (attr?.value.match(/\{\{([^}]+)}}/)) {
           // @ts-ignore
           node.setAttributeNS('fx-shadow', attr.name, attr.value);
+          node.removeAttribute(attr.name);
+        }
+
+        if (attr.name in directives) {
+
+          d('found directive', attr.name);
         }
       }
 
     }
 
   });
-
 
   return (target) => {
 
@@ -106,71 +124,12 @@ export function Component(options: Options) {
 
       }
 
-      lifecycle: Subject<LifeCycle> = new Subject<LifeCycle>();
+      propertyChange: Subject<LifeCycle> = new Subject<LifeCycle>();
 
       constructor(...args) {
         super(...args);
 
-        for (const property in this) {
-
-          if (
-            ['lifecycle'].includes(property)
-          ) {
-            continue;
-          }
-
-          const shadowProp = `__${property}__`;
-
-          Object.defineProperty(this, shadowProp, {
-            enumerable: false,
-            writable: true,
-            value: this[property]
-          });
-
-          Object.defineProperty(this, property, {
-            enumerable: true,
-            get: function() {
-              return this[shadowProp];
-            },
-            set: function(value) {
-              this[shadowProp] = value;
-              if (property in options.inputs) {
-                this.nativeElement.setAttributeNS('fx', property, value);
-              }
-              this.nativeElement.render();
-            }
-          });
-
-        }
-
-        this.lifecycle.subscribe((event) => {
-          d(options.selector, 'lifecycle', event.event);
-
-          if (event.event === 'attributedChanged') {
-
-            d(options.selector, event.event, event.payload.name);
-            this[event.payload.name] = event.payload.newValue;
-
-            if ('fxOnChanges' in this) {
-              this.fxOnChanges(event.payload);
-            }
-          }
-
-          if (event.event === 'onInit') {
-
-            if ('fxOnInit' in this) {
-              this.fxOnInit();
-            }
-          }
-
-          if (event.event === 'viewInit') {
-
-            if ('fxOnViewInit' in this) {
-
-              this.fxOnViewInit();
-            }
-          }
-        });
+        addWatchers(this as unknown as FxComponent);
 
       }
 
@@ -193,26 +152,31 @@ export function Component(options: Options) {
         super();
         this.attachShadow({mode: 'open'});
         this.controller.setNativeElement(this);
+
+        this.controller.propertyChange.subscribe((v) => {
+          this.log('property changed', v);
+          this.render();
+        });
       }
 
       connectedCallback() {
 
-
         // call fxOnInit before attaching the template (unparsed) to the DOM
-        this.controller.lifecycle.next({
-          event: 'onInit'
-        });
+        if ('fxOnInit' in this.controller) {
+          this.controller.fxOnInit();
+        }
 
         this.shadowRoot.appendChild(template.content.cloneNode(true));
 
-        this.controller.lifecycle.next({
-          event: 'viewInit'
-        });
+        if ('fxOnViewInit' in this.controller) {
+          this.controller.fxOnViewInit();
+        }
 
         this.init = true;
 
 
         // at this point let interpolate the data
+        // this is the first render.
         this.render();
 
 
@@ -224,6 +188,8 @@ export function Component(options: Options) {
 
                 const value = node.getAttribute(attributeName);
                 const methodName = value.match(/(\w+)\(/)[1];
+
+                console.log('adding event listener on', node);
                 node.addEventListener(eventName, (event) => {
                   this.controller[methodName](event);
                 });
@@ -236,28 +202,25 @@ export function Component(options: Options) {
       }
 
       attributeChangedCallback(name, oldValue, newValue) {
-
         if (this.init && oldValue !== newValue) {
-
-          this.controller.lifecycle.next({
-            event: 'attributedChanged',
-            payload: {name, oldValue, newValue}
-          });
-
+          this.controller[name] = newValue;
+          if ('fxOnChanges' in this.controller) {
+            this.controller.fxOnChanges({name, oldValue, newValue});
+          }
           this.render();
-
         }
       }
 
 
       render() {
 
-        this.log('rendering');
+        this.log('rendering starts');
         eachNode(this.shadowRoot, (node) => {
+
+          const directivesToRun = new Map();
 
           if (node.previousSibling?.nodeName === 'fx') {
             const template = (node.previousSibling as ProcessingInstruction).data;
-            this.log('rendering', render(template, this.controller));
             node.textContent = render(template, this.controller);
           }
 
@@ -271,12 +234,25 @@ export function Component(options: Options) {
                 // @ts-ignore
                 node.setAttributeNS('fx', attributeName, render(shadowAttr, this.controller));
               }
+
+              const fxAttribute = node.getAttributeNS('fx', attributeName);
+
+              // parse directives now! 💪
+              if (attributeName in directives && fxAttribute) {
+
+                const directive = directives[attributeName];
+                directivesToRun.set(attributeName, [directive, fxAttribute]);
+              }
             }
+
+            directivesToRun.forEach(([fn, args]) => {
+
+              fn(node, args);
+            });
           }
 
-
-
         });
+        this.log('rendering ends');
 
       }
 
@@ -314,15 +290,93 @@ function eachNode(rootNode, callback) {
 export function render(template: string, subs: object) {
 
   let tpl = template;
-  const variables = template.match(/\{\{[^}]+}}/g);
+  const variables = template.match(/\{\{([^}]+)\|?\s?(\w*)}}/g);
 
 
   for (const variable of variables) {
-    const value = subs[variable.slice(2, -2)];
+    /**
+     * here variables is an array of template testing such as
+     * ['{{name}}', {{list$ | async}}]
+     *
+     * we want to extract the key to get its value from subs.
+     */
+    const matches = variable.match(/\{\{([\w]+)\s?\|?\s?(\w+)?}}/);
+    const key = matches[1];
+    const pipe = matches[2];
+
+    let value = subs[key];
+    if (pipe in pipes) {
+      value = pipes[pipe](value)
+    }
 
     tpl = tpl.replace(variable, value);
   }
 
   return tpl;
+
+}
+
+
+export interface FxComponent {
+  propertyChange: Subject<any>;
+  nativeElement: HTMLElement;
+}
+
+export function addWatchers(target: FxComponent): void{
+  for (const property in target) {
+
+    if (
+      ['propertyChange'].includes(property) ||
+      typeof target[property] === 'function'
+
+    ) {
+      continue;
+    }
+
+    // @ts-ignore
+    if (target[property] instanceof Subject) {
+      console.log('this is a Subject', property);
+
+
+      (target[property] as Subject<any>).subscribe((value) => {
+        console.log({value});
+        target.propertyChange.next(({
+          event: 'attributedChanged',
+          payload: {
+            name: property,
+            newValue: value
+          }
+        }));
+      })
+    } else {
+
+      const shadowProp = `__${property}__`;
+
+      Object.defineProperty(target, shadowProp, {
+        enumerable: false,
+        writable: true,
+        value: target[property]
+      });
+
+      Object.defineProperty(target, property, {
+        enumerable: true,
+        get: function() {
+          return target[shadowProp];
+        },
+        set: function(value) {
+          target[shadowProp] = value;
+          target.propertyChange.next(({
+            event: 'attributedChanged',
+            payload: {
+              name: property,
+              newValue: value
+            }
+          }));
+        }
+      });
+
+    }
+
+  }
 
 }

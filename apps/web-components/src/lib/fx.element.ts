@@ -210,8 +210,6 @@ export abstract class FxElement extends HTMLElement {
       });
     });
 
-    debugger;
-
   }
 
   disconnectedCallback() {

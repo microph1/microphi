@@ -1,5 +1,6 @@
 import { Component, render } from './component2';
 import { Input } from './input';
+import { BehaviorSubject } from 'rxjs';
 
 describe('@Component', () => {
   @Component({
@@ -7,11 +8,13 @@ describe('@Component', () => {
     template: `
     <h1>Hello Mr. {{name}}</h1>
 
+<!--    <h4>{{names$}}</h4>-->
     <div class="{{name}}">this component should have a class set</div>
   `
   })
   class FxSimpleComponent {
     @Input() name: string = 'Davide';
+    // names$ = new BehaviorSubject<string>(this.name);
 
     fxOnInit = jest.fn();
     fxOnViewInit = jest.fn();
@@ -19,6 +22,7 @@ describe('@Component', () => {
 
     change() {
       this.name = 'davide-changed';
+      // this.names$.next(this.name);
     }
   }
 
@@ -78,16 +82,6 @@ describe('@Component', () => {
 
     });
 
-    describe('attributes bindings', () => {
-
-
-      it('should bind attributes of child elements', () => {
-        expect(elm.shadowRoot.innerHTML).toContain('class="Davide"');
-      });
-
-    });
-
-
     describe('lifecycle', () => {
 
       it('should call fxOnInit', () => {
@@ -111,6 +105,11 @@ describe('@Component', () => {
 
     describe('attributes', () => {
 
+
+      it('should bind attributes of child elements', () => {
+        expect(elm.shadowRoot.innerHTML).toContain('class="Davide"');
+      });
+
       it('should reflect changes elm -> controller', () => {
         // programmatically change attribute should reflect to controller
         elm.setAttribute('name', 'davide');
@@ -122,6 +121,16 @@ describe('@Component', () => {
         elm.controller['name'] = 'davide2';
         expect(elm.controller['name']).toEqual('davide2');
       });
+
+      // fit('should or... how many attributes there should be???', () => {
+      //   const root = elm.shadowRoot;
+      //   console.log(elm.shadowRoot.innerHTML);
+      //   console.log('plain', root.children[1].getAttribute('class'));
+      //   console.log('fx', root.children[1].getAttributeNS('fx', 'class'));
+      //   console.log('fx-shadow', root.children[1].getAttributeNS('fx-shadow', 'class'));
+      //   expect(root.children[1].getAttribute('class')).toEqual('');
+      //   // expect(root.getAttribute('class')).toEqual('');
+      // });
     });
 
   });

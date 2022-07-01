@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions,@typescript-eslint/ban-ts-comment */
 // import { bootstrap, DI, Inject } from '@microgamma/digator';
 // import { FxTestComponent } from './components/test/test.component';
 // import { RootComponent } from './components/root.component';
@@ -44,29 +45,76 @@
 // uncommet above to go to version 1
 
 
-import { Component, registerDirective } from './lib/component2';
+import { Component, registerDirective, registerPipe, render } from './lib/component2';
 import { Input } from './lib/input';
-import { html } from './lib/fx2.element';
-import { generateUUID } from './lib/utilities';
+import { BehaviorSubject, delay, Observable } from 'rxjs';
+import { faker } from '@faker-js/faker';
 
+
+registerPipe('async', (source$) => {
+
+  return `__#${source$}#__`;
+
+});
+
+registerPipe('async2', (source$: Observable<any>, node: HTMLElement) => {
+
+  let retValue = `__#will change when it comes#__`;
+
+  source$.pipe().subscribe((value) => {
+    console.log('got value in pipe async2', value);
+    retValue = value;
+  }).unsubscribe();
+
+  return retValue;
+
+});
 
 export function fxIf(node, value) {
 
-  console.log('running directive on', node, 'with value', value);
-  if (value) {
-    node.style.setProperty('display', 'block');
+  const v = eval(value);
+
+  console.log('running directive on', node, 'with value', {v});
+  if (v) {
+    node.style.setProperty('visibility', 'visible');
   } else {
-    node.style.setProperty('display', 'none');
+    node.style.setProperty('visibility', 'hidden');
   }
 
 }
 
 registerDirective('fxif', fxIf);
 
-registerDirective('fxfor', (node, value: string[]) => {
+registerDirective('fxfor', (node, value: string) => {
 
   console.log('this is fxfor', node, value);
-  debugger;
+
+  const parsedInput = value.match(/^let\s(.+)\sof\s(.+)$/);
+
+  const varname = parsedInput[1];
+  const items = parsedInput[2].split(',');
+
+  if (node.hasAttribute('fxfor')) {
+    (node as HTMLElement).style.setProperty('display', 'none');
+  }
+
+  for (const item of items.reverse()) {
+
+    const clone = node.parentNode.querySelector(`[data-fxfor="${item}"]`) || document.createElement(node.tagName);
+
+
+    // @ts-ignore
+    const template = node.childNodes[0].data;
+    const interpolated = render(template, {
+      [varname]: item
+    });
+
+    clone.innerHTML = interpolated;
+    clone.setAttribute( 'data-fxfor', item);
+
+    node.after(clone);
+  }
+
 });
 
 // @Component({
@@ -92,10 +140,12 @@ registerDirective('fxfor', (node, value: string[]) => {
   selector: 'fx-user',
   template: `
     <h1>Hello Mr. {{firstname}} - {{lastname}}</h1>
+    <small>{{firstname | async}}</small>
 
     <div>
-        {{firstname}}
+        {{fullname | async2}}
     </div>
+    <button (click)="next()">next</button>
     <div class="container">
         <slot></slot>
     </div>
@@ -104,6 +154,17 @@ registerDirective('fxfor', (node, value: string[]) => {
 class FxUser {
   @Input() firstname: string;
   @Input() lastname: string;
+
+  _fullname = new BehaviorSubject('Davide Cavaliere');
+  fullname = this._fullname.pipe(
+    delay(500),
+  );
+
+  next() {
+    const name = `${faker.name.firstName()} ${faker.name.lastName()}`;
+    this._fullname.next(name);
+    console.log('new name nexted', name);
+  }
 }
 
 // @Component({
@@ -170,7 +231,7 @@ class FxUser {
    <button (click)="change()">{{name}}</button>
    <button (click)="add()">add</button>
    <button (click)="toggleDescription()">Toggle</button>
-   <div #fxIf="isVisible">
+   <div id="if" fxIf="{{isVisible}}">
        <h2>The Dom ({{isVisible}})</h2>
        <h3>How to traverse the dom</h3>
        <p>
@@ -178,7 +239,7 @@ class FxUser {
            <ul>
                <li>prepare spaceship</li>
                <li>prepare helmet</li>
-               <li #fxFor="let item of items">{{item}}</li>
+               <li fxFor="let item of {{items}}">{{item}}</li>
            </ul>
            <div>
                nested3
@@ -192,18 +253,18 @@ class FxUser {
 })
 class FxSimpleComponent {
   @Input() name: string = 'Davide';
-  @Input() isVisible: boolean = false;
+  @Input() isVisible: boolean = true;
 
   lastname = 'Cavaliere';
-  items = [generateUUID()];
+  items = [faker.name.findName()];
 
   change(ev) {
-    this.name = generateUUID();
+    this.name = faker.name.findName();
     console.log('new name', this.name);
   }
 
   add() {
-    this.items = [...this.items, generateUUID()];
+    this.items = [...this.items, faker.name.findName()];
   }
 
   toggleDescription() {

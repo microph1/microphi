@@ -4,7 +4,7 @@ const { compilerOptions } = require('../../tsconfig.json');
 const moduleNameMapper = pathsToModuleNameMapper(compilerOptions.paths, {prefix: '<rootDir>/../../'});
 
 module.exports = {
-  displayName: 'flux',
+  displayName: 'ng-flux',
   preset: 'jest-preset-angular',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
 

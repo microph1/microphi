@@ -1,8 +1,8 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../../tsconfig.json",
   "compilerOptions": {
-    "rootDir": ".",
-    "outDir": "./dist",
+    "rootDir": "./src",
+    "outDir": "./lib",
     "sourceMap": true,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
@@ -10,19 +10,15 @@
     "target": "es2019",
     "module": "es2020",
     "lib": ["es2020", "DOM", "DOM.Iterable"],
-    "baseUrl": ".",
+    "baseUrl": "./",
     "plugins": [
       {
         "name": "@flux/language-service"
       }
     ]
   },
-  "references": [
-    {
-      "path": "../../projects/flux/core/tsconfig.json"
-    }
-  ],
   "include": [
+    "src/index.ts",
     "src/**/*.ts"
   ],
   "exclude": [

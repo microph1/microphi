@@ -2,9 +2,15 @@
   "name": "@flux/core",
   "version": "0.0.1",
   "description": "the flux core package",
-  "main": "index.js",
+  "main": "lib",
   "repository": "https://github.com/microph1/microphi",
   "author": "Davide Cavaliere",
   "license": "MIT",
-  "private": false
+  "private": false,
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "@microgamma/loggator": "^2.1.0"
+  }
 }

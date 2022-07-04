@@ -5,9 +5,11 @@ module.exports = {
     '<rootDir>/projects/store/src',
     '<rootDir>/projects/test/src',
     '<rootDir>/projects/phi/src',
+    '<rootDir>/projects/flux/**/src',
 
     // apps
     '<rootDir>/apps/**/src',
+
   ],
   coverageDirectory: 'coverage',
   reporters: [

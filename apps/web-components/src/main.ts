@@ -1,10 +1,7 @@
-/* eslint-disable @typescript-eslint/restrict-template-expressions,@typescript-eslint/ban-ts-comment */
-
-
-import { Component, registerDirective, registerPipe, render } from './lib/component2';
-import { Input } from './lib/input';
-import { BehaviorSubject, delay, Observable } from 'rxjs';
-import { faker } from '@faker-js/faker';
+import { parseTemplate, registerDirective, registerPipe } from '@flux/core';
+import { DI } from '@microgamma/digator';
+import { RootComponent } from './components/root.component';
+import { FxUserComponent } from './components/fx-user.component';
 
 
 registerPipe('async', (source$) => {
@@ -13,18 +10,6 @@ registerPipe('async', (source$) => {
 
 });
 
-registerPipe('async2', (source$: Observable<any>) => {
-  //
-  // let retValue = `__#will change when it comes#__`;
-  //
-  // source$.pipe().subscribe((value) => {
-  //   console.log('got value in pipe async2', value);
-  //   retValue = value;
-  // }).unsubscribe();
-  //
-  // return retValue;
-
-});
 
 export function fxIf(node, value) {
 
@@ -32,9 +17,9 @@ export function fxIf(node, value) {
 
   console.log('running directive on', node, 'with value', {v});
   if (v) {
-    node.style.setProperty('visibility', 'visible');
+    node.style.setProperty('display', 'block');
   } else {
-    node.style.setProperty('visibility', 'hidden');
+    node.style.setProperty('display', 'none');
   }
 
 }
@@ -61,7 +46,7 @@ registerDirective('fxfor', (node, value: string) => {
 
     // @ts-ignore
     const template = node.childNodes[0].data;
-    const interpolated = render(template, {
+    const interpolated = parseTemplate(template, {
       [varname]: item
     });
 
@@ -73,108 +58,11 @@ registerDirective('fxfor', (node, value: string) => {
 
 });
 
-@Component({
-  selector: 'fx-user',
-  template: `
 
-    <h1>Hello Mr. {{firstname}} - {{lastname}}</h1>
-    <small>{{firstname | async}}</small>
-
-    <div>
-        with pipe: {{fullname$}}
-    </div>
-    <div>
-        with internal subscription: {{fullnameAsync}}
-    </div>
-    <button (click)="next()">next</button>
-    <div class="container">
-        <slot></slot>
-    </div>
-  `
+@DI({
+  providers: [
+    RootComponent,
+    FxUserComponent,
+  ]
 })
-class FxUser {
-  @Input() firstname: string;
-  @Input() lastname: string;
-
-  _fullname = new BehaviorSubject('Davide Cavaliere');
-  fullname$ = this._fullname.pipe(
-    delay(500),
-  );
-
-  fullnameAsync: string = '';
-
-  constructor() {
-    this.fullname$.subscribe((name) => {
-      console.log('new name', name);
-      this.fullnameAsync = name;
-    });
-  }
-
-  next() {
-    const name = `${faker.name.firstName()} ${faker.name.lastName()}`;
-    this._fullname.next(name);
-    console.log('new name nexted', name);
-  }
-}
-
-
-@Component({
-  selector: 'fx-simple',
-  template: `
-
-   <style>
-        :host {
-            padding: 12px;
-        }
-   </style>
-   <fx-user firstname="{{name}}" lastname="{{lastname}}">
-     <small>tr: {{name}}</small>
-     <button (click)="change()">{{name}}</button>
-   </fx-user>
-
-   <button (click)="change()">{{name}}</button>
-   <button (click)="add()">add</button>
-   <button (click)="toggleDescription()">Toggle</button>
-   <div id="if" fxIf="{{isVisible}}">
-       <h2>The Dom ({{isVisible}})</h2>
-       <h3>How to traverse the dom</h3>
-       <p>
-           this is how to get all nodes
-           <ul>
-               <li>prepare spaceship</li>
-               <li>prepare helmet</li>
-               <li fxFor="let item of {{items}}">{{item}}</li>
-           </ul>
-           <div>
-               nested3
-               <span>{{items}}</span>
-           </div>
-       </p>
-       <button (click)="add()">add</button>
-
-   </div>
-   <fx-user firstname="{{name2}}" lastname="{{lastname2}}"></fx-user>
-  `
-})
-class FxSimpleComponent {
-  @Input() name: string = 'Davide';
-  @Input() name2: string = 'Davide2';
-  @Input() isVisible: boolean = true;
-
-  lastname = 'Cavaliere';
-  lastname2 = 'Cavaliere2';
-  items = [faker.name.findName()];
-
-  change(ev) {
-    this.name = faker.name.findName();
-    console.log('new name', this.name);
-  }
-
-  add() {
-    this.items = [...this.items, faker.name.findName()];
-  }
-
-  toggleDescription() {
-    this.isVisible = !this.isVisible;
-  }
-}
+class App {}

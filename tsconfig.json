@@ -32,6 +32,9 @@
       ],
       "@microphi/test": [
         "projects/test/src/public-api.ts"
+      ],
+      "@flux/core": [
+        "projects/flux/core/src/index.ts"
       ]
 
     }

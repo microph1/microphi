@@ -1,69 +1,63 @@
-import { Injectable } from '@microgamma/digator';
-import { Component } from '../lib/component';
-import { FxElement, html } from '../lib/fx.element';
-import { Input } from '../lib/input';
-import { generateUUID } from '../lib/utilities';
+import { faker } from '@faker-js/faker';
+import { Component, Input } from '@flux/core';
 
-// @Component({
-//   selector: 'fx-root',
-//   templateHtml: ({name, uid}) => html`
-//     <div>${name}<i>(${uid})</i></div>
-//     <button (click)="changeName()">Change name</button>
-//   `,
-//   template: `
-//     <style>
-//       .main {
-//         display: flex;
-//         flex-direction: column;
-//         padding: 12px;
-//       }
-//     </style>
-//     <div class="main">
-//       <div>
-//         {{name}} <i>({{uid}})</i>
-//         <button (click)="changeName()">Change name</button>
-//       </div>
-//       <fx-test name="{{name}}">
-//         <code (click)="changeName()">this code should be transcluded</code>
-//       </fx-test>
-//       <pre>
-//         <ul>
-//           <fx-for for="name" of="{{names}}">
-//             <template>
-//               <li>{{name}}</li>
-//             </template>
-//           </fx-for>
-//         </ul>
-//
-//         <ul>
-//           <li of="{{names}}"></li>
-//         </ul>
-//
-//       </pre>
-//     </div>
-//   `
-// })
-@Injectable()
-export class RootComponent extends FxElement {
+@Component({
+  selector: 'fx-simple',
+  template: `
 
-  @Input() names = [];
+   <style>
+        :host {
+            padding: 12px;
+        }
+   </style>
+   <fx-user firstname="{{name}}" lastname="{{lastname}}">
+     <small>tr: {{name}}</small>
+     <button (click)="change()">{{name}}</button>
+   </fx-user>
 
-  @Input() name: string = 'davide';
+   <button (click)="change()">{{name}}</button>
+   <button (click)="add()">add</button>
+   <button (click)="toggleDescription()">Toggle</button>
+   <div id="if" fxIf="{{isVisible}}">
+       <h2>The Dom ({{isVisible}})</h2>
+       <h3>How to traverse the dom</h3>
+       <p>
+           this is how to get all nodes
+           <ul>
+               <li>prepare spaceship</li>
+               <li>prepare helmet</li>
+               <li fxFor="let item of {{items}}">{{item}}</li>
+           </ul>
+           <div>
+               nested3
+               <span>{{items}}</span>
+           </div>
+       </p>
+       <button (click)="add()">add</button>
 
-  constructor() {
-    super();
+   </div>
+   <fx-user firstname="{{name2}}" lastname="{{lastname2}}"></fx-user>
+  `
+})
+export class RootComponent {
+  @Input() name: string = 'Davide';
+  @Input() name2: string = 'Davide2';
+  @Input() isVisible: boolean = true;
 
-    setTimeout(() => {
-      this.name = generateUUID();
-      // trigger change detection
-      this.names = [...this.names, this.name];
-    }, 2000)
+  lastname = 'Cavaliere';
+  lastname2 = 'Cavaliere2';
+  items = [faker.name.findName()];
+
+  change(ev) {
+    this.name = faker.name.findName();
+    console.log('new name', this.name);
   }
 
-  changeName() {
-    console.log('current name', this.uid);
-    this.name = generateUUID();
-    this.names = [...this.names, this.name];
-    console.log('new name', this.name);
+  add() {
+    this.items = [...this.items, faker.name.findName()];
+  }
+
+  toggleDescription() {
+    this.isVisible = !this.isVisible;
   }
 }

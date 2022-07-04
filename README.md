@@ -1,3 +1,5 @@
+[![CI](https://github.com/microph1/microphi/actions/workflows/nodejs.yml/badge.svg)](https://github.com/microph1/microphi/actions/workflows/nodejs.yml) [![codecov](https://codecov.io/gh/microph1/microphi/branch/master/graph/badge.svg?token=V8N7XE5Z5Y)](https://codecov.io/gh/microph1/microphi) 
+
 # Microphi
 
 for the frontend super heroes.

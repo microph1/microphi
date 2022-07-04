@@ -1,0 +1,12 @@
+{
+  "name": "@flux/language-service",
+  "version": "0.0.1",
+  "license": "MIT",
+  "main": "./lib",
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "typescript-template-language-service-decorator": "^2.3.1"
+  }
+}

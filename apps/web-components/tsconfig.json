@@ -13,10 +13,7 @@
     "baseUrl": ".",
     "plugins": [
       {
-        "name": "flux-language-service"
-      },
-      {
-        "name": "@angular/language-service"
+        "name": "@flux/language-service"
       }
     ]
   },

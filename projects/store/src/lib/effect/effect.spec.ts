@@ -22,7 +22,7 @@ describe('@Effect', () => {
       return undefined;
     }
 
-    @Effect<MyActions>('TWO', 'switchMap')
+    @Effect<MyActions>('TWO', 'mergeMap')
     TWO(): Observable<any> {
       return undefined;
     }
@@ -47,8 +47,8 @@ describe('@Effect', () => {
   it('should store metadata on the instance of the decorated class', () => {
 
     expect(getEffectMetadata(store)).toEqual({
-      ONE: { functionName: 'ONE', strategy: 'mergeMap'},
-      TWO: { functionName: 'TWO', strategy: 'switchMap'},
+      ONE: { functionName: 'ONE', strategy: 'switchMap'},
+      TWO: { functionName: 'TWO', strategy: 'mergeMap'},
       THREE: { functionName: 'THREE', strategy: 'concatMap'},
     });
   });

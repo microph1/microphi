@@ -1,7 +1,7 @@
 import { AuthService } from './auth.service';
 import { Injectable } from '@angular/core';
-import { Actions, Store, Effect, Reduce, Reducer, Store, Updater } from '@microphi/store';
 import { Observable } from 'rxjs';
+import { Effect, makeStore, Reduce, Store } from '@microphi/store';
 
 
 export interface User {
@@ -19,55 +19,59 @@ export interface AuthState {
   user?: User;
 }
 
-export interface AuthActions extends Actions {
-  AUTHENTICATE: (payload: {email: string, password: string}) => Observable<User>,
-  VALIDATE: (token: string) => Observable<User>,
-  LOGOUT: () => Observable<void>,
+export interface AuthActions {
+  authenticate: (payload: {email: string, password: string}) => Observable<User>,
+  validate: (token: string) => Observable<User>,
+  logout: () => Observable<void>,
 }
-
-@Store({
-  initialState: JSON.parse(localStorage.getItem('AuthStore')) || {},
-})
+//
+// @Store({
+//   initialState: JSON.parse(localStorage.getItem('AuthStore')) || {},
+// })
 @Injectable()
-export class AuthStore extends Store<AuthState, AuthActions> {
+export class AuthStore extends Store<AuthState, AuthActions> implements makeStore<AuthState, AuthActions>{
 
   public isAuth$ = this.select(({isAuth}) => isAuth);
   public user$ = this.select(({user}) => user);
 
   constructor(private authService: AuthService) {
-    super();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    super(JSON.parse(localStorage.getItem('AuthStore')) || {});
   }
 
-  @Effect<AuthActions>('VALIDATE')
-  public validateToken: Updater<AuthActions, 'VALIDATE'> = (payload) => {
-    return this.authService.validateToken(payload);
-  }
-
-  @Reduce<AuthActions>('VALIDATE')
-  public onTokenValidated: Reducer<AuthState, AuthActions, 'VALIDATE'> = (state, user) => {
-    state = { ...state, isAuth: true, ...user }
-    return state;
-  }
-
-  @Effect<AuthActions>('AUTHENTICATE')
-  public requestAuth: Updater<AuthActions, 'AUTHENTICATE'> = (payload) => {
-
+  @Effect<AuthActions>('authenticate')
+  authenticate(payload: { email: string; password: string }): Observable<User> {
     return this.authService.authenticate({
       email: payload.email,
       password: payload.password
     });
   }
 
-  @Reduce<AuthActions>('AUTHENTICATE')
-  private onAuth: Reducer<AuthState, AuthActions, 'AUTHENTICATE'> = (state, user) => {
-    state = { ...state, ...user };
-    return state;
+  @Effect<AuthActions>('logout')
+  logout(): Observable<void> {
+    return undefined;
   }
 
-  @Reduce<AuthActions>('LOGOUT')
-  private logout: Reducer<AuthState, AuthActions, 'LOGOUT'> = (state) => {
-    state = {user: undefined, isAuth: false};
-    return state;
+  @Reduce<AuthActions>('authenticate')
+  onAuthenticate(state: AuthState, payload: User): AuthState {
+    return { ...state, ...payload };
   }
+
+  @Reduce<AuthActions>('logout')
+  onLogout(state: AuthState, payload: void): AuthState {
+    return {user: undefined, isAuth: false};
+  }
+
+  @Reduce<AuthActions>('validate')
+  onValidate(state: AuthState, user: User): AuthState {
+      return {...state, isAuth: true, ...user};
+  }
+
+  @Effect<AuthActions>('validate')
+  validate(token: string): Observable<User> {
+      return this.authService.validateToken(token);
+  }
+
+
 
 }

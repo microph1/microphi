@@ -1,5 +1,6 @@
 
 module.exports = {
+
   projects: [
     // libs
     '<rootDir>/projects/store/src',
@@ -27,14 +28,14 @@ module.exports = {
     "!**/polyfills.ts",
     "!**/src/environments/**",
     "!**/main.ts",
-    "!**/src/public-api.ts"
+    "!**/src/public-api.ts",
   ],
   coverageThreshold: {
     global: {
-      branches: 95,
-      functions: 95,
-      lines: 95,
-      statements: 95,
+      statements: 76,
+      branches: 65,
+      lines: 75,
+      functions: 68,
     }
   },
 

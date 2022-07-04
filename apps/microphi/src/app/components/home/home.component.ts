@@ -40,7 +40,7 @@ function ClassDecoratorMixing(MixIn: typeof MixInA) {
         console.log('runs after original constructor');
       }
 
-      public methodA() {
+      public override methodA() {
         console.log('runs before');
         this.mixinA.methodA();
         super.methodA();

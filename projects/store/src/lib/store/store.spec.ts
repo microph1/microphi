@@ -19,7 +19,7 @@ describe('store', () => {
     actionEffectThrows: () => Observable<number>;
 
     // this represents an action with only a reducer
-    reducerThrows: { name: string };
+    // reducerThrows: { name: string };
 
     asyncEffect: (id: string, email: string) => Observable<string>;
     observerArgs: () => Observable<boolean>;
@@ -28,6 +28,7 @@ describe('store', () => {
   const initialState = {
     users: ['alice', 'bob']
   };
+
 
 
   class MyStore extends Store<ItemsState, ItemsActions> implements makeStore<ItemsState, ItemsActions> {
@@ -41,7 +42,7 @@ describe('store', () => {
       super(initialState);
     }
 
-    @Effect<ItemsActions>('findAll')
+    @Effect<MyStore>('findAll')
     public findAll() {
       this.effectSpy('payload');
       return of(['carl', 'denise']);
@@ -55,7 +56,7 @@ describe('store', () => {
       };
     };
 
-    @Effect<ItemsActions>('findOne', 'concatMap')
+    @Effect<MyStore>('findOne', 'concatMap')
     public findOne(name: string): Observable<string> {
       console.log('effect findOne', name);
       return of(name).pipe(
@@ -73,7 +74,7 @@ describe('store', () => {
       };
     };
 
-    @Effect<ItemsActions>('updateOne')
+    @Effect<MyStore>('updateOne')
     public updateOne(payload): Observable<{ name: string, newName: string }> {
       return of(payload);
     }
@@ -86,7 +87,7 @@ describe('store', () => {
 
     };
 
-    @Effect<ItemsActions>('observerArgs', 'switchMap')
+    @Effect<MyStore>('observerArgs', 'switchMap')
     public observerArgs() {
       return of(true);
     };
@@ -110,7 +111,7 @@ describe('store', () => {
       };
     };
 
-    @Effect<ItemsActions>('actionEffectThrows')
+    @Effect<MyStore>('actionEffectThrows')
     public actionEffectThrows() {
       return throwError(new Error('Effect error'));
     }
@@ -120,7 +121,7 @@ describe('store', () => {
       return undefined;
     }
 
-    @Effect<ItemsActions>('removeOne')
+    @Effect<MyStore>('removeOne')
     removeOne(name: string): Observable<boolean> {
       return of(true);
     }
@@ -130,10 +131,10 @@ describe('store', () => {
       return state;
     }
 
-    @Reduce<ItemsActions>('reducerThrows')
-    onReducerThrows(state: ItemsState, payload: {name: string}): ItemsState {
-      throw new Error('from reducer!');
-    }
+    // @Reduce<ItemsActions>('reducerThrows')
+    // onReducerThrows(state: ItemsState, payload: {name: string}): ItemsState {
+    //   throw new Error('from reducer!');
+    // }
 
   }
 
@@ -190,10 +191,19 @@ describe('store', () => {
     });
 
     it('should find a user', () => {
-      store.dispatch('findOne', 'bob');
-      expectObservable(store.state$).toEqual({
-        users: ['alice', 'bob'],
-        selected: [1, 'bob']
+
+      expectObservableWithCallback(({expectObservable}) => {
+
+        store.dispatch('findOne', 'bob');
+        expectObservable(store.state$).toBe('a 499ms b', {
+          a: {
+            users: ['alice', 'bob'],
+          },
+          b: {
+            users: ['alice', 'bob'],
+            selected: [1, 'bob']
+          }
+        });
       });
     });
 
@@ -215,10 +225,21 @@ describe('store', () => {
 
     });
 
-    it('should call a reducer that does not have any effect', () => {
-      store.dispatch('findOne', 'alice');
+    it('should call a reducer for an action that does not have any effect', () => {
 
-      expectObservable(store.state$).toEqual({users: ['alice', 'bob'], selected: [0, 'alice']});
+      expectObservableWithCallback(({expectObservable}) => {
+
+        store.dispatch('findOne', 'alice');
+
+        expectObservable(store.state$).toBe('a 499ms b', {
+          a: initialState,
+          b: {
+            ...initialState,
+            selected: [0, 'alice']
+          }
+        });
+      });
+
     });
 
   });
@@ -227,7 +248,7 @@ describe('store', () => {
 
   describe('handling concurrency', () => {
 
-    fdescribe('default strategy mergeMap', () => {
+    describe('default strategy switchMap', () => {
 
       it('should run the effect every time the event is dispatched', () => {
 
@@ -236,72 +257,15 @@ describe('store', () => {
           store.dispatch('findOne', 'alice');
           store.dispatch('findOne', 'bob');
 
-          expectObservable(store.state$).toBe('---- --- --- ');
+          expectObservable(store.state$).toBe('a 499ms b 499ms c', {
+            a: initialState,
+            b: {...initialState, selected: [0, 'alice']},
+            c: {...initialState, selected: [1, 'bob']},
+          });
         });
 
       });
 
-    });
-
-    xit('should handle async actions', (done) => {
-
-      const payload = [{a: 1}, {b: 2}];
-
-      store.state$.subscribe((state) => {
-        expect(store.reduceSpy).toHaveBeenCalledTimes(1);
-        done();
-      });
-
-      store.dispatch('asyncEffect', 'od', 'email');
-      store.dispatch('asyncEffect', 'od', 'email');
-      store.dispatch('asyncEffect', 'od', 'email');
-      store.dispatch('asyncEffect', 'od', 'email');
-
-      // testScheduler.run(({expectObservable}) => {
-      //
-      //   expectObservable(store.store$).toBe('a 1s b', {
-      //     a: {
-      //       items: [{a: 1}, {b: 2}]
-      //     }
-      //   });
-      // });
-
-    });
-
-    xit('should handle dispatch of several actions at once', () => {
-
-      store.state$.subscribe((state) => {
-        console.log('got state', state);
-
-      });
-      //
-      const payload = [{a: 1}, {b: 2}];
-      store.dispatch('asyncEffect', 'id', 'email');
-      store.dispatch('asyncEffect', 'id', 'email');
-
-      // debugger;
-      // store.dispatch(ItemsActions.GET_ALL, payload);
-      // debugger;
-      // store.dispatch(ItemsActions.ANOTHER_ACTION, payload);
-
-
-      // testScheduler.run(({expectObservable}) => {
-      //   expectObservable(store.store$).toBe('a ', {
-      //     a: {
-      //       items: [{a: 1}, {b: 2}]
-      //     }
-      //   });
-      //
-      //   debugger;
-      //   store.dispatch(ItemsActions.ASYNC_ACTION, payload);
-      //   debugger;
-      //   store.dispatch(ItemsActions.GET_ALL, payload);
-      //   debugger;
-      //   store.dispatch(ItemsActions.ANOTHER_ACTION, payload);
-      //
-      // });
-      //
-      expect(store.reduceSpy).toHaveBeenCalledTimes(1);
     });
 
   });
@@ -318,250 +282,7 @@ describe('store', () => {
       store.dispatch('actionEffectThrows');
 
     });
-
-    it('should handle error from a reducer', () => {
-      store.dispatch('reducerThrows', {name: 'name'})
-    });
-
-    // it('should get an error though the error subject (reducer that throws)', (done) => {
-
-      // store.error$.subscribe((err) => {
-      //   expect(err).toEqual(Error('from reducer!'));
-      //   done();
-      // });
-
-
-      // store.dispatch('reducerThrows');
-
-    // });
-
-    // it('should not follow the error through the items$ stream', () => {
-    //
-    //   store.dispatch('actionEffectThrows');
-    //   store.dispatch('findAll');
-    //
-    //   testScheduler.run(({expectObservable}) => {
-    //
-    //     const unsub = '^-------- !';
-    //     expectObservable(store.items$, unsub).toBe('a--', {a: [{a: 1}]});
-    //   });
-    //
-    // });
   });
-
-  // xdescribe('create an empty store', () => {
-  //   interface ItemsState {
-  //     items: any[];
-  //   }
-  //
-  //   enum ItemsActions {
-  //     ACTION_ONE,
-  //     ACTION_TWO,
-  //     ACTION_THREE,
-  //   }
-  //
-  //   @Store({
-  //     actions: ItemsActions,
-  //     name: 'MyStore',
-  //     useLocalStorage: false,
-  //     initialState: { items: [] },
-  //   })
-  //   class MyStore extends BaseStore<ItemsState> {
-  //
-  //     public items$ = this.store$.pipe(
-  //       map((state) => {
-  //         return state.items;
-  //       })
-  //     );
-  //
-  //     @Effect(ItemsActions.ACTION_THREE)
-  //     public effectThatThrows() {
-  //       return throwError(new Error('Effect error'));
-  //     }
-  //
-  //     @Reduce(ItemsActions.ACTION_TWO)
-  //     protected thisWillThrow() {
-  //       console.log('calling method that will throw');
-  //       throw new Error('my awesome error!');
-  //     }
-  //
-  //     @Reduce(ItemsActions.ACTION_ONE)
-  //     protected setState(state: ItemsState, items: any[]): ItemsState {
-  //
-  //       return {
-  //         ...state,
-  //         items: items
-  //       };
-  //
-  //     }
-  //   }
-  //
-  //   let store: MyStore;
-  //
-  //   beforeEach(() => {
-  //     store = new MyStore();
-  //   });
-  //
-  //   it('should create', () => {
-  //     expect(store).toBeTruthy();
-  //   });
-  //
-  //
-  //
-  //
-  // });
-
-  // xdescribe('create a store with effects and reducers', () => {
-  //
-  //   interface ItemsState {
-  //     items: any[];
-  //   }
-  //
-  //   enum ItemsActions {
-  //     GET_ALL,
-  //     ANOTHER_ACTION,
-  //     ASYNC_ACTION,
-  //   }
-  //
-  //   @Store({
-  //     actions: ItemsActions,
-  //     name: 'MyStore',
-  //     useLocalStorage: false,
-  //     initialState: { items: [] },
-  //   })
-  //   class MyStore extends BaseStore<ItemsState> {
-  //     public items$ = this.store$.pipe(
-  //       map((state) => {
-  //         return state.items;
-  //       })
-  //     );
-  //
-  //     public reduceSpy = createSpy('reduceSpy');
-  //     public effectSpy = createSpy('effectSpy');
-  //
-  //     @Effect(ItemsActions.ASYNC_ACTION)
-  //     public onAsyncAction() {
-  //       return of('hello').pipe(
-  //         tap((message) => console.log('waiting for message', message)),
-  //         delay(1000),
-  //         tap((message) => console.log('got message', message)),
-  //       );
-  //     }
-  //
-  //     @Reduce(ItemsActions.ASYNC_ACTION)
-  //     public asyncAction(state, payload) {
-  //       console.log('reducing async action', payload);
-  //       this.reduceSpy();
-  //       return {
-  //         ...state
-  //       };
-  //     }
-  //
-  //     @Effect(ItemsActions.GET_ALL)
-  //     public onGetAll(payload) {
-  //       this.effectSpy(payload);
-  //       return of(payload);
-  //     }
-  //
-  //     @Reduce(ItemsActions.GET_ALL)
-  //     @Reduce(ItemsActions.ANOTHER_ACTION)
-  //     public onGotAll(state, payload) {
-  //       this.reduceSpy(payload);
-  //       return {
-  //         ...state,
-  //         items: payload,
-  //       };
-  //     }
-  //
-  //     public dispatchGetAll(items: { [key: string]: string; }[]) {
-  //
-  //       super.dispatch(ItemsActions.GET_ALL, items);
-  //     }
-  //
-  //   }
-  //
-  //   let store: MyStore;
-  //
-  //   beforeEach(() => {
-  //     store = new MyStore();
-  //
-  //     store.dispatch(ItemsActions.GET_ALL, [{my: 'payload'}]);
-  //
-  //   });
-  //
-  //   it('should create', () => {
-  //     expect(store).toBeTruthy();
-  //   });
-  //
-  //   it('should run the effect', () => {
-  //     expect(store.effectSpy).toHaveBeenCalledWith([{my: 'payload'}]);
-  //   });
-  //
-  //   it('should run the reducer', () => {
-  //     expect(store.reduceSpy).toHaveBeenCalledWith([{my: 'payload'}]);
-  //
-  //   });
-  //
-  //   it('should update the state', async(() => {
-  //
-  //     store.items$.subscribe((items) => {
-  //       expect(items).toEqual([{my: 'payload'}]);
-  //     }, fail).unsubscribe();
-  //
-  //   }));
-  //
-  //   it('should work with marble testing', () => {
-  //     testScheduler.run(({ expectObservable }) => {
-  //       const unsub = '^-------- !';
-  //       expectObservable(store.items$, unsub).toBe('a-----', {a: [{my: 'payload'}]});
-  //     });
-  //   });
-  //
-  //   it('should use custom dispatch', () => {
-  //     store.dispatchGetAll([{a: '1'}, {b: '2'}, {c: '3'}]);
-  //
-  //     testScheduler.run(({ expectObservable }) => {
-  //       const unsub = '^-------- !';
-  //       expectObservable(store.items$, unsub).toBe('a', {a: [{a: '1'}, { b: '2'}, {c: '3'}]});
-  //
-  //     });
-  //   });
-  //
-  //   it('should be able to bind a reducer to one or more actions', () => {
-  //     store.dispatch(ItemsActions.ANOTHER_ACTION, []);
-  //     expect(store.reduceSpy).toHaveBeenCalledWith([]);
-  //   });
-  //
-  //   it('should cancel any pending effect if same action is dispatched twice', () => {
-  //
-  //     store.dispatch(ItemsActions.ASYNC_ACTION);
-  //     store.dispatch(ItemsActions.ASYNC_ACTION);
-  //     expect(store.reduceSpy).toHaveBeenCalledTimes(1);
-  //
-  //   });
-  //
-  //
-  //   xdescribe('loading', () => {
-  //     it('should start loading when an async action is dispatched', () => {
-  //       testScheduler.run(({expectObservable}) => {
-  //
-  //         expectObservable(store.loading$.pipe(
-  //           filter((state) => state.code === 2),
-  //           map((status) => status.status),
-  //           tap(console.log)
-  //         )).toBe('a 1s b', {
-  //           a: {
-  //             code: 2,
-  //             payload: undefined,
-  //             status: true,
-  //             type: 'onAsyncAction'
-  //           }
-  //         });
-  //       });
-  //
-  //     });
-  //   });
-  // });
 
 });
 

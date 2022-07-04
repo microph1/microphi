@@ -1,27 +1,38 @@
+/* eslint-disable @typescript-eslint/ban-types,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-call */
 import { BehaviorSubject, EMPTY, Observable, of, Subject } from 'rxjs';
 import { getReduceMetadata, Reducers } from '../reduce/reduce';
 import { catchError, concatMap, filter, finalize, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { Effects, EffectStrategy, getEffectMetadata } from '../effect/effect';
-import { PickByValue } from 'utility-types';
+import { Falsey } from 'utility-types';
 
 export type getPayloadFromActionType<A, C extends keyof A> = A[C] extends Function ? A[C] extends () => any ? never[] : A[C] extends (...args: infer T) => any ? T : never[] : A[C][];
 
-export type PureReducer = () => void;
 
 export type makeStore<State, Actions> =
-  // Effects
-  PickByValue<Actions, Function>
+// Effects
+  {
+    [k in keyof Actions]: Actions[k] extends Falsey ? never : Effector<Actions[k]>;
+  }
   &
   {
     // Reducers
-    [k in keyof Actions as `on${Capitalize<string & k>}`]: Actions[k] extends (...args: infer I) => Observable<infer O> ? (state: State, payload: O) => State : (state: State, payload: Actions[k]) => State
+    [k in keyof Actions as `on${Capitalize<string & k>}`]: Reducer<Actions[k], State>;
   };
+
+type fn<RetType> = (...args: any[]) => Observable<RetType>;
+
+type Effector<Action> = Action extends (...args: infer I) => infer O ? (...args: I) => O : never;
+
+// export type Reducer<State, Action> = Action extends fn<infer O> ? (state: State, payload: O) => State : (state: State, payload: Action) => State;
+export type Reducer<Action, S> = Action extends Falsey ? (state: S) => S : Action extends fn<infer O> ?  (state: S, payload: O) => S : (state: S, payload: Action) => S;
+
 
 interface LoadingState<A> {
   code: keyof A;
   payload: any;
   status: boolean;
 }
+
 
 export abstract class Store<State, A> {
 
@@ -49,6 +60,7 @@ export abstract class Store<State, A> {
 
   private readonly _store$: BehaviorSubject<State> = new BehaviorSubject<State>(
     // we need this in order to decouple initial state between instances
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     JSON.parse(JSON.stringify(this.initialState))
   );
 
@@ -59,7 +71,7 @@ export abstract class Store<State, A> {
   constructor(private initialState: State) {
 
 
-    const actions = [].concat(Object.keys(this.effects), Object.keys(this.reducers));
+    const actions: string[] = [].concat(Object.keys(this.effects), Object.keys(this.reducers));
 
     const actionsSet = new Set<string>();
 
@@ -117,7 +129,7 @@ export abstract class Store<State, A> {
     });
   }
 
-  select(projection: (s: State) => any) {
+  select<R>(projection: (s: State) => R) {
     return this.state$.pipe(
       map(projection)
     );
@@ -136,6 +148,7 @@ export abstract class Store<State, A> {
   ) {
 
     if (!this.actions.has(action as string)) {
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       throw new Error(`Cannot find action ${action}`);
     }
 
@@ -156,3 +169,4 @@ export abstract class Store<State, A> {
     }
   }
 }
+

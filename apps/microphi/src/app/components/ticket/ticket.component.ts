@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { TicketActions, TicketStore } from '../../services/tickets/ticket.store';
+import { TicketStore } from '../../services/tickets/ticket.store';
+import { Ticket } from '../../services/tickets/ticket.interface';
 
 @Component({
   selector: 'app-ticket',
@@ -8,16 +9,13 @@ import { TicketActions, TicketStore } from '../../services/tickets/ticket.store'
   styleUrls: ['./ticket.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TicketComponent implements OnInit {
+export class TicketComponent {
 
-  @Input() ticket: BehaviorSubject<any>;
+  @Input() ticket$: BehaviorSubject<Ticket>;
 
   constructor(private ticketStore: TicketStore) { }
 
-  ngOnInit() {
-  }
-
   changeStatus() {
-    this.ticketStore.dispatch(TicketActions.CHANGE_STATUS, this.ticket.getValue());
+    this.ticketStore.dispatch('changeStatus', this.ticket$.getValue());
   }
 }

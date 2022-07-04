@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/unbound-method,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access */
 import { Component, HostListener, OnDestroy, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Log } from '@microgamma/loggator';
-import { AuthActions, AuthStore } from '../../services/auth/auth.store';
+import { AuthStore } from '../../services/auth/auth.store';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -52,7 +53,7 @@ export class LoginComponent implements OnDestroy {
     this.subSink.add(
       this.authStore.isAuth$.subscribe((isAuth) => {
         if (isAuth) {
-          router.navigate(['']);
+          void router.navigate(['']);
         }
       })
     );
@@ -67,7 +68,7 @@ export class LoginComponent implements OnDestroy {
     this.$log.d('user', this.user.getRawValue());
 
     if (this.user.valid) {
-      this.authStore.dispatch('AUTHENTICATE', this.user.getRawValue());
+      this.authStore.dispatch('authenticate', this.user.getRawValue());
 
     }
   }

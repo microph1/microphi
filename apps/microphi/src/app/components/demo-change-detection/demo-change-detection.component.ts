@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { ItemsActions, ItemsStore } from './items-store';
+import { ItemsStore } from './items-store';
 import { debounceTime } from 'rxjs/operators';
 import { PhiComponent } from '@microphi/phi';
 
@@ -23,8 +23,8 @@ export class DemoChangeDetectionComponent extends PhiComponent implements OnInit
   ngOnInit() {
     this.addSubscription = this.searchForm.valueChanges.pipe(
       debounceTime(750)
-    ).subscribe(({search}) => {
-      this.itemsStore.dispatch(ItemsActions.SEARCH, search);
+    ).subscribe(({search}: {search: string}) => {
+      this.itemsStore.dispatch('search', search);
     });
   }
 }

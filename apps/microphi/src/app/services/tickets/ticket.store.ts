@@ -1,59 +1,40 @@
 import { Injectable } from '@angular/core';
 import { Ticket } from './ticket.interface';
 import { BackendService } from './ticket.service';
-import { bufferCount, catchError, map, mergeMap, switchMap } from 'rxjs/operators';
-import { from, NEVER } from 'rxjs';
-import { Store, Effect, ObservableList, Reduce, Store } from '@microphi/store';
+import { bufferCount, catchError, from, mergeMap, NEVER, Observable, switchMap } from 'rxjs';
+import { Effect, makeStore, Reduce, Store } from '@microphi/store';
+import { map } from 'rxjs/operators';
 
-
-type TicketWithState = Ticket & { isLoading?: boolean; hidden?: boolean };
 
 interface TicketsState {
-  tickets: ObservableList<TicketWithState>;
+  tickets: Ticket[];
 }
 
-export enum TicketActions {
-  SEARCH,
-  FIND_ALL,
-  FIND_ONE,
-  CHANGE_STATUS,
-  ASSIGN
+export interface TicketActions {
+  findAll: () => Observable<Ticket[]>,
+  // findOne: () => Observable<Ticket>,
+  changeStatus: ({id, completed}: { id: number, completed: boolean }) => Observable<Ticket>,
+  assign: () => Observable<any>
 }
 
-function getTicketsFromLocalStorage() {
-  const initialState = {
-    tickets: new ObservableList<TicketWithState>([])
-  };
+// SEARCH,
+// FIND_ONE,
+// CHANGE_STATUS,
+// ASSIGN
 
-  const ticketStore = JSON.parse(localStorage.getItem('TicketStore'));
 
-  if (ticketStore) {
-    initialState.tickets.push(...ticketStore.tickets);
-  }
-
-  return initialState;
-
-}
-
-@Store({
-  name: 'TicketStore',
-  initialState: getTicketsFromLocalStorage(),
-  actions: TicketActions,
-})
 @Injectable()
-export class TicketStore extends Store<TicketsState> {
-  public tickets$ = this.store$.pipe(
-    map((state) => {
-      return state.tickets;
-    })
-  );
+export class TicketStore extends Store<TicketsState, TicketActions> implements makeStore<TicketsState, TicketActions> {
+  tickets$ = this.select((state) => state.tickets);
 
   constructor(private ticketService: BackendService) {
-    super();
+    super({
+      tickets: []
+    });
   }
 
-  @Effect(TicketActions.FIND_ALL)
-  private getTickets() {
+  @Effect<TicketStore>('findAll')
+  findAll(): Observable<Ticket[]> {
     let numberOfTickets = 0;
 
     return this.ticketService.tickets().pipe(
@@ -79,54 +60,57 @@ export class TicketStore extends Store<TicketsState> {
     );
   }
 
-  @Effect(TicketActions.CHANGE_STATUS)
-  private changeStatus(payload: Ticket) {
 
-    return this.ticketService.complete(payload.id, !payload.completed);
+  @Reduce<TicketActions>('findAll')
+  onFindAll(state: TicketsState, tickets: Ticket[]): TicketsState {
+    return {...state, tickets};
   }
 
-  @Reduce(TicketActions.FIND_ALL)
-  private onResponse(state, payload: Ticket[]) {
-    // this is the final list of tickets
-    state.tickets.set(...payload);
+  @Effect<TicketActions>('changeStatus')
+  changeStatus({id, completed}: { id: number, completed: boolean }): Observable<Ticket> {
+    return this.ticketService.complete(id, completed);
+  }
 
+  @Reduce<TicketActions>('changeStatus')
+  onChangeStatus(state: TicketsState, payload: Ticket): TicketsState {
+    const ticket = state.tickets.find((t) => t.id === payload.id);
+    ticket.completed = payload.completed;
     return state;
   }
 
-  @Reduce(TicketActions.CHANGE_STATUS)
-  private onStatusChanged(state, payload: Ticket) {
+  assign(): Observable<any> {
+    return undefined;
+  }
 
-    state.tickets.updateOne({ ...payload, isLoading: false});
-
+  @Reduce<TicketActions>('assign')
+  onAssign(state: TicketsState, payload: any): TicketsState {
     return state;
   }
 
-  @Reduce(TicketActions.ASSIGN)
-  private onAssign(state, payload) {
-    return state;
-  }
 
-  @Reduce(TicketActions.SEARCH)
-  private onSearch(state, searchTerm) {
 
-    console.log('searching by', searchTerm);
-
-    for (const ticket of state.tickets) {
-      const t = ticket.getValue();
-      if (!t.description.includes(searchTerm)) {
-        ticket.next({
-          ...t,
-          hidden: true
-        });
-      } else {
-        ticket.next({
-          ...t,
-          hidden: false
-        });
-      }
-    }
-
-    return state;
-  }
+  //
+  // @Reduce<TicketActions>('SEARCH')
+  // private onSearch(state, searchTerm) {
+  //
+  //   console.log('searching by', searchTerm);
+  //
+  //   for (const ticket of state.tickets) {
+  //     const t = ticket.getValue();
+  //     if (!t.description.includes(searchTerm)) {
+  //       ticket.next({
+  //         ...t,
+  //         hidden: true
+  //       });
+  //     } else {
+  //       ticket.next({
+  //         ...t,
+  //         hidden: false
+  //       });
+  //     }
+  //   }
+  //
+  //   return state;
+  // }
 
 }

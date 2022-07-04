@@ -15,6 +15,6 @@ export class ToolbarComponent {
   constructor(private authStore: AuthStore) { }
 
   logout() {
-    this.authStore.dispatch('LOGOUT');
+    this.authStore.dispatch('logout');
   }
 }

@@ -7,7 +7,6 @@ module.exports = {
   displayName: 'microphi',
   preset: 'jest-preset-angular',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-
   moduleNameMapper,
   globals: {
     'ts-jest': {
@@ -15,6 +14,9 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
+  coveragePathIgnorePatterns: [
+    '<rootDir>/src/app/'
+  ],
   transform: {
     '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
   },

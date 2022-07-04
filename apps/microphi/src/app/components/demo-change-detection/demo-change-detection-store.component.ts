@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Item, ItemsActions, ItemsStore } from './items-store';
+import { Item, ItemsStore } from './items-store';
 
 
 @Component({
@@ -25,40 +25,38 @@ import { Item, ItemsActions, ItemsStore } from './items-store';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DemoChangeDetectionStoreComponent implements OnInit {
+export class DemoChangeDetectionStoreComponent {
 
   loading$ = this.itemsStore.loading$;
 
-  items$: Observable<Item[]> = this.itemsStore.items$;
-  filteredItems$ = combineLatest([this.items$, this.itemsStore.search$]).pipe(
-    map(([items, search]) => {
-      return items.filter((item) => {
-        if (+search) {
-          return item.a === +search || item.b === +search;
-        }
-
-        return true;
-      });
-    }),
-  );
+  items$ = this.itemsStore.items$;
+  filteredItems$ = of([]);
+  // filteredItems$ = combineLatest([this.items$, this.itemsStore.search$]).pipe(
+  //   map(([items, search]) => {
+  //     return items.filter((item) => {
+  //       if (+search) {
+  //         return item.a === +search || item.b === +search;
+  //       }
+  //
+  //       return true;
+  //     });
+  //   }),
+  // );
 
   constructor(private itemsStore: ItemsStore) {
   }
 
-  ngOnInit(): void {
-    this.itemsStore.dispatch(ItemsActions.GET);
-  }
 
   addItem(total = 1) {
-    this.itemsStore.dispatch(ItemsActions.ADD, total);
+    this.itemsStore.dispatch('add', total);
   }
 
-  remove($event: any) {
-    this.itemsStore.dispatch(ItemsActions.REMOVE, $event);
+  remove($event: Item) {
+    this.itemsStore.dispatch('remove', $event);
   }
 
-  edit($event: any) {
-    this.itemsStore.dispatch(ItemsActions.UPDATE, $event);
+  edit($event: Item) {
+    this.itemsStore.dispatch('update', $event);
   }
 }
 

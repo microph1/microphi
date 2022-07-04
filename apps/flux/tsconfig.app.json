@@ -3,7 +3,8 @@
   "compilerOptions": {
     "outDir": "../../out-tsc/app",
     "declaration": true,
-    "inlineSources": true
+    "inlineSources": true,
+    "noImplicitOverride": true
   },
   "files": [
     "src/main.ts",

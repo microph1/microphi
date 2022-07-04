@@ -9,12 +9,14 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "es2015",
-    "module": "esnext",
-    "lib": ["es2017", "dom"],
+    "module": "ES2020",
+    "lib": ["ES2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
+    "noImplicitOverride": true,
+
     "paths": {
       "@microphi/store": [
         "projects/store/src/public-api.ts"
@@ -31,6 +33,7 @@
       "@microphi/test": [
         "projects/test/src/public-api.ts"
       ]
+
     }
   },
   "angularCompilerOptions": {

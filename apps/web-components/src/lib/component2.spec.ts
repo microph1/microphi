@@ -151,3 +151,22 @@ describe('render', () => {
 
 
 });
+
+describe('#eachNode', () => {
+
+  const html = `
+    <h1>text node</h1>
+    <!-- comment node -->
+    <div>
+        another text  node
+        <span>with a child</span>
+        <ul>
+            <li>and</li>
+            <li>a</li>
+            <li>list <!-- and another comment--></li>
+        </ul>
+    </div>
+  `;
+
+
+});

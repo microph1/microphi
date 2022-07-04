@@ -65,7 +65,6 @@ export function Component(options: Options) {
     console.error('TBD??');
   }
 
-
   eachNode(template.content, (node) => {
 
     let data;
@@ -153,7 +152,9 @@ export function Component(options: Options) {
         this.attachShadow({mode: 'open'});
         this.controller.setNativeElement(this);
 
-        this.controller.propertyChange.subscribe((v) => {
+        this.controller.propertyChange.pipe(
+          // debounceTime(10),
+        ).subscribe((v) => {
           this.log('property changed', v);
           this.render();
         });
@@ -189,7 +190,7 @@ export function Component(options: Options) {
                 const value = node.getAttribute(attributeName);
                 const methodName = value.match(/(\w+)\(/)[1];
 
-                console.log('adding event listener on', node);
+                // console.log('adding event listener on', node);
                 node.addEventListener(eventName, (event) => {
                   this.controller[methodName](event);
                 });
@@ -207,7 +208,7 @@ export function Component(options: Options) {
           if ('fxOnChanges' in this.controller) {
             this.controller.fxOnChanges({name, oldValue, newValue});
           }
-          this.render();
+          // this.render();
         }
       }
 
@@ -261,10 +262,10 @@ export function Component(options: Options) {
 }
 
 export function getComponentMetadata(target): Options {
-  return Reflect.getMetadata(ComponentSymbol, target);
+  return Reflect.getMetadata(ComponentSymbol, target.constructor);
 }
 
-function eachNode(rootNode, callback) {
+function eachNode(rootNode: Node, callback) {
   if (!callback) {
     const nodes = [];
     eachNode(rootNode, function(node) {
@@ -300,11 +301,19 @@ export function render(template: string, subs: object) {
      *
      * we want to extract the key to get its value from subs.
      */
-    const matches = variable.match(/\{\{([\w]+)\s?\|?\s?(\w+)?}}/);
+      // eslint-disable-next-line no-useless-escape
+    const matches = variable.match(/\{\{([\w\$]+)\s?\|?\s?(\w+)?}}/);
     const key = matches[1];
     const pipe = matches[2];
 
     let value = subs[key];
+
+    if (key.endsWith('$')) {
+      console.log('rendering an observable');
+      value = subs[`${key}$$`];
+    }
+
+
     if (pipe in pipes) {
       value = pipes[pipe](value)
     }
@@ -322,50 +331,63 @@ export interface FxComponent {
   nativeElement: HTMLElement;
 }
 
-export function addWatchers(target: FxComponent): void{
-  for (const property in target) {
+export function addWatchers(instance: FxComponent): void {
+
+  const metadata = getComponentMetadata(instance);
+  const properties = Object.getOwnPropertyNames(instance);
+
+  const allProperties = new Set([...metadata.inputs, ...properties]);
+
+  for (const property of allProperties) {
 
     if (
       ['propertyChange'].includes(property) ||
-      typeof target[property] === 'function'
+      typeof instance[property] === 'function'
 
     ) {
       continue;
     }
 
     // @ts-ignore
-    if (target[property] instanceof Subject) {
+    if (instance[property] instanceof Subject) {
       console.log('this is a Subject', property);
 
+      Object.defineProperty(instance, `${property}$$`, {
+        writable: true
+      });
 
-      (target[property] as Subject<any>).subscribe((value) => {
-        console.log({value});
-        target.propertyChange.next(({
+      (instance[property] as Subject<any>).subscribe((value) => {
+        console.log('watched property changed', value);
+        instance[`${property}$$`] = value;
+
+        instance.propertyChange.next(({
           event: 'attributedChanged',
           payload: {
             name: property,
             newValue: value
           }
         }));
-      })
+      });
+
+
     } else {
 
       const shadowProp = `__${property}__`;
 
-      Object.defineProperty(target, shadowProp, {
+      Object.defineProperty(instance, shadowProp, {
         enumerable: false,
         writable: true,
-        value: target[property]
+        value: instance[property]
       });
 
-      Object.defineProperty(target, property, {
+      Object.defineProperty(instance, property, {
         enumerable: true,
         get: function() {
-          return target[shadowProp];
+          return this[shadowProp];
         },
         set: function(value) {
-          target[shadowProp] = value;
-          target.propertyChange.next(({
+          this[shadowProp] = value;
+          this.propertyChange.next(({
             event: 'attributedChanged',
             payload: {
               name: property,

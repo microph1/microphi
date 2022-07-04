@@ -1,48 +1,4 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions,@typescript-eslint/ban-ts-comment */
-// import { bootstrap, DI, Inject } from '@microgamma/digator';
-// import { FxTestComponent } from './components/test/test.component';
-// import { RootComponent } from './components/root.component';
-// import { getDebugger, setNamespace } from '@microgamma/loggator';
-// import { webComponents } from './lib/component';
-// import { FxForElement } from './lib/fx-for.element';
-//
-// setNamespace('web-components');
-//
-// const d = getDebugger('web-components:main')
-//
-// @DI({
-//   providers: [
-//     RootComponent,
-//     FxTestComponent,
-//     FxForElement,
-//   ]
-// })
-// class App {
-//
-//
-//   static {
-//
-//     d('registered components', webComponents);
-//
-//   }
-//
-//   constructor(
-//     // @Inject(RootComponent) root: RootComponent,
-//   ) {
-//     console.log('constructing app');
-//
-//     // document.body.appendChild(root);
-//
-//
-//   }
-// }
-//
-// const app = bootstrap(App);
-//
-// console.log({app});
-
-
-// uncommet above to go to version 1
 
 
 import { Component, registerDirective, registerPipe, render } from './lib/component2';
@@ -57,16 +13,16 @@ registerPipe('async', (source$) => {
 
 });
 
-registerPipe('async2', (source$: Observable<any>, node: HTMLElement) => {
-
-  let retValue = `__#will change when it comes#__`;
-
-  source$.pipe().subscribe((value) => {
-    console.log('got value in pipe async2', value);
-    retValue = value;
-  }).unsubscribe();
-
-  return retValue;
+registerPipe('async2', (source$: Observable<any>) => {
+  //
+  // let retValue = `__#will change when it comes#__`;
+  //
+  // source$.pipe().subscribe((value) => {
+  //   console.log('got value in pipe async2', value);
+  //   retValue = value;
+  // }).unsubscribe();
+  //
+  // return retValue;
 
 });
 
@@ -117,33 +73,18 @@ registerDirective('fxfor', (node, value: string) => {
 
 });
 
-// @Component({
-//   selector: 'fx-test',
-// })
-// class FxTestRender {
-//   @Input() firstname: string;
-//   @Input() lastname: string;
-//
-//   click() {
-//     console.log('clicked');
-//   }
-//
-//   render() {
-//     return html`
-//       <h2>this renders ${this.firstname} - ${this.lastname} </h2>
-//       <button (click)="click($event)">😈</button>
-//     `
-//   }
-// }
-//
 @Component({
   selector: 'fx-user',
   template: `
+
     <h1>Hello Mr. {{firstname}} - {{lastname}}</h1>
     <small>{{firstname | async}}</small>
 
     <div>
-        {{fullname | async2}}
+        with pipe: {{fullname$}}
+    </div>
+    <div>
+        with internal subscription: {{fullnameAsync}}
     </div>
     <button (click)="next()">next</button>
     <div class="container">
@@ -156,9 +97,18 @@ class FxUser {
   @Input() lastname: string;
 
   _fullname = new BehaviorSubject('Davide Cavaliere');
-  fullname = this._fullname.pipe(
+  fullname$ = this._fullname.pipe(
     delay(500),
   );
+
+  fullnameAsync: string = '';
+
+  constructor() {
+    this.fullname$.subscribe((name) => {
+      console.log('new name', name);
+      this.fullnameAsync = name;
+    });
+  }
 
   next() {
     const name = `${faker.name.firstName()} ${faker.name.lastName()}`;
@@ -167,55 +117,9 @@ class FxUser {
   }
 }
 
-// @Component({
-//   selector: 'fx-root',
-//   template: `
-//     <fx-user firstname="{{name}}" lastname="{{surname}}">
-//       <small>this text is transcluded from fx-user and variable are resolved from its parent <b>>__{{surname}}__</b></small>
-//     </fx-user>
-//     <button (click)="changeName(event);">click</button>
-//     <button (click)="toggleDescription()">Toggle</button>
-//     <div #fxIf="isVisible">
-//         <h2>The Dom ({{isVisible}})</h2>
-//         <h3>How to traverse the dom</h3>
-//         <p>
-//             this is how to get all nodes
-//             <ul>
-//                 <li>prepare spaceship</li>
-//                 <li>prepare helmet</li>
-//                 <li #fxFor="let item of items">{{item}}</li>
-//             </ul>
-//             <div>
-//                 nested3
-//                 <span>{{items}}</span>
-//             </div>
-//         </p>
-//     </div>
-//   `
-// })
-// class RootComponent {
-//   @Input() name: string = 'davide';
-//   @Input() surname: string = 'cavaliere';
-//   items = ['abc', '123', 'xyz'];
-//   isVisible = false;
-//
-//   toggleDescription() {
-//     this.isVisible = !this.isVisible;
-//   }
-//
-//   changeName(event) {
-//     console.log('event', event);
-//     this.name += 'e';
-//     this.items.push(this.name)
-//     console.log('new name', this.name, this.items);
-//   }
-// }
 
 @Component({
   selector: 'fx-simple',
-  // template: (comp: FxSimpleComponent) => `
-  //   <h1>Hello Mr. ${comp.name}</h1>
-  // `,
   template: `
 
    <style>
@@ -249,13 +153,16 @@ class FxUser {
        <button (click)="add()">add</button>
 
    </div>
+   <fx-user firstname="{{name2}}" lastname="{{lastname2}}"></fx-user>
   `
 })
 class FxSimpleComponent {
   @Input() name: string = 'Davide';
+  @Input() name2: string = 'Davide2';
   @Input() isVisible: boolean = true;
 
   lastname = 'Cavaliere';
+  lastname2 = 'Cavaliere2';
   items = [faker.name.findName()];
 
   change(ev) {

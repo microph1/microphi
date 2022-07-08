@@ -50,3 +50,5 @@ testem.log
 Thumbs.db
 
 tss_log.txt
+
+projects/flux/core/lib

@@ -1,8 +1,8 @@
 import 'jest-preset-angular/setup-jest';
+import { setMatchers } from '../src/lib/expect-observable/matchers';
 
-import { setMatchers } from './lib/expect-observable/expect-observable';
 
 setMatchers(
-  (actual, expected) => expect(actual).toEqual(expect.arrayContaining(expected)),
+  (actual, expected) => expect(actual).toContainEqual(expected),
   (actual, expected) => expect(actual).toEqual(expected)
 );

@@ -33,7 +33,7 @@ export class TicketStore extends Store<TicketsState, TicketActions> implements m
     });
   }
 
-  @Effect<TicketStore>('findAll')
+  @Effect()
   findAll(): Observable<Ticket[]> {
     let numberOfTickets = 0;
 
@@ -61,17 +61,17 @@ export class TicketStore extends Store<TicketsState, TicketActions> implements m
   }
 
 
-  @Reduce<TicketActions>('findAll')
+  @Reduce()
   onFindAll(state: TicketsState, tickets: Ticket[]): TicketsState {
     return {...state, tickets};
   }
 
-  @Effect<TicketActions>('changeStatus')
+  @Effect()
   changeStatus({id, completed}: { id: number, completed: boolean }): Observable<Ticket> {
     return this.ticketService.complete(id, completed);
   }
 
-  @Reduce<TicketActions>('changeStatus')
+  @Reduce()
   onChangeStatus(state: TicketsState, payload: Ticket): TicketsState {
     const ticket = state.tickets.find((t) => t.id === payload.id);
     ticket.completed = payload.completed;
@@ -82,7 +82,7 @@ export class TicketStore extends Store<TicketsState, TicketActions> implements m
     return undefined;
   }
 
-  @Reduce<TicketActions>('assign')
+  @Reduce()
   onAssign(state: TicketsState, payload: any): TicketsState {
     return state;
   }
@@ -90,7 +90,7 @@ export class TicketStore extends Store<TicketsState, TicketActions> implements m
 
 
   //
-  // @Reduce<TicketActions>('SEARCH')
+  // @Reduce()
   // private onSearch(state, searchTerm) {
   //
   //   console.log('searching by', searchTerm);

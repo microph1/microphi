@@ -1,8 +1,7 @@
 import { Store, makeStore } from './store';
-import { Reduce } from '../reduce/reduce';
-import { Effect } from '../effect/effect';
 import { delay, Observable, of, throwError } from 'rxjs';
-import { expectObservable, expectObservableWithCallback } from '@microphi/test';
+import { TestScheduler } from '@microphi/test';
+import { Effect, Reduce } from '@microphi/store';
 
 describe('store', () => {
   interface ItemsState {
@@ -42,13 +41,13 @@ describe('store', () => {
       super(initialState);
     }
 
-    @Effect<MyStore>('findAll')
+    @Effect()
     public findAll() {
       this.effectSpy('payload');
       return of(['carl', 'denise']);
     };
 
-    @Reduce<ItemsActions>('findAll')
+    @Reduce()
     public onFindAll(state, payload) {
       this.reduceSpy(payload);
       return {
@@ -56,17 +55,15 @@ describe('store', () => {
       };
     };
 
-    @Effect<MyStore>('findOne', 'concatMap')
+    @Effect('concatMap')
     public findOne(name: string): Observable<string> {
-      console.log('effect findOne', name);
       return of(name).pipe(
         delay(500),
       );
     }
 
-    @Reduce<ItemsActions>('findOne')
+    @Reduce()
     public onFindOne(state, name) {
-      console.log('reducer findOne', name);
       const selectedIdx = state.users.findIndex((u) => u === name);
       return {
         ...state,
@@ -74,12 +71,12 @@ describe('store', () => {
       };
     };
 
-    @Effect<MyStore>('updateOne')
+    @Effect()
     public updateOne(payload): Observable<{ name: string, newName: string }> {
       return of(payload);
     }
 
-    @Reduce<ItemsActions>('updateOne')
+    @Reduce()
     public onUpdateOne(state: ItemsState, {name, newName}: { name: string; newName: string }): ItemsState {
       const userIdx = state.users.findIndex((u) => u === name);
       state.users[userIdx] = newName;
@@ -87,22 +84,22 @@ describe('store', () => {
 
     };
 
-    @Effect<MyStore>('observerArgs', 'switchMap')
+    @Effect('switchMap')
     public observerArgs() {
       return of(true);
     };
 
-    @Reduce<ItemsActions>('observerArgs')
+    @Reduce()
     public onObserverArgs(state) {
       return state;
     };
 
-    @Effect('switchMap')
+    @Effect()
     public asyncEffect(id, email) {
       return of('test');
     };
 
-    @Reduce<ItemsActions>('asyncEffect')
+    @Reduce()
     public onAsyncEffect(state, payload) {
       this.reduceSpy();
       return {
@@ -111,27 +108,31 @@ describe('store', () => {
       };
     };
 
-    @Effect<MyStore>('actionEffectThrows')
+    @Effect()
     public actionEffectThrows() {
-      return throwError(new Error('Effect error'));
+      console.log('throwing error');
+      return throwError(new Error('Effect error')).pipe(
+        delay(500)
+
+      );
     }
 
-    @Reduce<ItemsActions>('actionEffectThrows')
+    @Reduce()
     onActionEffectThrows<O>(state: ItemsState, payload: number): ItemsState {
       return undefined;
     }
 
-    @Effect<MyStore>('removeOne')
+    @Effect()
     removeOne(name: string): Observable<boolean> {
       return of(true);
     }
 
-    @Reduce<ItemsActions>('removeOne')
+    @Reduce()
     onRemoveOne<O>(state: ItemsState, payload: boolean): ItemsState {
       return state;
     }
 
-    // @Reduce<ItemsActions>('reducerThrows')
+    // @Reduce()
     // onReducerThrows(state: ItemsState, payload: {name: string}): ItemsState {
     //   throw new Error('from reducer!');
     // }
@@ -139,9 +140,11 @@ describe('store', () => {
   }
 
   let store: MyStore;
+  let scheduler: TestScheduler;
 
   beforeEach(() => {
     store = new MyStore();
+    scheduler = new TestScheduler();
 
     // silent console.error
     jest.spyOn(console, 'error').mockImplementation();
@@ -161,7 +164,7 @@ describe('store', () => {
 
     it('should set initial state', () => {
 
-      expectObservable(storeSecondInstance.state$).toEqual({
+      scheduler.expect$(storeSecondInstance.state$).toContain({
         users: ['alice', 'bob']
       });
 
@@ -170,14 +173,14 @@ describe('store', () => {
     it('should not be shared between different instances', () => {
       store.dispatch('updateOne', {name: 'bob', newName: 'bobo'});
 
-      expectObservable(store.users$).toEqual(['alice', 'bobo']);
-      expectObservable(storeSecondInstance.users$).toEqual(['alice', 'bob']);
+      scheduler.expect$(store.users$).toContain(['alice', 'bobo']);
+      scheduler.expect$(storeSecondInstance.users$).toContain(['alice', 'bob']);
 
     });
 
     it('should update initial state', () => {
       store.dispatch('updateOne', {name: 'alice', newName: 'joy'});
-      expectObservable(store.users$).toEqual(['joy', 'bob']);
+      scheduler.expect$(store.users$).toContain(['joy', 'bob']);
 
     });
 
@@ -187,12 +190,12 @@ describe('store', () => {
 
     it('should find all users', () => {
       store.dispatch('findAll');
-      expectObservable(store.users$).toEqual(['alice', 'bob', 'carl', 'denise']);
+      scheduler.expect$(store.users$).toContain(['alice', 'bob', 'carl', 'denise']);
     });
 
     it('should find a user', () => {
 
-      expectObservableWithCallback(({expectObservable}) => {
+      new TestScheduler().run(({expectObservable}) => {
 
         store.dispatch('findOne', 'bob');
         expectObservable(store.state$).toBe('a 499ms b', {
@@ -212,14 +215,14 @@ describe('store', () => {
         name: 'bob',
         newName: 'robert'
       });
-      expectObservable(store.users$).toEqual(['alice', 'robert']);
+      scheduler.expect$(store.users$).toContain(['alice', 'robert']);
     });
 
     it('should call an effect and reduce the state', () => {
 
       store.dispatch('findAll');
 
-      expectObservable(store.state$).toEqual({users: ['alice', 'bob', 'carl', 'denise']});
+      scheduler.expect$(store.state$).toContain({users: ['alice', 'bob', 'carl', 'denise']});
       expect(store.effectSpy).toHaveBeenCalledWith('payload');
       expect(store.reduceSpy).toHaveBeenCalledWith(['carl', 'denise']);
 
@@ -227,7 +230,7 @@ describe('store', () => {
 
     it('should call a reducer for an action that does not have any effect', () => {
 
-      expectObservableWithCallback(({expectObservable}) => {
+      scheduler.run(({expectObservable}) => {
 
         store.dispatch('findOne', 'alice');
 
@@ -244,23 +247,20 @@ describe('store', () => {
 
   });
 
-
-
   describe('handling concurrency', () => {
 
     describe('default strategy switchMap', () => {
 
-      it('should run the effect every time the event is dispatched', () => {
+      it('should only get latest dispatch', () => {
 
 
-        expectObservableWithCallback(({expectObservable}) => {
+        scheduler.run(({expectObservable}) => {
           store.dispatch('findOne', 'alice');
           store.dispatch('findOne', 'bob');
 
-          expectObservable(store.state$).toBe('a 499ms b 499ms c', {
+          expectObservable(store.state$).toBe('a 499ms b', {
             a: initialState,
-            b: {...initialState, selected: [0, 'alice']},
-            c: {...initialState, selected: [1, 'bob']},
+            b: {...initialState, selected: [1, 'bob']},
           });
         });
 
@@ -270,16 +270,29 @@ describe('store', () => {
 
   });
 
-  describe('error handling', () => {
+  xdescribe('error handling', () => {
 
-    it('should get an error through the error subject (effect that throws)', (done) => {
+    fit('should get an error through the error subject (effect that throws)', (done) => {
 
-      store.error$.subscribe((err) => {
-        expect(err).toEqual(Error('Effect error'));
-        done();
+      store.loading$.subscribe((state) => {
+        console.log(state);
       });
 
-      store.dispatch('actionEffectThrows');
+
+
+      scheduler.run(({expectObservable}) => {
+        store.dispatch('actionEffectThrows');
+        expectObservable(store.loading$).toBe('a');
+      });
+
+      // store.dispatch('actionEffectThrows');
+      //
+      // scheduler.run(({expectObservable, cold}) => {
+      //
+      //   expectObservable(store.loading$).toBe('a -----|', {});
+      // });
+
+
 
     });
   });

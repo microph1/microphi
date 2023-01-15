@@ -1,19 +1,18 @@
 import { Store } from '../store/store';
 import { $Keys } from 'utility-types';
+import { scanInstance } from '../utilities/scan-instance';
 
 export type EffectStrategy = 'switchMap' | 'mergeMap' | 'concatMap';
 
-export type Effects<A> = {
-  [action in keyof A]: {
-    functionName: string;
-    strategy: EffectStrategy;
-  };
-};
+export interface Effect {
+  action: string;
+  strategy: EffectStrategy;
+}
 
 export const EffectSymbol = Symbol.for('@Effect');
 
 /**
- * Tags a method as an effect for the give `action`<br>
+ * Tags a method as an effect <br>
  *
  * Strategy is one of the following rxjs pipe-able operators:
  * - `mergeMap`
@@ -61,30 +60,33 @@ export const EffectSymbol = Symbol.for('@Effect');
  *
  * `D(a) -> D(b) -> E(a) ->  R(a) -> E(b) -> -> R(b)`
  *
- * @param action
  * @param strategy
  * @constructor
  */
-export function Effect<A>(action: $Keys<object & A>, strategy: EffectStrategy = 'switchMap') {
-
-  return <
-    S extends Store<any, any>
-  >(target: S, key: string) => {
-
-    const effects: Effects<A> = Reflect.getMetadata(EffectSymbol, target) || {};
-
-    if (effects[action]) {
-      throw new Error(`Effect ${action} already used on ${effects[action].functionName}`);
-    }
-    effects[action] = {
-      functionName: key,
-      strategy: strategy
-    };
-
-    return Reflect.defineMetadata(EffectSymbol, effects, target);
+export function Effect(strategy: EffectStrategy = 'switchMap'): MethodDecorator {
+  // return Reflect.metadata(EffectSymbol, strategy);
+  return (target, propertyKey) => {
+    // return Reflect.metadata(EffectSymbol, strategy)(target, propertyKey);
+    return Reflect.defineMetadata(EffectSymbol, strategy, target, propertyKey);
   };
 }
 
-export function getEffectMetadata<T, A>(instance: T): Effects<A> {
-  return Reflect.getMetadata(EffectSymbol, instance) || {};
+export function getEffectMetadata(klass: object, key: string) {
+  return Reflect.getMetadata(EffectSymbol, klass, key);
+}
+
+export function getEffects<T extends object>(instance: T): Effect[] {
+
+  const effects: Effect[] = [];
+
+  scanInstance(instance, (proto, key) => {
+
+    const strategy = getEffectMetadata(proto, key);
+    if (strategy) {
+      effects.push({action: key, strategy,});
+    }
+
+  });
+
+  return effects;
 }

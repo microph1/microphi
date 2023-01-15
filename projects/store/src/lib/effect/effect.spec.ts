@@ -1,4 +1,4 @@
-import { Effect, getEffectMetadata } from './effect';
+import { Effect, getEffectMetadata, getEffects } from './effect';
 import { Store, makeStore } from '../store/store';
 import { Observable } from 'rxjs';
 
@@ -12,17 +12,17 @@ describe('@Effect', () => {
 
   class TestEffect extends Store<any, MyActions> implements makeStore<any, MyActions> {
 
-    @Effect<MyActions>('ONE')
+    @Effect()
     ONE(): Observable<any> {
       return undefined;
     }
 
-    @Effect<MyActions>('THREE', 'concatMap')
+    @Effect('concatMap')
     THREE(): Observable<any> {
       return undefined;
     }
 
-    @Effect<MyActions>('TWO', 'mergeMap')
+    @Effect('mergeMap')
     TWO(): Observable<any> {
       return undefined;
     }
@@ -46,11 +46,11 @@ describe('@Effect', () => {
 
   it('should store metadata on the instance of the decorated class', () => {
 
-    expect(getEffectMetadata(store)).toEqual({
-      ONE: { functionName: 'ONE', strategy: 'switchMap'},
-      TWO: { functionName: 'TWO', strategy: 'mergeMap'},
-      THREE: { functionName: 'THREE', strategy: 'concatMap'},
-    });
+    expect(getEffects(store)).toEqual([
+      { action: 'ONE', strategy: 'switchMap'},
+      { action: 'THREE', strategy: 'concatMap'},
+      { action: 'TWO', strategy: 'mergeMap'},
+    ]);
   });
 
 });

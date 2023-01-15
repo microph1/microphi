@@ -1,22 +1,40 @@
 import 'reflect-metadata';
-import { Store } from '../store/store';
+import { scanInstance } from '../utilities/scan-instance';
+import { Class } from 'utility-types';
 
-export const ReduceMetadata = Symbol('@Reduce');
+export const ReduceSymbol = Symbol('@Reduce');
 
-export type Reducers<A> = {
-  [name in keyof A]: string;
-};
+export interface Reducer {
+  action: string;
+}
 
-export function Reduce<A>(onAction: keyof A) {
-  return <S extends Store<any, any>>(target: S, key: string) => {
+export function Reduce(): MethodDecorator {
+  return (target, propertyKey) => {
+    // by convention a reducer have name such as onFindAll
+    // where findAll is the associated action
+    // with the following we extract the action's name
+    const action = (propertyKey as string).slice(2, 3).toLowerCase() + (propertyKey as string).slice(3);
 
-    const reducer = Reflect.getMetadata(ReduceMetadata, target) || {};
-    reducer[onAction] = key;
-    return Reflect.defineMetadata(ReduceMetadata, reducer, target);
-
+    return Reflect.defineMetadata(ReduceSymbol, action, target, propertyKey);
   };
 }
 
-export function getReduceMetadata<A>(instance): Reducers<A> {
-  return Reflect.getMetadata(ReduceMetadata, instance) || {};
+export function getReduceMetadata(klass: Class<any>, key: string) {
+  return Reflect.getMetadata(ReduceSymbol, klass, key);
+}
+
+export function getReducers(instance: object): {action: string;}[] {
+
+  const reducers: {action: string;}[] = [];
+
+  scanInstance(instance, (proto, key) => {
+
+    const metadata = getReduceMetadata(proto, key);
+    if (metadata) {
+      reducers.push({action: metadata});
+    }
+
+  });
+
+  return reducers;
 }

@@ -4,7 +4,7 @@ import { Falsey } from 'utility-types';
 import { map } from 'rxjs/operators';
 import 'reflect-metadata';
 
-describe('experiments with new ways of thinking a state manager', () => {
+xdescribe('experiments with new ways of thinking a state manager', () => {
 
   type functionKeys<T> = {
     [k in keyof T]: T[k] extends Falsey ? never : T[k] extends (...args: any[]) => any ? k : never

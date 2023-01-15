@@ -1,7 +1,6 @@
 import { parseTemplate, registerDirective, registerPipe } from '@flux/core';
 import { DI } from '@microgamma/digator';
-import { RootComponent } from './components/root.component';
-import { FxUserComponent } from './components/fx-user.component';
+import { FxRootComponent } from './components/fx-root.component';
 import { FxMetronomeComponent } from './components/fx-metronome.component';
 
 import './styles.css';
@@ -64,8 +63,7 @@ registerDirective('fxfor', (node, value: string) => {
 
 @DI({
   providers: [
-    RootComponent,
-    FxUserComponent,
+    FxRootComponent,
     FxMetronomeComponent,
   ]
 })

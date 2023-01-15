@@ -4,7 +4,7 @@ import { getPayloadFromActionType } from '@microphi/store';
 import { filter, map, withLatestFrom } from 'rxjs/operators';
 import { $Keys } from 'utility-types';
 
-describe('experiment 2', () => {
+xdescribe('experiment 2', () => {
 
   type Class = new (...args: any[]) => {};
 

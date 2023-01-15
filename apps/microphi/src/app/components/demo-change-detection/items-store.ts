@@ -57,12 +57,12 @@ export class ItemsStore extends Store<ItemsState, ItemsActions> implements makeS
     });
   }
 
-  @Effect<ItemsActions>('add')
+  @Effect()
   add(total: number): Observable<number> {
     return of(total).pipe(delay(1000));
   }
 
-  @Reduce<ItemsActions>('add')
+  @Reduce()
   onAdd(state: ItemsState, total: number): ItemsState {
     for (let i = 0; i < total; i++) {
       state.items.push(createItem());
@@ -70,19 +70,19 @@ export class ItemsStore extends Store<ItemsState, ItemsActions> implements makeS
     return state;
   }
 
-  @Effect<ItemsActions>('remove')
+  @Effect()
   remove(item: Item): Observable<Item> {
     return of(item);
   }
 
-  @Reduce<ItemsActions>('remove')
+  @Reduce()
   onRemove(state: ItemsState, payload: Item): ItemsState {
     const idx = state.items.findIndex((i) => i === payload);
     state.items.splice(idx, 1);
     return state;
   }
 
-  @Reduce<ItemsActions>('update')
+  @Reduce()
   onUpdate(state: ItemsState, item: Item): ItemsState {
     const itemIdx = state.items.findIndex((i) => {
       return i === item;
@@ -92,12 +92,12 @@ export class ItemsStore extends Store<ItemsState, ItemsActions> implements makeS
     return state;
   }
 
-  @Effect<ItemsActions>('update')
+  @Effect()
   update(item: Item): Observable<Item> {
     return of(item);
   }
 
-  @Reduce<ItemsActions>('search')
+  @Reduce()
   onSearch(state: ItemsState, text: string): ItemsState {
 
 
@@ -107,7 +107,7 @@ export class ItemsStore extends Store<ItemsState, ItemsActions> implements makeS
     };
   }
 
-  @Effect<ItemsActions>('search')
+  @Effect()
   search(text: string): Observable<string> {
     return of(text);
   }

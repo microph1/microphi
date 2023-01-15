@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HydrateFrom } from '@microphi/phi';
-import { HttpClient } from '@angular/common/http';
 import { of, Subject } from 'rxjs';
-import { mergeMapTo } from 'rxjs/operators';
 
 export interface ProjectDef {
   name: string;
@@ -21,8 +19,6 @@ export class AppComponent implements OnInit {
 
   @HydrateFrom(localStorage)
   public opened: boolean;
-
-  constructor() {}
 
   ngOnInit() {
     this.ngOnInit$.next();

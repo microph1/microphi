@@ -39,7 +39,7 @@ export class AuthStore extends Store<AuthState, AuthActions> implements makeStor
     super(JSON.parse(localStorage.getItem('AuthStore')) || {});
   }
 
-  @Effect<AuthActions>('authenticate')
+  @Effect()
   authenticate(payload: { email: string; password: string }): Observable<User> {
     return this.authService.authenticate({
       email: payload.email,
@@ -47,27 +47,27 @@ export class AuthStore extends Store<AuthState, AuthActions> implements makeStor
     });
   }
 
-  @Effect<AuthActions>('logout')
+  @Effect()
   logout(): Observable<void> {
     return undefined;
   }
 
-  @Reduce<AuthActions>('authenticate')
+  @Reduce()
   onAuthenticate(state: AuthState, payload: User): AuthState {
     return { ...state, ...payload };
   }
 
-  @Reduce<AuthActions>('logout')
+  @Reduce()
   onLogout(state: AuthState, payload: void): AuthState {
     return {user: undefined, isAuth: false};
   }
 
-  @Reduce<AuthActions>('validate')
+  @Reduce()
   onValidate(state: AuthState, user: User): AuthState {
       return {...state, isAuth: true, ...user};
   }
 
-  @Effect<AuthActions>('validate')
+  @Effect()
   validate(token: string): Observable<User> {
       return this.authService.validateToken(token);
   }

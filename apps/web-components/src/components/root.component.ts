@@ -10,6 +10,8 @@ import { Component, Input } from '@flux/core';
             padding: 12px;
         }
    </style>
+   <fx-bpm></fx-bpm>
+
    <fx-user firstname="{{name}}" lastname="{{lastname}}">
      <small>tr: {{name}}</small>
      <button (click)="change()">{{name}}</button>

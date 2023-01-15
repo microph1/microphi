@@ -16,8 +16,6 @@ export class LoginComponent implements OnDestroy {
 
   private subSink = new Subscription();
 
-  private attempts = 0;
-
   @Log()
   private $log;
 
@@ -33,21 +31,6 @@ export class LoginComponent implements OnDestroy {
   }, {
     updateOn: 'blur'
   });
-
-
-  public authError$ = this.authStore.error$.pipe(
-    map((err) => {
-      // console.log('got error', err.error.message);
-
-      // if (!(err.error instanceof HttpErrorResponse)) {
-      //   console.log('not an error from backend');
-      //   throw throwError('Something weird is happening!');
-      // }
-
-      this.attempts++;
-      // return err.error.message + ' ' + this.attempts;
-    })
-  );
 
   constructor(private authStore: AuthStore, private router: Router) {
     this.subSink.add(

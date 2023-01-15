@@ -7,6 +7,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from '../../material.module';
 import { AuthStore } from '../../services/auth/auth.store';
 import { AuthService } from '../../services/auth/auth.service';
+import { MockComponent } from '@microphi/test';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -15,7 +16,12 @@ describe('LoginComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [MaterialModule, HttpClientTestingModule, RouterTestingModule, ReactiveFormsModule, NoopAnimationsModule],
-      declarations: [LoginComponent],
+      declarations: [
+        LoginComponent,
+        MockComponent({
+          selector: 'phi-login'
+        })
+      ],
       providers: [AuthStore, AuthService]
     }).compileComponents();
   });

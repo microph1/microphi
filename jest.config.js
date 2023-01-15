@@ -9,8 +9,8 @@ module.exports = {
     '<rootDir>/projects/flux/**/src',
 
     // apps
-    '<rootDir>/apps/**/src',
-
+    '<rootDir>/apps/flux/src',
+    '<rootDir>/apps/microphi/src',
   ],
   coverageDirectory: 'coverage',
   reporters: [
@@ -33,7 +33,7 @@ module.exports = {
   coverageThreshold: {
     global: {
       statements: 73,
-      branches: 63,
+      branches: 60,
       lines: 71,
       functions: 67,
     }

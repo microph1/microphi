@@ -49,4 +49,4 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Build
         run: |
-          yarn lerna build --since master
+          yarn lerna run build --since master

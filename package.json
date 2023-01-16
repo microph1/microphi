@@ -14,7 +14,7 @@
     "test:ci": "jest --ci --coverage",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "version": "lerna version",
+    "release": "lerna version --conventional-commits",
     "predeploy:dcsoftware": "ng build dcsoftware --configuration production",
     "deploy:dcsoftware": "cd projects/dcsoftware && yarn sls client deploy --no-confirm",
     "deploy:store": "ng deploy store --configuration=production",

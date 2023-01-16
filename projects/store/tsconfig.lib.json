@@ -17,11 +17,12 @@
     "strictMetadataEmit": true,
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true,
-    "enableResourceInlining": true
+    "enableResourceInlining": true,
+    "enableIvy": true,
+    "compilationMode": "partial"
   },
   "exclude": [
     "src/test-setup.ts",
-    "**/*.spec.ts",
-    "src/schematics/**"
+    "**/*.spec.ts"
   ]
 }

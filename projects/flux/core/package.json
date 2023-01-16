@@ -1,6 +1,6 @@
 {
   "name": "@flux/core",
-  "version": "0.0.1",
+  "version": "1.1.0",
   "description": "the flux core package",
   "main": "lib",
   "repository": "https://github.com/microph1/microphi",

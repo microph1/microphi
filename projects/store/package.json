@@ -13,16 +13,15 @@
     "flux",
     "elm"
   ],
-  "version": "0.2.10",
+  "version": "1.1.0",
   "dependencies": {
     "reflect-metadata": "^0.1.13",
     "tslib": "^2.4.0"
   },
   "devDependencies": {
-    "utility-types": "^3.10.0",
-    "@microphi/test": "*"
+    "@microphi/test": "^1.1.0",
+    "utility-types": "^3.10.0"
   },
   "schematics": "./schematics/collection.json",
-  "scripts": {
-  }
+  "scripts": {}
 }

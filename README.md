@@ -1,8 +1,8 @@
-[![CI](https://github.com/microph1/microphi/actions/workflows/nodejs.yml/badge.svg)](https://github.com/microph1/microphi/actions/workflows/nodejs.yml) [![codecov](https://codecov.io/gh/microph1/microphi/branch/master/graph/badge.svg?token=V8N7XE5Z5Y)](https://codecov.io/gh/microph1/microphi) [![CodeFactor](https://www.codefactor.io/repository/github/microph1/microphi/badge)](https://www.codefactor.io/repository/github/microph1/microphi)
+[![CI](https://github.com/microph1/microphi/actions/workflows/main.yml/badge.svg)](https://github.com/microph1/microphi/actions/workflows/nodejs.yml) [![codecov](https://codecov.io/gh/microph1/microphi/branch/master/graph/badge.svg?token=V8N7XE5Z5Y)](https://codecov.io/gh/microph1/microphi)
 
 # Microphi
 
-for the frontend super heroes.
+for the frontend superheroes.
 
 #How To
 

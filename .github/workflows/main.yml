@@ -55,3 +55,27 @@ jobs:
         run: |
           echo ${{ github.ref.name }}
           yarn lerna run build --since origin/master
+
+  version:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: show enviroment variables
+        run: env
+
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref.name }}
+          fetch-depth: 0
+
+      - uses: c-hive/gha-yarn-cache@v2
+
+      - name: Install
+        run: yarn install --frozen-lockfile
+
+
+      - name: Version
+        run: yarn lerna version -y --conventional-commits --create-release github --no-push

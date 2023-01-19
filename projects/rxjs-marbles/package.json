@@ -1,0 +1,26 @@
+{
+  "name": "@microphi/marbles",
+  "keywords": [
+    "rxjs",
+    "marbles",
+    "observables"
+  ],
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "module": "lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "version": "1.1.0",
+  "peerDependencies": {
+    "rxjs": "^7.8.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.lib.prod.json",
+    "test": "jest",
+    "test:ci": "jest -ci --coverage"
+  }
+}

@@ -12,6 +12,7 @@
     "build": "ng build",
     "test": "jest",
     "test:ci": "jest --ci --coverage",
+    "test:changed": "lerna run test:ci --since origin/master --stream --parallel",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "release": "lerna version --conventional-commits",

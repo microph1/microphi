@@ -1,27 +1,24 @@
 const { pathsToModuleNameMapper } = require('ts-jest');
 const { compilerOptions } = require('../../tsconfig.json');
 
-const moduleNameMapper = pathsToModuleNameMapper(compilerOptions.paths, {prefix: '<rootDir>/../../'});
+const moduleNameMapper = pathsToModuleNameMapper(compilerOptions.paths, { prefix: `${__dirname}/../../` });
 
 module.exports = {
   displayName: 'store',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-
   moduleNameMapper,
-  globals: {
-    'ts-jest': {
-      tsconfig: '<rootDir>/tsconfig.spec.json',
-      stringifyContentPathRegex: '\\.(html|svg)$',
-    },
-  },
-  transform: {
-    '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
-  },
-  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
-  snapshotSerializers: [
-    'jest-preset-angular/build/serializers/no-ng-attributes',
-    'jest-preset-angular/build/serializers/ng-snapshot',
-    'jest-preset-angular/build/serializers/html-comment',
-  ],
+  coverageReporters: ['text'],
+  // test reporter does not create a coverage folder
+  // in any other case create it under global coverage
+  coverageDirectory: '../../coverage/_store',
+
+  coverageThreshold: {
+    global: {
+      statements: 89,
+      branches: 72,
+      lines: 89,
+      functions: 85,
+    }
+  }
 };

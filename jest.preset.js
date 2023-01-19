@@ -3,6 +3,6 @@ module.exports = {
   ...ts_preset,
   testMatch: [ '**/+(*.)+(spec|test).+(ts)?(x)' ],
   moduleFileExtensions: [ 'ts', 'js', 'mjs', 'html' ],
-  coverageReporters: [ 'html' ],
+  coverageReporters: [ 'html', 'text' ],
   transform: { '^.+\\.(ts|js|html)$': 'ts-jest' },
 };

@@ -5,8 +5,6 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class TokenBearerInterceptor implements HttpInterceptor {
 
-  constructor() {}
-
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
     // console.log('token is', this.authService.token$.getValue());

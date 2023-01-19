@@ -1,5 +1,3 @@
-import { Store } from '../store/store';
-import { $Keys } from 'utility-types';
 import { scanInstance } from '../utilities/scan-instance';
 
 export type EffectStrategy = 'switchMap' | 'mergeMap' | 'concatMap';

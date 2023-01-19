@@ -1,3 +1,4 @@
+/* eslint-disable:  @typescript-eslint/no-unused-vars */
 import { Component, OnInit, Directive } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { startWith } from 'rxjs/operators';
@@ -10,6 +11,7 @@ export function Source<
     Value = Primitive,
     V = Value extends RxComponent ? (i: Value) => Primitive : Value,
   >(initialValue?: V): PropertyDecorator {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   return <T extends RxComponent>(target, propertyName) => {
 
     // console.log(Reflect)
@@ -26,7 +28,7 @@ export function Source<
 
 export function BindToParam(name: string): PropertyDecorator {
   return (target, propertyKey) => {
-    const params = Reflect.getMetadata('params', target.constructor) as {} || {};
+    const params = Reflect.getMetadata('params', target.constructor) as object || {};
     params[propertyKey] = name;
     Reflect.metadata('params', params)(target.constructor);
   };
@@ -36,15 +38,12 @@ export function BindToParam(name: string): PropertyDecorator {
 export abstract class RxComponent implements OnInit {
   protected sources$: Observable<any>[];
 
-  constructor() {
-
-  }
-
   ngOnInit() {
-    const paramsToBind = Reflect.getMetadata('params', this.constructor) as {};
+    const paramsToBind = Reflect.getMetadata('params', this.constructor) as object;
     console.log(paramsToBind);
 
     Object.entries(paramsToBind).forEach(([propertyName, paramName]) => {
+      console.log({paramName})
       const source = this[propertyName];
 
       if (source instanceof Observable) {
@@ -89,7 +88,7 @@ export abstract class RxComponent implements OnInit {
 
 
 @Component({
-  selector: 'app-root',
+  selector: 'fx-app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })

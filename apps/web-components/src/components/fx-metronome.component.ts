@@ -1,4 +1,4 @@
-import { Component, Input } from '@flux/core';
+import { Component } from '@flux/core';
 
 @Component({
   selector: 'fx-bpm',

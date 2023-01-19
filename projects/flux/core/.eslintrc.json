@@ -1,5 +1,5 @@
 {
-  "extends": "../../../.eslintrc.cjs",
+  "extends": "../../../.eslintrc.json",
   "ignorePatterns": [
     "**/*.html"
   ],
@@ -7,7 +7,8 @@
     {
       "files": "*.ts",
       "rules": {
-        "no-debugger": "warn",
+        "no-console": "warn",
+        "no-debugger": "error",
         "@typescript-eslint/no-unsafe-assignment": "off",
         "@typescript-eslint/no-unsafe-argument": "off",
         "@typescript-eslint/no-unsafe-member-access": "off",

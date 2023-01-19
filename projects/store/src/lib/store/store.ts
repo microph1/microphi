@@ -5,6 +5,7 @@ import { Effect, EffectStrategy, getEffects } from '../effect/effect';
 import { Brand, Primitive } from 'utility-types';
 
 export type getPayloadFromActionType<A, C extends keyof A> =
+// eslint-disable-next-line @typescript-eslint/ban-types
   A[C] extends Function ? A[C] extends () => any
     ? never[] : A[C] extends (...args: infer T) => any
       ? T : never[] : A[C][];

@@ -3,6 +3,9 @@
   "ignorePatterns": [
     "!**/*"
   ],
+  "plugins": [
+    "@angular-eslint"
+  ],
   "overrides": [
     {
       "files": [

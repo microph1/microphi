@@ -21,12 +21,12 @@ export function expectObservable<
   const alphabet = [ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ];
 
   return {
-    toBe: (marble: string, values?: {}, errorValue?: any) => {
+    toBe: (marble: string, values?: object, errorValue?: any) => {
       testScheduler.run(({ expectObservable }) => {
         expectObservable(obs).toBe(marble, values, errorValue);
       });
     },
-    toEqual: (...values: Array<{}>) => {
+    toEqual: <T>(...values: Array<T>) => {
 
       testScheduler.run(({ expectObservable }) => {
 
@@ -43,7 +43,7 @@ export function expectObservable<
         expectObservable(obs).toBe(marble.join(''), v);
       });
     },
-    toContain: (...values: Array<{}>) => {
+    toContain: <T>(...values: Array<T>) => {
 
       testScheduler.expect$(obs).toContain(...values);
     }

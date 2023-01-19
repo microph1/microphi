@@ -53,6 +53,7 @@ export class RootComponent {
   change(ev) {
     this.name = faker.name.findName();
     console.log('new name', this.name);
+    console.log({ev});
   }
 
   add() {

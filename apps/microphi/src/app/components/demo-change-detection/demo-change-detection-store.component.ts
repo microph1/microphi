@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { combineLatest, Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { of } from 'rxjs';
 import { Item, ItemsStore } from './items-store';
 
 

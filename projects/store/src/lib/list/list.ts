@@ -1,5 +1,6 @@
 import { $Keys } from 'utility-types';
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export class List<EntityType extends {}> implements Iterable<EntityType> {
 
   public readonly entities = new Map<any, EntityType>();
@@ -30,7 +31,7 @@ export class List<EntityType extends {}> implements Iterable<EntityType> {
     this.ids = entities.map((e) => this.getId(e));
 
     entities
-      .forEach((item, idx) => {
+      .forEach((item) => {
         const id = item[IDField];
         this.entities.set(id, item);
       });

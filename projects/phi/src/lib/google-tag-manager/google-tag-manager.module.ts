@@ -40,8 +40,6 @@ export class GoogleTagManagerModule {
     @Optional() router: Router
   ) {
 
-    console.log({router});
-
     if (GoogleTagManagerModule.options.enable) {
 
       this.initializeGTM({
@@ -51,11 +49,9 @@ export class GoogleTagManagerModule {
       if (GoogleTagManagerModule.options.trackPageViews && router) {
 
         if (router) {
-          console.log('router is available, registering virtual pageviews');
 
           router.events.subscribe((event) => {
             if (event instanceof NavigationEnd) {
-              console.log('tracking pageview');
               window['dataLayer'].push('pageview');
 
             }
@@ -87,6 +83,7 @@ export class GoogleTagManagerModule {
     window['dataLayer'] = window['dataLayer'] || [];
     // tslint:disable-next-line:only-arrow-functions
     window['gtag'] = window['gtag'] || function() {
+      // eslint-disable-next-line prefer-rest-params
       window['dataLayer'].push(arguments);
     };
 

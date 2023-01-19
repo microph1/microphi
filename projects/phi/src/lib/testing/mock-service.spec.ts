@@ -31,7 +31,6 @@ describe('@MockService', () => {
   //
   //   mockedInstance.functionToMock('a', 1);
   //   expect(mockedInstance.functionToMock).toHaveBeenCalledWith('a', 1);
-  //   // tslint:disable: no-string-literal
   //   expect<any>(mockedInstance['privateFn']).not.toHaveBeenCalled();
   //
   // });
@@ -63,7 +62,6 @@ describe('@MockService', () => {
   //
   //     mockedService.functionToMock('a', 1);
   //     expect(mockedService.functionToMock).toHaveBeenCalledWith('a', 1);
-  //     // tslint:disable: no-string-literal
   //     expect<any>(mockedService['privateFn']).not.toHaveBeenCalled();
   //
   //   });

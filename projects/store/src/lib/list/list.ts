@@ -38,7 +38,6 @@ export class List<EntityType extends {}> implements Iterable<EntityType> {
   }
 
   *[Symbol.iterator](): IterableIterator<EntityType> {
-    // tslint:disable-next-line:forin
     for (const idx in this.ids) {
       const id = this.ids[idx];
       yield this.entities.get(id);

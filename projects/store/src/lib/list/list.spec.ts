@@ -1,4 +1,3 @@
-/* tslint:disable:no-string-literal */
 import { List } from './list';
 
 describe('list', () => {

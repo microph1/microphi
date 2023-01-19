@@ -1,4 +1,3 @@
-/* tslint:disable:triple-equals */
 import { Observable, race, ReplaySubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import 'reflect-metadata';

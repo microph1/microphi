@@ -1,4 +1,3 @@
-/* tslint:disable:no-string-literal */
 import { Inject, ModuleWithProviders, NgModule, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GoogleTagManagerService } from './google-tag-manager.service';
@@ -81,10 +80,8 @@ export class GoogleTagManagerModule {
 
 
     window['dataLayer'] = window['dataLayer'] || [];
-    // tslint:disable-next-line:only-arrow-functions
-    window['gtag'] = window['gtag'] || function() {
-      // eslint-disable-next-line prefer-rest-params
-      window['dataLayer'].push(arguments);
+    window['gtag'] = window['gtag'] || function(...args) {
+      window['dataLayer'].push(args);
     };
 
     window['gtag']('js', new Date());

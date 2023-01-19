@@ -7,7 +7,6 @@ import { interval } from 'rxjs';
 describe('PhiComponent', () => {
 
   @Component({
-    // tslint:disable-next-line:component-selector
     selector: 'test-component',
     template: '<div>test component</div>'
   })
@@ -45,7 +44,6 @@ describe('PhiComponent', () => {
 
   it('should unsubscribe on destroy', () => {
     fixture.destroy();
-    // tslint:disable-next-line:no-string-literal
     const subscription = component['subscriptions'][0];
 
     expect(subscription.closed).toBeTruthy();

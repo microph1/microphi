@@ -1,4 +1,3 @@
-/* tslint:disable:no-string-literal */
 import { Injectable } from '@angular/core';
 
 @Injectable()

@@ -3,11 +3,8 @@
   "parserOptions": {
     "project": [
       "./tsconfig.json",
-      "./projects/**/tsconfig.json"
-//      "./apps/flux/tsconfig.app.json"
-//      "./apps/metronoman-flux/tsconfig.json",
-//      "./apps/microphi/**/tsconfig.app.json",
-//      "./apps/web-components/tsconfig.json"
+      "./projects/**/tsconfig.json",
+      "./apps/**/tsconfig.app.json"
     ],
     "createDefaultProgram": true
   },

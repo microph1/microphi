@@ -37,6 +37,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.lib.prod.json",
     "test": "jest",
-    "test:ci": "jest -ci --coverage"
+    "test:ci": "jest -ci --coverage",
+    "lint:ci": "eslint ./"
   }
 }

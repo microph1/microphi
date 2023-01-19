@@ -4,7 +4,8 @@
   "license": "MIT",
   "main": "./lib",
   "scripts": {
-    "build": "tsc -b"
+    "build": "tsc -b",
+    "lint:ci": "eslint ./"
   },
   "dependencies": {
     "typescript-template-language-service-decorator": "^2.3.1"

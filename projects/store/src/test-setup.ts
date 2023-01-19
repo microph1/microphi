@@ -1,4 +1,4 @@
-import { setMatchers } from '@microphi/test';
+import { setMatchers } from '@microphi/marbles';
 
 setMatchers(
   (actual, expected) => expect(actual).toContainEqual(expected),

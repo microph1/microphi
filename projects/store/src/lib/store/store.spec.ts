@@ -1,6 +1,6 @@
 import { Store, makeStore } from './store';
 import { delay, Observable, of, throwError } from 'rxjs';
-import { TestScheduler } from '@microphi/test';
+import { TestScheduler } from '@microphi/marbles';
 import { Effect, Reduce } from '@microphi/store';
 
 describe('store', () => {

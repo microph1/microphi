@@ -18,7 +18,8 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "ignorePatterns": [
-    "*.js"
+    "*.js",
+    "*.html"
   ],
   "rules": {
     "no-console": "warn",

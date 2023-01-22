@@ -9,6 +9,7 @@
     "tw": "tailwindcss"
   },
   "dependencies": {
+    "@flux/core": "*",
     "@microgamma/digator": "^2.1.0",
     "@microgamma/loggator": "^2.1.0",
     "mustache": "^4.2.0"

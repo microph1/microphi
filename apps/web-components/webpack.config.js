@@ -32,6 +32,33 @@ module.exports = {
         include: path.resolve(__dirname, 'src'),
         use: ['style-loader', 'css-loader', 'postcss-loader'],
       },
+      {
+        test: /\.s[ac]ss$/i,
+        exclude: [/\.styles.scss$/, /node_modules/],
+        use: [
+          // Creates `style` nodes from JS strings
+          "style-loader",
+          // Translates CSS into CommonJS
+          "css-loader",
+          // Compiles Sass to CSS
+          "sass-loader",
+        ],
+      },
+      {
+        test: /\.styles.scss$/,
+        exclude: /node_modules/,
+        use: [
+          "sass-to-string",
+          {
+            loader: "sass-loader",
+            options: {
+              sassOptions: {
+                outputStyle: "compressed",
+              },
+            },
+          },
+        ],
+      },
     ],
   },
   resolve: {

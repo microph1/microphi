@@ -1,50 +1,39 @@
-import { Component } from '@flux/core';
+import { Component, Input } from '@flux/core';
+import styles from './fx-user.styles.scss';
+
 
 @Component({
-  selector: 'fx-bpm',
+  selector: 'fx-accordion',
   shadowRoot: true,
   template: `
-    <div>
+  <style>
+    ${styles}
+  </style>
+  <div class="panel is-flex is-flex-direction-column">
+    <div class="panel-heading is-flex is-flex-grow-1 is-flex-direction-row is-justify-content-space-between">
+      <span>{{label}}</span>
 
-      <h2>BPM: {{bpm}}</h2>
-      <button (click)="play()">play</button>
+      <button class="button is-light is-small">
+        <span class="icon material-icons" (click)="toggle()">
+          expand_more
+        </span>
+      </button>
+
     </div>
+    <div class="panel-block" fxIf="{{expanded}}">
+        <slot></slot>
+    </div>
+  </div>
   `
 })
-export class FxMetronomeComponent {
-  bpm: number = 60;
-
-  private _audioCtx: AudioContext = new AudioContext();
-  private currentBeat: number;
-
-  play() {
-    console.log('start at', this.bpm);
+export class FxAccordionComponent {
+  @Input() label: string;
+  @Input() expanded: boolean = false;
 
 
-    this.beat();
+  toggle() {
+    console.log('toggle', this.expanded);
+
+    this.expanded = !this.expanded;
   }
-
-
-  private beat() {
-    const now = this._audioCtx.currentTime;
-    const osc = this._audioCtx.createOscillator();
-    osc.type = 'triangle';
-    if (this.currentBeat === 0) {
-      osc.frequency.value = 864;
-    } else {
-      osc.frequency.value = 432;
-    }
-
-    const gainNode = this._audioCtx.createGain();
-    osc.connect(gainNode);
-    gainNode.connect(this._audioCtx.destination);
-
-    osc.start(now);
-    gainNode.gain.linearRampToValueAtTime(0, now + 0.06);
-    osc.stop(now + 0.1);
-
-    this.currentBeat = (this.currentBeat + 1) % this.bpm;
-  }
-
-
 }

@@ -1,43 +1,5 @@
-import { faker } from '@faker-js/faker';
 import { Component, Input } from '@flux/core';
-
-/*
-<!--   <style>-->
-<!--        :host {-->
-<!--            padding: 12px;-->
-<!--        }-->
-<!--   </style>-->
-<!--   <fx-bpm></fx-bpm>-->
-
-<!--   <fx-user firstname="{{name}}" lastname="{{lastname}}">-->
-<!--     <small>tr: {{name}}</small>-->
-<!--     <button (click)="change()">{{name}}</button>-->
-<!--   </fx-user>-->
-
-   <button (click)="change()">{{name}}</button>
-   <button (click)="add()">add</button>
-   <button (click)="toggleDescription()">Toggle</button>
-   <div id="if" fxIf="{{isVisible}}">
-       <h2>The Dom ({{isVisible}})</h2>
-       <h3>How to traverse the dom</h3>
-       <p>
-           this is how to get all nodes
-           <ul>
-               <li>prepare spaceship</li>
-               <li>prepare helmet</li>
-               <li fxFor="let item of {{items}}">{{item}}</li>
-           </ul>
-           <div>
-               nested3
-               <span>{{items}}</span>
-           </div>
-       </p>
-       <button (click)="add()">add</button>
-
-   </div>
-<!--   <fx-user firstname="{{name2}}" lastname="{{lastname2}}"></fx-user>-->
-
- */
+import { faker } from '@faker-js/faker';
 
 @Component({
   selector: 'fx-root',
@@ -50,31 +12,31 @@ import { Component, Input } from '@flux/core';
     </style>
   `,
   template: `
-
-    <div class="header">
+    <div class="header m-1">
       <div>{{name}} - {{lastname}}</div>
       <div class="fx-grow"></div>
       <button class="button is-primary" (click)="change()">Change</button>
     </div>
-    <div class="content fx-column fx-grow">
+    <div class="content fx-column fx-grow m-4 mt-8">
 
-        <div class="card">
+        <div class="card p-3">
            <fx-user firstname="{{name}}" lastname="{{lastname}}">
-    <!--         <small>tr: {{name}}</small>-->
-    <!--         <button (click)="change()">{{name}}</button>-->
+            <div></div>
+             <small>tr: {{name}}</small>
+             <button (click)="change()">{{name}}</button>
            </fx-user>
+
+           <p>
+                <h4>non trascluded items</h4>
+                <code>
+                    {{items}}
+                </code>
+               <button (click)="add()">add</button>
+           </p>
         </div>
 
-
-
-
-        <div>
-            <button (click)="toggleDescription()">Toggle</button>
-       </div>
-       <div id="if" fxIf="{{isVisible}}">
-           <h2>The Dom ({{isVisible}})</h2>
-           <h3>How to traverse the dom</h3>
-           <p>
+       <fx-accordion label="How to traverse the dom" class="mt-6">
+            <p>
                this is how to get all nodes
                <ul>
                    <li>prepare spaceship</li>
@@ -88,7 +50,8 @@ import { Component, Input } from '@flux/core';
            </p>
            <button (click)="add()">add</button>
 
-       </div>
+       </fx-accordion>
+
 
     </div>
     <footer class="footer">
@@ -96,12 +59,10 @@ import { Component, Input } from '@flux/core';
     </footer>
 
 
-  `,
+  `
 })
-export class RootComponent {
+export class FxRootComponent {
   @Input() name: string = 'Davide';
-  @Input() isVisible: boolean = true;
-
   lastname = 'Cavaliere';
 
   items = [faker.name.findName()];
@@ -115,7 +76,4 @@ export class RootComponent {
     this.items = [...this.items, faker.name.findName()];
   }
 
-  toggleDescription() {
-    this.isVisible = !this.isVisible;
-  }
 }

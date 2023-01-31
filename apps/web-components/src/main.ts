@@ -1,18 +1,17 @@
-import { parseTemplate, registerDirective, registerPipe } from '@flux/core';
-import { DI } from '@microgamma/digator';
-import { RootComponent } from './components/root.component';
+import { App, getDirectives, parseTemplate, registerDirective, registerPipe } from '@flux/core';
+import { bootstrap, injector } from '@microgamma/digator';
+import { FxRootComponent } from './components/fx-root.component';
 import { FxUserComponent } from './components/fx-user.component';
-import { FxMetronomeComponent } from './components/fx-metronome.component';
-
-import './styles.css';
-
+import { FxAccordionComponent } from './components/fx-accordion.component';
+import { FxIfDirective } from './directives/fx-if.directive';
+import './styles.scss';
+import { Class } from 'utility-types';
 
 registerPipe('async', (source$) => {
 
   return `__#${source$}#__`;
 
 });
-
 
 export function fxIf(node, value) {
 
@@ -62,12 +61,33 @@ registerDirective('fxfor', (node, value: string) => {
 });
 
 
-@DI({
+@App({
   providers: [
-    RootComponent,
+    FxIfDirective,
+    FxAccordionComponent,
     FxUserComponent,
-    FxMetronomeComponent,
+    FxRootComponent,
+  ],
+  declarations: [
+    FxIfDirective,
+    FxAccordionComponent,
+    FxUserComponent,
+    FxRootComponent,
   ]
 })
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-class App {}
+class MyApp {
+  constructor() {
+    const directives = getDirectives();
+    console.log('directives', directives);
+    Object.entries(directives).forEach(([selector, klass]) => {
+      console.log({selector, klass});
+      const instance = injector(klass as Class<any>);
+      console.log(instance);
+    });
+  }
+}
+
+console.log('everything should be ready now we can start rendering thing');
+const app = bootstrap(MyApp);
+console.log({app});

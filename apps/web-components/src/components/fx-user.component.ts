@@ -1,22 +1,30 @@
 import { BehaviorSubject, delay } from 'rxjs';
 import { faker } from '@faker-js/faker';
 import { Component, Input } from '@flux/core';
+import styles  from './fx-user.styles.scss';
+
 
 @Component({
   selector: 'fx-user',
+  // shadowRoot: true,
   template: `
-
+    <style>
+        ${styles}
+    </style>
     <h1>Hello Mr. {{firstname}} - {{lastname}}</h1>
-    <small>{{firstname | async}}</small>
+    <small><b>with pipe:</b> {{firstname | async}}</small>
 
     <div>
-        with pipe: {{fullname$}}
+        <b>automatically handle observables:</b> {{fullname$}}
     </div>
     <div>
         with internal subscription: {{fullnameAsync}}
     </div>
-    <button (click)="next()">next</button>
+    <button class="button is-text" (click)="next()">next</button>
+
     <div class="container">
+        <!-- TODO: resolve content projection -->
+        <!-- slotting does not work without shadowDOM-->
         <slot></slot>
     </div>
   `
@@ -34,7 +42,7 @@ export class FxUserComponent {
 
   constructor() {
     this.fullname$.subscribe((name) => {
-      console.log('new name', name);
+      console.log('-------------------------new name------------------', name);
       this.fullnameAsync = name;
     });
   }

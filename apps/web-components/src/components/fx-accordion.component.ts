@@ -2,6 +2,7 @@ import { Component } from '@flux/core';
 
 @Component({
   selector: 'fx-bpm',
+  shadowRoot: true,
   template: `
     <div>
 

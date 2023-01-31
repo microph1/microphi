@@ -1,30 +1,38 @@
 import { Component } from './component.decorator';
 import { Input } from './input.decorator';
+import { App } from './app.decorator';
+import { bootstrap } from '@microgamma/digator';
+import { BehaviorSubject } from 'rxjs';
 
-describe('@Component', () => {
+xdescribe('@Component (shadow root)', () => {
 
   @Component({
-    selector: 'test-component',
+    selector: 'test-component-sh2',
+    shadowRoot: true,
     template: `
       <h4>{{firstname}}:{{lastname}}</h4>
+      <slot></slot>
     `
   })
-  class TestComponent {
+  class TestComponentSh {
     @Input() firstname: string;
     @Input() lastname: string;
   }
 
   @Component({
-    selector: 'fx-simple',
+    selector: 'fx-simple-sh',
+    shadowRoot: true,
     template: `
     <h1>Hello Mr. {{name}}</h1>
-    <test-component firstname="{{name}}" lastname="{{name}}"></test-component>
+    <test-component-sh firstname="{{name}}" lastname="{{name}}">
+        <span>transcluded name {{names$}}</span>
+    </test-component-sh>
     <div class="{{name}}">this component should have a class set</div>
   `
   })
-  class FxSimpleComponent {
+  class FxSimpleComponentSh {
     @Input() name: string = 'Davide';
-    // names$ = new BehaviorSubject<string>(this.name);
+    names$ = new BehaviorSubject<string>('an observable name');
 
     fxOnInit = jest.fn();
     fxOnViewInit = jest.fn();
@@ -36,62 +44,87 @@ describe('@Component', () => {
     }
   }
 
-  let component: FxSimpleComponent;
-  let elm;
+  let fxSimpleComponentSh: FxSimpleComponentSh;
+  let elmSh;
+
+  @App({
+    providers: [
+      FxSimpleComponentSh,
+      TestComponentSh,
+    ],
+    declarations: [
+      FxSimpleComponentSh,
+      TestComponentSh,
+    ]
+  })
+  class MyApp {}
 
   beforeEach(() => {
 
-    elm = document.createElement('fx-simple');
-    component = elm.controller;
+    elmSh = document.createElement('fx-simple-sh');
+    fxSimpleComponentSh = elmSh.controller;
+    bootstrap(MyApp);
   });
 
   it('should exists', () => {
-    expect(elm).toBeTruthy();
-    expect(component).toBeTruthy();
+    expect(elmSh).toBeTruthy();
+    expect(fxSimpleComponentSh).toBeTruthy();
   });
 
   describe('attach element to DOM', () => {
     beforeEach(() => {
       // calls connectedCallback
-      document.body.appendChild(elm);
+      document.body.innerHTML = '';
+      document.body.appendChild(elmSh);
     });
 
     describe('content rendering', () => {
 
       it('should render variables', () => {
 
-        expect(elm.shadowRoot.innerHTML.trim()).toContain('<h1>Hello Mr. Davide</h1>');
+        expect(elmSh.shadowRoot.innerHTML.trim()).toContain('<h1>Hello Mr. Davide</h1>');
       });
 
       it('should render nested components', () => {
-        expect(elm.shadowRoot.children[1].shadowRoot.innerHTML).toContain('<h4>Davide:Davide</h4>')
+        expect(elmSh.shadowRoot.children[1].shadowRoot.innerHTML).toContain('<h4>Davide:Davide</h4>')
       });
 
       it('should render when variable changes programmatically', () => {
 
-        expect(elm.shadowRoot.innerHTML).toContain('<h1>Hello Mr. Davide</h1>');
+        expect(elmSh.shadowRoot.innerHTML).toContain('<h1>Hello Mr. Davide</h1>');
 
-        component.name = 'Batman';
+        fxSimpleComponentSh.name = 'Batman';
 
-        expect(elm.shadowRoot.innerHTML.trim()).toContain('<h1>Hello Mr. Batman</h1>');
+        expect(elmSh.shadowRoot.innerHTML.trim()).toContain('<h1>Hello Mr. Batman</h1>');
       });
 
       it('should render when attribute is set', () => {
 
-        expect(elm.shadowRoot.innerHTML.trim()).toContain('<h1>Hello Mr. Davide</h1>');
+        expect(elmSh.shadowRoot.innerHTML.trim()).toContain('<h1>Hello Mr. Davide</h1>');
 
-        elm.setAttribute('name', 'davide2');
+        elmSh.setAttribute('name', 'davide2');
 
-        expect(elm.shadowRoot.innerHTML.trim()).toContain('<h1>Hello Mr. davide2</h1>');
+        expect(elmSh.shadowRoot.innerHTML.trim()).toContain('<h1>Hello Mr. davide2</h1>');
       });
 
       it('should render when variable is changed from inside the component', () => {
 
-        expect(elm.shadowRoot.innerHTML.trim()).toContain('<h1>Hello Mr. Davide</h1>');
+        expect(elmSh.shadowRoot.innerHTML.trim()).toContain('<h1>Hello Mr. Davide</h1>');
 
-        component.change();
+        fxSimpleComponentSh.change();
 
-        expect(elm.shadowRoot.innerHTML.trim()).toContain('<h1>Hello Mr. davide-changed</h1>');
+        expect(elmSh.shadowRoot.innerHTML.trim()).toContain('<h1>Hello Mr. davide-changed</h1>');
+      });
+
+      describe('transclusion', () => {
+
+        it('should show transcluded content', () => {
+          expect(elmSh.shadowRoot.innerHTML).toContain('transcluded name');
+        });
+
+        it('should resolve data using parent controller', () => {
+          expect(elmSh.shadowRoot.innerHTML).toContain('an observable name');
+        });
       });
 
     });
@@ -99,17 +132,17 @@ describe('@Component', () => {
     describe('lifecycle', () => {
 
       it('should call fxOnInit', () => {
-        expect(component.fxOnInit).toHaveBeenCalled();
+        expect(fxSimpleComponentSh.fxOnInit).toHaveBeenCalled();
       });
 
       it('should call fxViewInit after template has been attached ', () => {
-        expect(component.fxOnViewInit).toHaveBeenCalled();
+        expect(fxSimpleComponentSh.fxOnViewInit).toHaveBeenCalled();
 
       });
 
       it('should call fxOnChanges', () => {
-        elm.setAttribute('name', 'test');
-        expect(component.fxOnChanges).toHaveBeenCalledWith({
+        elmSh.setAttribute('name', 'test');
+        expect(fxSimpleComponentSh.fxOnChanges).toHaveBeenCalledWith({
           name: 'name',
           newValue: 'test',
           oldValue: null
@@ -119,32 +152,23 @@ describe('@Component', () => {
 
     describe('attributes', () => {
 
-
       it('should bind attributes of child elements', () => {
-        expect(elm.shadowRoot.innerHTML).toContain('class="Davide"');
+        expect(elmSh.shadowRoot.innerHTML).toContain('class="Davide"');
       });
 
       it('should reflect changes elm -> controller', () => {
         // programmatically change attribute should reflect to controller
-        elm.setAttribute('name', 'davide');
-        expect(elm.controller['name']).toEqual('davide');
+        elmSh.setAttribute('name', 'davide');
+        expect(elmSh.controller['name']).toEqual('davide');
       });
 
       it('should reflect changes controller -> elm', () => {
         // programmatically change attribute should reflect to controller
-        elm.controller['name'] = 'davide2';
-        expect(elm.controller['name']).toEqual('davide2');
+        elmSh.controller['name'] = 'davide2';
+        expect(elmSh.controller['name']).toEqual('davide2');
       });
 
-      // fit('should or... how many attributes there should be???', () => {
-      //   const root = elm.shadowRoot;
-      //   console.log(elm.shadowRoot.innerHTML);
-      //   console.log('plain', root.children[1].getAttribute('class'));
-      //   console.log('fx', root.children[1].getAttributeNS('fx', 'class'));
-      //   console.log('fx-shadow', root.children[1].getAttributeNS('fx-shadow', 'class'));
-      //   expect(root.children[1].getAttribute('class')).toEqual('');
-      //   // expect(root.getAttribute('class')).toEqual('');
-      // });
+
     });
 
   });

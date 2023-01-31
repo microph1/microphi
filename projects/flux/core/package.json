@@ -9,9 +9,14 @@
   "private": false,
   "scripts": {
     "build": "tsc -b",
+    "test": "jest --watch",
+    "test:ci": "jest -ci --coverage",
     "lint:ci": "eslint ./"
   },
   "dependencies": {
     "@microgamma/loggator": "^2.1.0"
+  },
+  "peerDependencies": {
+    "@microgamma/digator": "^2.1.0"
   }
 }

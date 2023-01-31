@@ -1,5 +1,5 @@
 import { Subject } from 'rxjs';
-import { getComponentMetadata } from './component.decorator';
+import { getComponentMetadataFromInstance } from './component.decorator';
 import { getDebugger } from '@microgamma/loggator';
 
 const d = getDebugger('@flux:add-watcher');
@@ -11,7 +11,7 @@ export interface FxComponent {
 
 export function addWatchers(instance: FxComponent): void {
 
-  const metadata = getComponentMetadata(instance);
+  const metadata = getComponentMetadataFromInstance(instance);
   const properties = Object.getOwnPropertyNames(instance);
 
   const allProperties = new Set([...metadata.inputs, ...properties]);

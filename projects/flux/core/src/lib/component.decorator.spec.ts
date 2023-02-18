@@ -4,10 +4,10 @@ import { App } from './app.decorator';
 import { bootstrap } from '@microgamma/digator';
 import { BehaviorSubject } from 'rxjs';
 
-xdescribe('@Component (shadow root)', () => {
+describe('@Component (shadow root)', () => {
 
   @Component({
-    selector: 'test-component-sh2',
+    selector: 'test-component-sh',
     shadowRoot: true,
     template: `
       <h4>{{firstname}}:{{lastname}}</h4>

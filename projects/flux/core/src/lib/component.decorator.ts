@@ -8,6 +8,16 @@ import { start$ } from './app.decorator';
 
 const d = getDebugger('@flux:core:@Component');
 
+export const HydratedSymbol = Symbol('@Hydrated');
+
+export function Hydrated(scope: string = ''): PropertyDecorator {
+
+  return (target, property) => {
+    Reflect.defineMetadata(HydratedSymbol, scope, target, property);
+  }
+
+}
+
 function* traverse(node: any, includeAllChildren) {
 
   const children = node.childNodes;
@@ -49,8 +59,6 @@ function* traverse(node: any, includeAllChildren) {
     }
   }
 }
-
-export const webComponents = [];
 
 export type Pipe = (values: any, options?: any) => any;
 
@@ -128,6 +136,7 @@ export function Component(options: ComponentOptions) {
 
       static {
 
+
         options.inputs = getInputMetadata(target) || [];
 
         d('creating custom component', options.selector);
@@ -202,6 +211,7 @@ export function Component(options: ComponentOptions) {
 
         combineLatest([
           this.controller.propertyChange,
+          start$,
         ]).pipe().subscribe(([v]) => {
           this.log('property changed', v);
           this.render();
@@ -261,9 +271,6 @@ export function Component(options: ComponentOptions) {
           // sheet.
         }
 
-        if ('fxOnViewInit' in this.controller) {
-          this.controller.fxOnViewInit();
-        }
 
         this.connected$.next();
         this.connected$.complete();
@@ -273,7 +280,9 @@ export function Component(options: ComponentOptions) {
       attributeChangedCallback(name, oldValue, newValue) {
         if (oldValue !== newValue) {
           this.controller[name] = newValue;
-          if ('fxOnChanges' in this.controller) {
+
+          // skip changes until component is not initialized
+          if ('fxOnChanges' in this.controller && this.init) {
             this.controller.fxOnChanges({name, oldValue, newValue});
           }
         }
@@ -310,22 +319,33 @@ export function Component(options: ComponentOptions) {
                 const propertyToSet = node.getAttribute(attributeName);
                 // console.log({propertyToSet});
 
-                node[attr] = this.controller[propertyToSet];
+                const value = this.controller[propertyToSet];
+                node[attr] = value;
+                // also set the actual attribute?
+                node.setAttribute(attr, value);
 
               }
 
-              const shadowAttr = node.getAttributeNS('fx-shadow', attributeName);
+              // const shadowAttr = node.getAttributeNS('fx-shadow', attributeName);
+              const shadowAttr = node.getAttribute(`fx-shadow-${attributeName}`);
 
               if (shadowAttr) {
                 this.log('rendering on', shadowAttr);
 
                 const value = parseTemplate(shadowAttr, this.controller);
-                node.setAttributeNS('fx', attributeName, value);
+                // if (attributeName === 'transform') {
+                //
+                // } else {
+                //
+                //   node.setAttributeNS('fx', attributeName, value);
+                // }
+                node.setAttribute(attributeName, value);
               }
 
-              const fxAttribute = node.getAttributeNS('fx', attributeName);
+              // const fxAttribute = node.getAttributeNS('fx', attributeName);
+              const fxAttribute = node.getAttribute(attributeName);
 
-              this.log('parse directives now! 💪');
+              // this.log('parse directives now! 💪');
               if (attributeName in directives && fxAttribute) {
                 const directive = directives[attributeName];
                 directivesToRun.set(attributeName, [directive, fxAttribute]);
@@ -349,13 +369,15 @@ export function Component(options: ComponentOptions) {
             if (node.getAttributeNames) {
 
               for (const attributeName of node.getAttributeNames()) {
+
                 const eventName = attributeName.match(/\((\w+)\)/)?.[1];
                 if (eventName) {
 
                   const value = node.getAttribute(attributeName);
                   const methodName = value.match(/(\w+)\(/)[1];
 
-                  console.log('adding event listener on', node, 'to controller', this);
+                  // console.log('adding event listener on', node, 'to controller', this);
+
                   node.addEventListener(eventName, (event) => {
                     this.controller[methodName](event);
                   });
@@ -367,6 +389,11 @@ export function Component(options: ComponentOptions) {
 
           this.log('first rendering done');
           this.init = true;
+
+          // call lifecycle after first render is done
+          if ('fxOnViewInit' in this.controller) {
+            this.controller.fxOnViewInit();
+          }
         }
 
         this.log('rendering ends');
@@ -413,7 +440,7 @@ export function instrumentTemplate(node, processingInstructionNodeName) {
   if (node.nodeType === 1) {
 
     for (const attr of [...node.attributes]) {
-      console.log('scanning attribute', attr.name);
+      // console.log('scanning attribute', attr.name);
 
       if ( attr?.name.match(/\[(.+)]/) ) {
         log('found attribute with [] binding');
@@ -425,14 +452,19 @@ export function instrumentTemplate(node, processingInstructionNodeName) {
         // node[attributeName] =
         // node.setAttributeNS('fx-shadow', attr.name, attr.value);
         // node.removeAttribute(attr.name);
+        const observer = new MutationObserver((mutations, observer) => {
+          console.log({mutations, observer});
+        });
 
+        observer.observe(node, { attributes: true})
       } else if (attr?.value.match(/\{\{([^}]+)}}/)) {
       // scan attributes with value such as {{name}}
 
         log('found attribute binding in', node.outerHTML);
         log('node.localName: ', node.localName);
-        node.setAttributeNS('fx-shadow', attr.name, attr.value);
-        node.removeAttribute(attr.name);
+        // node.setAttributeNS('fx-shadow', attr.name, attr.value);
+        node.setAttribute(`fx-shadow-${attr.name}`, attr.value);
+        // node.removeAttribute(attr.name);
       }
 
       if (attr.name in directives) {

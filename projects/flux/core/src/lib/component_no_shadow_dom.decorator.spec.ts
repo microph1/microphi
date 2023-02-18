@@ -79,7 +79,7 @@ describe('@Component (no shadow dom)', () => {
 
     describe('content rendering', () => {
 
-      fit('should render variables', () => {
+      it('should render variables', () => {
 
         expect(document.body.innerHTML.trim()).toContain('<h1>Hello Mr. Davide</h1>');
       });

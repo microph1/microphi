@@ -6,7 +6,7 @@ const d = getDebugger('@flux:render');
 export function parseTemplate(template: string, subs: object) {
 
   let tpl = template;
-  const variables = template.match(/\{\{([^}]+)\|?\s?(\w*)}}/g);
+  const variables = template.match(/\{\{([^}]+)\|?\s?(\w*)}}/g) || [];
 
 
   for (const variable of variables) {

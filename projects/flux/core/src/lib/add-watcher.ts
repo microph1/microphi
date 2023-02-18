@@ -1,5 +1,5 @@
 import { Subject } from 'rxjs';
-import { getComponentMetadataFromInstance } from './component.decorator';
+import { getComponentMetadataFromInstance, HydratedSymbol } from './component.decorator';
 import { getDebugger } from '@microgamma/loggator';
 
 const d = getDebugger('@flux:add-watcher');
@@ -21,7 +21,6 @@ export function addWatchers(instance: FxComponent): void {
     if (
       ['propertyChange'].includes(property) ||
       typeof instance[property] === 'function'
-
     ) {
       continue;
     }
@@ -49,13 +48,22 @@ export function addWatchers(instance: FxComponent): void {
 
 
     } else {
+      // check if property is @Hydrated
+      const hydrated = Reflect.getMetadata(HydratedSymbol, instance, property);
 
       const shadowProp = `__${property}__`;
+
+      const hydrateScope = [hydrated, property].join(':');
+      const value = JSON.parse(localStorage.getItem(hydrateScope));
+
+      // TODO fix value falsy thing
+      // eslint-disable-next-line no-extra-boolean-cast
+      const initialValue = !!hydrated && value ? value : instance[property];
 
       Object.defineProperty(instance, shadowProp, {
         enumerable: false,
         writable: true,
-        value: instance[property]
+        value: initialValue,
       });
 
       Object.defineProperty(instance, property, {
@@ -64,6 +72,12 @@ export function addWatchers(instance: FxComponent): void {
           return this[shadowProp];
         },
         set: function(value) {
+
+          // eslint-disable-next-line no-extra-boolean-cast
+          if (!!hydrated) {
+            localStorage.setItem(hydrateScope, JSON.stringify(value));
+          }
+
           this[shadowProp] = value;
           this.propertyChange.next(({
             event: 'attributedChanged',

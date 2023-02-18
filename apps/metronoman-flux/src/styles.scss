@@ -1,8 +1,86 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@charset "utf-8";
+
+@use '@material/theme' as theme;
+@use '@material/button/styles' as button;
+@use "@material/icon-button/styles" as icon-button;
+@use "@material/slider/styles" as slider;
+@use "@material/top-app-bar/mdc-top-app-bar";
+@use "@material/ripple";
+@use "@material/elevation/mdc-elevation";
+
+
+$shadow: rgba(0,0,0,0.4);
+$shadow-light: rgba(0,0,0,0.2);
+
+:root{
+  --stroke-width: 2px;
+  --stroke-color: #{theme.$primary};
+  --label-fill: #{theme.$background};
+  --fill-color: #{theme.$on-primary};
+}
 
 html, body {
-  width: 100%;
   height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+  display: flex;
+  flex-direction: row;
+  margin: 0;
+}
+
+.bpm {
+  font-size: 45vw;
+}
+
+fx-root {
+  @extend .fx-flex;
+  @extend .fx-flex-column;
+  @extend .fx-flex-grow;
+  //@extend .is-unselectable;
+}
+
+// mdc fixes
+.mdc-top-app-bar {
+  position: unset;
+}
+
+// flex utilities
+.fx-flex {
+  display: flex;
+}
+
+.fx-flex-column {
+  flex-direction: column;
+}
+
+.fx-flex-row {
+  @extend .fx-flex;
+  flex-direction: row;
+  align-items: center;
+
+}
+
+.fx-flex-grow {
+  @extend .fx-flex;
+  flex-grow: 1;
+}
+
+.fx-flex-align-items-center {
+  align-items: center;
+}
+
+.fx-flex-justify-content-center {
+  justify-content: center;
+}
+
+.fx-flex-align-center-center {
+  @extend .fx-flex-align-items-center;
+  @extend .fx-flex-justify-content-center;
+}
+
+.fx-flex-justify-space-around {
+  justify-content: space-around;
 }

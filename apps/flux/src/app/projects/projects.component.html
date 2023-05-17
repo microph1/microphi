@@ -1,0 +1,24 @@
+
+<div class="toolbar">
+  <button mat-fab routerLink="new">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
+
+<ng-container *ngFor="let project of projects$ | async">
+  <mat-card class="mb-6 fx-flex">
+    <mat-card-title>{{project.Name}}</mat-card-title>
+    <mat-card-content>
+      <ul>
+        <li *ngFor="let ob of (project | keyvalue)">{{ob.key}}: {{ob.value}}</li>
+      </ul>
+    </mat-card-content>
+
+    <mat-card-actions class="fx-flex-important fx-flex-row">
+      <span class="fx-flex"></span>
+      <a mat-button [routerLink]="project.uid">edit</a>
+      <button mat-button (click)="remove(project)" color="warn">remove</button>
+    </mat-card-actions>
+  </mat-card>
+</ng-container>
+

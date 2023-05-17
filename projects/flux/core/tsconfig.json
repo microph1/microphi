@@ -15,13 +15,14 @@
       {
         "name": "@flux/language-service"
       }
-    ]
+    ],
+    "declaration": true
   },
   "include": [
     "src/index.ts",
     "src/**/*.ts"
   ],
   "exclude": [
-    "*.spec.ts"
+    "src/**/*.spec.ts"
   ]
 }

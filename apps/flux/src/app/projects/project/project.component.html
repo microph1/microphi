@@ -1,0 +1,61 @@
+
+<div class="toolbar">
+  <button mat-fab (click)="save();" routerLink="..">
+    <mat-icon>save</mat-icon>
+  </button>
+</div>
+
+<div class="fx-flex-row fx-flex-align-items-baseline">
+
+  <div class="fx-flex-column">
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput
+             placeholder="space cowboy v0"
+             [formControl]="form.controls.name">
+
+    </mat-form-field>
+
+    <h4>Dimensions</h4>
+    <mat-form-field>
+      <mat-label>Height (cm)</mat-label>
+      <input matInput
+             [formControl]="form.controls.height" type="number">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Width (cm)</mat-label>
+      <input matInput
+             [formControl]="form.controls.width" type="number">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Depth (cm)</mat-label>
+      <input matInput
+             [formControl]="form.controls.depth" type="number">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Thickness (cm)</mat-label>
+      <input matInput
+             [formControl]="form.controls.thickness" type="number">
+    </mat-form-field>
+
+    <h4>Cabinet faces overflow</h4>
+
+    <mat-checkbox [formControl]="form.controls.expandTopBottom">Top/Bottom</mat-checkbox>
+    <mat-checkbox [formControl]="form.controls.expandFrontBack">Front/Back</mat-checkbox>
+    <mat-checkbox [formControl]="form.controls.expandSides">Sides</mat-checkbox>
+
+    <h4>Panels Sizes</h4>
+    <div>Top/Bottom: {{topBottom.width}}x{{topBottom.height}} cm</div>
+    <div>Front/Back: {{frontBack.width}}x{{frontBack.height}} cm</div>
+    <div>Sides: {{sides.width}}x{{sides.height}} cm</div>
+    <div>Volume: {{volume}} L</div>
+
+
+  </div>
+
+  <div class="fx-flex-column fx-flex-grow ml-4">
+  </div>
+</div>

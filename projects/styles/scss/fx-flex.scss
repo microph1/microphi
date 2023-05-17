@@ -1,0 +1,63 @@
+
+// flex utilities
+.fx-flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.fx-fill-column {
+  height: 100%;
+}
+
+.fx-fill-row {
+  width: 100%;
+}
+
+.fx-flex-column {
+  @extend .fx-flex;
+  flex-direction: column;
+}
+
+.fx-flex-row {
+
+  @extend .fx-flex;
+  flex-direction: row;
+  align-items: center;
+
+}
+
+.fx-flex-grow {
+  @extend .fx-flex;
+  flex-grow: 1;
+}
+
+.fx-flex-grow-02 {
+  @extend .fx-flex;
+  flex-grow: 0.2;
+}
+
+.fx-flex-align-items-center {
+  align-items: center;
+}
+
+.fx-flex-justify-content-center {
+  justify-content: center;
+}
+
+.fx-flex-align-items-start {
+  align-items: flex-start;
+}
+
+.fx-flex-align-items-baseline {
+  align-items: baseline;
+}
+
+
+.fx-flex-align-center-center {
+  @extend .fx-flex-align-items-center;
+  @extend .fx-flex-justify-content-center;
+}
+
+.fx-flex-justify-space-around {
+  justify-content: space-around;
+}

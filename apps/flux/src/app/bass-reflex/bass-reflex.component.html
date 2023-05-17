@@ -1,0 +1,103 @@
+
+<div class="canvas">
+  <canvasjs-chart [options]="chartOptions"></canvasjs-chart>
+</div>
+
+<div class="columns">
+  <div class="column">
+    <h4>Thiele-Small Parameters</h4>
+    <div class="slider">
+      <div>FS: {{fs | number}}</div>
+      <mat-slider [(value)]="fs" max="150" (change)="updateChart();"></mat-slider>
+    </div>
+
+    <div class="slider">
+      <div>Qt: {{qt/100}}</div>
+      <mat-slider [(value)]="qt" (change)="updateChart();"></mat-slider>
+    </div>
+    <div class="slider">
+      <div>Qes: {{qes/100}}</div>
+      <mat-slider  [(value)]="qes" (change)="updateChart();"></mat-slider>
+    </div>
+    <div class="slider">
+      <div>Vas: {{vas}}</div>
+      <mat-slider [(value)]="vas" (change)="updateChart();"></mat-slider>
+    </div>
+    <div class="slider">
+      <div>Sd: {{sd}}</div>
+      <mat-slider [(value)]="sd" (change)="updateChart();" max="700"></mat-slider>
+    </div>
+    <div class="slider">
+      <div>Xmax [mm]: {{xmax}}</div>
+      <mat-slider [(value)]="xmax" (change)="updateChart();"></mat-slider>
+    </div>
+
+    <div style="display: flex; flex-direction: row">
+      <span>EBP: {{ebp | number:'1.2-2'}}</span>/
+      <span *ngIf="ebp <= 50">closed box</span><br>
+      <span *ngIf="ebp >= 51 && ebp <= 100">closed or vented </span>
+      <span *ngIf="ebp >= 100 && ebp <= 129">vented</span>
+    </div>
+    <p *ngIf="qt/100 > 0.707">With Qts > 0,707 we recommend a closed box!</p>
+
+    <h4>Vent Parameters</h4>
+    <div class="slider">
+      <div>Diameter: {{ventDiameter}}</div>
+      <mat-slider [(value)]="ventDiameter" (change)="updateChart();"></mat-slider>
+    </div>
+    <div class="slider">
+      <div># of ports: {{numberOfPorts}}</div>
+      <mat-slider [(value)]="numberOfPorts" (change)="updateChart();" max="4"></mat-slider>
+    </div>
+  </div>
+  <div class="column">
+    <h4>Flat Response</h4>
+
+    <div class="slider">
+      <div>Vb: {{vb | number:'1.2-2'}}</div>
+      <mat-slider [(value)]="vb" (change)="updateChart();" disabled></mat-slider>
+    </div>
+    <div class="slider">
+      <div>F3: {{f3 | number:'1.2-2'}}</div>
+      <mat-slider [(value)]="f3" max="100" (change)="updateChart();" disabled></mat-slider>
+    </div>
+    <div class="slider">
+      <div>Fb: {{fb | number:'1.2-2'}}</div>
+      <mat-slider [(value)]="fb" (change)="updateChart();" disabled></mat-slider>
+    </div>
+    <div class="slider">
+      <div>Lp [cm]: {{lv | number:'1.2-2'}}</div>
+      <mat-slider [(value)]="lv" (change)="updateChart();" disabled></mat-slider>
+    </div>
+
+    <p>minimal port diameter: {{minPortDiameter | number:'1.2-2'}}</p>
+    <p>Q: {{q | number:'1.2-2'}}</p>
+
+  </div>
+  <div class="column">
+    <h4>Custom Response</h4>
+    <div class="slider">
+      <div>new vb: {{newVb | number:'1.2-2'}}</div>
+      <mat-slider [(value)]="newVb" (change)="updateChart();"></mat-slider>
+    </div>
+    <div class="slider">
+      <div>f3: {{cf3 | number:'1.2-2'}}</div>
+      <mat-slider [(value)]="cf3" (change)="updateChart();"></mat-slider>
+    </div>
+    <div class="slider">
+      <div>fb: {{cfb | number:'1.2-2'}}</div>
+      <mat-slider [(value)]="cfb" (change)="updateChart();"></mat-slider>
+    </div>
+    <div class="slider">
+      <div>Lp [cm]: {{clv | number:'1.2-2'}}</div>
+      <mat-slider [(value)]="clv" (change)="updateChart();"></mat-slider>
+    </div>
+
+    <p>Min port. diameter: {{cMinPortDiameter | number:'1.2-2'}}</p>
+    <p>Q: {{cq | number:'1.2-2'}}</p>
+
+
+  </div>
+
+</div>
+

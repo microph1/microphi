@@ -1,0 +1,131 @@
+<mat-toolbar>
+
+  <mat-button-toggle-group [(value)]="operator">
+    <mat-button-toggle value="lowerLeft">Lower Left</mat-button-toggle>
+    <mat-button-toggle value="upperRight">Upper Right</mat-button-toggle>
+    <mat-button-toggle value="pickColor">Pick Color</mat-button-toggle>
+  </mat-button-toggle-group>
+
+  <span class="fx-flex-grow"></span>
+
+
+<!--  <button mat-button (click)="scan();">Open File</button>-->
+
+
+  <input
+         type="file"
+         accept="image/*"
+         (change)="loadImage($event)">
+
+
+  <button mat-button (click)="scan();">Scan</button>
+
+  <button mat-icon-button (click)="undo();">
+    <mat-icon>undo</mat-icon>
+  </button>
+  <button mat-icon-button (click)="redo();">
+    <mat-icon>redo</mat-icon>
+  </button>
+
+</mat-toolbar>
+
+
+<div class="fx-flex-row fx-flex-grow fx-flex-align-items-start">
+
+
+  <div class="fx-flex-column fx-fill-column">
+
+    <div class="fx-flex-row">
+      <mat-form-field>
+        <mat-label>Color precision</mat-label>
+        <input matInput
+               placeholder=""
+               [formControl]="colorPrecision"
+               type="number"
+               autofocus>
+
+      </mat-form-field>
+      <span style="width: 40px; height: 20px; background: rgb( {{rPick}}, {{gPick}}, {{bPick}} )">&nbsp;</span>
+    </div>
+    <div class="fx-flex-column">
+
+
+      <span>X Axis</span>
+
+      <mat-radio-group aria-label="Select an option">
+        <mat-radio-button value="1">Lin</mat-radio-button>
+        <mat-radio-button value="2">Log</mat-radio-button>
+      </mat-radio-group>
+
+      <mat-form-field>
+        <mat-label>minX</mat-label>
+        <input matInput
+               placeholder=""
+               [formControl]="minX"
+               type="number"
+               autofocus>
+
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>maxX</mat-label>
+        <input matInput
+               placeholder=""
+               [formControl]="maxX"
+               type="number"
+               autofocus>
+
+      </mat-form-field>
+    </div>
+
+    <div class="fx-flex-column">
+      <span>Y Axis</span>
+      <mat-label>Scale Type</mat-label>
+      <mat-radio-group aria-label="Select an option">
+        <mat-radio-button value="1">Lin</mat-radio-button>
+        <mat-radio-button value="2">Log</mat-radio-button>
+      </mat-radio-group>
+
+      <mat-form-field>
+        <mat-label>minY</mat-label>
+        <input matInput
+               placeholder=""
+               [formControl]="minY"
+               type="number"
+               autofocus>
+
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>maxY</mat-label>
+        <input matInput
+               placeholder=""
+               [formControl]="maxY"
+               type="number"
+               autofocus>
+
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="fx-flex-column graph">
+
+    <div class="canvas">
+
+      <canvas #_canvasElement (click)="click($event)" (mousemove)="onMove($event)"></canvas>
+    </div>
+
+<!--    <div style="display: flex; flex-direction: row; ">-->
+<!--      <ng-container *ngFor="let color of palette">-->
+<!--        <div style="width: 20px; height: 20px; background: rgb( {{color[0]}}, {{color[1]}}, {{color[2]}} )"></div>-->
+<!--      </ng-container>-->
+<!--    </div>-->
+
+
+    <div>
+      <canvasjs-chart [options]="chartOptions" (chartInstance)="getChartInstance($event)"></canvasjs-chart>
+    </div>
+
+  </div>
+
+</div>

@@ -17,7 +17,7 @@ export function fxIf(node, value) {
 
   const v = eval(value);
 
-  console.log('running directive on', node, 'with value', {v});
+  // console.log('running directive on', node, 'with value', {v});
   if (v) {
     node.style.setProperty('display', 'block');
   } else {
@@ -30,7 +30,7 @@ registerDirective('fxif', fxIf);
 
 registerDirective('fxfor', (node, value: string) => {
 
-  console.log('this is fxfor', node, value);
+  // console.log('this is fxfor', node, value);
 
   const parsedInput = value.match(/^let\s(.+)\sof\s(.+)$/);
 

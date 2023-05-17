@@ -1,6 +1,9 @@
 @charset "utf-8";
 
-@use '@material/theme' as theme;
+@use '@material/theme' with (
+$primary: black,
+$on-primary: white,
+);
 @use '@material/button/styles' as button;
 @use "@material/icon-button/styles" as icon-button;
 @use "@material/slider/styles" as slider;
@@ -8,6 +11,7 @@
 @use "@material/ripple";
 @use "@material/elevation/mdc-elevation";
 
+@import "@microphi/styles/scss/fx-flex";
 
 $shadow: rgba(0,0,0,0.4);
 $shadow-light: rgba(0,0,0,0.2);
@@ -45,42 +49,4 @@ fx-root {
 // mdc fixes
 .mdc-top-app-bar {
   position: unset;
-}
-
-// flex utilities
-.fx-flex {
-  display: flex;
-}
-
-.fx-flex-column {
-  flex-direction: column;
-}
-
-.fx-flex-row {
-  @extend .fx-flex;
-  flex-direction: row;
-  align-items: center;
-
-}
-
-.fx-flex-grow {
-  @extend .fx-flex;
-  flex-grow: 1;
-}
-
-.fx-flex-align-items-center {
-  align-items: center;
-}
-
-.fx-flex-justify-content-center {
-  justify-content: center;
-}
-
-.fx-flex-align-center-center {
-  @extend .fx-flex-align-items-center;
-  @extend .fx-flex-justify-content-center;
-}
-
-.fx-flex-justify-space-around {
-  justify-content: space-around;
 }

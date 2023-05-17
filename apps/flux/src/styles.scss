@@ -1,0 +1,113 @@
+///* You can add global styles to this file, and also import other style files */
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
+//
+@import "../../../projects/styles/scss/fx-flex.scss";
+@import "../../../projects/styles/scss/spacing";
+//
+
+@include mat.core();
+
+$my-primary: mat.define-palette(mat.$indigo-palette, 500);
+$my-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+// The "warn" palette is optional and defaults to red if not specified.
+$my-warn: mat.define-palette(mat.$red-palette);
+
+$theme: mat.define-light-theme((
+  color: (
+    primary: $my-primary,
+    accent: $my-accent,
+    warn: $my-warn,
+  ),
+  typography: mat.define-typography-config(),
+  density: 0,
+));
+
+$color-config:    mat.get-color-config($theme);
+$primary-palette: map.get($color-config, 'primary');
+$accent-palette:  map.get($color-config, 'accent');
+$warn-palette:    map.get($color-config, 'warn');
+$is-dark-theme:   map.get($color-config, 'is-dark');
+
+html, body { height: 100%; }
+
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+
+  //& *:not(script,a,router-outlet,button[mat-fab],mat-toolbar) {
+  //  display: flex;
+  //  flex-direction: column;
+  //  //flex-grow: 1;
+  //}
+
+
+  a {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+
+  .mat-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.active {
+  color: mat.get-color-from-palette($accent-palette) !important;
+
+}
+
+.toolbar {
+  position: fixed;
+  top: 34px;
+  right: 34px;
+  z-index: 100;
+}
+
+router-outlet {
+  display: none;
+}
+
+mat-card-actions.card-actions {
+  display: flex;
+  flex-direction: row;
+}
+
+//
+//mat-radio-group {
+//  display: flex;
+//  flex-direction: column;
+//  margin: 15px 0;
+//  align-items: flex-start;
+//}
+//
+//mat-radio-button {
+//  margin: 5px;
+//}
+//
+//.overflow-auto {
+//  overflow: auto;
+//}
+//
+//.scrolling-content {
+//
+//
+//}
+//
+//a {
+//  display: flex;
+//  flex-direction: row;
+//  align-items: center;
+//  flex-wrap: wrap;
+//}

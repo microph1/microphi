@@ -4,7 +4,8 @@
     "project": [
       "./tsconfig.json",
       "./projects/**/tsconfig.json",
-      "./apps/**/tsconfig.app.json"
+      "./apps/**/tsconfig.app.json",
+      "./apps/**/tsconfig.json"
     ],
     "createDefaultProgram": true
   },

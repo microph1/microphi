@@ -232,7 +232,7 @@
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "apps/flux/src/styles.css"
+              "apps/flux/src/styles.scss"
             ],
             "scripts": [],
             "vendorChunk": true,
@@ -276,7 +276,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "flux:build"
+            "browserTarget": "flux:build",
+            "port": 8080
           },
           "configurations": {
             "production": {
@@ -302,7 +303,7 @@
               "apps/flux/src/assets"
             ],
             "styles": [
-              "apps/flux/src/styles.css"
+              "apps/flux/src/styles.scss"
             ],
             "scripts": []
           }

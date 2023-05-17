@@ -17,9 +17,7 @@ export class FxSliderComponent {
   constructor(
     private nativeElement: Element,
   ) {
-    setTimeout(() => {
-      this.slider.layout();
-    }, 300)
+
   }
 
   fxOnChanges({name, newValue, oldValue}) {
@@ -33,7 +31,10 @@ export class FxSliderComponent {
 
     this.slider = new MDCSlider(this.nativeElement.querySelector('.mdc-slider'));
 
-
+    setTimeout(() => {
+      console.log('aligning layout');
+      this.slider.layout();
+    }, 1000)
 
     this.slider.listen('MDCSlider:change', (e) => {
 

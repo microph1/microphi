@@ -1,0 +1,93 @@
+
+<div class="toolbar">
+  <button mat-fab (click)="save();">
+    <mat-icon>save</mat-icon>
+  </button>
+</div>
+
+
+<div class="fx-flex-column fx-flex-grow-02">
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput
+           [(ngModel)]="speaker.name"
+           autofocus>
+  </mat-form-field>
+
+  <ng-container *ngFor="let dimension of properties">
+    <mat-form-field>
+      <mat-label>
+        {{dimension.label}}
+        <ng-container *ngIf="dimension.unit">
+          <i>({{dimension.unit}})</i>
+        </ng-container>
+      </mat-label>
+      <input matInput
+
+             [(ngModel)]="dimension.value"
+             type="number"
+             autofocus>
+    </mat-form-field>
+
+
+  </ng-container>
+</div>
+
+<div class="fx-flex-column fx-flex-grow m-6">
+
+  <mat-card>
+
+    <mat-card-subtitle class="fx-flex-row">
+      <span class="mr-6">My Frequency Response</span>
+    </mat-card-subtitle>
+
+    <mat-card-content>
+
+      <ngx-bode fMin="20" fMax="500" [data]="myData"></ngx-bode>
+
+    </mat-card-content>
+
+
+  </mat-card>
+
+
+  <mat-card>
+
+    <mat-card-subtitle class="fx-flex-row">
+
+      <span class="mr-6">Bass Reflex</span>
+
+      <span class="mr-6">EBP: <b>{{bassReflex?.ebp | number}}</b></span>
+      <span class="mr-6">vb: <b>{{bassReflex?.vb | number}}L</b></span>
+      <span class="mr-6">fb: <b>{{bassReflex?.fb | number}} Hz</b></span>
+      <span class="mr-6">f3: <b>{{bassReflex?.f3 | number}} Hz</b></span>
+      <span class="mr-6">Lp: <b>{{bassReflex?.portLength | number}} cm</b></span>
+      <span class="mr-6">Min. Port. diam.: <b>{{bassReflex?.minPortDiameter | number}} cm</b></span>
+
+    </mat-card-subtitle>
+
+    <mat-card-content>
+
+      <ngx-bode fMin="20" fMax="500" [data]="bassReflexData" [stripLines]="[{ value: bassReflex.fb, label: 'fb' }, { value: bassReflex.f3, label: 'f3'}]"></ngx-bode>
+
+    </mat-card-content>
+
+
+  </mat-card>
+
+  <mat-card class="mb-6">
+    <mat-card-subtitle class="fx-flex-row">
+
+      <span class="mr-6">Close Box</span>
+
+      <span class="mr-6">vb: <b>{{closedBox.vb | number}} L</b></span>
+      <span class="mr-6">fb: <b>{{closedBox.fb | number}} Hz</b></span>
+      <span class="mr-6">f3: <b>{{closedBox.f3 | number}} Hz</b></span>
+
+    </mat-card-subtitle>
+    <mat-card-content>
+      <ngx-bode fMin="20" fMax="500" [data]="closedBoxData" [stripLines]="[{ value: closedBox.fb, label: 'fb' }, { value: closedBox.f3, label: 'f3'}]"></ngx-bode>
+    </mat-card-content>
+  </mat-card>
+
+</div>

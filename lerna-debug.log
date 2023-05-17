@@ -1,0 +1,26 @@
+0 silly argv {
+0 silly argv   _: [ 'run' ],
+0 silly argv   since: 'mastar',
+0 silly argv   lernaVersion: '5.1.6',
+0 silly argv   '$0': 'node_modules/.bin/lerna',
+0 silly argv   script: 'lint:ci'
+0 silly argv }
+1 notice cli v5.1.6
+2 verbose rootPath /media/dcavaliere/extradrive1/dev/drugo/microphi
+3 notice filter changed since "mastar"
+4 silly hasTags
+5 verbose hasTags true
+6 silly git-describe.sync "v1.1.0-7-g7aac13c-dirty" => {"lastTagName":"v1.1.0","lastVersion":"v1.1.0","refCount":"7","sha":"7aac13c","isDirty":true}
+7 info Looking for changed packages since mastar
+8 silly checking diff apps/metronoman-flux
+9 error Error: Command failed with exit code 128: git diff --name-only mastar -- apps/metronoman-flux
+9 error fatal: bad revision 'mastar'
+9 error     at makeError (/media/dcavaliere/extradrive1/dev/drugo/microphi/node_modules/execa/lib/error.js:60:11)
+9 error     at Function.module.exports.sync (/media/dcavaliere/extradrive1/dev/drugo/microphi/node_modules/execa/index.js:194:17)
+9 error     at Object.execSync (/media/dcavaliere/extradrive1/dev/drugo/microphi/node_modules/@lerna/child-process/index.js:39:16)
+9 error     at diffSinceIn (/media/dcavaliere/extradrive1/dev/drugo/microphi/node_modules/@lerna/collect-updates/lib/make-diff-predicate.js:75:23)
+9 error     at hasDiffSinceThatIsntIgnored (/media/dcavaliere/extradrive1/dev/drugo/microphi/node_modules/@lerna/collect-updates/lib/make-diff-predicate.js:34:18)
+9 error     at isCandidate (/media/dcavaliere/extradrive1/dev/drugo/microphi/node_modules/@lerna/collect-updates/collect-updates.js:113:77)
+9 error     at /media/dcavaliere/extradrive1/dev/drugo/microphi/node_modules/@lerna/collect-updates/lib/collect-packages.js:24:9
+9 error     at Map.forEach (<anonymous>)
+9 error     at collectPackages (/media/dcavaliere/extradrive1/dev/drugo/microphi/node_modules/@lerna/collect-updates/lib/collect-packages.js:23:12)

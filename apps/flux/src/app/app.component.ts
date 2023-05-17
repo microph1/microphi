@@ -1,10 +1,8 @@
-/* eslint-disable:  @typescript-eslint/no-unused-vars */
-import { Component, OnInit, Directive } from '@angular/core';
+import { AfterViewInit, Component, Directive, OnInit } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { startWith } from 'rxjs/operators';
 import 'reflect-metadata';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Primitive } from 'utility-types';
+import { SpeakersComponent } from './speakers/speakers.component';
 
 
 export function Source<
@@ -42,16 +40,19 @@ export abstract class RxComponent implements OnInit {
     const paramsToBind = Reflect.getMetadata('params', this.constructor) as object;
     console.log(paramsToBind);
 
-    Object.entries(paramsToBind).forEach(([propertyName, paramName]) => {
-      console.log({paramName})
-      const source = this[propertyName];
+    if (paramsToBind) {
+      Object.entries(paramsToBind).forEach(([propertyName, paramName]) => {
+        console.log({paramName});
+        const source = this[propertyName];
 
-      if (source instanceof Observable) {
-        source.pipe(
-        );
-      }
+        if (source instanceof Observable) {
+          source.pipe(
+          );
+        }
 
-    });
+      });
+    }
+
 
 
     this.combineLatestFromSources();
@@ -71,10 +72,9 @@ export abstract class RxComponent implements OnInit {
     //   return initialValue;
     // });
 
-    const sources$ = sources.map((name) => {
+    const sources$ = sources?.map((name) => {
       return this[name];
-
-    });
+    }) || [];
 
     combineLatest(sources$).pipe(
       // startWith(initialValues)
@@ -90,50 +90,9 @@ export abstract class RxComponent implements OnInit {
 @Component({
   selector: 'fx-app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
-export class AppComponent extends RxComponent implements OnInit {
-
-  private routerParam = 'my-route-param';
-
-  private formA = new UntypedFormGroup({
-    name: new UntypedFormControl(),
-    email: new UntypedFormControl(),
-    age: new UntypedFormControl()
-  });
-
-  private formControlB = new UntypedFormControl();
-
-  private formControlC = new UntypedFormControl();
-
-  @Source()
-  private sourceA$ = this.formA.valueChanges.pipe(
-    startWith(undefined)
-  );
-
-  @Source()
-  @BindToParam('B')
-  private sourceB$ = this.formControlB.valueChanges.pipe(
-    startWith('a')
-  );
-
-  @Source()
-  private sourceC$ = this.formControlC.valueChanges.pipe(
-    startWith(this.routerParam)
-  );
-
-
-
-  // ngOnInit(): void {
-  //   super.ngOnInit();
-  //   console.log('calling original onInit');
-  //   combineLatest([this.sourceA$, this.sourceB$]).subscribe((values) => {
-  //     console.log(values);
-  //   })
-  // }
-
-  onInputChange(values) {
-    console.log('onInputChange', values);
-  }
-
+export class AppComponent extends RxComponent {
+  component: SpeakersComponent;
+  opened: boolean = false;
 }

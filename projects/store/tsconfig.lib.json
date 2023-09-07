@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/store",
+    "outDir": "./lib",
     "rootDir": "src",
     "declarationMap": true,
     "target": "es2020",

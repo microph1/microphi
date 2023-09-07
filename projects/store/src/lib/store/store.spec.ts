@@ -55,7 +55,7 @@ describe('store', () => {
       };
     };
 
-    @Effect('concatMap')
+    @Effect('switchMap')
     public findOne(name: string): Observable<string> {
       return of(name).pipe(
         delay(500),

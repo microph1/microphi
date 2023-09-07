@@ -82,10 +82,10 @@ export abstract class Store<State, A> {
 
       this.actions.set(key, new Subject());
 
-      // @ts-ignore
-      const operator = Store.getOperator(this.effects[key]?.strategy);
+      const effect = this.effects.find((e) => e.action === key);
 
-      // @ts-ignore
+      const operator = Store.getOperator(effect?.strategy);
+
       this.actions.get(key).pipe(
         withLatestFrom(this._store$),
         tap(([{payload}]) => {
@@ -96,7 +96,7 @@ export abstract class Store<State, A> {
           });
         }),
         operator(([{name, payload}]) => {
-          // @ts-ignore
+
           return this[name](...payload).pipe(
             tap((response) => {
               this._loading$.next({

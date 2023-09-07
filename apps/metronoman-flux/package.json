@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "webpack serve",
-    "build": "webpack"
+    "_build": "webpack"
   },
   "dependencies": {
     "@microgamma/digator": "^2.1.0",

@@ -1,20 +1,6 @@
+import { getEnvironmentVarialbles } from "./get-environment-varialbles";
+
 declare const process: any;
-let DEBUG: string;
-let PALETTE: string;
-
-if (typeof window === 'object') {
-
-  DEBUG = localStorage.getItem('debug') || '';
-  PALETTE = localStorage.getItem('palette') || '';
-
-} else {
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-  DEBUG = process.env['DEBUG'];
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-  PALETTE = process.env['PALETTE'];
-
-}
 
 const colors = new Map<string, string>();
 
@@ -32,9 +18,9 @@ colorPalettes.set('funky_dealer', [
 
 const DEFAULT_PALETTE: Palette = 'funky_dealer';
 
-
 export function getDebugger(namespace: string) {
   let lastTimeStamp = 0;
+  const {DEBUG, PALETTE} = getEnvironmentVarialbles(process);
 
   const colorPalette = colorPalettes.get(PALETTE || DEFAULT_PALETTE) as string[];
 
@@ -85,4 +71,3 @@ export function getDebugger(namespace: string) {
     }
   }
 }
-console.log('test');

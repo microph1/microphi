@@ -24,6 +24,7 @@
   ],
   "version": "1.1.3",
   "dependencies": {
+    "@microphi/debug": "^1.1.3",
     "reflect-metadata": "^0.1.13",
     "tslib": "^2.5.0"
   },

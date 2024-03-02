@@ -17,7 +17,7 @@
     "build:ci": "lerna run build:ci",
     "test": "jest",
     "test:ci": "lerna run test:ci",
-    "lint": "lerna run lint",
+    "lint:ci": "lerna run lint",
     "e2e": "ng e2e",
     "release": "lerna version --conventional-commits",
     "predeploy:dcsoftware": "ng build dcsoftware --configuration production",

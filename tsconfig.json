@@ -20,6 +20,9 @@
       ],
       "@flux/core": [
         "projects/flux/core/src/index.ts"
+      ],
+      "@microphi/debug": [
+        "packages/debug/src/debug.ts"
       ]
     },
     "outDir": "./dist/out-tsc",

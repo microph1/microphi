@@ -2,12 +2,14 @@
 
 # Compiled output
 /projects/*/dist
+/apps/*/dist
 /tmp
 /out-tsc
 /bazel-out
 
 # Node
-/node_modules
+node_modules
+/dist
 npm-debug.log
 yarn-error.log
 
@@ -37,6 +39,7 @@ projects/**/coverage
 /libpeerconnection.log
 testem.log
 /typings
+lerna-debug.log
 
 # System files
 .DS_Store

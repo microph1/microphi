@@ -1,6 +1,7 @@
 import { $Keys } from 'utility-types';
 
-export class List<EntityType extends {}> implements Iterable<EntityType> {
+export class List<EntityType extends object> implements Iterable<EntityType> {
+
 
   public readonly entities = new Map<any, EntityType>();
 

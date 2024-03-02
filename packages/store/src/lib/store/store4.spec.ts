@@ -1,9 +1,6 @@
 import { Brand } from 'utility-types';
-import { Observable } from 'rxjs';
 
-type StateManager<T, Act> = {
-
-}
+// type StateManager<T, Act> = {}
 
 type action<T> = Brand<T, 'action'>;
 

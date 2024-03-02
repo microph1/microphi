@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Store, makeStore } from '../store/store';
 import { Effect, getEffects } from './effect';
 
@@ -14,26 +14,29 @@ describe('@Effect', () => {
 
     @Effect()
     ONE(): Observable<any> {
-      return undefined;
+      return of();
     }
 
     @Effect('concatMap')
     THREE(): Observable<any> {
-      return undefined;
+      return of();
     }
 
     @Effect('mergeMap')
     TWO(): Observable<any> {
-      return undefined;
+      return of();
     }
 
     onONE<O>(state: any, payload: any): any {
+      // no empty
     }
 
     onTHREE<O>(state: any, payload: any): any {
+      // no empty
     }
 
     onTWO<O>(state: any, payload: any): any {
+      // no empty
     }
 
   }

@@ -46,7 +46,7 @@ describe('store', () => {
     public findAll() {
       this.effectSpy('payload');
       return of(['carl', 'denise']);
-    };
+    }
 
     @Reduce()
     public onFindAll(state, payload) {
@@ -54,7 +54,7 @@ describe('store', () => {
       return {
         users: [...state.users, ...payload]
       };
-    };
+    }
 
     @Effect()
     public findOne(name: string): Observable<string> {
@@ -70,7 +70,7 @@ describe('store', () => {
         ...state,
         selected: [selectedIdx, name]
       };
-    };
+    }
 
     @Effect()
     public updateOne(payload): Observable<{ name: string, newName: string }> {
@@ -83,22 +83,22 @@ describe('store', () => {
       state.users[userIdx] = newName;
       return state;
 
-    };
+    }
 
     @Effect('switchMap')
     public observerArgs() {
       return of(true);
-    };
+    }
 
     @Reduce()
     public onObserverArgs(state) {
       return state;
-    };
+    }
 
     @Effect()
     public asyncEffect(id, email) {
       return of('test');
-    };
+    }
 
     @Reduce()
     public onAsyncEffect(state, payload) {
@@ -107,7 +107,7 @@ describe('store', () => {
         ...state,
         items: payload
       };
-    };
+    }
 
     @Effect()
     public actionEffectThrows() {
@@ -273,7 +273,7 @@ describe('store', () => {
 
   xdescribe('error handling', () => {
 
-    fit('should get an error through the error subject (effect that throws)', (done) => {
+    fit('should get an error through the error subject (effect that throws)', () => {
 
       store.loading$.subscribe((state) => {
         console.log(state);

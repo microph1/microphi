@@ -14,7 +14,7 @@
       ],
       "rules": {
         "@typescript-eslint/no-explict-any": ["off"],
-        "@typescript-eslint/no-unsafe-assignment": ["warn"],
+        "@typescript-eslint/ban-ts-comment": ["warn"],
         "@angular-eslint/directive-selector": [
           "error",
           {

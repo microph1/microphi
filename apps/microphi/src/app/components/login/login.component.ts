@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/unbound-method,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access */
 import { Component, HostListener, OnDestroy, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Log } from '@microgamma/loggator';
 import { AuthStore } from '../../services/auth/auth.store';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',

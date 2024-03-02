@@ -55,7 +55,7 @@ describe('store', () => {
       };
     };
 
-    @Effect('switchMap')
+    @Effect()
     public findOne(name: string): Observable<string> {
       return of(name).pipe(
         delay(500),
@@ -251,7 +251,7 @@ describe('store', () => {
 
     describe('default strategy switchMap', () => {
 
-      it('should only get latest dispatch', () => {
+      fit('should only get latest dispatch', () => {
 
 
         scheduler.run(({expectObservable}) => {

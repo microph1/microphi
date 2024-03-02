@@ -1,10 +1,5 @@
 {
-  "npmClient": "yarn",
-  "useWorkspaces": true,
-  "packages": [
-    "projects/*",
-    "apps/*",
-    "projects/flux/*"
-  ],
-  "version": "1.1.3"
+  "$schema": "node_modules/lerna/schemas/lerna-schema.json",
+  "version": "16.2.35",
+  "npmClient": "yarn"
 }

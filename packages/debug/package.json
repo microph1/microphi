@@ -1,17 +1,9 @@
 {
-  "name": "@microphi/store",
+  "name": "@microphi/debug",
   "keywords": [
-    "redux",
-    "reducer",
-    "state",
-    "predictable",
-    "functional",
-    "immutable",
-    "hot",
-    "live",
-    "replay",
-    "flux",
-    "elm"
+    "log",
+    "debug",
+    "console"
   ],
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",

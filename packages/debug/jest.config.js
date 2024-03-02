@@ -4,7 +4,7 @@ const { compilerOptions } = require('../../tsconfig.json');
 const moduleNameMapper = pathsToModuleNameMapper(compilerOptions.paths, {prefix: '<rootDir>/../../'});
 
 module.exports = {
-  displayName: 'store',
+  displayName: 'debug',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.spec.ts'],
 

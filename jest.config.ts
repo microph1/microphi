@@ -12,20 +12,6 @@ const jestConfig: JestConfigWithTsJest = {
     'packages/*'
   ],
   preset: 'ts-jest',
-  coverageReporters: ['json', 'html', 'lcov', 'text-summary'],
-  collectCoverageFrom: [
-    "**/src/**/!(*.spec).ts",
-    "!**/*.experiment.ts",
-    "!**/index.ts",
-  ],
-  coverageThreshold: {
-    global: {
-      statements: 73.1,
-      branches: 48.39,
-      functions: 79.63,
-      lines: 72.63,
-    }
-  },
 }
 
 console.log(jestConfig.transform);

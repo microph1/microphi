@@ -35,6 +35,7 @@
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
-    "build:ci": "yarn build"
+    "build:ci": "yarn build",
+    "test:ci": "jest --coverage --ci"
   }
 }

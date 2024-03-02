@@ -20,6 +20,22 @@ const config: Config = {
     // [...]
   },
   moduleNameMapper,
+  coverageDirectory: '<rootDir>/../../coverage/store',
+  coverageReporters: ['json', 'html', 'lcov', 'text-summary'],
+  collectCoverageFrom: [
+    "**/src/**/!(*.spec).ts",
+    "!**/*.experiment.ts",
+    "!**/index.ts",
+  ],
+  coverageThreshold: {
+    global: {
+      statements: 88.89,
+      branches: 82.35,
+      lines: 88.46,
+      functions: 82.35,
+    }
+  },
+
 }
 
 export default config;

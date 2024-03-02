@@ -1,11 +1,19 @@
 {
   "extends": "../../tsconfig.json",
-  "references": [
-    {
-      "path": "../expect-observable",
-    },
-    {
-      "path": "../loggator",
-    }
+  "compilerOptions": {
+    "outDir": "./lib",
+    "rootDir": "src",
+    "declarationMap": true,
+    "target": "es2020",
+    "declaration": true,
+    "inlineSources": true,
+    "types": []
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "src/test-setup.ts",
+    "**/*.spec.ts"
   ]
 }

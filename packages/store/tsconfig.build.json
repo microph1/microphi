@@ -8,10 +8,5 @@
   "include": ["src/**/*.ts"],
   "exclude": [
     "src/**/*.spec.ts"
-  ],
-  "references": [
-    {
-      "path": "../loggator/tsconfig.build.json"
-    }
   ]
 }

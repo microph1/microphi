@@ -5,6 +5,7 @@ import { Effect, EffectStrategy, getEffects } from '../effect/effect';
 import { Brand, Primitive } from 'utility-types';
 
 export type getPayloadFromActionType<A, C extends keyof A> =
+// eslint-disable-next-line @typescript-eslint/ban-types
   A[C] extends Function ? A[C] extends () => any
     ? never[] : A[C] extends (...args: infer T) => any
       ? T : never[] : A[C][];
@@ -72,6 +73,7 @@ export abstract class Store<State, A> {
     this.effects = getEffects(this);
     this.reducers = getReducers(this);
 
+    // @ts-ignore
     const actions = [].concat(this.effects, this.reducers);
 
     const actionsSet = new Set<string>();
@@ -84,8 +86,9 @@ export abstract class Store<State, A> {
 
       const effect = this.effects.find((e) => e.action === key);
 
-      const operator = Store.getOperator(effect?.strategy);
+      const operator = Store.getOperator(effect!.strategy);
 
+      // @ts-ignore
       this.actions.get(key).pipe(
         withLatestFrom(this._store$),
         tap(([{payload}]) => {
@@ -97,6 +100,7 @@ export abstract class Store<State, A> {
         }),
         operator(([{name, payload}]) => {
 
+          // @ts-ignore
           return this[name](...payload).pipe(
             tap((response) => {
               this._loading$.next({

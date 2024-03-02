@@ -1,6 +1,6 @@
-import { Effect, getEffectMetadata, getEffects } from './effect';
-import { Store, makeStore } from '../store/store';
 import { Observable } from 'rxjs';
+import { Store, makeStore } from '../store/store';
+import { Effect, getEffects } from './effect';
 
 describe('@Effect', () => {
 

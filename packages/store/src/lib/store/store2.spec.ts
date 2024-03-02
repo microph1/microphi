@@ -1,8 +1,7 @@
 /* eslint-disable */
+import 'reflect-metadata';
 import { Observable, of, Subject } from 'rxjs';
 import { Falsey } from 'utility-types';
-import { map } from 'rxjs/operators';
-import 'reflect-metadata';
 
 xdescribe('experiments with new ways of thinking a state manager', () => {
 

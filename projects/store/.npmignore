@@ -1,7 +1,0 @@
-src
-tsconfig*.json
-yarn.lock
-yarn-error.log
-*.test*
-*.spec*
-jest.config.js

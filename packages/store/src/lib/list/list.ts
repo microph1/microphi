@@ -18,7 +18,11 @@ export class List<EntityType extends {}> implements Iterable<EntityType> {
     return this.entities.size;
   }
 
-  public get(id) {
+  public has(id: any) {
+    return this.entities.has(id);
+  }
+
+  public get(id: any) {
     return this.entities.get(id);
   }
   private getId(entity: EntityType) {
@@ -40,6 +44,7 @@ export class List<EntityType extends {}> implements Iterable<EntityType> {
     // tslint:disable-next-line:forin
     for (const idx in this.ids) {
       const id = this.ids[idx];
+      // @ts-ignore
       yield this.entities.get(id);
     }
   }
@@ -71,7 +76,15 @@ export class List<EntityType extends {}> implements Iterable<EntityType> {
     });
   }
 
+  public clear() {
+
+    this.ids.length = 0;
+    this.entities.clear();
+
+  }
+
   public delete(...entities: EntityType[]) {
+
     entities.forEach((e) => {
       const id = this.getId(e);
       const indexOfId = this.ids.findIndex((_id) => _id === id);
@@ -81,6 +94,7 @@ export class List<EntityType extends {}> implements Iterable<EntityType> {
         this.entities.delete(id);
       }
     });
+
   }
 
   public append(...entities: EntityType[]) {

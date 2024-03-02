@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { BehaviorSubject, Observable, of, Subject, switchMap, tap } from 'rxjs';
-import { getPayloadFromActionType } from '@microphi/store';
+import { getPayloadFromActionType } from './store';
 import { filter, map, withLatestFrom } from 'rxjs/operators';
 import { $Keys } from 'utility-types';
 

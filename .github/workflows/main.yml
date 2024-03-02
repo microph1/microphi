@@ -75,7 +75,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org/'
 
       - name: Install
-        run: yarn install --frozon-lockfile
+        run: yarn install --frozen-lockfile
 
       - name: Version_and_Deploy
         run: |

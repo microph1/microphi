@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [16.3.0](https://github.com/microph1/microphi/compare/v1.1.3...v16.3.0) (2024-03-02)
+
+
+### Bug Fixes
+
+* refactor copied files ([8991a71](https://github.com/microph1/microphi/commit/8991a719bfc2955e03a06674d66a62049ececa68))
+
+
+### Features
+
+* **ci:** add github workflows ([180d2ce](https://github.com/microph1/microphi/commit/180d2ce0b188dc07e18fd0d8e2d249eeb0e46028))
+* **debug:** add debug package ([0e7d497](https://github.com/microph1/microphi/commit/0e7d4976a36b9dd83a8ec0f50593fd7f5b0b4b59))
+
+
+
+
+
 ## [1.1.3](https://github.com/microph1/microphi/compare/v1.1.2...v1.1.3) (2023-09-07)
 
 **Note:** Version bump only for package microphi

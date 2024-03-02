@@ -25,6 +25,10 @@ describe('yet another implemetation', () => {
 
 
 
+  it('should pass', () => {
+
+    expect(true).toBeTruthy();
+  });
 
 
 

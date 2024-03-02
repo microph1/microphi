@@ -1,7 +1,8 @@
+import { Effect } from '../effect/effect';
+import { Reduce } from '../reduce/reduce';
 import { Store, makeStore } from './store';
 import { delay, Observable, of, throwError } from 'rxjs';
-import { TestScheduler } from '@microphi/test';
-import { Effect, Reduce } from '@microphi/store';
+import { TestScheduler } from '@datakitchen/rxjs-marbles';
 
 describe('store', () => {
   interface ItemsState {
@@ -298,4 +299,3 @@ describe('store', () => {
   });
 
 });
-

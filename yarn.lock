@@ -1901,6 +1901,11 @@
   resolved "https://registry.yarnpkg.com/@csstools/selector-specificity/-/selector-specificity-2.0.2.tgz#1bfafe4b7ed0f3e4105837e056e0a89b108ebe36"
   integrity sha512-IkpVW/ehM1hWKln4fCA3NzJU8KwD+kIOvPZA4cqxoJHtE21CCzjyp+Kxbu0i5I4tBNOlXPL9mjwnWlL0VEG4Fg==
 
+"@datakitchen/rxjs-marbles@^16.2.36":
+  version "16.2.36"
+  resolved "https://registry.yarnpkg.com/@datakitchen/rxjs-marbles/-/rxjs-marbles-16.2.36.tgz#3314f53ae845bd9da64d69210bc4922fb459e43c"
+  integrity sha512-IABZfQalucMHbVH/3fb56l07qNpL3H20bFhsykilawHatzQq/witkDqEi8JiYfro9SM7g8M4euUNt22t5LQY/Q==
+
 "@discoveryjs/json-ext@0.5.7", "@discoveryjs/json-ext@^0.5.0":
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz#1d572bfbbe14b7704e0ba0f39b74815b84870d70"

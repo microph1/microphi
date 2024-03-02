@@ -55,6 +55,7 @@
     "@angular-eslint/template-parser": "16.3.1",
     "@angular/cli": "^16.2.11",
     "@angular/compiler-cli": "^16.2.0",
+    "@datakitchen/rxjs-marbles": "^16.2.36",
     "@faker-js/faker": "^7.3.0",
     "@types/jest": "^29.4.4",
     "@types/node": "^20.11.24",

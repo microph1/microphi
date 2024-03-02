@@ -85,8 +85,9 @@ xdescribe('experiment 2', () => {
                 })
               );
             })
-          ).subscribe((state: S) => {
+          ).subscribe((state) => {
             console.log('new state is', state);
+            // @ts-ignore
             this._state$.next(state);
           });
 
@@ -140,7 +141,7 @@ xdescribe('experiment 2', () => {
        */
       dispatch<K extends keyof IE>(action: K, ...payload: getPayloadFromActionType<IE, K>) {
         console.log('dispatching action', action, 'with payload', payload);
-        this.actions.get(action).next(payload);
+        this.actions.get(action)?.next(payload);
       }
     };
   }
@@ -203,7 +204,7 @@ xdescribe('experiment 2', () => {
 
   const initialState: IState = {
     items: ['Alice'],
-    selected: undefined,
+    selected: -1,
   };
 
   class MyStore extends StoreFactory(Effects, Reducers, initialState) {

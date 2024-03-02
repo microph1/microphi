@@ -2,6 +2,7 @@ import { $Keys } from 'utility-types';
 import { BehaviorSubject, Observable, Subject, switchMap, tap } from 'rxjs';
 import { filter, map, withLatestFrom } from 'rxjs/operators';
 import { getDebugger } from '@microphi/debug';
+import { getPayloadFromActionType } from './store';
 
 const d = getDebugger('store-3');
 
@@ -102,8 +103,9 @@ export function StoreFactory<E extends Class,
               })
             );
           })
-        ).subscribe((state: S) => {
+        ).subscribe((state) => {
           d('new state is', state);
+          // @ts-ignore
           this._state$.next(state);
         });
 
@@ -156,7 +158,7 @@ export function StoreFactory<E extends Class,
      */
     dispatch<K extends keyof IE>(action: K, ...payload: getPayloadFromActionType<IE, K>) {
       d('dispatching action', action, 'with payload', payload);
-      this.actions.get(action).next(payload);
+      this.actions.get(action)?.next(payload);
     }
   };
 }

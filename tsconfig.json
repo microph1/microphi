@@ -4,7 +4,7 @@
     "baseUrl": "./",
     "paths": {
       "@microphi/store": [
-        "projects/store/src/index.ts"
+        "packages/store/src/index.ts"
       ],
       "@microphi/cache": [
         "projects/cache/src/index.ts"

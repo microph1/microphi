@@ -4,7 +4,8 @@
   "workspaces": [
     "projects/*",
     "projects/flux/*",
-    "apps/*"
+    "apps/*",
+    "packages/*"
   ],
   "scripts": {
     "ng": "ng",

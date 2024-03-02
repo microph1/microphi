@@ -1,5 +1,5 @@
 {
-  "name": "@microphi/store_deprecated",
+  "name": "@microphi/store",
   "keywords": [
     "redux",
     "reducer",
@@ -28,13 +28,12 @@
     "tslib": "^2.5.0"
   },
   "devDependencies": {
-    "@microphi/test": "^1.1.0",
     "utility-types": "^3.10.0"
   },
   "peerDependencies": {
-    "rxjs": "^7.8.0"
+    "rxjs": "~7.8.0"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.lib.prod.json"
+    "build": "tsc -b tsconfig.build.json"
   }
 }

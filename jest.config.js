@@ -1,26 +1,17 @@
 
+
+
 module.exports = {
-
   projects: [
-    // libs
-    '<rootDir>/projects/store/src',
-    '<rootDir>/projects/test/src',
-    '<rootDir>/projects/phi/src',
-    '<rootDir>/projects/flux/**/src',
-
-    // apps
-    '<rootDir>/apps/flux/src',
-    '<rootDir>/apps/microphi/src',
+    'projects/*'
   ],
+
   coverageDirectory: 'coverage',
   reporters: [
-    'default'
+    'default',
+    ['jest-junit', { outputDirectory: 'coverage', outputName: 'junit.xml' }],
   ],
-  coverageReporters: [
-    'html',
-    'lcov',
-    'text'
-  ],
+  coverageReporters: ['html', 'lcov', 'text', 'cobertura'],
   collectCoverageFrom: [
     "**/src/**/!(*.spec).ts",
     "!**/index.ts",

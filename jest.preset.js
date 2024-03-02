@@ -1,8 +1,10 @@
-const ts_preset = require('ts-jest/jest-preset');
+
+
 module.exports = {
-  ...ts_preset,
-  testMatch: [ '**/+(*.)+(spec|test).+(ts)?(x)' ],
+  preset: 'ts-jest',
+  testMatch: [ '**/?(*.)+(spec|test).[jt]s?(x)' ],
   moduleFileExtensions: [ 'ts', 'js', 'mjs', 'html' ],
   coverageReporters: [ 'html' ],
-  transform: { '^.+\\.(ts|js|html)$': 'ts-jest' },
+  testEnvironment: 'jsdom',
+  testEnvironmentOptions: { customExportConditions: [ 'node', 'require', 'default' ] },
 };

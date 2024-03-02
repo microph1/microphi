@@ -3,9 +3,6 @@
   "version": "0.0.0",
   "workspaces": {
     "packages": [
-      "projects/*",
-      "projects/flux/*",
-      "apps/*",
       "packages/*"
     ]
   },
@@ -19,6 +16,7 @@
     "test:ci": "lerna run test:ci",
     "lint:ci": "lerna run lint",
     "e2e": "ng e2e",
+    "deploy:ci": "lerna publish -y --conventional-commits --create-release github --loglevel verbose --no-private",
     "release": "lerna version --conventional-commits",
     "predeploy:dcsoftware": "ng build dcsoftware --configuration production",
     "deploy:dcsoftware": "cd projects/dcsoftware && yarn sls client deploy --no-confirm",

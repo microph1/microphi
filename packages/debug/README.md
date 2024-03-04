@@ -25,4 +25,4 @@ In any case its value is a comma separated list of regex: if a match happens wit
 
 On each line a timestap is printed and if two or more line from the same namespace are printed out in less the one second then they will show `+ xxx ms` to indicate their offset.
 
-![nodejs example output](../../.github/assets/debug_nodejs_output.png)
+![nodejs example output](https://github.com/microph1/microphi/raw/master/.github/assets/debug_nodejs_output.png)

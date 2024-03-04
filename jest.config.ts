@@ -14,5 +14,4 @@ const jestConfig: JestConfigWithTsJest = {
   preset: 'ts-jest',
 }
 
-console.log(jestConfig.transform);
 export default jestConfig

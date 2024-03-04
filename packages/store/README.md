@@ -1,17 +1,65 @@
 # @microphi/store
 
-> A typescript library to handle states in a human way
+A different way of doing state management with RxJS.
 
-Please refer to the following post for some more info. Documentation will come at a later stage
-
-https://dev.to/davidecavaliere/a-state-manager-for-angular-that-makes-sense-finally-at-least-for-me-2kij-temp-slug-6701935?preview=27e5680771de4a8c93dd2c825b0691b68605d25f1e4ff583e6c4116ba4d30b3b863c98dcfe41b7d059672a5bc3b6e892ceba1b8272e8123594ac0843
-
-Be aware this is just a PoC at this moment *do not use it on your production apps* 
-
-## Build and deploy @microphi/store
-
+## Install
+With your favourite package manager install
 ```
-yarn version
-yarn build store --prod
-yarn deploy store
+@microphi/store
+```
+
+### Define the state
+```typescript
+interface ItemsState {
+  users: string[];
+  selected?: [number, string];
+}
+```
+
+### Define the actions
+```typescript
+interface ItemsActions {
+  // An action MUST always return an Observable
+  findAll: () => Observable<string[]>;
+  // select: (name: string) => Observable<[number, string]>;
+}
+```
+### Implement effects and reducers in the store
+
+```typescript
+import { Store, Effect, Reduce } from '@microphi/store';
+
+// -> Create a class that extends `Store` such as
+class MyStore extends Store<ItemsState, ItemsActions>
+    implements makeStore<ItemsState, ItemsActions> {
+  // -> optionally implement `makeStore` to add extra type checking
+
+  constructor() {
+    // -> Set the initial state
+    super({
+      users: ['alice', 'bob'],
+    });
+  }
+
+  @Effect()
+  // -> Implement `findAll` method
+  findAll(): Observable<string[]> {
+    // - Simulate an async call
+    return of(['alice', 'bob', 'carl', 'denise']);
+  }
+
+  @Reduce() // - Decorate with `@Reduce` so the `Store` knows this is a reducer
+  // -> Method name MUST be `on` + capitalized `actionName`
+  //  its first argument is always the current state
+  //  its second argument is the output of its action without the Observable.
+  public onFindAll(state: ItemsState, payload: string[]) {
+    // -> add state transition logic here
+
+    // -> Return the new state
+    return {
+      users: [...state.users, ...payload]
+    };
+  }
+
+}
 ```

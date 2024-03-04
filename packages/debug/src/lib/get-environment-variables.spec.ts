@@ -1,4 +1,4 @@
-import { getEnvironmentVarialbles } from "./get-environment-varialbles";
+import { getEnvironmentVariables } from "./get-environment-varialbles";
 
 describe('get-environment-variables', () => {
 
@@ -9,12 +9,10 @@ describe('get-environment-variables', () => {
 
   it('should get from process', () => {
 
-    expect(getEnvironmentVarialbles({env: {
+    expect(getEnvironmentVariables({env: {
       DEBUG: 'test',
-      PALETTE: 'palette',
     }})).toEqual({
         DEBUG: 'test',
-        PALETTE: 'palette',
       })
   });
 

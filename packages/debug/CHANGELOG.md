@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.5](https://github.com/microph1/microphi/compare/v1.1.4...v1.1.5) (2024-03-04)
+
+
+### Bug Fixes
+
+* need to run prepack lifecycle ([4dec0e7](https://github.com/microph1/microphi/commit/4dec0e7a269e963448c8b74a141891bd2f39e021))
+
+
+
+
+
 ## [1.1.4](https://github.com/microph1/microphi/compare/v16.4.0...v1.1.4) (2024-03-04)
 
 **Note:** Version bump only for package @microphi/debug

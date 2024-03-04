@@ -12,7 +12,7 @@
 ```javascript
 import { getDebugger } from "@microphi/debug";
 
-export const d = getDebugger('AppComponent');
+export const d = getDebugger('namespace1');
 
 // any where in the code
 d('test');

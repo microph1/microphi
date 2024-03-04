@@ -1,5 +1,6 @@
 {
   "name": "@microphi/debug",
+  "description": "A very simple wrapper to console.log",
   "private": false,
   "keywords": [
     "log",

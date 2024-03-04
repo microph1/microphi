@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.6](https://github.com/microph1/microphi/compare/v1.1.5...v1.1.6) (2024-03-04)
+
+
+### Bug Fixes
+
+* **debug:** avoid referencing directly process or window. use try catch instead ([7131495](https://github.com/microph1/microphi/commit/7131495c4deccf974f2062bfbba0698a5dcfb348))
+* **debug:** use assertive logic to dectec environment ([79fe9e6](https://github.com/microph1/microphi/commit/79fe9e6da757f98dd3ac7468ea04e13817feb3cb))
+* **debug:** use ES6 and nodenext to build the project to allow nodejs compatibility ([ffd4740](https://github.com/microph1/microphi/commit/ffd4740235bb0047052145dbc252c8f8505a6df7))
+
+
+
+
+
 ## [1.1.5](https://github.com/microph1/microphi/compare/v1.1.4...v1.1.5) (2024-03-04)
 
 

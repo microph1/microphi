@@ -22,9 +22,9 @@
   "files": [
     "lib"
   ],
-  "version": "1.1.5",
+  "version": "1.1.6",
   "dependencies": {
-    "@microphi/debug": "^1.1.5",
+    "@microphi/debug": "^1.1.6",
     "reflect-metadata": "^0.1.13",
     "tslib": "^2.5.0"
   },

@@ -1,15 +1,16 @@
-export function getEnvironmentVariables(process: {env: {[k:string]: string}}) {
-    let DEBUG: string;
+import { isNodejs } from "./is_nodejs";
 
-    if (typeof window === 'object') {
+export function getEnvironmentVariables() {
 
-        DEBUG = localStorage.getItem('debug') || '';
+  let DEBUG: string;
 
-    } else {
+  if (isNodejs()) {
 
-        DEBUG = process.env['DEBUG'];
+    DEBUG = process.env['DEBUG'] || '';
+  } else {
 
-    }
+    DEBUG = localStorage.getItem('debug') || '';
+  }
 
-    return { DEBUG };
+  return { DEBUG };
 }

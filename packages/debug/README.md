@@ -1,17 +1,28 @@
-# @microphi/store
+# @microphi/debug
 
-> A typescript library to handle states in a human way
+> Super simple wrapper around console.log
 
-Please refer to the following post for some more info. Documentation will come at a later stage
-
-https://dev.to/davidecavaliere/a-state-manager-for-angular-that-makes-sense-finally-at-least-for-me-2kij-temp-slug-6701935?preview=27e5680771de4a8c93dd2c825b0691b68605d25f1e4ff583e6c4116ba4d30b3b863c98dcfe41b7d059672a5bc3b6e892ceba1b8272e8123594ac0843
-
-Be aware this is just a PoC at this moment *do not use it on your production apps* 
-
-## Build and deploy @microphi/store
-
+# Install
 ```
-yarn version
-yarn build store --prod
-yarn deploy store
+@microphi/debug
 ```
+
+# Log
+
+```javascript
+import { getDebugger } from "@microphi/debug";
+
+export const d = getDebugger('AppComponent');
+
+// any where in the code
+d('test');
+setTimeout(() => {
+  d('hello there');
+}, 500);
+```
+You need to set the `DEBUG` environment variable if running on nodejs or `localStorage.debug` if running in the browser.
+In any case its value is a comma separated list of regex: if a match happens with the namespace then the text will be logged using `console.log`.
+
+On each line a timestap is printed and if two or more line from the same namespace are printed out in less the one second then they will show `+ xxx ms` to indicate their offset.
+
+![nodejs example output](../../.github/assets/debug_nodejs_output.png)

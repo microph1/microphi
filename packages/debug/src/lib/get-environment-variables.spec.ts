@@ -2,19 +2,21 @@ import { getEnvironmentVariables } from "./get-environment-varialbles";
 
 describe('get-environment-variables', () => {
 
-  describe('in browser', () => {
 
-    test.todo('mock localStorage');
-  });
+  describe('in nodejs', () => {
 
-  it('should get from process', () => {
+    beforeEach(() => {
+      process.env['DEBUG'] = 'test';
+    });
 
-    expect(getEnvironmentVariables({env: {
-      DEBUG: 'test',
-    }})).toEqual({
+    it('should get from process', () => {
+
+      expect(getEnvironmentVariables()).toEqual({
         DEBUG: 'test',
-      })
-  });
+      });
 
+    });
+
+  });
 
 });

@@ -3,7 +3,9 @@
   "compilerOptions": {
     "outDir": "lib",
     "rootDir": "src",
-    "noEmit": false
+    "noEmit": false,
+    "target": "ES6",
+    "module": "nodenext"
   },
   "include": ["src/**/*.ts"],
   "exclude": [

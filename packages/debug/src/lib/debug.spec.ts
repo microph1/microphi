@@ -1,22 +1,23 @@
-import { getDebugger } from "@microgamma/loggator";
+import { Log, getDebugger } from './debug';
 
 describe('debug', () => {
 
-  let d: unknown;
+  let d: Log;
 
   beforeEach(() => {
-
     d = getDebugger('namespace');
-
-    // @ts-ignore
-    d('test');
   });
 
-  it('should...', () => {
-
+  it('should exists', () => {
     expect(d).toBeTruthy();
   });
 
+  it('should log', () => {
+    jest.spyOn(console, 'log');
 
+    d('test');
+
+    expect(console.log).toHaveBeenCalled();
+  });
 
 });

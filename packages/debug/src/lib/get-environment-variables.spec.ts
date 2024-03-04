@@ -11,10 +11,8 @@ describe('get-environment-variables', () => {
 
     expect(getEnvironmentVarialbles({env: {
       DEBUG: 'test',
-      PALETTE: 'palette',
     }})).toEqual({
         DEBUG: 'test',
-        PALETTE: 'palette',
       })
   });
 

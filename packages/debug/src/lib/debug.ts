@@ -1,40 +1,74 @@
 import { getEnvironmentVarialbles } from "./get-environment-varialbles";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare const process: any;
 
 const colors = new Map<string, string>();
 
 type Palette = 'funky_dealer' | string;
 
-const colorPalettes = new Map<Palette, string[]>();
+const colorPalette: string[] = [];
 
-colorPalettes.set('funky_dealer', [
-  '#7dd823',
-  '#d9d126',
-  '#ffb611',
-  '#ff6000',
-  '#0f5940',
-]);
+if (process) {
 
-const DEFAULT_PALETTE: Palette = 'funky_dealer';
+  colorPalette.push(
+    "\x1b[30m",
+    "\x1b[31m",
+    "\x1b[32m",
+    "\x1b[33m",
+    "\x1b[34m",
+    "\x1b[35m",
+    "\x1b[36m",
+    "\x1b[37m",
+    "\x1b[90m",
+    "\x1b[91m",
+    "\x1b[92m",
+    "\x1b[93m",
+    "\x1b[94m",
+    "\x1b[95m",
+    "\x1b[96m",
+    "\x1b[97m",
+  );
 
-export function getDebugger(namespace: string) {
+} else {
+
+  colorPalette.push(
+    "#0000FF", "#6699FF", // Blue
+    "#FF0000", "#FF6666", // Red
+    "#00FF00", "#66FF66", // Green
+    "#FFFF00", "#FFFF66", // Yellow
+    "#800080", "#CC66CC", // Purple
+    "#FFA500", "#FFCC99", // Orange
+    "#FFC0CB", "#FFCCCC", // Pink
+    "#40E0D0", "#66CCCC"  // Turquoise
+  );
+}
+
+
+
+
+export type Log = (...args: unknown[]) => void;
+
+export function getDebugger(namespace: string): Log {
+
+
   let lastTimeStamp = 0;
-  const {DEBUG, PALETTE} = getEnvironmentVarialbles(process);
+  const {DEBUG} = getEnvironmentVarialbles(process);
 
-  const colorPalette = colorPalettes.get(PALETTE || DEFAULT_PALETTE) as string[];
 
-  const random =  Math.floor(Math.random() * (colorPalette.length + 1));
+  const random =  Math.floor(Math.random() * (colorPalette.length - 1));
   // Generate a random color
   const randomColor = colors.get(namespace) ||
     colors.set(namespace, colorPalette[random]).get(namespace) as string;
 
+
   // CSS style for the namespace with random color and bold
   const namespaceStyle = `color: ${randomColor}; font-weight: bold;`;
 
-  return (...args: unknown[]) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (...args: any[]) => {
 
-    let formattedTime = undefined;
+    let formattedTime = '';
     const now = Date.now();
 
     if ((now - lastTimeStamp) > 1000) {
@@ -57,13 +91,17 @@ export function getDebugger(namespace: string) {
       const regexs = DEBUG.split(',');
       for (const regex of regexs) {
 
-        // console.info({debug});
         const match = namespace.match(regex);
-        // console.log({match});
 
         if (match) {
           // Print formatted time with namespace
-          console.log(`%c${formattedTime} %c${namespace}`, 'color: lightblue', namespaceStyle, ...args);
+          if (process) {
+            console.log(`\x1b[7m${formattedTime}\x1b[0m`, `\x1b[1m${randomColor}${namespace}\x1b[0m`, ...args);
+
+          } else {
+
+            console.log(`%c${formattedTime} %c${namespace}`, 'color: lightblue', namespaceStyle, ...args);
+          }
         }
 
       }

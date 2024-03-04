@@ -1,4 +1,4 @@
-export function getEnvironmentVarialbles(process: {env: {[k:string]: string}}) {
+export function getEnvironmentVariables(process: {env: {[k:string]: string}}) {
     let DEBUG: string;
 
     if (typeof window === 'object') {

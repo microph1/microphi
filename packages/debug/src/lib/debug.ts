@@ -1,11 +1,9 @@
-import { getEnvironmentVarialbles } from "./get-environment-varialbles";
+import { getEnvironmentVariables } from "./get-environment-varialbles";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare const process: any;
 
 const colors = new Map<string, string>();
-
-type Palette = 'funky_dealer' | string;
 
 const colorPalette: string[] = [];
 
@@ -53,7 +51,7 @@ export function getDebugger(namespace: string): Log {
 
 
   let lastTimeStamp = 0;
-  const {DEBUG} = getEnvironmentVarialbles(process);
+  const {DEBUG} = getEnvironmentVariables(process);
 
 
   const random =  Math.floor(Math.random() * (colorPalette.length - 1));

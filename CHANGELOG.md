@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [16.4.0](https://github.com/microph1/microphi/compare/v16.3.0...v16.4.0) (2024-03-04)
+
+
+### Features
+
+* **debug:** have only one color palette. add colors for nodejs ([2409069](https://github.com/microph1/microphi/commit/240906954abe0ed24d8941e94c01d1be7245156b))
+
+
+
+
+
 # [16.3.0](https://github.com/microph1/microphi/compare/v1.1.3...v16.3.0) (2024-03-02)
 
 

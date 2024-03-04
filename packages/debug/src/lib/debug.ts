@@ -6,8 +6,7 @@ const colors = new Map<string, string>();
 
 const colorPalette: string[] = [];
 
-try {
- isNodejs();
+if (isNodejs()) {
 
   colorPalette.push(
     "\x1b[30m",
@@ -27,7 +26,9 @@ try {
     "\x1b[96m",
     "\x1b[97m",
   );
-} catch (error) {
+
+} else {
+
   colorPalette.push(
     "#0000FF", "#6699FF", // Blue
     "#FF0000", "#FF6666", // Red
@@ -89,13 +90,13 @@ export function getDebugger(namespace: string): Log {
         if (match) {
           // Print formatted time with namespace
 
-          if (typeof window === 'object') {
+          if (isNodejs()) {
 
-            console.log(`%c${formattedTime} %c${namespace}`, 'color: lightblue', namespaceStyle, ...args);
+            console.log(`\x1b[7m${formattedTime}\x1b[0m`, `\x1b[1m${randomColor}${namespace}\x1b[0m`, ...args);
 
           } else {
 
-            console.log(`\x1b[7m${formattedTime}\x1b[0m`, `\x1b[1m${randomColor}${namespace}\x1b[0m`, ...args);
+            console.log(`%c${formattedTime} %c${namespace}`, 'color: lightblue', namespaceStyle, ...args);
 
           }
         }

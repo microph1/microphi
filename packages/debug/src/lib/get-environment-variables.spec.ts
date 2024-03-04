@@ -7,14 +7,23 @@ describe('get-environment-variables', () => {
     test.todo('mock localStorage');
   });
 
-  it('should get from process', () => {
+  describe('in nodejs', () => {
 
-    expect(getEnvironmentVariables({env: {
-      DEBUG: 'test',
-    }})).toEqual({
+    beforeEach(() => {
+      process.env['DEBUG'] = 'test';
+    })
+
+    it('should get from process', () => {
+
+      expect(getEnvironmentVariables()).toEqual({
         DEBUG: 'test',
-      })
+      });
+
+    });
+
   });
+
+
 
 
 });

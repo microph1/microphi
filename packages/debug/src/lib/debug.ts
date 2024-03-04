@@ -1,13 +1,13 @@
 import { getEnvironmentVariables } from "./get-environment-varialbles";
+import { isNodejs } from "./is_nodejs";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-declare const process: any;
 
 const colors = new Map<string, string>();
 
 const colorPalette: string[] = [];
 
-if (process) {
+try {
+ isNodejs();
 
   colorPalette.push(
     "\x1b[30m",
@@ -27,9 +27,7 @@ if (process) {
     "\x1b[96m",
     "\x1b[97m",
   );
-
-} else {
-
+} catch (error) {
   colorPalette.push(
     "#0000FF", "#6699FF", // Blue
     "#FF0000", "#FF6666", // Red
@@ -39,11 +37,8 @@ if (process) {
     "#FFA500", "#FFCC99", // Orange
     "#FFC0CB", "#FFCCCC", // Pink
     "#40E0D0", "#66CCCC"  // Turquoise
-  );
+  )
 }
-
-
-
 
 export type Log = (...args: unknown[]) => void;
 
@@ -51,7 +46,7 @@ export function getDebugger(namespace: string): Log {
 
 
   let lastTimeStamp = 0;
-  const {DEBUG} = getEnvironmentVariables(process);
+  const {DEBUG} = getEnvironmentVariables();
 
 
   const random =  Math.floor(Math.random() * (colorPalette.length - 1));
@@ -93,12 +88,15 @@ export function getDebugger(namespace: string): Log {
 
         if (match) {
           // Print formatted time with namespace
-          if (process) {
-            console.log(`\x1b[7m${formattedTime}\x1b[0m`, `\x1b[1m${randomColor}${namespace}\x1b[0m`, ...args);
+
+          if (typeof window === 'object') {
+
+            console.log(`%c${formattedTime} %c${namespace}`, 'color: lightblue', namespaceStyle, ...args);
 
           } else {
 
-            console.log(`%c${formattedTime} %c${namespace}`, 'color: lightblue', namespaceStyle, ...args);
+            console.log(`\x1b[7m${formattedTime}\x1b[0m`, `\x1b[1m${randomColor}${namespace}\x1b[0m`, ...args);
+
           }
         }
 

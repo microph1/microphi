@@ -1,25 +1,10 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "rootDir": ".",
-    "sourceMap": true,
-    "declaration": false,
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "target": "es2015",
-    "module": "ES2020",
-    "lib": ["ES2020", "dom"],
-    "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
-    "baseUrl": ".",
-    "allowSyntheticDefaultImports": true,
-    "noImplicitOverride": true,
-
+    "baseUrl": "./",
     "paths": {
       "@microphi/store": [
-        "projects/store/src/index.ts"
+        "packages/store/src/index.ts"
       ],
       "@microphi/cache": [
         "projects/cache/src/index.ts"
@@ -38,12 +23,37 @@
       ],
       "@flux/core": [
         "projects/flux/core/src/index.ts"
+      ],
+      "@microphi/debug": [
+        "packages/debug/src/debug.ts"
       ]
-
-    }
+    },
+    "outDir": "./dist/out-tsc",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "ES2022",
+    "useDefineForClassFields": false,
+    "lib": [
+      "ES2022",
+      "dom"
+    ],
+    "types": ["node"]
   },
   "angularCompilerOptions": {
-    "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
   }
 }

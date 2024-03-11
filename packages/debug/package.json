@@ -1,0 +1,30 @@
+{
+  "name": "@microphi/debug",
+  "description": "A very simple wrapper to console.log",
+  "private": false,
+  "keywords": [
+    "log",
+    "debug",
+    "console"
+  ],
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "module": "lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "version": "1.1.7",
+  "dependencies": {
+    "tslib": "^2.5.0"
+  },
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json",
+    "build:ci": "yarn build",
+    "test:ci": "jest --coverage --ci",
+    "prepack": "yarn build",
+    "lint": "eslint ./src"
+  }
+}

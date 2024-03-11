@@ -1,35 +1,65 @@
-# This is a basic workflow to help you get started with Actions
+name: Test - Build - Version and Deploy
 
+<<<<<<< HEAD
 name: default
 
 # Controls when the workflow will run
+=======
+>>>>>>> origin/master
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
   push:
+<<<<<<< HEAD
     branches: [ master ]
+=======
+    branches:
+      - master
+>>>>>>> origin/master
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
 
+<<<<<<< HEAD
   lint_and_test:
+=======
+  Test_Lint:
+>>>>>>> origin/master
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      - uses: c-hive/gha-yarn-cache@v2
-      # Runs a single command using the runners shell
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          fetch-depth: 0
+
+      - name: Set git user
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+          cache: 'yarn'
+          # Optional registry to set up for auth. Will set the registry in a project level .npmrc and .yarnrc file,
+          # and set up auth to read in from env.NODE_AUTH_TOKEN.
+          # Default: ''
+          registry-url: 'https://registry.npmjs.org/'
+
       - name: Install
-        run: yarn install --frozen-lockfile
+        run: yarn install --frozon-lockfile
+
+      - name: Build
+        # we need to build before testing
+        # otherwise dependent projects won't have their libs
+        run: |
+          yarn build:ci
+
       - name: Test
         run: |
           yarn lint:ci
           yarn test:ci
-      - name: Codecov
-        uses: codecov/codecov-action@v3.1.0
 
+<<<<<<< HEAD
 #      # This workflow contains a single job called "build"
 #  build:
 #    # The type of runner that the job will run on
@@ -54,3 +84,54 @@ jobs:
 #        run: |
 #          echo "branch name: $GITHUB_HEAD_REF"
 #          yarn lerna run build --since origin/master
+=======
+      - name: Lint
+        run: |
+          yarn lint:ci
+
+
+  Publish:
+    runs-on: ubuntu-latest
+    needs: Test_Lint
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          fetch-depth: 0
+
+      - name: Set git user
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+          cache: 'yarn'
+          # Optional registry to set up for auth. Will set the registry in a project level .npmrc and .yarnrc file,
+          # and set up auth to read in from env.NODE_AUTH_TOKEN.
+          # Default: ''
+          registry-url: 'https://registry.npmjs.org/'
+
+      - name: Install
+        run: yarn install --frozen-lockfile
+
+      - name: Version_and_Deploy
+        run: |
+          yarn deploy:ci
+        # this will call lerna publish.
+        # Please note the `--contents dist` option https://www.npmjs.com/package/@lerna/publish#--contents-dir
+        # this implies that each package MUST generate its own artifacts in a dist folder within itself
+        # for the angular libraries this is done by angular-cli which will also copy over a package.json file
+        # for other packages the `package.json` file must be copied manually
+        #
+        # Also note that relative lifecycle hook will still run in the original folder
+        # and here we leverage the prepack lifecycle hook to build each package
+        # This voids the build step done before a probably we can get rid of it for now I'm just leaving it
+        # so that the pipeline stops earlier if for any reason the build fails.
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+>>>>>>> origin/master

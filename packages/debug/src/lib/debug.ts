@@ -43,6 +43,16 @@ if (isNodejs()) {
 
 export type Log = (...args: unknown[]) => void;
 
+export type onMessageCallback = ({
+  formattedTime, namespace, args
+}: {formattedTime: string; namespace: string; args: unknown[]}) => void;
+
+const callBacks: onMessageCallback[] = [];
+
+export function onMessage(cb: onMessageCallback) {
+  callBacks.push(cb);
+}
+
 export function getDebugger(namespace: string): Log {
 
 
@@ -89,7 +99,6 @@ export function getDebugger(namespace: string): Log {
 
         if (match) {
           // Print formatted time with namespace
-
           if (isNodejs()) {
 
             console.log(`\x1b[7m${formattedTime}\x1b[0m`, `\x1b[1m${randomColor}${namespace}\x1b[0m`, ...args);
@@ -100,6 +109,11 @@ export function getDebugger(namespace: string): Log {
 
           }
         }
+
+        // in anycase call callbacks
+        callBacks.forEach((cb) => {
+          cb.apply(null, [{ formattedTime, namespace, args }]);
+        });
 
       }
 

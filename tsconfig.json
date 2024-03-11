@@ -18,9 +18,6 @@
       "@microphi/test": [
         "projects/test/src/public-api.ts"
       ],
-      "@microphi/marbles": [
-        "projects/rxjs-marbles/src/index.ts"
-      ],
       "@flux/core": [
         "projects/flux/core/src/index.ts"
       ],

@@ -1,0 +1,28 @@
+{
+  "name": "@microphi/flux",
+  "version": "1.1.0",
+  "description": "the flux core package",
+  "main": "lib",
+  "repository": "https://github.com/microph1/microphi",
+  "author": "Davide Cavaliere",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json",
+    "test": "jest --watch",
+    "test:ci": "jest -ci --coverage",
+    "lint:ci": "eslint ./src"
+  },
+  "dependencies": {
+    "@microgamma/digator": "^2.1.0",
+    "@microphi/debug": "^1.1.7",
+    "mustache": "^4.2.0",
+    "tslib": "^2.6.2"
+  },
+  "peerDependencies": {},
+  "devDependencies": {
+    "@types/mustache": "^4.2.4",
+    "jest-environment-jsdom": "^29.6.4",
+    "typescript": "^5.4.2"
+  }
+}

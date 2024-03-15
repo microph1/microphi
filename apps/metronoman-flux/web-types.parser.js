@@ -1,4 +1,4 @@
-const {getDebugger} = require("@microgamma/loggator");
+const {getDebugger} = require("@microphi/debug");
 const d = getDebugger('@flux/web-types.parser');
 
 

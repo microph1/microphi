@@ -58,7 +58,9 @@ export class Providers {
     if (this.useClass.has(className)) {
       d(`${className} has a provided implementation`);
       const k = this.useClass.get(className);
-      // @ts-expect-error
+      if (!k) {
+        throw new Error('Unable to instantiat class');
+      }
       const instance = new k();
       this.instances.set(className, instance);
       return instance;
@@ -66,7 +68,9 @@ export class Providers {
 
     d(`instantiating ${className}`);
     const k = this.providers.get(className);
-    // @ts-expect-error
+    if (!k) {
+      throw new Error('Unable to instantiat class');
+    }
     const instance = new k();
     this.instances.set(className, instance);
     return instance;

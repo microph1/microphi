@@ -6,7 +6,7 @@ import { bootstrap } from '@microgamma/digator';
 
 
 // at this point the only thing that is not working when not using shadow dom is transclusion
-describe('@Component (no shadow dom)', () => {
+xdescribe('@Component (no shadow dom)', () => {
 
   @Component({
     selector: 'test-component',

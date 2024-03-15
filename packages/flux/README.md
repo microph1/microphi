@@ -1,6 +1,6 @@
 # @microphi/flux
 
-> Super simple wrapper around console.log
+> Yet another frontend framework
 
 # Install
 ```

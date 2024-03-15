@@ -2,8 +2,16 @@
   "name": "@microphi/flux",
   "version": "1.1.0",
   "description": "the flux core package",
-  "main": "lib",
-  "repository": "https://github.com/microph1/microphi",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "module": "lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {"url": "git+https://github.com/microph1/microphi"},
   "author": "Davide Cavaliere",
   "license": "MIT",
   "private": false,

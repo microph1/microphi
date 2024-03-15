@@ -1,4 +1,4 @@
-import { Log, getDebugger } from './debug';
+import { Log, getDebugger, onMessage } from './debug';
 
 jest.mock('./get-environment-varialbles', () => {
   return {
@@ -34,6 +34,31 @@ describe('debug', () => {
   it('should not log', () => {
     notD('test');
     expect(console.log).not.toHaveBeenCalled();
+  });
+
+
+  describe('onMessage', () => {
+    const spy = jest.fn();
+
+    beforeEach(() => {
+      spy.mockReset();
+
+      onMessage((message) => {
+        spy(message);
+      });
+
+    });
+
+    it('should execute a callback', () => {
+
+      d('test a callback');
+
+      expect(spy).toHaveBeenCalledWith({
+        formattedTime: expect.anything(),
+        namespace: 'namespace',
+        args: ['test a callback'],
+      });
+    })
   });
 
 });

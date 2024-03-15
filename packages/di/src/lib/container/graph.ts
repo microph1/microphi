@@ -109,7 +109,7 @@ export class Graph {
    * @param v
    */
   encodeEdge(u: NodeId, v: NodeId): EncodedEdge {
-    return u + "|" + v;
+    return u + '|' + v;
   }
 
   /**
@@ -216,7 +216,7 @@ export class Graph {
 
   /**
    * Depth First Search algorithm, inspired by
-   * Cormen et al. "Introduction to Algorithms" 3rd Ed. p. 604
+   * Cormen et al. 'Introduction to Algorithms' 3rd Ed. p. 604
    * The additional option `includeSourceNodes` specifies whether to
    * include or exclude the source nodes from the result (true by default).
    * If `sourceNodes` is not specified, all nodes in the graph
@@ -235,7 +235,7 @@ export class Graph {
       sourceNodes = this.nodes();
     }
 
-    if (typeof includeSourceNodes !== "boolean") {
+    if (typeof includeSourceNodes !== 'boolean') {
       includeSourceNodes = true;
     }
 
@@ -243,9 +243,9 @@ export class Graph {
     const visiting: Record<NodeId, boolean> = {};
     const nodeList: NodeId[] = [];
 
-     const DFSVisit = (node: NodeId) => {
+    const DFSVisit = (node: NodeId) => {
       if (visiting[node] && errorOnCycle) {
-        throw new CycleError("Cycle found");
+        throw new CycleError('Cycle found');
       }
       if (!visited[node]) {
         visited[node] = true;
@@ -254,7 +254,7 @@ export class Graph {
         visiting[node] = false;
         nodeList.push(node);
       }
-    }
+    };
 
     if (includeSourceNodes) {
       sourceNodes.forEach(DFSVisit);
@@ -319,7 +319,7 @@ export class Graph {
       } else {
         return true;
       }
-    }
+    };
 
     const CA2Visit = (visited: Record<NodeId, boolean>, node: NodeId) => {
       if (!visited[node]) {
@@ -332,7 +332,7 @@ export class Graph {
           });
         }
       }
-    }
+    };
 
     if (CA1Visit({}, node1)) {
       // No shortcut worked
@@ -346,7 +346,7 @@ export class Graph {
    * The topological sort algorithm yields a list of visited nodes
    * such that for each visited edge (u, v), u comes before v in the list.
    * Amazingly, this comes from just reversing the result from depth first search.
-   * Cormen et al. "Introduction to Algorithms" 3rd Ed. p. 613
+   * Cormen et al. 'Introduction to Algorithms' 3rd Ed. p. 613
    *
    * @param sourceNodes
    * @param includeSourceNodes
@@ -360,7 +360,7 @@ export class Graph {
 
   /**
    * Dijkstra's Shortest Path Algorithm.
-   * Cormen et al. "Introduction to Algorithms" 3rd Ed. p. 658
+   * Cormen et al. 'Introduction to Algorithms' 3rd Ed. p. 658
    * Variable and function names correspond to names in the book.
    *
    * @param source
@@ -394,12 +394,12 @@ export class Graph {
       this.nodes().forEach((node) => {
         q[node] = true;
       });
-    }
+    };
 
     // Returns true if q is empty.
     const priorityQueueEmpty = () => {
       return Object.keys(q).length === 0;
-    }
+    };
 
     // Linear search to extract (find and remove) min from q.
     const extractMin = (): NodeId | null => {
@@ -418,7 +418,7 @@ export class Graph {
       }
       delete q[minNode];
       return minNode;
-    }
+    };
 
     const relax = (u: NodeId, v: NodeId) => {
       const w = this.getEdgeWeight(u, v);
@@ -426,7 +426,7 @@ export class Graph {
         d[v] = d[u] + w;
         p[v] = u;
       }
-    }
+    };
 
     const dijkstra = () => {
       initializeSingleSource();
@@ -438,7 +438,7 @@ export class Graph {
           relax(u as string, v);
         });
       }
-    }
+    };
 
     // Assembles the shortest path by traversing the
     // predecessor subgraph from destination to source.
@@ -454,13 +454,13 @@ export class Graph {
         node = p[node];
       }
       if (node !== source) {
-        throw new Error("No path found");
+        throw new Error('No path found');
       }
       nodeList.path.push(node);
       nodeList.path.reverse();
       // nodeList.weight = 0;
       return nodeList;
-    }
+    };
 
     dijkstra();
 

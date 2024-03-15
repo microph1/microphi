@@ -1,6 +1,5 @@
 import { Mocked, WithMock } from './mocked';
 import isMockFunction = jest.isMockFunction;
-import mock = jest.mock;
 
 describe('Mocked', () => {
 

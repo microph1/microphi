@@ -17,7 +17,7 @@ export function Injectable() {
   return target => {
     d('annotating', target.name);
     return InjectableDecorator(target);
-  }
+  };
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types
@@ -41,7 +41,7 @@ export function InjectableDecorator<T extends {new(...args: any[]): {}}>(klass: 
 
     constructor(...args: any[]) {
       d(args);
-      d({ injectMetadata })
+      d({ injectMetadata });
 
       for (const {parameterIndex, klass} of injectMetadata) {
         // TODO implement a factory
@@ -55,7 +55,7 @@ export function InjectableDecorator<T extends {new(...args: any[]): {}}>(klass: 
       // d('class name', this[ClassNameSymbol]);
 
     }
-  }
+  };
 }
 
 export function getInjectableMetadata(klass: Klass): string {

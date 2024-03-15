@@ -1,4 +1,4 @@
-import { isNodejs } from "./is_nodejs";
+import { isNodejs } from './is_nodejs';
 
 export function getEnvironmentVariables() {
 

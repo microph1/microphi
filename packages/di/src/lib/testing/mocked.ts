@@ -11,8 +11,8 @@ const MockedSymbol = Symbol('Mocked');
 export type MockedOptions<InstanceType extends object> = Partial<Record<FunctionKeys<InstanceType>, Mock|'NO_MOCK'>>;
 
 export const Mocked = <BaseClass extends Klass, K extends object = InstanceType<BaseClass>>(
-    base: BaseClass,
-    options: MockedOptions<K> = {},
+  base: BaseClass,
+  options: MockedOptions<K> = {},
 ): BaseClass =>
 
   class {
@@ -67,7 +67,7 @@ function *getPropertyNames(instance: Instance) {
       .filter((property) => {
         return typeof instance[property] === 'function';
       })
-      .filter((p) => !internals.includes(p))
+      .filter((p) => !internals.includes(p));
 
     for (const method of methods) {
       yield method;

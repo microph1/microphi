@@ -10,6 +10,7 @@ describe('TestBed', () => {
   class TestClassB {
     say(name: string) {
       // console.log('hello')
+      return name;
     }
   }
 

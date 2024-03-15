@@ -11,7 +11,7 @@ describe('@DI', () => {
     static instance = 0;
 
     constructor() {
-      ++A.instance
+      ++A.instance;
     }
 
     sayHello = jest.fn();
@@ -74,7 +74,7 @@ describe('@DI', () => {
 
   beforeEach(() => {
     bootstrap(App);
-    b = injector(B)
+    b = injector(B);
 
   });
 

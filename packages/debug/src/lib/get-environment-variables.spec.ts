@@ -1,4 +1,4 @@
-import { getEnvironmentVariables } from "./get-environment-varialbles";
+import { getEnvironmentVariables } from './get-environment-varialbles';
 
 describe('get-environment-variables', () => {
 

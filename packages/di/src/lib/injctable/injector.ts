@@ -12,7 +12,7 @@ export function injector<K extends Class<any>>(klass: K): InstanceType<K> {
 
 
   if (providers.hasInjectable(klass)) {
-      return providers.getInstance(klass);
+    return providers.getInstance(klass);
   } else {
 
     // what happens here is that `klass` may not be available for injection for

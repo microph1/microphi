@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import { getEnvironmentVariables } from "./get-environment-varialbles";
+import { getEnvironmentVariables } from './get-environment-varialbles';
 
 jest.mock('./is_nodejs', () => {
   return {
@@ -9,7 +9,7 @@ jest.mock('./is_nodejs', () => {
     isNodejs: () => {
       return false;
     }
-  }
+  };
 
 });
 

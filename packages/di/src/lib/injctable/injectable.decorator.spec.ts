@@ -1,12 +1,12 @@
-import { Injectable } from '../injctable/injectable.decorator';
+// import { Injectable } from '../injctable/injectable.decorator';
 
 describe('@Injectable', () => {
 
-  @Injectable()
-  class TestClassA {}
-
-  @Injectable()
-  class TestClassB {}
+  // @Injectable()
+  // class TestClassA {}
+  //
+  // @Injectable()
+  // class TestClassB {}
 
   it('should make injectables available for injection', () => {
     expect(true).toBeTruthy();

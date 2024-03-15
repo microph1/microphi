@@ -35,6 +35,6 @@ describe('@After', () => {
 
   it('should work with tuples', () => {
     expect(instance.testB('davide', 'dave')).toEqual('hello davide aka dave!');
-  })
+  });
 
 });

@@ -15,10 +15,9 @@ export function DI(options: DIOptions) {
     target[ClassNameSymbol] = 'root';
     Reflect.metadata(DISymbol, options)(target);
     return InjectableDecorator(target);
-  }
+  };
 }
 
 export function getDIMetadata(target: Klass): DIOptions {
   return Reflect.getMetadata(DISymbol, target);
 }
-

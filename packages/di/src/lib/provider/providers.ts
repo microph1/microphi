@@ -17,7 +17,7 @@ export class Providers {
       d('adding injectable', provider.provide);
 
       if (!(ClassNameSymbol in provider.provide)) {
-        throw Error(`Is ${provider.provide.name} annotated with @Injectable()?`)
+        throw Error(`Is ${provider.provide.name} annotated with @Injectable()?`);
       }
 
       this.providers.set(provider.provide[ClassNameSymbol], provider.provide);
@@ -27,7 +27,7 @@ export class Providers {
       d('adding injectable', provider);
 
       if (!(ClassNameSymbol in provider)) {
-        throw Error(`Is ${provider.name} annotated with @Injectable()?`)
+        throw Error(`Is ${provider.name} annotated with @Injectable()?`);
       }
 
       this.providers.set(provider[ClassNameSymbol], provider);
@@ -58,7 +58,7 @@ export class Providers {
     if (this.useClass.has(className)) {
       d(`${className} has a provided implementation`);
       const k = this.useClass.get(className);
-      // @ts-ignore
+      // @ts-expect-error
       const instance = new k();
       this.instances.set(className, instance);
       return instance;
@@ -66,7 +66,7 @@ export class Providers {
 
     d(`instantiating ${className}`);
     const k = this.providers.get(className);
-    // @ts-ignore
+    // @ts-expect-error
     const instance = new k();
     this.instances.set(className, instance);
     return instance;

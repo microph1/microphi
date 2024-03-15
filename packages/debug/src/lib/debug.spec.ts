@@ -6,7 +6,7 @@ jest.mock('./get-environment-varialbles', () => {
     getEnvironmentVariables: () => {
       return { DEBUG: 'namespace' };
     }
-  }
+  };
 
 });
 

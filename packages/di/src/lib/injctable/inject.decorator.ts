@@ -9,10 +9,9 @@ const dependencies = new Graph();
 
 const InjectSymbol = Symbol.for('@Inject');
 
-export function Inject<K extends Class<unknown>>(klass: K) {
+export function Inject<K extends Class<unknown>>(klass: K): ParameterDecorator {
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  return <T extends Function>(target: T, propertyKey: string, parameterIndex) => {
+  return (target, propertyKey, parameterIndex) => {
 
     const targetClassName = target['name'];
 
@@ -37,12 +36,12 @@ export function Inject<K extends Class<unknown>>(klass: K) {
       parameterIndex,
       klass
     });
-    d('defined deps', deps)
+    d('defined deps', deps);
 
-    return Reflect.metadata(InjectSymbol, deps)(target);
-  }
+    return Reflect.metadata(InjectSymbol, deps)(target as any);
+  };
 }
 
-export function getInjectMetadata(target): {parameterIndex: number, klass: Class<unknown>}[] {
+export function getInjectMetadata(target: any): {parameterIndex: number, klass: Class<unknown>}[] {
   return Reflect.getMetadata(InjectSymbol, target) || [];
 }

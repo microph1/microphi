@@ -1,5 +1,5 @@
-import { getEnvironmentVariables } from "./get-environment-varialbles";
-import { isNodejs } from "./is_nodejs";
+import { getEnvironmentVariables } from './get-environment-varialbles';
+import { isNodejs } from './is_nodejs';
 
 
 const colors = new Map<string, string>();
@@ -9,36 +9,36 @@ const colorPalette: string[] = [];
 if (isNodejs()) {
 
   colorPalette.push(
-    "\x1b[30m",
-    "\x1b[31m",
-    "\x1b[32m",
-    "\x1b[33m",
-    "\x1b[34m",
-    "\x1b[35m",
-    "\x1b[36m",
-    "\x1b[37m",
-    "\x1b[90m",
-    "\x1b[91m",
-    "\x1b[92m",
-    "\x1b[93m",
-    "\x1b[94m",
-    "\x1b[95m",
-    "\x1b[96m",
-    "\x1b[97m",
+    '\x1b[30m',
+    '\x1b[31m',
+    '\x1b[32m',
+    '\x1b[33m',
+    '\x1b[34m',
+    '\x1b[35m',
+    '\x1b[36m',
+    '\x1b[37m',
+    '\x1b[90m',
+    '\x1b[91m',
+    '\x1b[92m',
+    '\x1b[93m',
+    '\x1b[94m',
+    '\x1b[95m',
+    '\x1b[96m',
+    '\x1b[97m',
   );
 
 } else {
 
   colorPalette.push(
-    "#0000FF", "#6699FF", // Blue
-    "#FF0000", "#FF6666", // Red
-    "#00FF00", "#66FF66", // Green
-    "#FFFF00", "#FFFF66", // Yellow
-    "#800080", "#CC66CC", // Purple
-    "#FFA500", "#FFCC99", // Orange
-    "#FFC0CB", "#FFCCCC", // Pink
-    "#40E0D0", "#66CCCC"  // Turquoise
-  )
+    '#0000FF', '#6699FF', // Blue
+    '#FF0000', '#FF6666', // Red
+    '#00FF00', '#66FF66', // Green
+    '#FFFF00', '#FFFF66', // Yellow
+    '#800080', '#CC66CC', // Purple
+    '#FFA500', '#FFCC99', // Orange
+    '#FFC0CB', '#FFCCCC', // Pink
+    '#40E0D0', '#66CCCC'  // Turquoise
+  );
 }
 
 export type Log = (...args: unknown[]) => void;
@@ -104,5 +104,5 @@ export function getDebugger(namespace: string): Log {
       }
 
     }
-  }
+  };
 }

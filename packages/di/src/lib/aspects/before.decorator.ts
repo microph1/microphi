@@ -34,11 +34,13 @@ export function Before<P>(fn: (args: P) => P): MethodDecorator {
     descriptor.value = function() {
 
       // @ts-ignore
+      // eslint-disable-next-line prefer-rest-params
       const retValue = fn.bind(this).apply(this, arguments) as any;
 
       // so here we can call originalMethod with retValue
       // doing so beforeFn has the ability to change original arguments's values
       if (retValue === undefined) {
+        // eslint-disable-next-line prefer-rest-params
         return originalMethod.apply(this, arguments);
       }
 

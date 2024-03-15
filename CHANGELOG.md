@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/microph1/microphi/compare/v1.1.7...v1.2.0) (2024-03-15)
+
+
+### Features
+
+* **debug:** add onMessage handle so that user can ([05b79ec](https://github.com/microph1/microphi/commit/05b79ecd9345e2b9fe3f81a11ae80099b2a4db72))
+
+
+
+
+
 ## [1.1.7](https://github.com/microph1/microphi/compare/v1.1.6...v1.1.7) (2024-03-04)
 
 **Note:** Version bump only for package microphi

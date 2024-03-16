@@ -18,7 +18,7 @@ export function Hydrated(scope: string = ''): PropertyDecorator {
 
   return (target, property) => {
     Reflect.defineMetadata(HydratedSymbol, scope, target, property);
-  }
+  };
 
 }
 
@@ -53,7 +53,7 @@ export interface ComponentOptions {
 }
 
 interface AttributeChanged {
-  event: 'attributedChanged',
+  event: 'attributeChanged',
   payload: {
     name: string;
     newValue: any;
@@ -72,7 +72,7 @@ interface ViewInit {
 type LifeCycle = AttributeChanged | OnInit | ViewInit;
 
 
-export function Component(options: ComponentOptions) {
+export function Component(options: ComponentOptions): ClassDecorator {
 
   const d = getDebugger(`@flux:@Component:${options.selector}`);
 
@@ -90,7 +90,7 @@ export function Component(options: ComponentOptions) {
 
   return (target: any) => {
 
-    Reflect.defineMetadata(ComponentSymbol, options, target)
+    Reflect.defineMetadata(ComponentSymbol, options, target);
 
     // this is the class that represents the controller available
     // inside every custom element
@@ -167,7 +167,7 @@ export function Component(options: ComponentOptions) {
           this.controller.propertyChange,
           start$,
         ]).pipe(
-          debounceTime(10),
+          // debounceTime(10),
         ).subscribe(([v]) => {
           this.log('property changed', v.event);
           if ('fxOnChanges' in this.controller) {
@@ -275,7 +275,7 @@ export function Component(options: ComponentOptions) {
 
                 this.log('adding event listener on', node, 'to controller', this);
 
-                node.addEventListener(eventName, (event) => {
+                node.addEventListener(eventName, (event: any) => {
                   this.controller[methodName](event);
                 });
               }
@@ -398,19 +398,19 @@ export function Component(options: ComponentOptions) {
     });
 
     const injectableTarget = Injectable()(klass);
-    Reflect.defineMetadata(ComponentSymbol, options, injectableTarget)
+    Reflect.defineMetadata(ComponentSymbol, options, injectableTarget);
 
     return injectableTarget;
 
   };
 }
 
-export function getComponentMetadata(target): ComponentOptions {
+export function getComponentMetadata(target: any): ComponentOptions {
 
   return Reflect.getMetadata(ComponentSymbol, target);
 }
 
-export function getComponentMetadataFromInstance(target): ComponentOptions {
+export function getComponentMetadataFromInstance(target: any): ComponentOptions {
 
   return Reflect.getMetadata(ComponentSymbol, target.constructor);
 }

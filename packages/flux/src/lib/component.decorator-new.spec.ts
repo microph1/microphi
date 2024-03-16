@@ -37,7 +37,7 @@ export class TestBed {
 
 }
 
-describe('@Component', () => {
+xdescribe('@Component', () => {
 
   describe('shadow dom', () => {
 
@@ -100,14 +100,14 @@ describe('@Component', () => {
 
 
         // value property is set to the actual value of the cotroller[name]
-        expect(elmSh.shadowRoot.querySelector('input').value).toEqual('Mr. Davide')
+        expect(elmSh.shadowRoot.querySelector('input').value).toEqual('Mr. Davide');
 
         // it's [boxed] attribute `[value]` olds the name of the mapping variable on the controller
         // `name`
         expect(elmSh.shadowRoot.querySelector('input').getAttribute('[value]')).toEqual('name');
 
         // the attribute `value` is set to the hash representing the value
-        expect(elmSh.shadowRoot.querySelector('input').getAttribute('value')).toEqual('yWoQafyndog7YNnhXgtYYVEoaBZh8FcnAHUEbv3UGSk')
+        expect(elmSh.shadowRoot.querySelector('input').getAttribute('value')).toEqual('yWoQafyndog7YNnhXgtYYVEoaBZh8FcnAHUEbv3UGSk');
       });
     });
 

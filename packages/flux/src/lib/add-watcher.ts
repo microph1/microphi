@@ -41,7 +41,7 @@ export function addWatchers(instance: FxComponent): void {
         instance[`${property}$$`] = value;
 
         instance.propertyChange.next(({
-          event: 'attributedChanged',
+          event: 'attributeChanged',
           payload: {
             name: property,
             newValue: value
@@ -85,7 +85,7 @@ export function addWatchers(instance: FxComponent): void {
           this[shadowProp] = value;
 
           this.propertyChange.next(({
-            event: 'attributedChanged',
+            event: 'attributeChanged',
             payload: {
               name: property,
               newValue: value

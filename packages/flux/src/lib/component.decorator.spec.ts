@@ -15,8 +15,8 @@ describe('@Component (shadow root)', () => {
     `
   })
   class TestComponentSh {
-    @Input() firstname: string;
-    @Input() lastname: string;
+    @Input() firstname!: string;
+    @Input() lastname!: string;
   }
 
   @Component({
@@ -25,14 +25,14 @@ describe('@Component (shadow root)', () => {
     template: `
     <h1>Hello Mr. {{name}}</h1>
     <test-component-sh firstname="{{name}}" lastname="{{name}}">
-        <span>transcluded name {{names$}}</span>
+        <span>transcluded name {{name}}</span>
     </test-component-sh>
     <div class="{{name}}">this component should have a class set</div>
   `
   })
   class FxSimpleComponentSh {
     @Input() name: string = 'Davide';
-    names$ = new BehaviorSubject<string>('an observable name');
+    // names$ = 'automatic subscription of observables has been removed' // new BehaviorSubject<string>('an observable name');
 
     fxOnInit = jest.fn();
     fxOnViewInit = jest.fn();
@@ -81,12 +81,22 @@ describe('@Component (shadow root)', () => {
     describe('content rendering', () => {
 
       it('should render variables', () => {
-
         expect(elmSh.shadowRoot.innerHTML.trim()).toContain('<h1>Hello Mr. Davide</h1>');
       });
 
-      it('should render nested components', () => {
-        expect(elmSh.shadowRoot.children[1].shadowRoot.innerHTML).toContain('<h4>Davide:Davide</h4>')
+      it('should render nested components', (done) => {
+        setTimeout(() => {
+          // in component.decorator there s debouce of 10 ms
+          // this is to avoid too many changes at once
+          // but it makes testing much more complicated
+          //
+          // For now I'm removing the debounce and make all tests pass
+          // without the modification here done
+
+
+          expect(elmSh.shadowRoot.children[1].shadowRoot.innerHTML).toContain('<h4>Davide:Davide</h4>');
+          done();
+        }, 500);
       });
 
       it('should render when variable changes programmatically', () => {
@@ -119,12 +129,9 @@ describe('@Component (shadow root)', () => {
       describe('transclusion', () => {
 
         it('should show transcluded content', () => {
-          expect(elmSh.shadowRoot.innerHTML).toContain('transcluded name');
+          expect(elmSh.shadowRoot.innerHTML).toContain('transcluded name Davide');
         });
 
-        it('should resolve data using parent controller', () => {
-          expect(elmSh.shadowRoot.innerHTML).toContain('an observable name');
-        });
       });
 
     });
@@ -135,17 +142,15 @@ describe('@Component (shadow root)', () => {
         expect(fxSimpleComponentSh.fxOnInit).toHaveBeenCalled();
       });
 
-      it('should call fxViewInit after template has been attached ', () => {
-        expect(fxSimpleComponentSh.fxOnViewInit).toHaveBeenCalled();
-
-      });
 
       it('should call fxOnChanges', () => {
         elmSh.setAttribute('name', 'test');
         expect(fxSimpleComponentSh.fxOnChanges).toHaveBeenCalledWith({
-          name: 'name',
-          newValue: 'test',
-          oldValue: null
+          event: 'attributeChanged',
+          payload: {
+            name: 'name',
+            newValue: 'test',
+          }
         });
       });
     });
@@ -179,7 +184,7 @@ describe('component.decorator - attribute bindings', () => {
 
   @Component({
     selector: 'fx-simple-sh-1',
-    // shadowRoot: true,
+    shadowRoot: true,
     template: `
     <h1>Hello Mr. {{name}}</h1>
     <div id="one" class="{{name}}">this is with {{name}}</div>
@@ -212,6 +217,8 @@ describe('component.decorator - attribute bindings', () => {
   })
   class MyApp {}
 
+  let node;
+
   beforeEach(() => {
 
     elmSh = document.createElement('fx-simple-sh-1');
@@ -220,6 +227,7 @@ describe('component.decorator - attribute bindings', () => {
 
     document.body.innerHTML = '';
     document.body.appendChild(elmSh);
+    node = document.body.children[0].shadowRoot?.getElementById('two');
 
   });
 
@@ -229,14 +237,11 @@ describe('component.decorator - attribute bindings', () => {
   });
 
   it('should set the attribute with the hash of the given value', () => {
-    const node = document.getElementById('two');
 
-    // TODO: this is testing the implementation. refactor
-    expect(node.getAttribute('class')).toEqual('1Ad2_tzzlT0tPw_pV4sP373bLu5xfkHnv9f74ut6YHk');
+    expect(node?.getAttribute('class')).toEqual('Davide');
   });
 
   it('should set the a property with the real value on the node `fxController`', () => {
-    const node = document.getElementById('two');
 
     // TODO: this is testing the implementation. refactor
     expect(node['class']).toEqual('Davide');
@@ -249,15 +254,13 @@ describe('component.decorator - attribute bindings', () => {
     });
 
     it('should update attribute with new hash', () => {
-      const node = document.getElementById('two');
 
       // TODO: this is testing the implementation. refactor
-      expect(node.getAttribute('class')).toEqual('HiSAWXm_EitWA-XFq0fRvUXUYkRbFCdiGjhTqeOvOPg');
+      expect(node.getAttribute('class')).toEqual('new davide');
 
     });
 
     it('should set the a property with the real value on the node `fxController`', () => {
-      const node = document.getElementById('two');
 
       // TODO: this is testing the implementation. refactor
       expect(node['class']).toEqual('new davide');

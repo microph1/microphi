@@ -18,7 +18,7 @@
   ],
   "exclude": [
     "src/test-setup.ts",
-    "**/*.spec.ts",
+    // "**/*.spec.ts",
     "node_modules"
   ]
 }

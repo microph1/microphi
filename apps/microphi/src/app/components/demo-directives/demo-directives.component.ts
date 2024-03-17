@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { filter, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
@@ -10,7 +10,7 @@ import { from } from 'rxjs';
   templateUrl: './demo-directives.component.html',
   styleUrls: ['./demo-directives.component.scss']
 })
-export class DemoDirectivesComponent implements OnInit {
+export class DemoDirectivesComponent {
   // public toBeDocumented = [
   //   AnimateTextDirective,
   //   ParallaxDirective
@@ -40,9 +40,6 @@ export class DemoDirectivesComponent implements OnInit {
     // });
 
 
-  }
-
-  ngOnInit() {
   }
 
 }

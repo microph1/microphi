@@ -1,5 +1,39 @@
-<word-count onClick="count(event)">
-  hello world!
-  [[counter]]
+<mat-toolbar color="primary" class="mat-elevation-z9">
+  <a (click)="opened = !opened;">
+    <mat-icon class="pr-2">
+      menu
+    </mat-icon>
+    Flux Designer
+  </a>
 
-</word-count>
+  <span class="fx-flex-grow"></span>
+
+</mat-toolbar>
+
+
+<mat-sidenav-container class="fx-flex-column fx-flex-grow">
+
+  <mat-sidenav mode="over" [opened]="opened">
+
+    <mat-nav-list>
+      <a mat-list-item routerLink="/projects" routerLinkActive="active" (click)="opened = false">
+        <mat-icon>speaker_group</mat-icon>
+        Projects</a>
+
+      <a mat-list-item routerLink="/speakers" routerLinkActive="active" (click)="opened = false">
+        <mat-icon>volume_up</mat-icon> Speakers
+      </a>
+    </mat-nav-list>
+
+  </mat-sidenav>
+
+  <mat-sidenav-content class="fx-flex-column fx-flex-grow p-7">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
+
+<!--<mat-toolbar>-->
+<!--  contextual toolbar-->
+
+<!--</mat-toolbar>-->

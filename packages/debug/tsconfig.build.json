@@ -1,11 +1,9 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "lib",
-    "rootDir": "src",
     "noEmit": false,
-    "target": "ES6",
-    "module": "nodenext"
+    "inlineSources": false,
+    "sourceMap": false
   },
   "include": ["src/**/*.ts"],
   "exclude": [

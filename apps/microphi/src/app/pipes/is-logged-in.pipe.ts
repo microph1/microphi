@@ -10,7 +10,7 @@ export class IsLoggedInPipe implements PipeTransform {
 
   constructor(private authStore: AuthStore) {}
 
-  transform(value: any): Observable<boolean> {
+  transform(): Observable<boolean> {
     return this.authStore.isAuth$;
   }
 

@@ -1,0 +1,58 @@
+<div class="fx-flex fx-flex-grow fx-flex-column">
+
+  <div class="fx-flex-grow fx-flex-align-center-center">
+    <fx-knob
+      label="{{bpm}}" min="{{min}}"
+      max="{{max}}" value={{bpm}}
+      (wheel)="scrolling($event)" (click)="click($event)">
+    </fx-knob>
+  </div>
+
+  <div class="fx-flex-row fx-flex-grow fx-flex-justify-space-around">
+    <!--    <button class="mdc-icon-button" (click)="faster()">-->
+    <!--      <span class="mdc-icon-button__ripple"></span>-->
+    <!--      <span class="mdc-icon-button__focus-ring"></span>-->
+    <!--      <i class="material-icons">-->
+    <!--        add_circle-->
+    <!--      </i>-->
+    <!--    </button>-->
+
+    <button fxIfNot="{{playing$}}" class="mdc-button mdc-button--outlined" (click)="play()">
+      <span class="mdc-button__ripple"></span>
+      <span class="mdc-button__focus-ring"></span>
+      <span class="mdc-button__label">Play</span>
+
+    </button>
+    <button fxIf="{{playing$}}" class="mdc-button mdc-button--raised" (click)="stop()">
+      <span class="mdc-button__ripple"></span>
+      <span class="mdc-button__focus-ring"></span>
+      <span class="mdc-button__label">Stop</span>
+    </button>
+
+
+    <!--    <button class="mdc-icon-button" (click)="slower()">-->
+    <!--      <span class="mdc-icon-button__ripple"></span>-->
+    <!--      <span class="mdc-icon-button__focus-ring"></span>-->
+    <!--      <i class="material-icons">-->
+    <!--        remove_circle-->
+    <!--      </i>-->
+    <!--    </button>-->
+
+  </div>
+
+  <!-- BPM slider -->
+  <div class="fx-flex fx-flex-row">
+    <span class="material-icons">
+      speed
+    </span>
+    <fx-slider class="fx-flex-column fx-flex-grow" [value]="bpm" [min]="min" [max]="max" (change)="tempoChange($event)"></fx-slider>
+  </div>
+
+  <!--  Volume slider -->
+  <div class="fx-flex fx-flex-row">
+    <span class="material-icons">
+      volume_up
+    </span>
+    <fx-slider class="fx-flex-column fx-flex-grow" [value]="volume" (change)="volumeChange($event)"></fx-slider>
+  </div>
+</div>

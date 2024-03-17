@@ -1,0 +1,41 @@
+{
+  "name": "@microphi/di",
+  "version": "2.1.0",
+  "description": "Handcrafted DI container",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "module": "lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "typescirpt",
+    "decorator",
+    "dependency injection",
+    "di container"
+  ],
+  "author": {
+    "email": "cavaliere.davide@gmail.com",
+    "name": "Davide Cavaliere",
+    "url": "www.dcsoftware.io"
+  },
+  "homepage": "https://github.com/microph1/microphi",
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json",
+    "build:ci": "yarn build",
+    "test:ci": "jest --coverage --ci",
+    "prepack": "yarn build",
+    "lint": "eslint ./src"
+  },
+  "dependencies": {
+    "@microphi/debug": "^1.1.7",
+    "reflect-metadata": "^0.1.13"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.23.3"
+  }
+}

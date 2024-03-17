@@ -74,18 +74,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "microphi:build"
+            "buildTarget": "microphi:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "microphi:build:production"
+              "buildTarget": "microphi:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "microphi:build"
+            "buildTarget": "microphi:build"
           }
         },
         "test": {
@@ -232,7 +232,7 @@
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "apps/flux/src/styles.css"
+              "apps/flux/src/styles.scss"
             ],
             "scripts": [],
             "vendorChunk": true,
@@ -276,18 +276,19 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "flux:build"
+            "port": 8080,
+            "buildTarget": "flux:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "flux:build:production"
+              "buildTarget": "flux:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "flux:build"
+            "buildTarget": "flux:build"
           }
         },
         "test": {
@@ -302,7 +303,7 @@
               "apps/flux/src/assets"
             ],
             "styles": [
-              "apps/flux/src/styles.css"
+              "apps/flux/src/styles.scss"
             ],
             "scripts": []
           }

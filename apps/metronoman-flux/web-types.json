@@ -1,0 +1,101 @@
+{
+  "name": "@flux/core",
+  "framework": "flux",
+  "version": "0.1.0",
+  "js-types-syntax": "typescript",
+  "description-markup": "markdown",
+  "default-icon": "icons/angular2.svg",
+  "framework-config": {
+    "enable-when": {
+      "node-packages": [
+        "@flux/core"
+      ]
+    }
+  },
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "fx-knob",
+          "description": "a simple knob web component",
+          "attributes": [
+            {
+              "name": "label"
+            },
+            {
+              "name": "min"
+            },
+            {
+              "name": "max"
+            },
+            {
+              "name": "value"
+            }
+          ]
+        },
+        {"name": "fx-root"},
+        {
+          "name": "fx-slider",
+          "attributes": [
+            {
+              "name": "value",
+              "required": true,
+              "pattern": {
+                "regex": "\\[?value\\]?"
+              }
+            },
+            {
+              "name": "min",
+              "required": true,
+              "pattern": {
+                "regex": "\\[?min\\]?"
+              }
+            },
+            {
+              "name": "max",
+              "required": true,
+              "pattern": {
+                "regex": "\\[?max\\]?"
+              }
+            }
+          ]
+        }
+      ],
+      "flux-directives": [
+        {
+          "name": "If",
+          "description": "set html element display property to `block` if expression is true, to `none` otherwise",
+          "attribute-value": {
+            "required": true
+          }
+        },
+        {
+          "name": "IfNot",
+          "description": "set html element display property to `none` if expression is true, to `block` otherwise"
+        }
+      ],
+      "attributes": [
+        {
+          "name": "Flux directives",
+          "description": "flux directives works pretty much like Angular directives",
+          "virtual": true,
+          "pattern": {
+            "items": "/html/flux-directives",
+            "template": [
+              "fx",
+              "$...",
+              "#item:flux directive"
+            ]
+          }
+        },
+        {
+          "name": "Output attributes",
+          "virtual": true,
+          "pattern": {
+            "regex": "\\(.+\\)"
+          }
+        }
+      ]
+    }
+  }
+}

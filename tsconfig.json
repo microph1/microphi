@@ -4,25 +4,10 @@
     "baseUrl": "./",
     "paths": {
       "@microphi/store": [
-        "packages/store/src/index.ts"
-      ],
-      "@microphi/cache": [
-        "projects/cache/src/index.ts"
-      ],
-      "@microphi/phi": [
-        "projects/phi/src/public-api.ts"
-      ],
-      "@microphi/phi/*": [
-        "projects/phi/*"
-      ],
-      "@microphi/test": [
-        "projects/test/src/public-api.ts"
-      ],
-      "@flux/core": [
-        "projects/flux/core/src/index.ts"
+        "packages/store/lib"
       ],
       "@microphi/debug": [
-        "packages/debug/src/debug.ts"
+        "packages/debug/lib"
       ]
     },
     "outDir": "./dist/out-tsc",
@@ -47,6 +32,9 @@
     ],
     "types": ["node"]
   },
+  "exclude": [
+    "node_modules"
+  ],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,

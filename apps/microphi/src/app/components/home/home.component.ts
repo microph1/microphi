@@ -3,8 +3,9 @@ import { Log } from '@microgamma/loggator';
 import { AuthStore } from '../../services/auth/auth.store';
 
 
-// tslint:disable-next-line:no-unused-expression
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function BeforeDecorator(fn: (...args: any[]) => any) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   return (target: typeof MyBaseClass, key, descriptor) => {
     return class extends MyBaseClass {
 
@@ -30,6 +31,7 @@ class MyBaseClass {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function ClassDecoratorMixing(MixIn: typeof MixInA) {
   return (Class: typeof MyBaseClass) => {
     return class extends Class {

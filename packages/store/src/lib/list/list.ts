@@ -35,14 +35,13 @@ export class List<EntityType extends object> implements Iterable<EntityType> {
     this.ids = entities.map((e) => this.getId(e));
 
     entities
-      .forEach((item, idx) => {
+      .forEach((item) => {
         const id = item[IDField];
         this.entities.set(id, item);
       });
   }
 
   *[Symbol.iterator](): IterableIterator<EntityType> {
-    // tslint:disable-next-line:forin
     for (const idx in this.ids) {
       const id = this.ids[idx];
       // @ts-ignore

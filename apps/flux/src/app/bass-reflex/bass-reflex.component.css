@@ -1,0 +1,24 @@
+
+mat-slider {
+  flex-grow: 1;
+}
+
+.slider {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.slider > div {
+  flex: 0.5;
+}
+
+.columns {
+  display: flex;
+  flex-grow: 1;
+  justify-content: space-evenly;
+}
+
+.column {
+  width: 30%;
+}

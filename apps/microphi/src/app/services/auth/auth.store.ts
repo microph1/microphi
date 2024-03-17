@@ -58,6 +58,7 @@ export class AuthStore extends Store<AuthState, AuthActions> implements makeStor
   }
 
   @Reduce()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onLogout(state: AuthState, payload: void): AuthState {
     return {user: undefined, isAuth: false};
   }
@@ -75,3 +76,4 @@ export class AuthStore extends Store<AuthState, AuthActions> implements makeStor
 
 
 }
+

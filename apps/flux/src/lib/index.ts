@@ -1,4 +1,3 @@
-// /* tslint:disable:radix */
 // class WordCount extends HTMLElement {
 //   elm = document.createElement('slot');
 //   listeners;

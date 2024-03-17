@@ -1,0 +1,15 @@
+service: flux-metronoman-app
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: eu-central-1 # EU (Frankfurt) Region
+  profile: serverless
+
+plugins:
+  - serverless-finch
+
+custom:
+  client:
+    bucketName: flux-metronoman-app # Change this to a universally unique bucket name
+    distributionFolder: ../../dist/metronoman-flux

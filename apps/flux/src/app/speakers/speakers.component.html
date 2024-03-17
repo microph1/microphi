@@ -1,0 +1,124 @@
+<mat-form-field class="mb-4">
+  <mat-label>Search</mat-label>
+  <input matInput [formControl]="search" autofocus>
+</mat-form-field>
+
+<div class="toolbar">
+  <button mat-fab routerLink="new">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
+
+<mat-accordion>
+  <mat-expansion-panel *ngFor="let speaker of speakers$ | async"
+    #panel
+    (opened)="panel.expanded = true"
+    (closed)="panel.expanded = false">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{speaker.name}} - {{speaker.size.value}}" - {{speaker.znom.value}} {{speaker.znom.unit}}
+      </mat-panel-title>
+      <mat-panel-description>
+        <span class="mr-5">
+          {{speaker.fo.label}} <b>{{speaker.fo.value}} {{speaker.fo.unit}}</b>
+        </span>
+        <span class="mr-5">
+          {{speaker.vas.label}} <b>{{speaker.vas.value}} {{speaker.vas.unit}}</b>
+        </span>
+        <span class="mr-5">
+          {{speaker.spl.label}} <b>{{speaker.spl.value}} {{speaker.spl.unit}}</b>
+        </span>
+        <span class="mr-5">
+          {{speaker.power.label}} <b>{{speaker.power.value}} {{speaker.power.unit}}</b>
+        </span>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+
+    <div class="fx-flex-row mb-4">
+
+      <div class="mr-6">
+        <strong>{{speaker.inHole.label}}:</strong> {{speaker.inHole.value}} <i>{{speaker.inHole.unit}}</i>
+      </div>
+
+      <div class="mr-6">
+        <strong>{{speaker.outHole.label}}:</strong> {{speaker.outHole.value}} <i>{{speaker.outHole.unit}}</i>
+      </div>
+
+      <div class="mr-6">
+        <strong>{{speaker.thick.label}}:</strong> {{speaker.thick.value}} <i>{{speaker.thick.unit}}</i>
+      </div>
+
+    </div>
+
+    <div class="fx-flex-row mb-4">
+
+      <div class="mr-6">
+        <strong>{{speaker.revc.label}}:</strong> {{speaker.revc.value}} <i>{{speaker.revc.unit}}</i>
+      </div>
+
+      <div class="mr-6">
+        <strong>{{speaker.levc.label}}:</strong> {{speaker.levc.value}} <i>{{speaker.levc.unit}}</i>
+      </div>
+
+      <div class="mr-6">
+        <strong>{{speaker.sd.label}}:</strong> {{speaker.sd.value}} <i>{{speaker.sd.unit}}</i>
+      </div>
+
+      <div class="mr-6">
+        <strong>{{speaker.bl.label}}:</strong> {{speaker.bl.value}} <i>{{speaker.bl.unit}}</i>
+      </div>
+
+      <div class="mr-6">
+        <strong>{{speaker.no.label}}:</strong> {{speaker.no.value}} <i>{{speaker.no.unit}}</i>
+      </div>
+
+      <div class="mr-6">
+        <strong>{{speaker.xmax.label}}:</strong> {{speaker.xmax.value}} <i>{{speaker.xmax.unit}}</i>
+      </div>
+
+      <div class="mr-6">
+        <strong>{{speaker.voiceCoilDiameter.label}}:</strong> {{speaker.voiceCoilDiameter.value}}
+        <i>{{speaker.voiceCoilDiameter.unit}}</i>
+      </div>
+
+    </div>
+
+    <div class="fx-flex-row mb-4">
+
+      <div class="mr-6">
+        <strong>{{speaker.mmd.label}}:</strong> {{speaker.mmd.value}} <i>{{speaker.mmd.unit}}</i>
+      </div>
+
+      <div class="mr-6">
+        <strong>{{speaker.mms.label}}:</strong> {{speaker.mms.value}} <i>{{speaker.mms.unit}}</i>
+      </div>
+
+      <div class="mr-6">
+        <strong>{{speaker.cms.label}}:</strong> {{speaker.cms.value}} <i>{{speaker.cms.unit}}</i>
+      </div>
+
+      <div class="mr-6">
+        <strong>{{speaker.qms.label}}:</strong> {{speaker.qms.value}} <i>{{speaker.qms.unit}}</i>
+      </div>
+
+      <div class="mr-6">
+        <strong>{{speaker.qes.label}}:</strong> {{speaker.qes.value}} <i>{{speaker.qes.unit}}</i>
+      </div>
+
+      <div class="mr-6">
+        <strong>{{speaker.qts.label}}:</strong> {{speaker.qts.value}} <i>{{speaker.qts.unit}}</i>
+      </div>
+
+
+    </div>
+
+
+    <mat-action-row>
+      <span class="fx-flex-grow"></span>
+      <a mat-button [routerLink]="speaker.uuid">edit</a>
+      <button mat-button (click)="remove(speaker)" color="warn">remove</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</mat-accordion>
+

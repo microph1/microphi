@@ -83,7 +83,7 @@ export class TicketStore extends Store<TicketsState, TicketActions> implements m
   }
 
   @Reduce()
-  onAssign(state: TicketsState, payload: any): TicketsState {
+  onAssign(state: TicketsState): TicketsState {
     return state;
   }
 

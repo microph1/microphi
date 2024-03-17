@@ -1,21 +1,21 @@
 {
   "extends": "../../.eslintrc.json",
-  "ignorePatterns": [
-    "!**/*"
+  "parserOptions": {
+    "project": [
+      "apps/flux/tsconfig.app.json",
+      "apps/flux/tsconfig.spec.json"
+    ]
+  },
+  "plugins": [
+    "@angular-eslint"
   ],
   "overrides": [
     {
       "files": [
         "*.ts"
       ],
-      "parserOptions": {
-        "project": [
-          "tsconfig.app.json",
-          "tsconfig.spec.json"
-        ],
-        "createDefaultProgram": true
-      },
       "rules": {
+        "no-console": "off",
         "@angular-eslint/directive-selector": [
           "error",
           {

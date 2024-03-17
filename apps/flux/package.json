@@ -1,0 +1,21 @@
+{
+  "name": "flux",
+  "private": true,
+  "version": "1.1.0",
+  "description": "",
+  "scripts": {
+    "start": "ng serve",
+    "deploy": "sls client deploy --no-confirm"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "canvasjs": "^1.8.3",
+    "d3": "^7.8.2",
+    "openscad-wasm": "git+https://github.com/DSchroer/openscad-wasm"
+  },
+  "devDependencies": {
+    "@types/canvasjs": "^1.9.8",
+    "@types/d3": "^7.4.0"
+  }
+}

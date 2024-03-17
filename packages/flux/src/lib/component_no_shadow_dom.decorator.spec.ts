@@ -16,8 +16,8 @@ xdescribe('@Component (no shadow dom)', () => {
     `
   })
   class TestComponent {
-    @Input() firstname: string;
-    @Input() lastname: string;
+    @Input() firstname!: string;
+    @Input() lastname!: string;
   }
 
   @Component({
@@ -86,7 +86,7 @@ xdescribe('@Component (no shadow dom)', () => {
       });
 
       it('should render nested components', () => {
-        expect(document.body.innerHTML).toContain('<h4>Davide:Davide</h4>')
+        expect(document.body.innerHTML).toContain('<h4>Davide:Davide</h4>');
       });
 
       it('should render when variable changes programmatically', () => {

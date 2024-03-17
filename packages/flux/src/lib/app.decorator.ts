@@ -45,5 +45,5 @@ export function App(options: App) {
         super();
       }
     });
-  }
+  };
 }

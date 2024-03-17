@@ -1,8 +1,7 @@
-import { Component, getComponentMetadata } from './component.decorator';
-import { Input } from './input.decorator';
-import { App } from './app.decorator';
 import { bootstrap } from '@microgamma/digator';
 import { Class } from 'utility-types';
+import { App } from './app.decorator';
+import { Component, getComponentMetadata } from './component.decorator';
 
 type TestBedConfig = App;
 
@@ -61,6 +60,7 @@ xdescribe('@Component', () => {
         TestComponentSh,
       ]
     })
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     class MyApp1 {}
 
     let elmSh;

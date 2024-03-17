@@ -6,7 +6,7 @@ const d = getDebugger('@flux:core:@Directive');
 
 const DirectiveSymbol = Symbol('@Decorator');
 
-const directives = {}
+const directives = {};
 
 export function Directive_(options: ComponentOptions): ClassDecorator {
 

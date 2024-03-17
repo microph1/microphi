@@ -17,9 +17,10 @@
   "private": false,
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
-    "test": "jest --watch",
-    "test:ci": "jest -ci --coverage",
-    "lint:ci": "eslint ./src"
+    "build:ci": "yarn build",
+    "test:ci": "jest --coverage --ci",
+    "prepack": "yarn build",
+    "lint": "eslint ./src"
   },
   "dependencies": {
     "@microgamma/digator": "^2.1.0",

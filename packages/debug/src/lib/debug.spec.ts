@@ -58,7 +58,7 @@ describe('debug', () => {
         namespace: 'namespace',
         args: ['test a callback'],
       });
-    })
+    });
   });
 
 });

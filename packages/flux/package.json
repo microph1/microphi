@@ -1,6 +1,6 @@
 {
   "name": "@microphi/flux",
-  "version": "1.1.0",
+  "version": "2.2.0",
   "description": "the flux core package",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -11,7 +11,9 @@
   "files": [
     "lib"
   ],
-  "repository": {"url": "git+https://github.com/microph1/microphi"},
+  "repository": {
+    "url": "git+https://github.com/microph1/microphi"
+  },
   "author": "Davide Cavaliere",
   "license": "MIT",
   "private": false,
@@ -24,11 +26,10 @@
   },
   "dependencies": {
     "@microgamma/digator": "^2.1.0",
-    "@microphi/debug": "^1.1.7",
+    "@microphi/debug": "^2.2.0",
     "mustache": "^4.2.0",
     "tslib": "^2.6.2"
   },
-  "peerDependencies": {},
   "devDependencies": {
     "@types/mustache": "^4.2.4",
     "jest-environment-jsdom": "^29.6.4",

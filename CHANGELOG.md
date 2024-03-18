@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/microph1/microphi/compare/v1.2.0...v2.2.0) (2024-03-18)
+
+
+### Bug Fixes
+
+* merge errors ([e4535a7](https://github.com/microph1/microphi/commit/e4535a77c882a0d70851c4de600c948c1c2f3718))
+
+
+### Features
+
+* **@flux/core:** new `@Hydrated` decorator, some changes on when lifecyle hooks take place ([026be18](https://github.com/microph1/microphi/commit/026be18099ff792f41fd6918dad026c9a602973f))
+* **flux/core:** WIP many fronts ([d7069d9](https://github.com/microph1/microphi/commit/d7069d975892eb774353b3348b6229cd020a38b0))
+* **marbles:** add new marbles project ([0e76a8e](https://github.com/microph1/microphi/commit/0e76a8e3a825cea3686fc2e69803d2b3af4416a1))
+* **metronoman-flux:** several changes here see below ([e3ea754](https://github.com/microph1/microphi/commit/e3ea754b0bc7eccad3701a20ee1b4312e5b50061))
+* migrate @microgamma/digator to @microphi/di ([e2e71e1](https://github.com/microph1/microphi/commit/e2e71e117411efdb6f2372fee086caaa31f0d234))
+* start migration of flux ([9f6c6d5](https://github.com/microph1/microphi/commit/9f6c6d5c1259b24519e17461b301e2a87901e1db))
+* **web-components:** experimenting with non shadow dom components ([3172061](https://github.com/microph1/microphi/commit/31720612c046252a1c7d1dbad912d027a916a383))
+
+
+
+
+
 # [1.2.0](https://github.com/microph1/microphi/compare/v1.1.7...v1.2.0) (2024-03-15)
 
 

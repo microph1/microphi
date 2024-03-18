@@ -40,14 +40,13 @@ jobs:
         run: |
           yarn build:ci
 
-      - name: Test
-        run: |
-          yarn lint:ci
-          yarn test:ci
-
       - name: Lint
         run: |
           yarn lint:ci
+
+      - name: Test
+        run: |
+          yarn test:ci
 
 
   Publish:

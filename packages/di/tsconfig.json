@@ -4,7 +4,11 @@
     "outDir": "lib",
     "rootDir": "src",
     "types": ["jest"],
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "declarationMap": true,
+    "target": "es2020",
+    "declaration": true,
+    "inlineSources": true
   },
   "include": ["src/**/*"]
 }

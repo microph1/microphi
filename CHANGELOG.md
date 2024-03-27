@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.1](https://github.com/microph1/microphi/compare/v2.2.0...v2.2.1) (2024-03-27)
+
+
+### Bug Fixes
+
+* **di:** it should build typings ([1c203c1](https://github.com/microph1/microphi/commit/1c203c1dec314642cc2d86f1876ee3038cc216e6))
+
+
+
+
+
 # [2.2.0](https://github.com/microph1/microphi/compare/v1.2.0...v2.2.0) (2024-03-18)
 
 

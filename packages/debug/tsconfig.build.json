@@ -3,7 +3,8 @@
   "compilerOptions": {
     "noEmit": false,
     "inlineSources": false,
-    "sourceMap": false
+    "sourceMap": false,
+    "composite": true
   },
   "include": ["src/**/*.ts"],
   "exclude": [

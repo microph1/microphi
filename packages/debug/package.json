@@ -16,7 +16,7 @@
   "files": [
     "lib"
   ],
-  "version": "2.2.1",
+  "version": "2.2.3",
   "dependencies": {
     "tslib": "^2.5.0"
   },

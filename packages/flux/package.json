@@ -1,6 +1,6 @@
 {
   "name": "@microphi/flux",
-  "version": "2.2.1",
+  "version": "2.2.3",
   "description": "the flux core package",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@microgamma/digator": "^2.1.0",
-    "@microphi/debug": "^2.2.1",
+    "@microphi/debug": "^2.2.3",
     "mustache": "^4.2.0",
     "tslib": "^2.6.2"
   },

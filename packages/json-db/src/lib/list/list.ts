@@ -1,14 +1,24 @@
-import { $Keys } from 'utility-types';
+import { Subject } from 'rxjs';
+import { $Keys, FunctionKeys } from 'utility-types';
+
+
+export interface Operation {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  op: FunctionKeys<List<any>>;
+  payload?: unknown;
+  timestamp: Date;
+}
 
 export class List<EntityType extends object> implements Iterable<EntityType> {
 
+  public operations$ = new Subject<Operation>();
 
-  public readonly entities = new Map<any, EntityType>();
+  public readonly entities = new Map<string, EntityType>();
 
   /**
    * maps entities position from the original array to their ids
    */
-  private readonly ids: any[] = [];
+  private readonly ids: string[] = [];
 
   public get size() {
     if (this.ids.length !== this.entities.size) {
@@ -19,15 +29,16 @@ export class List<EntityType extends object> implements Iterable<EntityType> {
     return this.entities.size;
   }
 
-  public has(id: any) {
+  public has(id: string) {
     return this.entities.has(id);
   }
 
-  public get(id: any) {
+  public get(id: string) {
     return this.entities.get(id);
   }
-  private getId(entity: EntityType) {
-    return entity[this.IDField];
+
+  private getId(entity: EntityType): string {
+    return entity[this.IDField] as string;
   }
 
   constructor(private IDField: $Keys<EntityType>, entities: EntityType[] = []) {
@@ -36,7 +47,7 @@ export class List<EntityType extends object> implements Iterable<EntityType> {
 
     entities
       .forEach((item) => {
-        const id = item[IDField];
+        const id = this.getId(item);
         this.entities.set(id, item);
       });
   }
@@ -44,8 +55,13 @@ export class List<EntityType extends object> implements Iterable<EntityType> {
   *[Symbol.iterator](): IterableIterator<EntityType> {
     for (const idx in this.ids) {
       const id = this.ids[idx];
-      // @ts-ignore
-      yield this.entities.get(id);
+
+      const entity = this.entities.get(id);
+      if (entity) {
+        yield entity;
+      } else {
+        throw new Error(`Cannot get entity with id ${id}`);
+      }
     }
   }
 
@@ -58,7 +74,10 @@ export class List<EntityType extends object> implements Iterable<EntityType> {
       }
 
       this.entities.set(id, e);
+
     });
+
+    this.operations$.next({ op: 'upsert', payload: entities, timestamp: new Date() });
   }
 
   public prepend(...entities: EntityType[]) {
@@ -74,12 +93,14 @@ export class List<EntityType extends object> implements Iterable<EntityType> {
       this.entities.set(id, e);
 
     });
+    this.operations$.next({ op: 'prepend', payload: entities, timestamp: new Date() });
   }
 
   public clear() {
 
     this.ids.length = 0;
     this.entities.clear();
+    this.operations$.next({ op: 'clear', timestamp: new Date() });
 
   }
 
@@ -95,6 +116,7 @@ export class List<EntityType extends object> implements Iterable<EntityType> {
       }
     });
 
+    this.operations$.next({ op: 'delete', payload: entities, timestamp: new Date() });
   }
 
   public append(...entities: EntityType[]) {
@@ -108,5 +130,9 @@ export class List<EntityType extends object> implements Iterable<EntityType> {
       this.ids.push(id);
       this.entities.set(id, e);
     });
+
+    this.operations$.next({ op: 'append', payload: entities, timestamp: new Date() });
   }
+
+
 }

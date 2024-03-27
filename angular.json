@@ -168,12 +168,6 @@
             "tsConfig": "projects/cache/tsconfig.spec.json",
             "karmaConfig": "projects/cache/karma.conf.js"
           }
-        },
-        "deploy": {
-          "builder": "ngx-deploy-npm:deploy",
-          "options": {
-            "access": "public"
-          }
         }
       }
     },
@@ -201,12 +195,6 @@
             "main": "projects/phi/src/test.ts",
             "tsConfig": "projects/phi/tsconfig.spec.json",
             "karmaConfig": "projects/phi/karma.conf.js"
-          }
-        },
-        "deploy": {
-          "builder": "ngx-deploy-npm:deploy",
-          "options": {
-            "access": "public"
           }
         }
       }

@@ -7,7 +7,7 @@ import { defaults as tsjPreset } from 'ts-jest/presets';
 // const moduleNameMapper = pathsToModuleNameMapper(compilerOptions.paths, {prefix: '<rootDir>/../../'});
 
 const config: Config = {
-  displayName: 'di',
+  displayName: 'json-db',
   transform: {
     ...tsjPreset.transform,
     '^.+\\.tsx?$': [

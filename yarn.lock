@@ -3805,17 +3805,6 @@
     node-gyp "^10.0.0"
     which "^4.0.0"
 
-"@nrwl/devkit@14.3.6":
-  version "14.3.6"
-  resolved "https://registry.yarnpkg.com/@nrwl/devkit/-/devkit-14.3.6.tgz#40b9712e672438bd7a7b6ebbb7367fa68ec5fcc3"
-  integrity sha512-yGAZ5emBSb13smdkVagJRD/IC+ZkGLuRUc9A4Oqp/hDtOoUx6Jxot6vKwniTfbYZlk1Dkeq77d3atsEwz0dD1A==
-  dependencies:
-    ejs "^3.1.7"
-    ignore "^5.0.4"
-    rxjs "^6.5.4"
-    semver "7.3.4"
-    tslib "^2.3.0"
-
 "@nrwl/devkit@17.2.8":
   version "17.2.8"
   resolved "https://registry.yarnpkg.com/@nrwl/devkit/-/devkit-17.2.8.tgz#dd3467b484c4611454a45541ffb29e4de5b2ebe7"
@@ -11710,13 +11699,6 @@ ng-packagr@^17.3.0:
     esbuild "^0.20.0"
     rollup "^4.5.0"
 
-ngx-deploy-npm@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/ngx-deploy-npm/-/ngx-deploy-npm-4.1.0.tgz#08d9a4eecfb3416b054ad21389efe31cba32bef6"
-  integrity sha512-/WHloNsGsmI8qAovFqS8AcTKyyuheiTmpQPxfDeyLBtgQ+/jvoxDfbEz98uTx4WtiSfSGJnOBLZiPVLwVyyqLg==
-  dependencies:
-    "@nrwl/devkit" "14.3.6"
-
 nice-napi@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/nice-napi/-/nice-napi-1.0.2.tgz#dc0ab5a1eac20ce548802fc5686eaa6bc654927b"
@@ -13467,13 +13449,6 @@ rxjs@7.8.1, rxjs@^7.5.5, rxjs@^7.8.1, rxjs@~7.8.0:
   dependencies:
     tslib "^2.1.0"
 
-rxjs@^6.5.4:
-  version "6.6.7"
-  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.6.7.tgz#90ac018acabf491bf65044235d5863c4dab804c9"
-  integrity sha512-hTdwr+7yYNIT5n4AMYp85KA6yw2Va0FLa3Rguvbpa4W3I5xynaBZo41cM3XM+4Q6fRMj3sBYIR1VAmZMXYJvRQ==
-  dependencies:
-    tslib "^1.9.0"
-
 safe-buffer@5.1.2, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.2.tgz#991ec69d296e0313747d59bdfd2b745c35f8828d"
@@ -13610,13 +13585,6 @@ selfsigned@^2.1.1:
   version "5.7.1"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.7.1.tgz#a954f931aeba508d307bbf069eff0c01c96116f7"
   integrity sha512-sauaDf/PZdVgrLTNYHRtpXa1iRiKcaebiKQ1BJdpQlWH2lCvexQdX55snPFyK7QzpudqbCI0qXFfOasHdyNDGQ==
-
-semver@7.3.4:
-  version "7.3.4"
-  resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.4.tgz#27aaa7d2e4ca76452f98d3add093a72c943edc97"
-  integrity sha512-tCfb2WLjqFAtXn4KEdxIhalnRtoKFN7nAwj0B3ZXCbQloV2tq5eDbcTmT68JJD3nRJq24/XgxtQKFIpQdtvmVw==
-  dependencies:
-    lru-cache "^6.0.0"
 
 semver@7.5.3:
   version "7.5.3"

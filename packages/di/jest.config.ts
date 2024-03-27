@@ -1,8 +1,8 @@
 import type { Config } from 'jest';
-import { pathsToModuleNameMapper } from 'ts-jest';
+// import { pathsToModuleNameMapper } from 'ts-jest';
 // import { compilerOptions } from '../../tsconfig.json';
-import { defaults as tsjPreset } from 'ts-jest/presets'
-const { compilerOptions } = require('../../tsconfig.json');
+import { defaults as tsjPreset } from 'ts-jest/presets';
+// const { compilerOptions } = require('../../tsconfig.json');
 
 // const moduleNameMapper = pathsToModuleNameMapper(compilerOptions.paths, {prefix: '<rootDir>/../../'});
 
@@ -24,9 +24,9 @@ const config: Config = {
   coverageDirectory: '<rootDir>/../../coverage/di',
   coverageReporters: ['json', 'html', 'lcov', 'text-summary'],
   collectCoverageFrom: [
-    "**/src/**/!(*.spec).ts",
-    "!**/*.experiment.ts",
-    "!**/index.ts",
+    '**/src/**/!(*.spec).ts',
+    '!**/*.experiment.ts',
+    '!**/index.ts',
   ],
   coverageThreshold: {
     global: {
@@ -36,7 +36,7 @@ const config: Config = {
       lines: 92.22,
     }
   },
-}
+};
 
 
 export default config;

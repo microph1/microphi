@@ -6,5 +6,10 @@
   "include": ["src/**/*.ts"],
   "exclude": [
     "src/**/*.spec.ts"
+  ],
+  "references": [
+    {
+      "path": "../debug/tsconfig.build.json"
+    }
   ]
 }

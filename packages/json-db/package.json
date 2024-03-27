@@ -1,0 +1,37 @@
+{
+  "name": "@microphi/json-db",
+  "version": "2.2.0",
+  "description": "Small, fast and simple file based json-db",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "module": "lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "json-db"
+  ],
+  "author": {
+    "email": "cavaliere.davide@gmail.com",
+    "name": "Davide Cavaliere",
+    "url": "www.dcsoftware.io"
+  },
+  "homepage": "https://github.com/microph1/microphi",
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json",
+    "build:ci": "yarn build",
+    "test:ci": "jest --coverage --ci",
+    "prepack": "yarn build",
+    "lint": "eslint ./src"
+  },
+  "dependencies": {
+    "@microphi/debug": "^2.2.0"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.23.3"
+  }
+}

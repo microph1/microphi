@@ -74,6 +74,11 @@ describe('list', () => {
       expect([...list].length).toEqual(4);
 
     });
+
+    it('should notify operation$', () => {
+
+    });
+
   });
 
   describe('prepend', () => {
@@ -186,26 +191,6 @@ describe('list', () => {
       expect([...list][1]).toEqual(users[2]);
       expect([...list][2]).toEqual(users[1]);
     });
-  });
-
-  xit('test sorting an object by field', () => {
-    const a = {
-      c: 2,
-      b: 1,
-      a: 3,
-    };
-
-    console.log({a});
-
-    a['d'] = 4;
-    console.log({a});
-
-    console.log(
-      Object.keys(a)
-        .sort((x, y) => x.charCodeAt(0) - y.charCodeAt(0))
-        .map((id) => a[id])
-    );
-
   });
 
 });

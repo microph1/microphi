@@ -1,6 +1,7 @@
 {
   "name": "microphi",
   "version": "0.0.0",
+  "licence": "MIT",
   "workspaces": {
     "packages": [
       "packages/*"
@@ -38,7 +39,6 @@
     "@angular/platform-browser": "^17.3.0",
     "@angular/platform-browser-dynamic": "^17.3.0",
     "@angular/router": "^17.3.0",
-    "ngx-deploy-npm": "^4.1.0",
     "rxjs": "~7.8.0",
     "ts-loader": "^9.3.1",
     "tslib": "^2.3.0",

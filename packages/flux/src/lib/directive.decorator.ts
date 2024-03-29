@@ -1,5 +1,5 @@
 import { getDebugger } from '@microphi/debug';
-import { Injectable } from '@microgamma/digator';
+import { Injectable } from '@microphi/di';
 import { ComponentOptions } from './component.decorator';
 
 const d = getDebugger('@flux:core:@Directive');

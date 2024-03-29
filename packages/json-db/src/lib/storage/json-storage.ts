@@ -1,6 +1,6 @@
 import { getDebugger } from '@microphi/debug';
 import MiniSearch, { Options } from 'minisearch';
-import { close, exists, existsSync, mkdir, openSync, readFileSync, rmSync, rmdir, unlink, writeFile, writeFileSync } from 'node:fs';
+import { close, exists, existsSync, mkdir, openSync, readFileSync, rmSync, unlink, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { Scheduler, Subject, asapScheduler, debounceTime, from, switchMap } from 'rxjs';
 import { List } from '../list/list';

@@ -1,4 +1,4 @@
-import { bootstrap } from '@microgamma/digator';
+import { bootstrap } from '@microphi/di';
 import { Class } from 'utility-types';
 import { App } from './app.decorator';
 import { Component, getComponentMetadata } from './component.decorator';

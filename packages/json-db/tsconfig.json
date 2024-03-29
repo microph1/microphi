@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "lib",
     "rootDir": "src",
-    "types": ["jest"],
+    "types": ["node", "jest"],
     "noImplicitAny": false,
     "declarationMap": true,
     "target": "es2020",

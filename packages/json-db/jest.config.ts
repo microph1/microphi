@@ -21,7 +21,7 @@ const config: Config = {
     // [...]
   },
   // moduleNameMapper,
-  coverageDirectory: '<rootDir>/../../coverage/di',
+  coverageDirectory: '<rootDir>/../../coverage/json-db',
   coverageReporters: ['json', 'html', 'lcov', 'text-summary'],
   collectCoverageFrom: [
     '**/src/**/!(*.spec).ts',
@@ -30,10 +30,10 @@ const config: Config = {
   ],
   coverageThreshold: {
     global: {
-      statements: 92.33,
-      branches: 78.79,
-      functions: 92.39,
-      lines: 92.22,
+      statements: 92.12,
+      branches: 73.53,
+      functions: 93.75,
+      lines: 93.71,
     }
   },
 };

@@ -33,9 +33,13 @@
   },
   "devDependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.23.3",
+    "@datakitchen/rxjs-marbles": "^17.0.0",
+    "@types/node": "^20.11.30",
+    "minisearch": "^6.3.0",
     "utility-types": "^3.10.0"
   },
   "peerDependencies": {
+    "minisearch": "^6.3.0",
     "rxjs": "~7.8.0"
   }
 }

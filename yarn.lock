@@ -2157,6 +2157,11 @@
   resolved "https://registry.yarnpkg.com/@datakitchen/rxjs-marbles/-/rxjs-marbles-16.2.37.tgz#9abd1eceeabd284cb725591f43acb47b85947e87"
   integrity sha512-c2Ft+vzsIn8Bdn5R4ajmE2XUb0dNCq/mqPquae4dMfnB+8hCFJyYPzZ9mAJkZaIw96P5O6IO0MfWKUdC8TthxQ==
 
+"@datakitchen/rxjs-marbles@^17.0.0":
+  version "17.0.0"
+  resolved "https://registry.yarnpkg.com/@datakitchen/rxjs-marbles/-/rxjs-marbles-17.0.0.tgz#e5c1c9bba05044923d013592a1227f6e009d8370"
+  integrity sha512-hzdoyI50RFTQBkqU6dPzDk9Myis5i1mRMhIJ6vP4MdLe/gHfDI+tTJStWwGlv69eCDgv7ZkrrcMuuB9H8DYzBA==
+
 "@discoveryjs/json-ext@0.5.7":
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz#1d572bfbbe14b7704e0ba0f39b74815b84870d70"
@@ -5086,6 +5091,13 @@
   version "20.11.28"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-20.11.28.tgz#4fd5b2daff2e580c12316e457473d68f15ee6f66"
   integrity sha512-M/GPWVS2wLkSkNHVeLkrF2fD5Lx5UC4PxA0uZcKc6QqbIQUJyW1jVjueJYi1z8n0I5PxYrtpnPnWglE+y9A0KA==
+  dependencies:
+    undici-types "~5.26.4"
+
+"@types/node@^20.11.30":
+  version "20.11.30"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.11.30.tgz#9c33467fc23167a347e73834f788f4b9f399d66f"
+  integrity sha512-dHM6ZxwlmuZaRmUPfv1p+KrdD1Dci04FbdEm/9wEMouFqxYoFl5aMkt0VMAUtYRQDyYvD41WJLukhq/ha3YuTw==
   dependencies:
     undici-types "~5.26.4"
 
@@ -11528,6 +11540,11 @@ minipass@^5.0.0:
   version "7.0.4"
   resolved "https://registry.yarnpkg.com/minipass/-/minipass-7.0.4.tgz#dbce03740f50a4786ba994c1fb908844d27b038c"
   integrity sha512-jYofLM5Dam9279rdkWzqHozUo4ybjdZmCsDHePy5V/PbBcVMiSZR97gmAy45aqi8CK1lG2ECd356FU86avfwUQ==
+
+minisearch@^6.3.0:
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/minisearch/-/minisearch-6.3.0.tgz#985a2f1ca3c73c2d65af94f0616bfe57164b0b6b"
+  integrity sha512-ihFnidEeU8iXzcVHy74dhkxh/dn8Dc08ERl0xwoMMGqp4+LvRSCgicb+zGqWthVokQKvCSxITlh3P08OzdTYCQ==
 
 minizlib@^2.1.1, minizlib@^2.1.2:
   version "2.1.2"

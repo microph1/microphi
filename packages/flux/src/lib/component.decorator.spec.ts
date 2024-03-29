@@ -1,7 +1,7 @@
 import { Component } from './component.decorator';
 import { Input } from './input.decorator';
 import { App } from './app.decorator';
-import { bootstrap } from '@microgamma/digator';
+import { bootstrap } from '@microphi/di';
 import { BehaviorSubject } from 'rxjs';
 
 describe('@Component (shadow root)', () => {

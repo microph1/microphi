@@ -2,7 +2,7 @@ import { Component } from './component.decorator';
 import { Input } from './input.decorator';
 import { App } from './app.decorator';
 import { BehaviorSubject } from 'rxjs';
-import { bootstrap } from '@microgamma/digator';
+import { bootstrap } from '@microphi/di';
 
 
 // at this point the only thing that is not working when not using shadow dom is transclusion

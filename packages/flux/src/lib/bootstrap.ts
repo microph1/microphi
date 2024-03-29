@@ -1,4 +1,4 @@
-import { Instance, Klass, bootstrap as diBootstrap, Injectable } from '@microgamma/digator';
+import { Instance, Klass, bootstrap as diBootstrap, Injectable } from '@microphi/di';
 
 export function bootstrap(app: Klass): Instance {
 

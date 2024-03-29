@@ -1,4 +1,4 @@
-import { DI, DIOptions } from '@microgamma/digator';
+import { DI, DIOptions } from '@microphi/di';
 import { getDebugger } from '@microphi/debug';
 import { Class } from 'utility-types';
 import { getComponentMetadata } from './component.decorator';

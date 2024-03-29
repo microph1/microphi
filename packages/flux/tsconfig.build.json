@@ -10,5 +10,9 @@
   "exclude": [
     "src/**/*.spec.ts",
     "node_modules"
+  ],
+  "references": [
+    { "path": "../di/tsconfig.build.json" },
+    { "path": "../debug/tsconfig.build.json" }
   ]
 }

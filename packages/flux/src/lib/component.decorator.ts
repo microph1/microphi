@@ -2,7 +2,7 @@ import { getDebugger } from '@microphi/debug';
 import { combineLatest, Subject } from 'rxjs';
 import { getInputMetadata } from './input.decorator';
 import { addWatchers, FxComponent } from './add-watcher';
-import { Injectable } from '@microgamma/digator';
+import { Injectable } from '@microphi/di';
 import { start$ } from './app.decorator';
 import { getValue, parseTemplate } from './parse-template';
 import { traverse } from './traverse';

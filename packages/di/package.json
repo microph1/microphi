@@ -1,6 +1,6 @@
 {
   "name": "@microphi/di",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "Handcrafted DI container",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",

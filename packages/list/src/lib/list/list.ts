@@ -65,6 +65,9 @@ export class List<EntityType extends object> implements Iterable<EntityType> {
     }
   }
 
+  /**
+  * Upsert one or more items. I.e.: append if new update otherwise
+  * */
   public upsert(...entities: EntityType[]) {
     entities.forEach((e) => {
       const id = this.getId(e);

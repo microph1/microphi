@@ -3,6 +3,12 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
+      "@microphi/di": [
+        "packages/di/lib"
+      ],
+      "@microphi/list": [
+        "packages/list/lib"
+      ],
       "@microphi/store": [
         "packages/store/lib"
       ],

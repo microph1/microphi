@@ -1,3 +1,4 @@
+import { exec } from 'child_process';
 import { List } from './list';
 
 describe('list', () => {
@@ -75,9 +76,7 @@ describe('list', () => {
 
     });
 
-    it('should notify operation$', () => {
-
-    });
+    test.todo('should notify operation$');
 
   });
 
@@ -191,6 +190,30 @@ describe('list', () => {
       expect([...list][1]).toEqual(users[2]);
       expect([...list][2]).toEqual(users[1]);
     });
+  });
+
+  describe('#has', () => {
+    it('should check whether an entity is not in the list', () => {
+      expect(list.has(newEntity.id)).toBeFalsy();
+    });
+
+    it('should check whether an entity is in the list', () => {
+      expect(list.has('abc')).toBeTruthy();
+    });
+
+
+  });
+
+
+  describe('clear the list', () => {
+
+    it('should remove all entities', () => {
+      list.clear();
+
+      expect(list.size).toEqual(0);
+    });
+
+
   });
 
 });

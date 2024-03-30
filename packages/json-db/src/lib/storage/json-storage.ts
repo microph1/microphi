@@ -3,7 +3,7 @@ import MiniSearch, { Options } from 'minisearch';
 import { close, exists, existsSync, mkdir, openSync, readFileSync, rmSync, unlink, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { Scheduler, Subject, asapScheduler, debounceTime, from, switchMap } from 'rxjs';
-import { List } from '../list/list';
+import { List } from '@microphi/list';
 
 /**
  * Mark T as having auto trailing attributes

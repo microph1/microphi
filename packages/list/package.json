@@ -1,7 +1,7 @@
 {
-  "name": "@microphi/json-db",
+  "name": "@microphi/list",
   "version": "2.3.0",
-  "description": "Small, fast and simple file based json-db",
+  "description": "Simple and fast list-like class",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "module": "lib/index.js",
@@ -13,7 +13,7 @@
   ],
   "license": "MIT",
   "keywords": [
-    "json-db"
+    "list"
   ],
   "author": {
     "email": "cavaliere.davide@gmail.com",
@@ -33,14 +33,10 @@
   },
   "devDependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.23.3",
-    "@datakitchen/rxjs-marbles": "^17.0.0",
     "@types/node": "^20.11.30",
-    "minisearch": "^6.3.0",
     "utility-types": "^3.10.0"
   },
   "peerDependencies": {
-    "minisearch": "^6.3.0",
-    "@microphi/list": "^2.3.0",
     "rxjs": "~7.8.0"
   }
 }

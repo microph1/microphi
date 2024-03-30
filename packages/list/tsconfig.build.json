@@ -10,9 +10,6 @@
   "references": [
     {
       "path": "../debug/tsconfig.build.json"
-    },
-    {
-      "path": "../list/tsconfig.build.json"
     }
   ]
 }

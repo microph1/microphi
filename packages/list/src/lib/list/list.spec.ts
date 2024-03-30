@@ -1,4 +1,3 @@
-import { exec } from 'child_process';
 import { List } from './list';
 
 describe('list', () => {
@@ -9,7 +8,7 @@ describe('list', () => {
       email: string;
       name: string;
     };
-    anotherField?: any;
+    anotherField?: unknown;
   }
 
   let list: List<Entity>;

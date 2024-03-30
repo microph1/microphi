@@ -3,7 +3,7 @@
 > Small, fast and simple file based json-db super powered by [minisearch](https://github.com/lucaong/minisearch)
 
 ## Install
-With your preferend package manager install
+With your preferred package manager install
 ```
 @microphi/json-db
 ```

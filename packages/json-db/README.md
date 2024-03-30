@@ -51,3 +51,11 @@ const storage = new JsonStorage<User>('users', '.data', {
 The third object in the JsonStorage constructor is the `Options` object of minisearch which documentation can be found [here](https://lucaong.github.io/minisearch/classes/MiniSearch.MiniSearch.html#constructor)
 
 JsonStorage uses internally rxjs to queue the operations on the index and so to avoid too many read/write to occur simultaneously. By default `index.json` is written on disk after 3 second of inactivity. This can be changed using the fourth argument of the constructor specifying the time in milliseconds. Also a fifth argument can be passed to change the default rxjs scheduler (asapScheduler).
+
+#### Minisearch
+minisearch functionalities are available through the `search` field.
+```typescript
+storage.search.search('batman', { fields: ['name'] });
+```
+Remember documents are added/updated/removed to minisearch automatically.
+For more info on minisearch please consult their [repo](https://github.com/lucaong/minisearch).

@@ -1,6 +1,6 @@
 {
   "name": "@microphi/json-db",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "Small, fast and simple file based json-db",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -39,8 +39,8 @@
     "utility-types": "^3.10.0"
   },
   "peerDependencies": {
-    "minisearch": "^6.3.0",
     "@microphi/list": "^2.3.0",
+    "minisearch": "^6.3.0",
     "rxjs": "~7.8.0"
   }
 }

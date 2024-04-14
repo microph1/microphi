@@ -7,11 +7,7 @@
     "types": ["jest", "node"],
     "esModuleInterop": true
   },
-  "files": [
-    "src/test-setup.spec.ts"
-  ],
   "include": [
-    "**/*.spec.ts",
-    "**/*.d.ts"
+    "src/**/*.spec.ts"
   ]
 }

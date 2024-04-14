@@ -63,3 +63,19 @@ class MyStore extends Store<ItemsState, ItemsActions>
 
 }
 ```
+
+### Dispatch and select state
+```typescript
+// given an instance of the store
+const store = new MyStore();
+
+// subscribe to any state change
+store.state$.subscribe((state) => console.log({ state }) );
+
+// or better select a projection of the state
+store.select(({users}) => users).subscribe((users) => console.log({ users }));
+
+// finally dispatch an action
+store.dispatch('findAll');
+
+```

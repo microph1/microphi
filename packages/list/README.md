@@ -2,7 +2,8 @@
 
 > Simple and fast list-like class
 
-It combines internally a map and an array of ids. The combination give this class the flexibility of an array and the ability to access directly to an element from its id.
+It combines internally a javascrript map and an array of ids. The combination give this class the flexibility of an array and the ability to access directly to an element from its id.
+
 
 ## Install
 With your preferred package manager install
@@ -15,7 +16,7 @@ With your preferred package manager install
 
 interface Entity {
   id: string;
-user: {
+  user: {
     email: string;
     name: string;
   };

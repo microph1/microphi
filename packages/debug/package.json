@@ -1,6 +1,16 @@
 {
   "name": "@microphi/debug",
+  "version": "2.3.0",
   "description": "A very simple wrapper to console.log",
+  "main": "lib/main/index.js",
+  "typings": "lib/main/index.d.ts",
+  "module": "lib/module/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
   "licence": "MIT",
   "private": false,
   "keywords": [
@@ -8,21 +18,17 @@
     "debug",
     "console"
   ],
-  "main": "lib/index.js",
-  "typings": "lib/index.d.ts",
-  "module": "lib/index.js",
-  "directories": {
-    "lib": "lib"
+  "author": {
+    "email": "cavaliere.davide@gmail.com",
+    "name": "Davide Cavaliere",
+    "url": "www.dcsoftware.io"
   },
-  "files": [
-    "lib"
-  ],
-  "version": "2.3.0",
+  "homepage": "https://github.com/microph1/microphi",
   "dependencies": {
     "tslib": "^2.5.0"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.build.json",
+    "build": "tsc -b tsconfig.build.json && tsc -b tsconfig.cj.json",
     "build:ci": "yarn build",
     "test:ci": "jest --coverage --ci",
     "prepack": "yarn build",

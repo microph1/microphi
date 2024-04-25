@@ -1,9 +1,11 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "lib",
-    "rootDir": "src",
-    "noEmit": false
+    "outDir": "./lib/module",
+    "noEmit": false,
+    "inlineSources": false,
+    "sourceMap": false,
+    "composite": true
   },
   "include": ["src/**/*.ts"],
   "exclude": [

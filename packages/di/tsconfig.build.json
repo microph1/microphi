@@ -1,15 +1,14 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "noEmit": false
+    "outDir": "./lib/module",
+    "noEmit": false,
+    "inlineSources": false,
+    "sourceMap": false,
+    "composite": true
   },
   "include": ["src/**/*.ts"],
   "exclude": [
     "src/**/*.spec.ts"
-  ],
-  "references": [
-    {
-      "path": "../debug/tsconfig.build.json"
-    }
   ]
 }

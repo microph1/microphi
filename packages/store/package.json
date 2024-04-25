@@ -1,5 +1,16 @@
 {
   "name": "@microphi/store",
+  "version": "2.3.0",
+  "description": "RxJS base state manager",
+  "main": "lib/main/index.js",
+  "typings": "lib/main/index.d.ts",
+  "module": "lib/module/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
   "licence": "MIT",
   "keywords": [
     "redux",
@@ -14,16 +25,19 @@
     "flux",
     "elm"
   ],
-  "main": "lib/index.js",
-  "typings": "lib/index.d.ts",
-  "module": "lib/index.js",
-  "directories": {
-    "lib": "lib"
+  "author": {
+    "email": "cavaliere.davide@gmail.com",
+    "name": "Davide Cavaliere",
+    "url": "www.dcsoftware.io"
   },
-  "files": [
-    "lib"
-  ],
-  "version": "2.3.0",
+  "homepage": "https://github.com/microph1/microphi",
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json && tsc -b tsconfig.cj.json",
+    "build:ci": "yarn build",
+    "test:ci": "jest --coverage --ci",
+    "prepack": "yarn build",
+    "lint:ci": "eslint ./src"
+  },
   "dependencies": {
     "@microphi/debug": "^2.3.0",
     "reflect-metadata": "^0.1.13",
@@ -34,12 +48,5 @@
   },
   "peerDependencies": {
     "rxjs": "~7.8.0"
-  },
-  "scripts": {
-    "build": "tsc -b tsconfig.build.json",
-    "build:ci": "yarn build",
-    "test:ci": "jest --coverage --ci",
-    "prepack": "yarn build",
-    "lint:ci": "eslint ./src"
   }
 }

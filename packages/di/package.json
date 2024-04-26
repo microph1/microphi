@@ -1,6 +1,6 @@
 {
   "name": "@microphi/di",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "description": "Handcrafted DI container",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -32,7 +32,7 @@
     "lint": "eslint ./src"
   },
   "dependencies": {
-    "@microphi/debug": "^2.5.0",
+    "@microphi/debug": "^2.5.1",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {

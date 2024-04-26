@@ -10,5 +10,13 @@
     "declaration": true,
     "inlineSources": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "references": [
+    {
+      "path": "../debug/tsconfig.json"
+    },
+    {
+      "path": "../list/tsconfig.json"
+    }
+  ]
 }

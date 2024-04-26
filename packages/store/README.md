@@ -79,3 +79,14 @@ store.select(({users}) => users).subscribe((users) => console.log({ users }));
 store.dispatch('findAll');
 
 ```
+
+#### Watch loading state
+We assume every action to be an asyncronious task so every action as a loading state associated to it. Loading state can we subscribed such as:
+```typescript
+store.getLoadingFor('findAll').subscribe((loading) => {
+
+  console.log({loading});
+
+});
+
+```

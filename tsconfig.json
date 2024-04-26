@@ -4,16 +4,16 @@
     "baseUrl": "./",
     "paths": {
       "@microphi/di": [
-        "packages/di/lib/main"
+        "packages/di/lib"
       ],
       "@microphi/list": [
-        "packages/list/lib/main"
+        "packages/list/lib"
       ],
       "@microphi/store": [
-        "packages/store/lib/main"
+        "packages/store/lib"
       ],
       "@microphi/debug": [
-        "packages/debug/lib/main"
+        "packages/debug/lib"
       ]
     },
     "outDir": "./dist/out-tsc",

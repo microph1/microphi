@@ -2,9 +2,9 @@
   "name": "@microphi/debug",
   "version": "2.5.0",
   "description": "A very simple wrapper to console.log",
-  "main": "lib/main/index.js",
-  "typings": "lib/main/index.d.ts",
-  "module": "lib/module/index.js",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "module": "lib/index.js",
   "directories": {
     "lib": "lib"
   },
@@ -28,7 +28,7 @@
     "tslib": "^2.5.0"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.build.json && tsc -b tsconfig.cj.json",
+    "build": "tsc -b tsconfig.build.json",
     "build:ci": "yarn build",
     "test:ci": "jest --coverage --ci",
     "prepack": "yarn build",

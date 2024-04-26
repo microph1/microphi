@@ -1,11 +1,12 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "./lib/module",
+    "outDir": "./lib",
     "noEmit": false,
     "inlineSources": false,
     "sourceMap": false,
-    "composite": true
+    "composite": true,
+    "module": "commonjs"
   },
   "include": ["src/**/*.ts"],
   "exclude": [

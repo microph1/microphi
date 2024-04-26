@@ -1,6 +1,6 @@
 {
   "name": "@microphi/store",
-  "version": "2.3.0",
+  "version": "2.5.0",
   "description": "RxJS base state manager",
   "main": "lib/main/index.js",
   "typings": "lib/main/index.d.ts",
@@ -39,7 +39,7 @@
     "lint:ci": "eslint ./src"
   },
   "dependencies": {
-    "@microphi/debug": "^2.3.0",
+    "@microphi/debug": "^2.5.0",
     "reflect-metadata": "^0.1.13",
     "tslib": "^2.5.0"
   },

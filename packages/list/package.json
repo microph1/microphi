@@ -1,6 +1,6 @@
 {
   "name": "@microphi/list",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "description": "Simple and fast list-like class",
   "main": "lib/main/index.js",
   "typings": "lib/main/index.d.ts",
@@ -29,7 +29,7 @@
     "lint": "eslint ./src"
   },
   "dependencies": {
-    "@microphi/debug": "^2.3.0"
+    "@microphi/debug": "^2.5.0"
   },
   "devDependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.23.3",

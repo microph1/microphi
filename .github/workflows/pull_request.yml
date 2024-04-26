@@ -31,11 +31,11 @@ jobs:
 
       - name: Build
         run: |
-          yarn build:ci --since origin/master
+          yarn build:ci
 
       - name: Test
         run: |
-          yarn test:ci --since origin/master
+          yarn test:ci
 
   lint:
     runs-on: ubuntu-latest
@@ -57,5 +57,5 @@ jobs:
 
       - name: Lint
         run: |
-          yarn lint:ci --since origin/master
+          yarn lint:ci
       # This workflow contains a single job called "build"

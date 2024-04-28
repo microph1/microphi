@@ -216,7 +216,15 @@ export class JsonStorage<T extends object> {
     });
   }
 
-  getAll() {
+  async get(id: string): Promise<T> {
+    const path = await this.storageFile(id);
+    const data = readFileSync(path, {encoding: 'utf8'});
+    const entity: T = JSON.parse(data);
+
+    return entity;
+  }
+
+  getAll(): Promise<T[]> {
     const items$ = [...this.index].map(({ id }) => this.get(id));
 
     return Promise.all(items$);
@@ -247,27 +255,6 @@ export class JsonStorage<T extends object> {
 
   private buildPath(id: string) {
     return join(this.basePath, this.entity, `${id}.json`);
-  }
-
-  async get(id: string): Promise<T|undefined> {
-    const path = await this.storageFile(id);
-    const data = readFileSync(path, {encoding: 'utf8'});
-    let entity: T;
-
-    try {
-
-      entity = JSON.parse(data);
-
-      return entity;
-    } catch (e) {
-      // console.log(e);
-      this.#l(`error while trying to load data for item with id ${id}`);
-      this.#l('item does not exists');
-      this.#l('clearing index');
-      this.index.delete({id, path});
-    }
-
-    return Promise.resolve(undefined);
   }
 
 

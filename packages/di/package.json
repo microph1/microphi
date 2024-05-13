@@ -32,10 +32,12 @@
     "lint": "eslint ./src"
   },
   "dependencies": {
-    "@microphi/debug": "^2.5.1",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.23.3"
+  },
+  "peerDepenencies": {
+    "@microphi/debug": "^2.5.1"
   }
 }

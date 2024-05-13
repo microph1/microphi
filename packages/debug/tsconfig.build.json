@@ -1,12 +1,11 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "./lib",
+    "outDir": "./lib/esm",
     "noEmit": false,
     "inlineSources": false,
     "sourceMap": false,
-    "composite": true,
-    "module": "commonjs"
+    "composite": true
   },
   "include": ["src/**/*.ts"],
   "exclude": [

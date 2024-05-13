@@ -45,7 +45,9 @@ export class JsonStorage<T extends object> {
   constructor(
     private entity: string,
     private basePath: string,
+    // minisearch index options
     searchIndexOptions?: Options,
+    // Debounce time in ms
     debounce?: number,
     private scheduler?: Scheduler,
   ) {

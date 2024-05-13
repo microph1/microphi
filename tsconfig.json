@@ -13,7 +13,7 @@
         "packages/store/lib"
       ],
       "@microphi/debug": [
-        "packages/debug/lib"
+        "packages/debug/lib/esm"
       ]
     },
     "outDir": "./dist/out-tsc",

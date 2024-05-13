@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.6.0](https://github.com/microph1/microphi/compare/v2.5.1...v2.6.0) (2024-05-13)
+
+
+### Bug Fixes
+
+* **json-db:** get and getAll should not possibily return undefined ([a8ee1f2](https://github.com/microph1/microphi/commit/a8ee1f29e38f676ce813426f95e406c5244e97e5))
+* **json-db:** should not compile to commonjs as this generates errors on minisearch ([858bc36](https://github.com/microph1/microphi/commit/858bc364f5b2363d806b38e68571f9e3dc70ac1c))
+
+
+### Features
+
+* **debug:** Publish commonjs version ([e3a800f](https://github.com/microph1/microphi/commit/e3a800f2aa73c4f30aacc282c00376f262624400))
+
+
+### Reverts
+
+* Revert "fix(json-db): get and getAll should not possibily return undefined" ([def9136](https://github.com/microph1/microphi/commit/def9136b066ebcf34f03582b974237e5ead69354))
+
+
+
+
+
 ## [2.5.1](https://github.com/microph1/microphi/compare/v2.5.0...v2.5.1) (2024-04-26)
 
 

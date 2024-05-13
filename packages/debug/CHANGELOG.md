@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.6.0](https://github.com/microph1/microphi/compare/v2.5.1...v2.6.0) (2024-05-13)
+
+
+### Features
+
+* **debug:** Publish commonjs version ([e3a800f](https://github.com/microph1/microphi/commit/e3a800f2aa73c4f30aacc282c00376f262624400))
+
+
+
+
+
 ## [2.5.1](https://github.com/microph1/microphi/compare/v2.5.0...v2.5.1) (2024-04-26)
 
 

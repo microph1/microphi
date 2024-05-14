@@ -31,7 +31,6 @@
     "build": "tsc -b tsconfig.build.json && tsc -b tsconfig.cjs.json",
     "build:ci": "yarn build",
     "test:ci": "jest --coverage --ci",
-    "prepack": "yarn build",
     "lint": "eslint ./src"
   },
   "devDependencies": {

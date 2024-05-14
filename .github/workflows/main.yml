@@ -7,7 +7,7 @@ on:
 
 jobs:
 
-  Test_Lint:
+  Build_Test_Lint_Deploy:
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it

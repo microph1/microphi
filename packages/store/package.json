@@ -1,6 +1,6 @@
 {
   "name": "@microphi/store",
-  "version": "2.7.1",
+  "version": "2.7.2",
   "description": "RxJS base state manager",
   "main": "lib/cjs/index.js",
   "typings": "lib/esm/index.d.ts",

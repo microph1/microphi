@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.7.2](https://github.com/microph1/microphi/compare/v2.7.1...v2.7.2) (2024-05-14)
+
+
+### Bug Fixes
+
+* remove exports field in package json ([3044b3e](https://github.com/microph1/microphi/commit/3044b3e6d20e026240f63cc2272823105950af22))
+
+
+
+
+
 ## [2.7.1](https://github.com/microph1/microphi/compare/v2.7.0...v2.7.1) (2024-05-14)
 
 

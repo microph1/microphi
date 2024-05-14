@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.7.2](https://github.com/microph1/microphi/compare/v2.7.1...v2.7.2) (2024-05-14)
+
+
+### Bug Fixes
+
+* **di:** in cjs exporting testing modules causes troubles ([fda9722](https://github.com/microph1/microphi/commit/fda972251d32dcf055837afb04d318dc76a72610))
+* **di:** remove exports field ([257eea7](https://github.com/microph1/microphi/commit/257eea7b80190babccf4c46dde844c120735e425))
+* publish step was failing after switch to hybrid packages ([9be11cf](https://github.com/microph1/microphi/commit/9be11cf7a2d97218c8bf5a850003003e80f13578))
+* remove exports field in package json ([3044b3e](https://github.com/microph1/microphi/commit/3044b3e6d20e026240f63cc2272823105950af22))
+
+
+
+
+
 ## [2.7.1](https://github.com/microph1/microphi/compare/v2.7.0...v2.7.1) (2024-05-14)
 
 

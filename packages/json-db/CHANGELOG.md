@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.7.0](https://github.com/microph1/microphi/compare/v2.6.0...v2.7.0) (2024-05-14)
+
+
+### Features
+
+* allow other packages to publish cjs ([692700c](https://github.com/microph1/microphi/commit/692700c703db8105e51455b578adbcc2f8c0075f))
+
+
+
+
+
 # [2.6.0](https://github.com/microph1/microphi/compare/v2.5.1...v2.6.0) (2024-05-13)
 
 

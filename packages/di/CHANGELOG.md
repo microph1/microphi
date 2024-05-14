@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.7.1](https://github.com/microph1/microphi/compare/v2.7.0...v2.7.1) (2024-05-14)
+
+
+### Bug Fixes
+
+* publish step was failing after switch to hybrid packages ([dd621e3](https://github.com/microph1/microphi/commit/dd621e356954de1a0f58cd6043c7e29a9a7c9743))
+
+
+
+
+
 # [2.7.0](https://github.com/microph1/microphi/compare/v2.6.0...v2.7.0) (2024-05-14)
 
 

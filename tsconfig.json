@@ -4,13 +4,13 @@
     "baseUrl": "./",
     "paths": {
       "@microphi/di": [
-        "packages/di/lib"
+        "packages/di/lib/esm"
       ],
       "@microphi/list": [
-        "packages/list/lib"
+        "packages/list/lib/esm"
       ],
       "@microphi/store": [
-        "packages/store/lib"
+        "packages/store/lib/esm"
       ],
       "@microphi/debug": [
         "packages/debug/lib/esm"

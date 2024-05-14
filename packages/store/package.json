@@ -2,9 +2,15 @@
   "name": "@microphi/store",
   "version": "2.6.0",
   "description": "RxJS base state manager",
-  "main": "lib/index.js",
-  "typings": "lib/index.d.ts",
-  "module": "lib/index.js",
+  "main": "lib/cjs/index.js",
+  "typings": "lib/esm/index.d.ts",
+  "module": "lib/esm/index.js",
+  "exports": {
+    ".": {
+      "import": "lib/esm/index.js",
+      "require": "lib/cjs/index.js"
+    }
+  },
   "directories": {
     "lib": "lib"
   },
@@ -32,14 +38,13 @@
   },
   "homepage": "https://github.com/microph1/microphi",
   "scripts": {
-    "build": "tsc -b tsconfig.build.json",
+    "build": "tsc -b tsconfig.build.json && tsc -b tsconfig.cjs.json",
     "build:ci": "yarn build",
     "test:ci": "jest --coverage --ci",
     "prepack": "yarn build",
     "lint:ci": "eslint ./src"
   },
   "dependencies": {
-    "@microphi/debug": "^2.6.0",
     "reflect-metadata": "^0.1.13",
     "tslib": "^2.5.0"
   },

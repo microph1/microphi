@@ -2,9 +2,15 @@
   "name": "@microphi/list",
   "version": "2.6.0",
   "description": "Simple and fast list-like class",
-  "main": "lib/index.js",
-  "typings": "lib/index.d.ts",
-  "module": "lib/index.js",
+  "main": "lib/cjs/index.js",
+  "typings": "lib/esm/index.d.ts",
+  "module": "lib/esm/index.js",
+  "exports": {
+    ".": {
+      "import": "lib/esm/index.js",
+      "require": "lib/cjs/index.js"
+    }
+  },
   "directories": {
     "lib": "lib"
   },
@@ -22,14 +28,13 @@
   },
   "homepage": "https://github.com/microph1/microphi",
   "scripts": {
-    "build": "tsc -b tsconfig.build.json",
+    "build": "tsc -b tsconfig.build.json && tsc -b tsconfig.cjs.json",
     "build:ci": "yarn build",
     "test:ci": "jest --coverage --ci",
     "prepack": "yarn build",
     "lint": "eslint ./src"
   },
   "dependencies": {
-    "@microphi/debug": "^2.6.0"
   },
   "devDependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.23.3",
@@ -37,6 +42,7 @@
     "utility-types": "^3.10.0"
   },
   "peerDependencies": {
+    "@microphi/debug": "^2.5.1",
     "rxjs": "~7.8.0"
   }
 }

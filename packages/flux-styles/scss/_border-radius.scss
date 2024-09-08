@@ -1,0 +1,23 @@
+@import "variables";
+@import "mixins";
+
+$radius-map: (
+  "border-radius": (
+    property: border-radius,
+    shortcut: rounded,
+    values: (
+      none: 0px,
+      sm: $space-base * 0.125,
+      base: $space-base * 0.25,
+      lg: $space-base * 0.5,
+      xl: $space-base * 0.75,
+      2xl: $space-base * 1,
+      3xl: $space-base * 1.5,
+      full: 9999px
+    )
+  ),
+);
+
+@each $key, $utility in $radius-map {
+  @include generate-utilities($utility)
+}

@@ -20,7 +20,7 @@
     "deploy:ci": "lerna publish -y --conventional-commits --create-release github --loglevel verbose --no-private",
     "release": "lerna version --conventional-commits",
     "predeploy:dcsoftware": "ng build dcsoftware --configuration production",
-    "deploy:dcsoftware": "cd projects/dcsoftware && yarn sls client deploy --no-confirm",
+    "deploy:dcsoftware": "cd projects/dcsoftware && npm run sls client deploy --no-confirm",
     "deploy:store": "ng deploy store --configuration=production",
     "predeploy:microphi": "ng build microphi --configuration production",
     "deploy": "lerna run deploy --stream --scope",

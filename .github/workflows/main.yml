@@ -25,32 +25,32 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '18.x'
-          cache: 'yarn'
+          cache: 'npm'
           # Optional registry to set up for auth. Will set the registry in a project level .npmrc and .yarnrc file,
           # and set up auth to read in from env.NODE_AUTH_TOKEN.
           # Default: ''
           registry-url: 'https://registry.npmjs.org/'
 
       - name: Install
-        run: yarn install --frozon-lockfile
+        run: npm ci
 
       - name: Build
         # we need to build before testing
         # otherwise dependent projects won't have their libs
         run: |
-          yarn build:ci
+          npm run build:ci
 
       - name: Lint
         run: |
-          yarn lint:ci
+          npm run lint:ci
 
       - name: Test
         run: |
-          yarn test:ci
+          npm run test:ci
 
       - name: Version_and_Deploy
         run: |
-          yarn deploy:ci
+          npm run deploy:ci
         # this will call lerna publish.
         # Please note the `--contents dist` option https://www.npmjs.com/package/@lerna/publish#--contents-dir
         # this implies that each package MUST generate its own artifacts in a dist folder within itself

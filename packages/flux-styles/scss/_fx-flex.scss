@@ -1,0 +1,259 @@
+// flex utilities
+.fx-flex {
+  display: flex;
+}
+
+.fx-flex-fill {
+  width: 100%;
+  height: 100%;
+}
+
+.fx-fill-column {
+  height: 100%;
+}
+
+.fx-fill-row {
+  width: 100%;
+}
+
+.fx-flex-grow {
+  flex-grow: 1;
+}
+
+@mixin styles($prefix: '') {
+  $actual-prefix: if($prefix == '', '', #{$prefix}--);
+
+  .#{$actual-prefix}hidden {
+    display: none !important;
+  }
+
+  .#{$actual-prefix}fx-flex-column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .#{$actual-prefix}fx-flex-row {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .#{$actual-prefix}fx-flex-nowrap {
+    flex-wrap: nowrap;
+  }
+
+  .#{$actual-prefix}fx-flex-wrap {
+    flex-wrap: wrap;
+  }
+
+  .#{$actual-prefix}fx-flex-align-items-center {
+    align-items: center;
+  }
+
+  .#{$actual-prefix}fx-flex-align-items-baseline {
+    align-items: baseline;
+  }
+
+  .#{$actual-prefix}fx-flex-justify-center {
+    justify-content: center;
+  }
+
+  .#{$actual-prefix}fx-flex-align-items-start {
+    align-items: flex-start;
+  }
+
+  .#{$actual-prefix}fx-flex-align-items-end {
+    align-items: flex-end;
+  }
+
+  .#{$actual-prefix}fx-flex-align-items-baseline {
+    align-items: baseline;
+  }
+
+  .#{$actual-prefix}fx-flex-align-center-center {
+    align-items: center;
+    justify-content: center;
+  }
+
+  .#{$actual-prefix}fx-flex-justify-space-evenly {
+    justify-content: space-around;
+  }
+
+  .#{$actual-prefix}fx-flex-justify-space-around {
+    justify-content: space-around;
+  }
+
+  .#{$actual-prefix}fx-flex-justify-space-between {
+    justify-content: space-between;
+  }
+
+  .#{$actual-prefix}fx-flex-justify-end {
+    justify-content: end;
+  }
+
+
+  $i: 0;
+  @while $i <= 100 {
+
+    .#{$actual-prefix}fx-w-#{$i} {
+      width: #{$i}vw;
+    }
+
+    .#{$actual-prefix}fx-h-#{$i} {
+      height: #{$i}vh;
+    }
+
+
+    // do stuff
+    $i: $i + 10;
+  }
+
+  .#{$actual-prefix}fx-flex-grow {
+    flex-grow: 1;
+  }
+
+  $j: 0;
+
+  @while $j < 4 {
+
+    .#{$actual-prefix}fx-flex-grow-#{$j} {
+      flex-grow: $j;
+    }
+
+    $j: $j + 1;
+
+  }
+}
+
+@include styles();
+
+@media (min-aspect-ratio: 4/4) {
+  /* Styles for wide screens */
+  @include styles('wider');
+
+}
+
+@media (min-aspect-ratio: 5/4) {
+  /* Styles for very wide screens */
+  @include styles('very-wide');
+}
+
+
+@media (max-aspect-ratio: 4/4) {
+  /* Styles for tall screens */
+  @include styles('taller');
+}
+
+$breakpoints : (
+  '': null,
+  'xs-': 400,
+  'sm-': 750,
+  'md-': 900,
+  'lg-': 1200,
+  'xlg-': 1450,
+) !default;
+
+@each $media-shortcut, $max-width in $breakpoints {
+
+  @if $max-width != null {
+    @media (max-width: #{$max-width}px) {
+
+      .below-#{$media-shortcut} {
+
+        &-hidden {
+          display: none !important;
+        }
+
+        &-fx-flex-row {
+          display: flex;
+          flex-direction: row;
+        }
+
+        &-fx-flex-row-reverse {
+          display: flex;
+          flex-direction: row-reverse;
+        }
+
+        &-fx-flex-column {
+          display: flex;
+          flex-direction: column;
+        }
+
+        &-fx-flex-column-reverse {
+          display: flex;
+          flex-direction: column-reverse;
+        }
+
+        &-fx-flex-grow {
+          flex-grow: 1;
+        }
+      }
+    }
+
+    @media (min-width: #{$max-width}px) {
+
+      .above-#{$media-shortcut} {
+
+        &-hidden {
+          display: none !important;
+        }
+
+
+        &-fx-flex-column {
+          display: flex;
+          flex-direction: column;
+        }
+
+        &-fx-flex-row {
+          display: flex;
+          flex-direction: row;
+        }
+
+        &-fx-flex-grow {
+          flex-grow: 1;
+        }
+      }
+
+    }
+
+  }
+
+
+  // hidden utilities
+  @media (max-width: #{$max-width}px) {
+    .#{$media-shortcut}-hidden {
+      display: none !important;
+    }
+  }
+
+}
+
+/// end fx-flex helpers.... refactor every thing below this
+
+.overflow-auto {
+  overflow: auto;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+
+.w-0 {
+  width: 0;
+}
+
+.h-0 {
+  width: 0;
+}
+
+.fx-fill-height {
+  height: calc(100vh - 2*var(--mat-toolbar-standard-height, 65px));
+}
+
+.fx-flex-000 {
+  flex: 0 0 0;
+}
+
+.fx-flex-100 {
+  flex: 1 0 0;
+}

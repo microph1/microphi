@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { HydrateFrom } from '@microphi/phi';
 import { of, Subject } from 'rxjs';
 
 export interface ProjectDef {
@@ -15,9 +14,9 @@ export interface ProjectDef {
 export class AppComponent implements OnInit {
   private ngOnInit$ = new Subject<void>();
 
-  public isLoading$ = of(false)
+  public isLoading$ = of(false);
 
-  @HydrateFrom(localStorage)
+  @Hydra(localStorage)
   public opened: boolean;
 
   ngOnInit() {

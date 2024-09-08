@@ -1,5 +1,5 @@
 import { TestScheduler } from '@datakitchen/rxjs-marbles';
-import { Observable, ReplaySubject, Subject, delay, of, tap, throwError } from 'rxjs';
+import { Observable, Subject, delay, of, tap, throwError } from 'rxjs';
 import { Effect } from '../effect/effect';
 import { Reduce } from '../reduce/reduce';
 import { Store, makeStore } from './store';
@@ -97,7 +97,7 @@ describe('store', () => {
 
     @Effect()
     public asyncEffect(id, email) {
-      return of('test');
+      return of(`${id}${email}`);
     }
 
     @Reduce()
@@ -119,8 +119,8 @@ describe('store', () => {
     }
 
     @Reduce()
-    onActionEffectThrows<O>(state: ItemsState, payload: number): ItemsState {
-      return undefined;
+    onActionEffectThrows(state: ItemsState, payload: number): ItemsState {
+      return {...state, };
     }
 
     @Effect()
@@ -336,10 +336,7 @@ describe('store', () => {
       triggerChange(value: boolean) {
         console.log('triggering change', value);
         this.trigger$.next(value);
-
-
       }
-
 
       @Effect()
       connect(): Observable<boolean> {

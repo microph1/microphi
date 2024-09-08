@@ -63,9 +63,10 @@ export const EffectSymbol = Symbol.for('@Effect');
  */
 export function Effect(strategy: EffectStrategy = 'switchMap'): MethodDecorator {
   // return Reflect.metadata(EffectSymbol, strategy);
-  return (target, propertyKey) => {
+  return (target, propertyKey, descriptor) => {
     // return Reflect.metadata(EffectSymbol, strategy)(target, propertyKey);
-    return Reflect.defineMetadata(EffectSymbol, strategy, target, propertyKey);
+    Reflect.defineMetadata(EffectSymbol, strategy, target, propertyKey);
+    return descriptor;
   };
 }
 

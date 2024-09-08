@@ -24,18 +24,18 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '18.x'
-          cache: 'yarn'
+          cache: 'npm'
 
       - name: Install
-        run: yarn install --frozon-lockfile
+        run: npm ci
 
       - name: Build
         run: |
-          yarn build:ci
+          npm run build:ci
 
       - name: Test
         run: |
-          yarn test:ci
+          npm run test:ci
 
   lint:
     runs-on: ubuntu-latest
@@ -50,12 +50,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '18.x'
-          cache: 'yarn'
+          cache: 'npm'
 
       - name: Install
-        run: yarn install --frozon-lockfile
+        run: npm ci
 
       - name: Lint
         run: |
-          yarn lint:ci
+          npm run lint:ci
       # This workflow contains a single job called "build"

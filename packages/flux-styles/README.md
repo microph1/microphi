@@ -1,6 +1,11 @@
-# SCSS Library for Web Applications
+# Microphi Styles
 
-Welcome to the **SCSS Library for Web Applications**, a powerful and flexible set of SCSS utilities designed to help you build modern, scalable, and maintainable stylesheets for your web projects.
+Welcome to the **Microphi Styles**, a powerful and flexible set of SCSS utilities designed to help you build modern, scalable, and maintainable stylesheets for your web projects.
+
+## Motivations
+While working on Microgamma we went through all available scss libraries. All lacked a flex first approach to layouting.
+We believe in a flex first approach when it comes to layouting. This library is the result of our though process in term of layouting and utilities.
+
 
 ## Table of Contents
 
@@ -23,21 +28,18 @@ Welcome to the **SCSS Library for Web Applications**, a powerful and flexible se
 
 ## Installation
 
-You can install the SCSS library using npm or yarn:
+Install using your favorite package manager
 
 ```bash
-# With npm
-npm install scss-web-library
-
-# With yarn
-yarn add scss-web-library
+@microphi/flexus
 ```
 
 Alternatively, you can manually download the SCSS files and include them in your project.
 
 ## Getting Started
 
-After installing the library, import the main SCSS file in your project:
+library_name is made of the following scss modules
+
 
 ```scss
 @import 'path/to/scss-library/main.scss';

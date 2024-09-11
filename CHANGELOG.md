@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.7.4](https://github.com/microph1/microphi/compare/v2.7.3...v2.7.4) (2024-09-11)
+
+**Note:** Version bump only for package microphi
+
 ## [2.7.3](https://github.com/microph1/microphi/compare/v2.7.2...v2.7.3) (2024-09-11)
 
 ### Bug Fixes

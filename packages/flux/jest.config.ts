@@ -1,7 +1,5 @@
 import type { Config } from 'jest';
 import { pathsToModuleNameMapper } from 'ts-jest';
-// import { compilerOptions } from '../../tsconfig.json';
-import { defaults as tsjPreset } from 'ts-jest/presets';
 const { compilerOptions } = require('../../tsconfig.json');
 
 const moduleNameMapper = pathsToModuleNameMapper(compilerOptions.paths, {prefix: '<rootDir>/../../'});
@@ -9,7 +7,6 @@ const moduleNameMapper = pathsToModuleNameMapper(compilerOptions.paths, {prefix:
 const config: Config = {
   displayName: 'flux',
   transform: {
-    ...tsjPreset.transform,
     '^.+\\.tsx?$': [
       'ts-jest',
       {
@@ -23,7 +20,7 @@ const config: Config = {
   testEnvironment: 'jsdom',
   moduleNameMapper,
   coverageDirectory: '<rootDir>/../../coverage/flux',
-  coverageReporters: ['json', 'html', 'lcov', 'text-summary'],
+  coverageReporters: ['json','lcov', 'text-summary'],
   collectCoverageFrom: [
     '**/src/**/!(*.spec).ts',
     '!**/*.experiment.ts',

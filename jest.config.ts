@@ -1,17 +1,13 @@
-import type { JestConfigWithTsJest } from 'ts-jest'
+import { Config } from 'jest';
 
-// import { defaultsESM as tsjPreset } from 'ts-jest/presets';
-// import { jsWithTs as tsjPreset } from 'ts-jest/presets';
-// import { jsWithTsESM as tsjPreset } from 'ts-jest/presets';
-// import { jsWithBabel as tsjPreset } from 'ts-jest/presets';
-// import { jsWithBabelESM as tsjPreset } from 'ts-jest/presets';
-
-const jestConfig: JestConfigWithTsJest = {
-  // [...]
+const jestConfig: Config = {
+  testEnvironment: 'node',
   projects: [
     'packages/*'
   ],
-  preset: 'ts-jest',
+  transform: {
+    "^.+.tsx?$": ["ts-jest",{}],
+  },
 }
 
 export default jestConfig

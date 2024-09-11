@@ -128,6 +128,7 @@ export class JsonStorage<T extends object> {
     for (const {id, ...doc} of docs) {
       const timestamp = new Date().toISOString();
       const updateTime = this.index.has(id) ? {
+        ...this.index.get(id),
         modified: timestamp,
       } : {
         modified: timestamp,

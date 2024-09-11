@@ -114,6 +114,19 @@ export abstract class Store<State, A> {
             }),
             // the above is
             map((response) => {
+              // if an inner observable emits again the reducer will be triggered again
+              // allowing for state changes from the outside.
+              // Which sounds terrible said like that but if can actually be handy.
+              // For example when a connection state changes:
+              //
+              // store.dispatch('connect') ->
+              // connection happens successfully ->
+              // onConnect is called -> state updated
+              //
+              // ... some time later
+              //
+              // network connection is lost connection is lost
+
               // by convention reducer name must be
               // on + Action
               const reducerName = `on${(name[0]).toUpperCase()}${(name as string).slice(1)}`;

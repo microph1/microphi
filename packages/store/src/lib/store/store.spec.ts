@@ -1,8 +1,8 @@
+import { TestScheduler } from '@datakitchen/rxjs-marbles';
+import { Observable, Subject, delay, of, throwError } from 'rxjs';
 import { Effect } from '../effect/effect';
 import { Reduce } from '../reduce/reduce';
 import { Store, makeStore } from './store';
-import { delay, Observable, of, throwError } from 'rxjs';
-import { TestScheduler } from '@datakitchen/rxjs-marbles';
 
 describe('store', () => {
   interface ItemsState {
@@ -97,7 +97,7 @@ describe('store', () => {
 
     @Effect()
     public asyncEffect(id, email) {
-      return of('test');
+      return of(`${id}${email}`);
     }
 
     @Reduce()
@@ -119,8 +119,8 @@ describe('store', () => {
     }
 
     @Reduce()
-    onActionEffectThrows<O>(state: ItemsState, payload: number): ItemsState {
-      return undefined;
+    onActionEffectThrows(state: ItemsState, payload: number): ItemsState {
+      return {...state, };
     }
 
     @Effect()
@@ -252,7 +252,7 @@ describe('store', () => {
 
     describe('default strategy switchMap', () => {
 
-      fit('should only get latest dispatch', () => {
+      it('should only get latest dispatch', () => {
 
 
         scheduler.run(({expectObservable}) => {
@@ -297,5 +297,113 @@ describe('store', () => {
 
     });
   });
+
+  describe('inner observable trigger state change', () => {
+
+    interface Actions {
+      connect(): Observable<boolean>;
+    }
+
+    interface State {
+      connected: boolean;
+    }
+
+
+    class TestInnerObservableStore extends Store<State, Actions> implements makeStore<State, Actions> {
+
+      // suppose this is an internal state of a service
+      // for example this could be the connection status
+      // of a websocket service which will be set/unset (true/false)
+      // on internal event listeners such as
+      //
+      // socket.on('connect', ....)
+      // socket.on('error', ....)
+      externalConnection$ = new Subject<boolean>();
+
+      trigger$ = new Subject<boolean>();
+
+      constructor() {
+        super({connected: false});
+
+        this.trigger$.pipe(
+
+          delay(1000, scheduler),
+        ).subscribe((value) => {
+          this.externalConnection$.next(value);
+        });
+      }
+
+      triggerChange(value: boolean) {
+        this.trigger$.next(value);
+      }
+
+      @Effect()
+      connect(): Observable<boolean> {
+        // to connect we want to trigger a connection event in
+        // the service and return its internal
+        // connection status, i.e.: our external connection status
+        this.triggerChange(true);
+
+        return this.externalConnection$.pipe(
+        );
+      }
+
+      @Reduce()
+      onConnect(state: State, payload: boolean): State {
+
+
+        return {...state, connected: payload};
+
+      }
+
+    }
+
+    let innerObservableStore: TestInnerObservableStore;
+
+    beforeEach(() => {
+      innerObservableStore = new TestInnerObservableStore();
+      jest.spyOn(innerObservableStore, 'onConnect');
+    });
+
+    it('should connect', () => {
+
+
+      scheduler.run(({expectObservable}) => {
+
+        expectObservable(innerObservableStore.connect()).toBe('1000ms a', {
+          a: true,
+        });
+
+
+
+      });
+    });
+
+    it('should trigger state change again', () => {
+
+      scheduler.run(({flush}) => {
+
+        innerObservableStore.dispatch('connect');
+        flush();
+
+        expect(innerObservableStore.onConnect).toHaveBeenCalledWith({
+          connected: false,
+        }, true);
+
+        innerObservableStore.triggerChange(false);
+        flush();
+
+        expect(innerObservableStore.onConnect).toHaveBeenCalledWith({
+          connected: true,
+        }, false);
+
+      });
+
+    });
+
+
+
+  });
+
 
 });

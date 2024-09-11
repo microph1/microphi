@@ -1,0 +1,33 @@
+
+.phi-pad {
+  padding: 4vh 12vw
+}
+
+.phi-pad-h {
+  padding: 4vh 0;
+}
+
+.phi-pad-v {
+  padding: 0 12vw;
+}
+
+.phi-as-pointer {
+  cursor: pointer;
+}
+
+.phi-backdrop-fixed {
+  background-attachment: fixed;
+}
+
+.phi-background {
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.phi-background-image-contain {
+  background-size: contain;
+}
+
+.phi-background-image-cover {
+  background-size: cover;
+}

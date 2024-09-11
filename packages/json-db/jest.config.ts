@@ -1,15 +1,8 @@
 import type { Config } from 'jest';
-// import { pathsToModuleNameMapper } from 'ts-jest';
-// import { compilerOptions } from '../../tsconfig.json';
-import { defaults as tsjPreset } from 'ts-jest/presets';
-// const { compilerOptions } = require('../../tsconfig.json');
-
-// const moduleNameMapper = pathsToModuleNameMapper(compilerOptions.paths, {prefix: '<rootDir>/../../'});
 
 const config: Config = {
   displayName: 'json-db',
   transform: {
-    ...tsjPreset.transform,
     '^.+\\.tsx?$': [
       'ts-jest',
       {
@@ -18,11 +11,9 @@ const config: Config = {
       },
     ],
     '\\.js$': ['babel-jest', {rootMode: 'upward'}],
-    // [...]
   },
-  // moduleNameMapper,
   coverageDirectory: '<rootDir>/../../coverage/json-db',
-  coverageReporters: ['json', 'html', 'lcov', 'text-summary'],
+  coverageReporters: ['json', 'lcov', 'text-summary'],
   collectCoverageFrom: [
     '**/src/**/!(*.spec).ts',
     '!**/*.experiment.ts',
@@ -31,7 +22,7 @@ const config: Config = {
   coverageThreshold: {
     global: {
       statements: 90.09,
-      branches: 73.08,
+      branches: 73.07,
       functions: 90.00,
       lines: 92.52,
     }

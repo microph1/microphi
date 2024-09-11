@@ -1,0 +1,121 @@
+$space-xxs: 2px;
+$space-xs: 4px;
+$space-sm: 8px;
+$space-md: 12px;
+$space-lg: 16px;
+$space-xl: 24px;
+$space-xxl: 32px;
+$space-auto: auto;
+
+$spacing-shortcuts: (
+  "margin": "m",
+  "padding": "p"
+) !default;
+$spacing-directions: ("top": "t", "right": "r", "bottom": "b", "left": "l") !default;
+$spacing-horizontal: "x" !default;
+$spacing-vertical: "y" !default;
+$spacing-values: (
+  "0": 0,
+  "1": $space-xxs,
+  "2": $space-xs,
+  "3": $space-sm,
+  "4": $space-md,
+  "5": $space-lg,
+  "6": $space-xl,
+  "7": $space-xxl,
+  "8": 64px,
+  "9": 128px,
+  "a": $space-auto,
+) !default;
+
+$breakpoints : (
+  '': null,
+  'xs-': 400,
+  'sm-': 750,
+  'md-': 850,
+  'lg-': 1200,
+  'xlg-': 1450,
+) !default;
+
+@each $media-shortcut, $width in $breakpoints {
+  @if $width == null {
+    @each $property, $shortcut in $spacing-shortcuts {
+      @each $name, $value in $spacing-values {
+
+
+
+        // such as: m-3 or p-4
+        .#{$shortcut}-#{$name} {
+          #{$property}: $value
+        }
+
+        .gap-#{$name} {
+          gap: $value;
+        }
+
+        @each $direction, $suffix in $spacing-directions {
+          // such as: mr-3 or pb-4
+          .#{$shortcut}#{$suffix}-#{$name} {
+            #{$property}-#{$direction}: $value;
+          }
+
+        }
+
+        @if $spacing-horizontal != null {
+          .#{$shortcut}#{$spacing-horizontal}-#{$name} {
+            #{$property}-left: $value;
+            #{$property}-right: $value;
+          }
+
+        }
+
+        @if $spacing-vertical != null {
+          .#{$shortcut}#{$spacing-vertical}-#{$name} {
+            #{$property}-top: $value;
+            #{$property}-bottom: $value;
+          }
+
+        }
+
+      }
+    }
+  }
+
+  //@debug "media-shortcut: #{$media-shortcut}";
+
+  @media (max-width: #{$width}px) {
+    //@debug "";
+    @each $property, $shortcut in $spacing-shortcuts {
+      @each $name, $value in $spacing-values {
+
+        //@debug "rule: .#{$media-shortcut}-#{$shortcut}-#{$name}";
+
+        .#{$media-shortcut}-#{$shortcut}-#{$name} {
+          #{$property}: $value
+        }
+
+        @each $direction, $suffix in $spacing-directions {
+          .#{$media-shortcut}-#{$shortcut}#{$suffix}-#{$name} {
+            #{$property}-#{$direction}: $value;
+          }
+        }
+
+        @if $spacing-horizontal != null {
+          .#{$media-shortcut}-#{$shortcut}#{$spacing-horizontal}-#{$name} {
+            #{$property}-left: $value;
+            #{$property}-right: $value;
+          }
+        }
+
+        @if $spacing-vertical != null {
+          .#{$media-shortcut}-#{$shortcut}#{$spacing-vertical}-#{$name} {
+            #{$property}-top: $value;
+            #{$property}-bottom: $value;
+          }
+        }
+
+      }
+    }
+
+  }
+}

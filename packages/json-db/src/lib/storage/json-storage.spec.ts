@@ -21,7 +21,8 @@ describe('json-storage', () => {
     // TODO: fill in some initial data
 
     const user0 = { id: '0', name: 'user0' };
-    const index = [{id: '0', path: '.data/users/0.json'}];
+    const timestamp = new Date().toISOString();
+    const index = [{id: '0', path: '.data/users/0.json', created: timestamp, modified: timestamp}];
 
     if (!existsSync('.data')) {
       mkdirSync('.data');
@@ -128,11 +129,27 @@ describe('json-storage', () => {
 
       it('update an existing document', async () => {
 
-        await storage.upsert({id: '1', name: 'super-superman'});
-        const user = await storage.get('1');
-        expect(user).toEqual({id: '1', name: 'super-superman'});
+        await storage.upsert({id: '0', name: 'super-superman'});
+        const user = await storage.get('0');
+        expect(user).toEqual({id: '0', name: 'super-superman'});
       });
 
+      it('update entity updated field while conserving created field', async () => {
+        const idx = storage.index.get('0');
+
+        expect(idx).toEqual({
+          created: expect.anything(),
+          modified: expect.anything(),
+          id: expect.anything(),
+          path: expect.anything(),
+        });
+
+        await storage.upsert({id: '0', name: 'super-superman-1'});
+        expect(storage.index.get('0')?.created).toEqual(idx?.created);
+        expect(storage.index.get('0')?.modified).not.toEqual(idx?.modified);
+
+
+      });
 
     });
   });

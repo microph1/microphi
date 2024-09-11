@@ -1,5 +1,5 @@
 import { TestScheduler } from '@datakitchen/rxjs-marbles';
-import { Observable, Subject, delay, of, tap, throwError } from 'rxjs';
+import { Observable, Subject, delay, of, throwError } from 'rxjs';
 import { Effect } from '../effect/effect';
 import { Reduce } from '../reduce/reduce';
 import { Store, makeStore } from './store';
@@ -334,7 +334,6 @@ describe('store', () => {
       }
 
       triggerChange(value: boolean) {
-        console.log('triggering change', value);
         this.trigger$.next(value);
       }
 
@@ -346,14 +345,12 @@ describe('store', () => {
         this.triggerChange(true);
 
         return this.externalConnection$.pipe(
-          tap((...args) => console.log('external state changed', args)),
         );
       }
 
       @Reduce()
       onConnect(state: State, payload: boolean): State {
 
-        console.log('reducing state with payload', payload);
 
         return {...state, connected: payload};
 
@@ -389,12 +386,10 @@ describe('store', () => {
         innerObservableStore.dispatch('connect');
         flush();
 
-        console.log('asserting here');
         expect(innerObservableStore.onConnect).toHaveBeenCalledWith({
           connected: false,
         }, true);
 
-        console.log('change state again');
         innerObservableStore.triggerChange(false);
         flush();
 

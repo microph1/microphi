@@ -5,7 +5,7 @@ describe('@HydrateFrom', () => {
   class TestClass {
 
     @HydrateFrom(localStorage)
-    public name: string;
+    public name!: string;
   }
 
   it('should create', () => {

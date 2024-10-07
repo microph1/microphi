@@ -1,5 +1,5 @@
 {
-  "name": "@microphi/flux",
+  "name": "@microphi/flux-core",
   "version": "2.7.3",
   "description": "the flux core package",
   "main": "lib/index.js",

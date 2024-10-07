@@ -1,6 +1,6 @@
-# Microphi Styles
+# fx-scss
 
-Welcome to the **Microphi Styles**, a powerful and flexible set of SCSS utilities designed to help you build modern, scalable, and maintainable stylesheets for your web projects.
+Welcome to the **fx-scss**, a flex first set of css classes to ease
 
 ## Motivations
 While working on Microgamma we went through all available scss libraries. All lacked a flex first approach to layouting.

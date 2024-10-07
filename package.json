@@ -4,7 +4,8 @@
   "licence": "MIT",
   "workspaces": {
     "packages": [
-      "packages/*"
+      "packages/*",
+      "flux/*"
     ]
   },
   "scripts": {

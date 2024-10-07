@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "declarationMap": true,
+    "target": "es2020",
+    "declaration": true,
+    "inlineSources": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "src/test-setup.ts",
+    "**/*.spec.ts"
+  ]
+}

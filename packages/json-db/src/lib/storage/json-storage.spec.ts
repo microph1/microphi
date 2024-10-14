@@ -248,7 +248,7 @@ fdescribe('kanepa technical', () => {
 
       console.log({maxIndexes});
       // I can disregard all max values that happen in the middle
-      const lastMaxIndex = maxIndexes.pop();
+      const lastMaxIndex = maxIndexes.pop() || 0;
       console.log({lastMaxIndex});
 
 
@@ -256,12 +256,12 @@ fdescribe('kanepa technical', () => {
 
         const currentValue = price[index];
 
-        if (currentValue < max) {
+
+        if (currentValue < max && lastMaxIndex > index) {
 
           actions.push([index, 'buy']);
         } else if (currentValue === max) {
 
-          if ()
           actions.push([index, 'stay']);
         }
 
@@ -303,7 +303,8 @@ fdescribe('kanepa technical', () => {
           // do nothing
         }
 
-        if (action === 'sell') {
+        if (action === 'sell' && price[idx] === max) {
+
           maxProfix += numberOfStocks * price[idx];
           numberOfStocks = 0;
         }
@@ -315,14 +316,19 @@ fdescribe('kanepa technical', () => {
 
     }
 
-    // maximumProfit([3, 4, 5, 3, 5, 2]);
+    expect(
+      maximumProfit([3, 4, 5, 3, 5, 2])
+    ).toEqual(5);
+
 
     console.log('-------------------');
-    maximumProfit([5, 3, 2]);
+    expect(
+      maximumProfit([5, 3, 2])
+    ).toEqual(0);
     console.log('-------------------');
-    // maximumProfit([1, 2, 100]);
+    maximumProfit([1, 2, 100]);
 
-    // expect(maximumProfit([5, 3, 2])).toEqual(0);
+    expect(maximumProfit([1, 2, 100])).toEqual(197);
 
   });
 

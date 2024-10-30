@@ -4,6 +4,7 @@ import { Observable, Subject, delay, of, throwError } from 'rxjs';
 import { Reduce } from '../reduce/reduce';
 import { Store, makeStore } from './store';
 import { Effect } from '../effect/effect';
+import { DebounceTime } from '../operators/debounce';
 
 describe('store', () => {
   interface ItemsState {
@@ -23,6 +24,7 @@ describe('store', () => {
     // reducerThrows: { name: string };
 
     asyncEffect: (id: string, email: string) => Observable<string>;
+    asyncEffectWithDelay: (id: string, email: string) => Observable<string>;
     observerArgs: () => Observable<boolean>;
   }
 
@@ -132,6 +134,20 @@ describe('store', () => {
     @Reduce()
     onRemoveOne(state: ItemsState, _payload: boolean): ItemsState {
       return state;
+    }
+
+    @DebounceTime(300)
+    @Effect('switchMap')
+    public asyncEffectWithDelay(id: string, email: string) {
+      return of(`${id}:${email}`);
+    }
+
+    @Reduce()
+    public onAsyncEffectWithDelay(state: ItemsState, payload: string) {
+      return {
+        ...state,
+        items: payload
+      };
     }
 
     // @Reduce()
@@ -298,6 +314,27 @@ describe('store', () => {
 
     });
   });
+
+
+  describe('adding a delay', () => {
+
+    it('should add a delay to each dispatch', () => {
+      scheduler.run(({expectObservable}) => {
+
+        store.dispatch('asyncEffectWithDelay', 'id', 'email');
+        store.dispatch('asyncEffectWithDelay', 'id2', 'email2');
+        expectObservable(store.state$).toBe('a 299ms b', {
+          a: initialState,
+          b: {...initialState, items: 'id2:email2'}
+        });
+      });
+
+
+    });
+
+
+  });
+
 
   describe('inner observable trigger state change', () => {
 

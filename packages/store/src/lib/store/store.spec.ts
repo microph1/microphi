@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { TestScheduler } from '@datakitchen/rxjs-marbles';
 import { Observable, Subject, delay, of, throwError } from 'rxjs';
-import { Effect } from '../effect/effect';
 import { Reduce } from '../reduce/reduce';
 import { Store, makeStore } from './store';
+import { Effect } from '../effect/effect';
 
 describe('store', () => {
   interface ItemsState {
@@ -49,7 +50,7 @@ describe('store', () => {
     }
 
     @Reduce()
-    public onFindAll(state, payload) {
+    public onFindAll(state: ItemsState, payload: string[]) {
       this.reduceSpy(payload);
       return {
         users: [...state.users, ...payload]
@@ -64,7 +65,7 @@ describe('store', () => {
     }
 
     @Reduce()
-    public onFindOne(state, name) {
+    public onFindOne(state: ItemsState, name: string): ItemsState {
       const selectedIdx = state.users.findIndex((u) => u === name);
       return {
         ...state,
@@ -73,7 +74,7 @@ describe('store', () => {
     }
 
     @Effect()
-    public updateOne(payload): Observable<{ name: string, newName: string }> {
+    public updateOne(payload: {name: string; newName: string}): Observable<{ name: string; newName: string }> {
       return of(payload);
     }
 
@@ -91,17 +92,17 @@ describe('store', () => {
     }
 
     @Reduce()
-    public onObserverArgs(state) {
+    public onObserverArgs(state: ItemsState) {
       return state;
     }
 
     @Effect()
-    public asyncEffect(id, email) {
+    public asyncEffect(id: string, email: string) {
       return of(`${id}${email}`);
     }
 
     @Reduce()
-    public onAsyncEffect(state, payload) {
+    public onAsyncEffect(state: ItemsState, payload: string) {
       this.reduceSpy();
       return {
         ...state,
@@ -119,17 +120,17 @@ describe('store', () => {
     }
 
     @Reduce()
-    onActionEffectThrows(state: ItemsState, payload: number): ItemsState {
+    onActionEffectThrows(state: ItemsState, _payload: number): ItemsState {
       return {...state, };
     }
 
     @Effect()
-    removeOne(name: string): Observable<boolean> {
+    removeOne(_name: string): Observable<boolean> {
       return of(true);
     }
 
     @Reduce()
-    onRemoveOne<O>(state: ItemsState, payload: boolean): ItemsState {
+    onRemoveOne(state: ItemsState, _payload: boolean): ItemsState {
       return state;
     }
 

@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { BehaviorSubject, EMPTY, Observable, of, Subject } from 'rxjs';
-import { getReducers, Reducer } from '../reduce/reduce';
-import { catchError, concatMap, filter, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
-import { Effect, EffectStrategy, getEffects } from '../effect/effect';
+import { catchError, concatMap, debounceTime, filter, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { Brand, Primitive } from 'utility-types';
+import { Effect, EffectStrategy, getEffects } from '../effect/effect';
+import { getReducers, Reducer } from '../reduce/reduce';
+
+type Fn = (...args: any[]) => any;
 
 export type getPayloadFromActionType<A, C extends keyof A> =
-// eslint-disable-next-line @typescript-eslint/ban-types
-  A[C] extends Function ? A[C] extends () => any
+  A[C] extends Fn ? A[C] extends () => any
     ? never[] : A[C] extends (...args: infer T) => any
       ? T : never[] : A[C][];
 
@@ -73,8 +75,7 @@ export abstract class Store<State, A> {
     this.effects = getEffects(this);
     this.reducers = getReducers(this);
 
-    // @ts-ignore
-    const actions = [].concat(this.effects, this.reducers);
+    const actions = [...this.effects, ...this.reducers];
 
     const actionsSet = new Set<string>();
 
@@ -172,12 +173,10 @@ export abstract class Store<State, A> {
     this.actions.get(action as string)?.next({name, payload});
   }
 
-  // eslint-disable-next-line @typescript-eslint/member-ordering
   private static noopEffect(payload: any) {
     return of(payload);
   }
 
-  // eslint-disable-next-line @typescript-eslint/member-ordering
   private static getOperator(strategyFn: EffectStrategy) {
     if (strategyFn === 'mergeMap') {
       return mergeMap;

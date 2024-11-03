@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.1](https://github.com/microph1/microphi/compare/v2.8.0...v2.8.1) (2024-11-03)
+
+### Bug Fixes
+
+* **store:** add new stuff to public API ([0065ac6](https://github.com/microph1/microphi/commit/0065ac6b51893951a1ff5b835713b2ac9e73f6ea))
+
 # [2.8.0](https://github.com/microph1/microphi/compare/v2.7.4...v2.8.0) (2024-11-03)
 
 ### Features

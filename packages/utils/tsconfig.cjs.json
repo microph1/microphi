@@ -5,7 +5,7 @@
     "module": "commonjs"
   },
   "exclude": [
-    "src/**/*.spec.ts",
-    "src/lib/store/store-3.experiment.ts"
+    "src/test-setup.ts",
+    "**/*.spec.ts"
   ]
 }

@@ -1,0 +1,36 @@
+{
+  "name": "@microphi/utils",
+  "version": "2.7.3",
+  "description": "Microphi Utilities",
+  "main": "lib/cjs/index.js",
+  "typings": "lib/esm/index.d.ts",
+  "module": "lib/esm/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "licence": "MIT",
+  "private": true,
+  "keywords": [
+    "log",
+    "debug",
+    "console"
+  ],
+  "author": {
+    "email": "cavaliere.davide@gmail.com",
+    "name": "Davide Cavaliere",
+    "url": "www.microphi.io"
+  },
+  "homepage": "https://github.com/microph1/microphi",
+  "dependencies": {
+    "tslib": "^2.5.0"
+  },
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json && tsc -b tsconfig.cjs.json",
+    "build:ci": "npm run build",
+    "test:ci": "jest --coverage --ci",
+    "lint": "eslint ./src"
+  }
+}

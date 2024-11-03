@@ -3,9 +3,5 @@
   "compilerOptions": {
     "outDir": "./lib/cjs",
     "module": "commonjs"
-  },
-  "exclude": [
-    "src/**/*.spec.ts",
-    "src/lib/store/store-3.experiment.ts"
-  ]
+  }
 }

@@ -1,50 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { BehaviorSubject, EMPTY, Observable, of, Subject } from 'rxjs';
-import { getReducers, Reducer } from '../reduce/reduce';
-import { catchError, concatMap, filter, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { catchError, concatMap, debounceTime, filter, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { Effect, EffectStrategy, getEffects } from '../effect/effect';
-import { Brand, Primitive } from 'utility-types';
+import { getDebounce } from '../operators/debounce';
+import { getReducers, Reducer } from '../reduce/reduce';
+import { Fn, getPayloadFromActionType, LoadingState } from './types';
+import { CacheSymbol } from '../operators/cache';
 
-export type getPayloadFromActionType<A, C extends keyof A> =
-// eslint-disable-next-line @typescript-eslint/ban-types
-  A[C] extends Function ? A[C] extends () => any
-    ? never[] : A[C] extends (...args: infer T) => any
-      ? T : never[] : A[C][];
-
-export type PureReducer<T extends Primitive> = Brand<T, 'reducer'>;
-
-export type makeEffects<Actions> = {
-  // Effects
-  [k in keyof Actions]: Actions[k] extends PureReducer<Primitive>
-    ? never
-    : Actions[k]
-}
-
-export type makeStore<State, Actions> =
-  {
-    [k in keyof makeEffects<Actions>]: makeEffects<Actions>[k]
-  }
-  // &
-  // Actions
-  &
-  {
-    // Reducers
-    [k in keyof Actions as `on${Capitalize<string & k>}`]: Actions[k] extends (...args: any) => Observable<infer O>
-    ? (state: State, payload: O) => State
-    : Actions[k] extends PureReducer<infer O>
-      ? (state?: State, payload?: O) => State
-      : (state?: State) => State
-
-  };
-
-export interface LoadingState<A> {
-  code: keyof A;
-  payload?: any;
-  response?: any;
-  error?: any;
-  status: boolean;
-}
 
 export abstract class Store<State, A> {
+
+  private [CacheSymbol] = new Map<string, {timestamp: number; value: Observable<any>}>();
 
   private readonly actions: Map<string, Subject<{ name: string, payload?: any }>> = new Map();
 
@@ -73,8 +39,7 @@ export abstract class Store<State, A> {
     this.effects = getEffects(this);
     this.reducers = getReducers(this);
 
-    // @ts-ignore
-    const actions = [].concat(this.effects, this.reducers);
+    const actions = [...this.effects, ...this.reducers];
 
     const actionsSet = new Set<string>();
 
@@ -88,59 +53,76 @@ export abstract class Store<State, A> {
 
       const operator = Store.getOperator(effect!.strategy);
 
-      // @ts-ignore
-      this.actions.get(key).pipe(
-        withLatestFrom(this._store$),
-        tap(([{payload}]) => {
-          this._loading$.next({
-            payload: payload,
-            status: true,
-            code: key as keyof A,
-          });
-        }),
-        operator(([{name, payload}]) => {
+      const action = this.actions.get(key);
 
-          // @ts-ignore
-          return this[name](...payload).pipe(
-            tap((response) => {
-              this._loading$.next({
-                payload,
-                response,
-                status: false,
-                // here the action is done. The action is the only async call
-                // we can assume the loading is done as the effect is not async
-                code: key as keyof A,
-              });
-            }),
-            // the above is
-            map((response) => {
-              // if an inner observable emits again the reducer will be triggered again
-              // allowing for state changes from the outside.
-              // Which sounds terrible said like that but if can actually be handy.
-              // For example when a connection state changes:
-              //
-              // store.dispatch('connect') ->
-              // connection happens successfully ->
-              // onConnect is called -> state updated
-              //
-              // ... some time later
-              //
-              // network connection is lost connection is lost
+      const pipeline: any[] = [];
 
-              // by convention reducer name must be
-              // on + Action
-              const reducerName = `on${(name[0]).toUpperCase()}${(name as string).slice(1)}`;
+      if (action) {
+        const debounce = getDebounce(this, key);
+        if (debounce) {
+          pipeline.push(debounceTime(debounce));
+        }
 
-              // @ts-ignore
-              return this[reducerName](this._store$.getValue(), response);
-            }),
-            // error need to be swallowed here too otherwise the observable chain will be broken
-            // meaning that once an action goes into an error it cannot be dispatched again
-            catchError((error) => this.swallowError(key, error, payload)),
-          );
-        }),
+        pipeline.push(
+
+          withLatestFrom(this._store$),
+
+          tap(([{payload}]) => {
+            this._loading$.next({
+              payload: payload,
+              status: true,
+              code: key as keyof A,
+            });
+          }),
+
+          operator(([{name, payload}]) => {
+            const method = name as keyof this;
+
+            return (this[method] as Fn)(...payload).pipe(
+              tap((response) => {
+                this._loading$.next({
+                  payload,
+                  response,
+                  status: false,
+                  // here the action is done. The action is the only async call
+                  // we can assume the loading is done as the effect is not async
+                  code: key as keyof A,
+                });
+              }),
+              // the above is
+              map((response) => {
+                // if an inner observable emits again the reducer will be triggered again
+                // allowing for state changes from the outside.
+                // Which sounds terrible said like that but if can actually be handy.
+                // For example when a connection state changes:
+                //
+                // store.dispatch('connect') ->
+                // connection happens successfully ->
+                // onConnect is called -> state updated
+                //
+                // ... some time later
+                //
+                // network connection is lost connection is lost
+
+                // by convention reducer name must be
+                // on + Action
+                const reducerName = `on${(name[0]).toUpperCase()}${(name as string).slice(1)}` as keyof this;
+
+                return (this[reducerName] as Fn)(this._store$.getValue(), response);
+              }),
+              // error need to be swallowed here too otherwise the observable chain will be broken
+              // meaning that once an action goes into an error it cannot be dispatched again
+              catchError((error) => this.swallowError(key, error, payload)),
+            );
+          }),
+        );
+
+
         // @ts-ignore
-      ).subscribe(this._store$);
+        action.pipe(...pipeline).subscribe(this._store$);
+
+      }
+
     });
   }
 
@@ -172,12 +154,10 @@ export abstract class Store<State, A> {
     this.actions.get(action as string)?.next({name, payload});
   }
 
-  // eslint-disable-next-line @typescript-eslint/member-ordering
   private static noopEffect(payload: any) {
     return of(payload);
   }
 
-  // eslint-disable-next-line @typescript-eslint/member-ordering
   private static getOperator(strategyFn: EffectStrategy) {
     if (strategyFn === 'mergeMap') {
       return mergeMap;

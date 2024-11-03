@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { TestScheduler } from '@datakitchen/rxjs-marbles';
 import { Observable, Subject, delay, of, throwError } from 'rxjs';
-import { Effect } from '../effect/effect';
 import { Reduce } from '../reduce/reduce';
-import { Store, makeStore } from './store';
+import { Store } from './store';
+import { Effect } from '../effect/effect';
+import { DebounceTime } from '../operators/debounce';
+import { makeStore } from './types';
 
 describe('store', () => {
   interface ItemsState {
@@ -22,6 +25,7 @@ describe('store', () => {
     // reducerThrows: { name: string };
 
     asyncEffect: (id: string, email: string) => Observable<string>;
+    asyncEffectWithDelay: (id: string, email: string) => Observable<string>;
     observerArgs: () => Observable<boolean>;
   }
 
@@ -49,7 +53,7 @@ describe('store', () => {
     }
 
     @Reduce()
-    public onFindAll(state, payload) {
+    public onFindAll(state: ItemsState, payload: string[]): ItemsState {
       this.reduceSpy(payload);
       return {
         users: [...state.users, ...payload]
@@ -64,7 +68,7 @@ describe('store', () => {
     }
 
     @Reduce()
-    public onFindOne(state, name) {
+    public onFindOne(state: ItemsState, name: string): ItemsState {
       const selectedIdx = state.users.findIndex((u) => u === name);
       return {
         ...state,
@@ -73,7 +77,7 @@ describe('store', () => {
     }
 
     @Effect()
-    public updateOne(payload): Observable<{ name: string, newName: string }> {
+    public updateOne(payload: {name: string; newName: string}): Observable<{ name: string; newName: string }> {
       return of(payload);
     }
 
@@ -91,17 +95,17 @@ describe('store', () => {
     }
 
     @Reduce()
-    public onObserverArgs(state) {
+    public onObserverArgs(state: ItemsState) {
       return state;
     }
 
     @Effect()
-    public asyncEffect(id, email) {
+    public asyncEffect(id: string, email: string) {
       return of(`${id}${email}`);
     }
 
     @Reduce()
-    public onAsyncEffect(state, payload) {
+    public onAsyncEffect(state: ItemsState, payload: string) {
       this.reduceSpy();
       return {
         ...state,
@@ -119,18 +123,32 @@ describe('store', () => {
     }
 
     @Reduce()
-    onActionEffectThrows(state: ItemsState, payload: number): ItemsState {
+    onActionEffectThrows(state: ItemsState, _payload: number): ItemsState {
       return {...state, };
     }
 
     @Effect()
-    removeOne(name: string): Observable<boolean> {
+    removeOne(_name: string): Observable<boolean> {
       return of(true);
     }
 
     @Reduce()
-    onRemoveOne<O>(state: ItemsState, payload: boolean): ItemsState {
+    onRemoveOne(state: ItemsState, _payload: boolean): ItemsState {
       return state;
+    }
+
+    @DebounceTime(300)
+    @Effect('switchMap')
+    public asyncEffectWithDelay(id: string, email: string) {
+      return of(`${id}:${email}`);
+    }
+
+    @Reduce()
+    public onAsyncEffectWithDelay(state: ItemsState, payload: string) {
+      return {
+        ...state,
+        items: payload
+      };
     }
 
     // @Reduce()
@@ -297,6 +315,27 @@ describe('store', () => {
 
     });
   });
+
+
+  describe('adding a delay', () => {
+
+    it('should add a delay to each dispatch', () => {
+      scheduler.run(({expectObservable}) => {
+
+        store.dispatch('asyncEffectWithDelay', 'id', 'email');
+        store.dispatch('asyncEffectWithDelay', 'id2', 'email2');
+        expectObservable(store.state$).toBe('a 299ms b', {
+          a: initialState,
+          b: {...initialState, items: 'id2:email2'}
+        });
+      });
+
+
+    });
+
+
+  });
+
 
   describe('inner observable trigger state change', () => {
 

@@ -1,8 +1,8 @@
 /* eslint-disable */
 import { BehaviorSubject, Observable, of, Subject, switchMap, tap } from 'rxjs';
-import { getPayloadFromActionType } from './store';
 import { filter, map, withLatestFrom } from 'rxjs/operators';
 import { $Keys } from 'utility-types';
+import { getPayloadFromActionType } from './types';
 
 xdescribe('experiment 2', () => {
 

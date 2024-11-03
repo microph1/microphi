@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Observable, of } from 'rxjs';
-import { Store, makeStore } from '../store/store';
+import { Store } from '../store/store';
 import { Effect, getEffects } from './effect';
+import { makeStore } from '../store/types';
 
 describe('@Effect', () => {
 

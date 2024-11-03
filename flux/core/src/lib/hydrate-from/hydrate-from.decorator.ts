@@ -1,5 +1,10 @@
-export function readFromStorage<T = unknown>(storage: Storage, namespace: string): T {
-  return JSON.parse(storage.getItem(namespace) || 'false') || undefined;
+export function readFromStorage<T = unknown>(storage: Storage, namespace: string, parser?: (v: any) => any): T {
+  const value = storage.getItem(namespace) || 'false';
+
+  if (parser) {
+    return parser(value);
+  }
+  return JSON.parse(value) || undefined;
 }
 
 export function writeToStorage<T = unknown>(storage: Storage, key: string, value: T) {

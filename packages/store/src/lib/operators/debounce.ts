@@ -1,15 +1,18 @@
 import 'reflect-metadata';
 import { Class } from 'utility-types';
 import { scanInstance } from '../utilities/scan-instance';
+import { Store } from '../store/store';
+import { Fn, Key } from '../store/types';
 
 const DebounceSymbol = Symbol.for('@DebounceTime');
+
 
 /**
  * Add a debounce to each dispatch of this action
  */
-export function DebounceTime(time: number): MethodDecorator {
+export function DebounceTime(time: number) {
 
-  return (target, key, descriptor) => {
+  return <T extends Fn, S extends Store<any, any>>(target: S, key: Key, descriptor: TypedPropertyDescriptor<T>) => {
     Reflect.defineMetadata(DebounceSymbol, time, target, key);
     return descriptor;
   };

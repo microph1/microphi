@@ -2,9 +2,10 @@
 import { TestScheduler } from '@datakitchen/rxjs-marbles';
 import { Observable, Subject, delay, of, throwError } from 'rxjs';
 import { Reduce } from '../reduce/reduce';
-import { Store, makeStore } from './store';
+import { Store } from './store';
 import { Effect } from '../effect/effect';
 import { DebounceTime } from '../operators/debounce';
+import { makeStore } from './types';
 
 describe('store', () => {
   interface ItemsState {
@@ -52,7 +53,7 @@ describe('store', () => {
     }
 
     @Reduce()
-    public onFindAll(state: ItemsState, payload: string[]) {
+    public onFindAll(state: ItemsState, payload: string[]): ItemsState {
       this.reduceSpy(payload);
       return {
         users: [...state.users, ...payload]

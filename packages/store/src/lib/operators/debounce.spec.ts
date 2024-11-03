@@ -3,7 +3,7 @@ import { Effect } from '../effect/effect';
 import { Store } from '../store/store';
 import { DebounceTime, getDebounce, getDebounceTimeMetadata } from './debounce';
 
-fdescribe('@DebounceTime', () => {
+describe('@DebounceTime', () => {
 
   interface State {
     items: [],

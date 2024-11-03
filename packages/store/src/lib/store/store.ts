@@ -1,51 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { BehaviorSubject, EMPTY, Observable, of, Subject } from 'rxjs';
 import { catchError, concatMap, debounceTime, filter, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
-import { Brand, Primitive } from 'utility-types';
 import { Effect, EffectStrategy, getEffects } from '../effect/effect';
 import { getDebounce } from '../operators/debounce';
 import { getReducers, Reducer } from '../reduce/reduce';
+import { Fn, getPayloadFromActionType, LoadingState } from './types';
 
-type Fn = (...args: any[]) => any;
-
-export type getPayloadFromActionType<A, C extends keyof A> =
-  A[C] extends Fn ? A[C] extends () => any
-    ? never[] : A[C] extends (...args: infer T) => any
-      ? T : never[] : A[C][];
-
-export type PureReducer<T extends Primitive> = Brand<T, 'reducer'>;
-
-export type makeEffects<Actions> = {
-  // Effects
-  [k in keyof Actions]: Actions[k] extends PureReducer<Primitive>
-    ? never
-    : Actions[k]
-}
-
-export type makeStore<State, Actions> =
-  {
-    [k in keyof makeEffects<Actions>]: makeEffects<Actions>[k]
-  }
-  // &
-  // Actions
-  &
-  {
-    // Reducers
-    [k in keyof Actions as `on${Capitalize<string & k>}`]: Actions[k] extends (...args: any) => Observable<infer O>
-    ? (state: State, payload: O) => State
-    : Actions[k] extends PureReducer<infer O>
-      ? (state?: State, payload?: O) => State
-      : (state?: State) => State
-
-  };
-
-export interface LoadingState<A> {
-  code: keyof A;
-  payload?: any;
-  response?: any;
-  error?: any;
-  status: boolean;
-}
 
 export abstract class Store<State, A> {
 

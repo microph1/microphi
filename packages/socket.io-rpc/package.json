@@ -1,7 +1,7 @@
 {
-  "name": "@microphi/utils",
+  "name": "@microphi/socket.io-rpc",
   "version": "2.7.3",
-  "description": "Microphi Utilities",
+  "description": "Socket.io RPC integration",
   "main": "lib/cjs/index.js",
   "typings": "lib/esm/index.d.ts",
   "module": "lib/esm/index.js",
@@ -12,7 +12,7 @@
     "lib"
   ],
   "licence": "MIT",
-  "private": false,
+  "private": true,
   "keywords": [
     "log",
     "debug",
@@ -25,6 +25,10 @@
   },
   "homepage": "https://github.com/microph1/microphi",
   "dependencies": {
+    "@microphi/debug": "^2.7.3",
+    "rxjs": "^7.8.1",
+    "socket.io": "^4.8.0",
+    "socket.io-client": "^4.8.0",
     "tslib": "^2.5.0"
   },
   "scripts": {

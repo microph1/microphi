@@ -2,8 +2,8 @@ import type { Config } from 'jest';
 
 
 const config: Config = {
-  displayName: 'utils',
-  testEnvironment: 'jsdom',
+  displayName: 'socket.io-rpc',
+  // testEnvironment: 'jsdom',
   transform: {
     '^.+\\.tsx?$': [
       'ts-jest',
@@ -13,7 +13,7 @@ const config: Config = {
       },
     ],
   },
-  coverageDirectory: '<rootDir>/../../coverage/utils',
+  coverageDirectory: '<rootDir>/../../coverage/socket.io-rpc',
   coverageReporters: ['json', 'lcov', 'text-summary'],
   collectCoverageFrom: [
     '**/src/**/!(*.spec).ts',

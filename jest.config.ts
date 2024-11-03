@@ -6,8 +6,8 @@ const jestConfig: Config = {
     'packages/*'
   ],
   transform: {
-    "^.+.tsx?$": ["ts-jest",{}],
+    '^.+.tsx?$': ['ts-jest',{}],
   },
-}
+};
 
-export default jestConfig
+export default jestConfig;

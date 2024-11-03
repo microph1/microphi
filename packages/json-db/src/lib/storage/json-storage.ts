@@ -1,5 +1,5 @@
 import { getDebugger } from '@microphi/debug';
-import MiniSearch, { Options } from 'minisearch';
+import MiniSearch, { Options, SearchOptions } from 'minisearch';
 import { close, exists, existsSync, mkdir, openSync, readFileSync, rmSync, unlink, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { Scheduler, Subject, asapScheduler, debounceTime, from, switchMap } from 'rxjs';
@@ -27,17 +27,6 @@ export class JsonStorage<T extends object> {
 
   index = new List<withAutoTrail<{ id: string; path: string; }>>('id', []);
 
-  get search(): MiniSearch<T> {
-    if (!this._search) {
-      throw Error(`Need to enable search by passing Minisearch Options to constructor. ${this.entity}`);
-    }
-
-    return this._search;
-  }
-
-  set search(value: MiniSearch<T>) {
-    this._search = value;
-  }
 
   private _search!: MiniSearch<T>;
 
@@ -111,6 +100,10 @@ export class JsonStorage<T extends object> {
       }
     });
 
+  }
+
+  search(text: string, options?: SearchOptions) {
+    return this._search.search(text, options);
   }
 
   async saveIndex() {
@@ -217,7 +210,30 @@ export class JsonStorage<T extends object> {
     });
   }
 
-  getAll() {
+  async get(id: string): Promise<T|undefined> {
+    const path = await this.storageFile(id);
+    const data = readFileSync(path, {encoding: 'utf8'});
+    let entity: T;
+
+    try {
+
+      entity = JSON.parse(data);
+
+      return entity;
+    } catch (e) {
+      // console.log(e);
+      this.#l(`error while trying to load data for item with id ${id}`);
+      this.#l('item does not exists');
+      this.#l('clearing index');
+      this.index.delete({id, path});
+    }
+
+    return Promise.resolve(undefined);
+  }
+
+
+
+  async getAll() {
     const items$ = [...this.index].map(({ id }) => this.get(id));
 
     return Promise.all(items$);
@@ -248,27 +264,6 @@ export class JsonStorage<T extends object> {
 
   private buildPath(id: string) {
     return join(this.basePath, this.entity, `${id}.json`);
-  }
-
-  async get(id: string): Promise<T|undefined> {
-    const path = await this.storageFile(id);
-    const data = readFileSync(path, {encoding: 'utf8'});
-    let entity: T;
-
-    try {
-
-      entity = JSON.parse(data);
-
-      return entity;
-    } catch (e) {
-      // console.log(e);
-      this.#l(`error while trying to load data for item with id ${id}`);
-      this.#l('item does not exists');
-      this.#l('clearing index');
-      this.index.delete({id, path});
-    }
-
-    return Promise.resolve(undefined);
   }
 
 

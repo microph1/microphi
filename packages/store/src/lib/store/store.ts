@@ -5,9 +5,12 @@ import { Effect, EffectStrategy, getEffects } from '../effect/effect';
 import { getDebounce } from '../operators/debounce';
 import { getReducers, Reducer } from '../reduce/reduce';
 import { Fn, getPayloadFromActionType, LoadingState } from './types';
+import { CacheSymbol } from '../operators/cache';
 
 
 export abstract class Store<State, A> {
+
+  private [CacheSymbol] = new Map<string, {timestamp: number; value: Observable<any>}>();
 
   private readonly actions: Map<string, Subject<{ name: string, payload?: any }>> = new Map();
 

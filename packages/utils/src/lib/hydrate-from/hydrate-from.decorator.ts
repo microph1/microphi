@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import 'reflect-metadata';
-import { EventEmitter } from 'stream';
 
 export function readFromStorage<T = unknown>(storage: Storage, namespace: string, parser?: (v: string) => T): T {
   const value = storage.getItem(namespace) || 'false';
@@ -31,10 +31,9 @@ export function HydrateFrom(storage: Storage, options?: {
     const metadata = Reflect.getMetadataKeys(target);
     console.log({metadata});
 
-    // @ts-ignore
-    console.log({target, key});
 
     if (type.name === 'HMap') {
+      // this is an experiment for now
 
     } else {
 
@@ -63,10 +62,10 @@ export interface Serializable<T> {
 export class HMap<I,O> extends Map<I, O> implements Serializable<HMap<I,O>> {
 
 
-  parse(v: string): HMap<I, O> {
+  parse(_v: string): HMap<I, O> {
     throw new Error('Method not implemented.');
   }
-  serialize(v: HMap<I, O>): string {
+  serialize(_v: HMap<I, O>): string {
     throw new Error('Method not implemented.');
   }
 

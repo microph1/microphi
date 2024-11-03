@@ -1,6 +1,6 @@
 # @microphi/store
 
-A different way of doing state management with RxJS.
+@microphi/store is a pure RxJS state manager.
 
 ## Install
 With your favourite package manager install
@@ -60,7 +60,6 @@ class MyStore extends Store<ItemsState, ItemsActions>
       users: [...state.users, ...payload]
     };
   }
-
 }
 ```
 
@@ -89,4 +88,111 @@ store.getLoadingFor('findAll').subscribe((loading) => {
 
 });
 
+```
+
+### Choose the right strategy
+We assume that an action always execute an async effect. Internally such effect is wrapped in a RxJS pipe, as such there are several way this can be done.
+So for example when we dispatch an action such as `findOne` let's say its effect is a call to and endpoint to retrieve an entity by its id.
+Dependending on the scenario we may want to `switchMap`, `mergeMap` or `concatMap`.
+
+This can be achieved passing the `strategy` argument to the `@Effect` decorator such as:
+
+```typescript
+
+class MyStore extends Store<ItemsState, ItemsActions>
+    implements makeStore<ItemsState, ItemsActions> {
+
+  constructor() {
+    super({
+      users: ['alice', 'bob'],
+      selected: undefined,
+
+    });
+  }
+
+  @Effect('mergeMap')
+  findOne(id: string): Observable<string> {
+    return fromFetch(`http://my.super.endpoint/${id}`)
+  }
+
+  @Reduce()
+  public onFindOne(state: ItemsState, select: string) {
+    return {
+      ...state,
+      selected,
+    };
+  }
+}
+```
+
+### Operators
+When dispatching actions some RxJS operators can be applied using decorators:
+
+#### @Cache
+It caches the value returned from the effect (i.e.: its observable) for 300_000 (default) milliseconds (i.e.: 5 mins) or the amount of milliseconds provided in the `ttl` field.
+The effect will be cached according to its arguments. I.e.: like a memoized function `@Cache` will get check arguments and cache their result separately.
+
+Optionally a `trackBy` function can be provided in order to customized how arguments are considered for caching.
+If not provided `JSON.stringify` is used to serialize the arguments.
+If provided `trackBy` will have the exact same arguments of the effect being annotated.
+```typescript
+
+class MyStore extends Store<ItemsState, ItemsActions>
+    implements makeStore<ItemsState, ItemsActions> {
+
+  constructor() {
+    super({
+      users: ['alice', 'bob'],
+      selected: undefined,
+
+    });
+  }
+
+  @Effect('mergeMap')
+  @Cache({ttl: 1_000, trackBy: (id: string) => id.toLowerCase()})
+  findOne(id: string): Observable<string> {
+    return fromFetch(`http://my.super.endpoint/${id}`)
+  }
+
+  @Reduce()
+  public onFindOne(state: ItemsState, select: string) {
+    return {
+      ...state,
+      selected,
+    };
+  }
+}
+```
+
+
+#### @DebounceTime
+It will debouce calling the effect as in a RxJS pipe
+
+```typescript
+
+class MyStore extends Store<ItemsState, ItemsActions>
+    implements makeStore<ItemsState, ItemsActions> {
+
+  constructor() {
+    super({
+      users: ['alice', 'bob'],
+      selected: undefined,
+
+    });
+  }
+
+  @Effect('mergeMap')
+  @DebounceTime(300)
+  findOne(id: string): Observable<string> {
+    return fromFetch(`http://my.super.endpoint/${id}`)
+  }
+
+  @Reduce()
+  public onFindOne(state: ItemsState, select: string) {
+    return {
+      ...state,
+      selected,
+    };
+  }
+}
 ```

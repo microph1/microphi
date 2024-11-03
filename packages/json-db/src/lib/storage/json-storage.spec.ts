@@ -57,7 +57,7 @@ describe('json-storage', () => {
 
 
   it('initialize minisearch', () => {
-    const results = storage.search.search('anything');
+    const results = storage.search('anything');
     expect(results).toEqual([]);
   });
 

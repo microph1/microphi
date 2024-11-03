@@ -63,9 +63,11 @@ export class HMap<I,O> extends Map<I, O> implements Serializable<HMap<I,O>> {
 
 
   parse(_v: string): HMap<I, O> {
+    console.log({_v});
     throw new Error('Method not implemented.');
   }
   serialize(_v: HMap<I, O>): string {
+    console.log({_v});
     throw new Error('Method not implemented.');
   }
 

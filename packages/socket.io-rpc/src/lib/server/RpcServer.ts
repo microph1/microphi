@@ -22,6 +22,7 @@ export interface IMessage<T = unknown> {
 }
 
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export abstract class RpcServer<T extends object> {
   #d = getDebugger('@microphi:RpcServer');
 

@@ -16,7 +16,7 @@
     "build:ci": "lerna run build:ci",
     "test": "jest",
     "test:ci": "lerna run test:ci",
-    "lint:ci": "lerna run lint",
+    "lint:ci": "lerna run lint --parallel",
     "e2e": "ng e2e",
     "deploy:ci": "lerna publish -y --conventional-commits --create-release github --loglevel verbose --no-private",
     "release": "lerna version --conventional-commits",

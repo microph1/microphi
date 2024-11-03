@@ -5,13 +5,10 @@
     "declarationMap": true,
     "target": "es2020",
     "declaration": true,
-    "inlineSources": true
+    "inlineSources": true,
+    "types": ["jest"]
   },
   "include": [
     "src/**/*"
-  ],
-  "exclude": [
-    "src/test-setup.ts",
-    "**/*.spec.ts"
   ]
 }

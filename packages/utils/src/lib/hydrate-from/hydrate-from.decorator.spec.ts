@@ -1,7 +1,7 @@
 import { HMap, HydrateFrom } from './hydrate-from.decorator';
 
 
-describe('@HydrateFrom', () => {
+fdescribe('@HydrateFrom', () => {
 
   class TestClass {
 

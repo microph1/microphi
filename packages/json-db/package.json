@@ -1,6 +1,6 @@
 {
   "name": "@microphi/json-db",
-  "version": "2.7.4",
+  "version": "2.8.0",
   "description": "Small, fast and simple file based json-db",
   "main": "lib/cjs/index.js",
   "typings": "lib/esm/index.d.ts",

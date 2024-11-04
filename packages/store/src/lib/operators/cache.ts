@@ -2,6 +2,7 @@
 import { Store } from '../store/store';
 import { Observable } from 'rxjs';
 import { Fn, Key } from '../store/types';
+import 'reflect-metadata';
 
 export const CacheSymbol = Symbol('@Cache');
 

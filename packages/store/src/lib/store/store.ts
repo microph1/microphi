@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { BehaviorSubject, EMPTY, Observable, of, Subject } from 'rxjs';
-import { catchError, concatMap, debounceTime, filter, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { asapScheduler, BehaviorSubject, EMPTY, identity, MonoTypeOperatorFunction, Observable, of, SchedulerLike, Subject } from 'rxjs';
+import { catchError, concatMap, debounceTime, delay, filter, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { Effect, EffectStrategy, getEffects } from '../effect/effect';
-import { getDebounce } from '../operators/debounce';
+import { CacheSymbol } from '../operators/cache';
+import { debounceOrNothing, getDebounce } from '../operators/debounce';
+import { delayOrNothing, getDelay } from '../operators/delay';
 import { getReducers, Reducer } from '../reduce/reduce';
 import { Fn, getPayloadFromActionType, LoadingState } from './types';
-import { CacheSymbol } from '../operators/cache';
 
 
 export abstract class Store<State, A> {
 
-  private [CacheSymbol] = new Map<string, {timestamp: number; value: Observable<any>}>();
+  protected [CacheSymbol] = new Map<string, {timestamp: number; value: Observable<any>}>();
 
   private readonly actions: Map<string, Subject<{ name: string, payload?: any }>> = new Map();
 
@@ -34,7 +35,7 @@ export abstract class Store<State, A> {
     return this._store$.asObservable();
   }
 
-  constructor(private initialState: State) {
+  constructor(private initialState: State, scheduler: SchedulerLike = asapScheduler) {
 
     this.effects = getEffects(this);
     this.reducers = getReducers(this);
@@ -44,6 +45,7 @@ export abstract class Store<State, A> {
     const actionsSet = new Set<string>();
 
     actions.forEach(({action}) => actionsSet.add(action));
+
 
     actionsSet.forEach((key) => {
 
@@ -55,17 +57,15 @@ export abstract class Store<State, A> {
 
       const action = this.actions.get(key);
 
-      const pipeline: any[] = [];
+
 
       if (action) {
-        const debounce = getDebounce(this, key);
-        if (debounce) {
-          pipeline.push(debounceTime(debounce));
-        }
+        const debounced = getDebounce(this, key) || 0;
+        const delayTime = getDelay(this, key) || 0;
 
-        pipeline.push(
-
+        action.pipe(
           withLatestFrom(this._store$),
+          debounceOrNothing(debounced),
 
           tap(([{payload}]) => {
             this._loading$.next({
@@ -79,6 +79,7 @@ export abstract class Store<State, A> {
             const method = name as keyof this;
 
             return (this[method] as Fn)(...payload).pipe(
+              delayOrNothing(delayTime),
               tap((response) => {
                 this._loading$.next({
                   payload,
@@ -115,11 +116,7 @@ export abstract class Store<State, A> {
               catchError((error) => this.swallowError(key, error, payload)),
             );
           }),
-        );
-
-
-        // @ts-ignore
-        action.pipe(...pipeline).subscribe(this._store$);
+        ).subscribe((state) => this._store$.next(state as State));
 
       }
 
@@ -154,7 +151,7 @@ export abstract class Store<State, A> {
     this.actions.get(action as string)?.next({name, payload});
   }
 
-  private static noopEffect(payload: any) {
+  protected static noopEffect(payload: any) {
     return of(payload);
   }
 

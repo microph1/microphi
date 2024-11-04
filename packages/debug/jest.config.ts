@@ -13,7 +13,7 @@ const config: Config = {
     ],
   },
   coverageDirectory: '<rootDir>/../../coverage/debug',
-  coverageReporters: ['json', 'lcov', 'text-summary'],
+  coverageReporters: ['json', 'lcov', 'text-summary', 'html'],
   collectCoverageFrom: [
     '**/src/**/!(*.spec).ts',
     '!**/*.experiment.ts',

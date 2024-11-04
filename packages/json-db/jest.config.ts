@@ -13,7 +13,7 @@ const config: Config = {
     '\\.js$': ['babel-jest', {rootMode: 'upward'}],
   },
   coverageDirectory: '<rootDir>/../../coverage/json-db',
-  coverageReporters: ['json', 'lcov', 'text-summary'],
+  coverageReporters: ['json', 'lcov', 'text-summary', 'html'],
   collectCoverageFrom: [
     '**/src/**/!(*.spec).ts',
     '!**/*.experiment.ts',

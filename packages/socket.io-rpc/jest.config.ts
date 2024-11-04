@@ -14,7 +14,7 @@ const config: Config = {
     ],
   },
   coverageDirectory: '<rootDir>/../../coverage/socket.io-rpc',
-  coverageReporters: ['json', 'lcov', 'text-summary'],
+  coverageReporters: ['json', 'lcov', 'text-summary', 'html'],
   collectCoverageFrom: [
     '**/src/**/!(*.spec).ts',
     '!**/*.experiment.ts',

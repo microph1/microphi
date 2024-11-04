@@ -15,7 +15,7 @@ const config: Config = {
   },
   // moduleNameMapper,
   // coverageDirectory: '<rootDir>/../../coverage/list',
-  //coverageReporters: ['json', 'html', 'lcov', 'text-summary'],
+  coverageReporters: ['json', 'html', 'lcov', 'text-summary'],
   collectCoverageFrom: [
     '**/src/**/!(*.spec).ts',
     '!**/*.experiment.ts',

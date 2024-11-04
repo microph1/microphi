@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.9.0](https://github.com/microph1/microphi/compare/v2.8.2...v2.9.0) (2024-11-04)
+
+### Features
+
+* **store:** add delay decorator ([0c1ff5d](https://github.com/microph1/microphi/commit/0c1ff5d6c5feaa777d613a7ba52118c5e2e7f210))
+
 ## [2.8.2](https://github.com/microph1/microphi/compare/v2.8.1...v2.8.2) (2024-11-03)
 
 **Note:** Version bump only for package microphi

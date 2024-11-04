@@ -1,6 +1,6 @@
 {
   "name": "@microphi/debug",
-  "version": "2.7.3",
+  "version": "2.9.0",
   "description": "A very simple wrapper to console.log",
   "main": "lib/cjs/index.js",
   "typings": "lib/esm/index.d.ts",

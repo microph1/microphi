@@ -128,7 +128,7 @@ class MyStore extends Store<ItemsState, ItemsActions>
 ### Operators
 When dispatching actions some RxJS operators can be applied using decorators:
 
-#### @Cache
+#### Cache
 It caches the value returned from the effect (i.e.: its observable) for 300_000 (default) milliseconds (i.e.: 5 mins) or the amount of milliseconds provided in the `ttl` field.
 The effect will be cached according to its arguments. I.e.: like a memoized function `@Cache` will get check arguments and cache their result separately.
 
@@ -165,7 +165,7 @@ class MyStore extends Store<ItemsState, ItemsActions>
 ```
 
 
-#### @DebounceTime
+#### DebounceTime
 It will debouce calling the effect as in a RxJS pipe
 
 ```typescript
@@ -196,3 +196,26 @@ class MyStore extends Store<ItemsState, ItemsActions>
   }
 }
 ```
+
+#### DelayTime
+It will deley an effect as in a RxJS pipe.
+```typescript
+  class TestClass extends Store<State, Actions> {
+
+    /**
+     * this effect will be rate limited at one call per 100 ms
+     */
+    @Effect('concatMap')
+    @DelayTime(100)
+    effectWithDelay(id: string) {
+      return fromFetch(`http://my.super.endpoint/${id}`)
+    }
+
+    @Reduce()
+    onEffectWithDelay(state: State, payload: string): State {
+      return {...state, items: [...state.items, payload]};
+    }
+  }
+```
+⚠️ Note the use of `concatMap` strategy. If another strategy is used the effect of `@DelayTime` may be not what really expected.
+Please see [delay.spec.ts](./src/lib/operators/delay.spec.ts) for all possible combination of `strategy` and `@DelayTime`

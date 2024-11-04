@@ -20,7 +20,7 @@ const config: Config = {
   testEnvironment: 'jsdom',
   moduleNameMapper,
   coverageDirectory: '<rootDir>/../../coverage/flux',
-  coverageReporters: ['json','lcov', 'text-summary'],
+  coverageReporters: ['json','lcov', 'text-summary', 'html'],
   collectCoverageFrom: [
     '**/src/**/!(*.spec).ts',
     '!**/*.experiment.ts',

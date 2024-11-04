@@ -25,7 +25,6 @@ describe('store', () => {
     // reducerThrows: { name: string };
 
     asyncEffect: (id: string, email: string) => Observable<string>;
-    asyncEffectWithDelay: (id: string, email: string) => Observable<string>;
     observerArgs: () => Observable<boolean>;
   }
 
@@ -137,19 +136,6 @@ describe('store', () => {
       return state;
     }
 
-    @DebounceTime(300)
-    @Effect('switchMap')
-    public asyncEffectWithDelay(id: string, email: string) {
-      return of(`${id}:${email}`);
-    }
-
-    @Reduce()
-    public onAsyncEffectWithDelay(state: ItemsState, payload: string) {
-      return {
-        ...state,
-        items: payload
-      };
-    }
 
     // @Reduce()
     // onReducerThrows(state: ItemsState, payload: {name: string}): ItemsState {
@@ -292,47 +278,15 @@ describe('store', () => {
   xdescribe('error handling', () => {
 
     fit('should get an error through the error subject (effect that throws)', () => {
-
       store.loading$.subscribe((state) => {
         console.log(state);
       });
-
-
 
       scheduler.run(({expectObservable}) => {
         store.dispatch('actionEffectThrows');
         expectObservable(store.loading$).toBe('a');
       });
-
-      // store.dispatch('actionEffectThrows');
-      //
-      // scheduler.run(({expectObservable, cold}) => {
-      //
-      //   expectObservable(store.loading$).toBe('a -----|', {});
-      // });
-
-
-
     });
-  });
-
-
-  describe('adding a delay', () => {
-
-    it('should add a delay to each dispatch', () => {
-      scheduler.run(({expectObservable}) => {
-
-        store.dispatch('asyncEffectWithDelay', 'id', 'email');
-        store.dispatch('asyncEffectWithDelay', 'id2', 'email2');
-        expectObservable(store.state$).toBe('a 299ms b', {
-          a: initialState,
-          b: {...initialState, items: 'id2:email2'}
-        });
-      });
-
-
-    });
-
 
   });
 

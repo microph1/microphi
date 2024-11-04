@@ -1,4 +1,5 @@
 import { scanInstance } from '../utilities/scan-instance';
+import 'reflect-metadata';
 
 export type EffectStrategy = 'switchMap' | 'mergeMap' | 'concatMap';
 

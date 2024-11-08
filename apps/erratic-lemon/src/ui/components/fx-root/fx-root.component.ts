@@ -1,5 +1,5 @@
 import { Component, Input, registerDirective, registerPipe } from '@microphi/flux';
-import { template } from './fx-root.template';
+// import { template } from './fx-root.template';
 // use this to try custom jsx implementation
 // import { template } from './fx-root.template';
 
@@ -15,7 +15,7 @@ registerDirective('fxfor', (node, value: string, controller: any) => {
 
   const parsedInput = value.match(/^let\s(.+)\sof\s(.+)$/);
 
-  const varname = parsedInput[1];
+  const varname = parsedInput?.[1];
   // const items: any[] = JSON.parse(parsedInput[2]);
   // @ts-ignore
   const items: any[] = controller[parsedInput[2]];
@@ -25,12 +25,12 @@ registerDirective('fxfor', (node, value: string, controller: any) => {
   }
 
 
-  items.reverse().forEach((item, index) => {
+  items.reverse().forEach((_item, index) => {
 
     const clone = node.parentNode.querySelector(`[data-fxfor="${index}"]`) || document.createElement(node.tagName);
 
 
-    debugger;
+    // debugger;
 
     // @ts-ignore
     // const template = getTemplate(node);
@@ -40,7 +40,7 @@ registerDirective('fxfor', (node, value: string, controller: any) => {
 
 
     clone.innerHTML = node.innerHTML;
-    clone.setAttribute(`data-${varname}`, `{{${parsedInput[2]}[${index}]}`);
+    clone.setAttribute(`data-${varname}`, `{{${parsedInput?.[2]}[${index}]}`);
     clone.setAttribute('data-fxfor', String(index));
 
     node.after(clone);
@@ -70,7 +70,7 @@ registerDirective('fxfor', (node, value: string, controller: any) => {
   `
 })
 export class FxIf {
-  @Input() condition: boolean;
+  @Input() condition!: boolean;
 }
 
 @Component({
@@ -78,8 +78,8 @@ export class FxIf {
   shadowRoot: true,
 })
 export class FxFor {
-  @Input() of: any[];
-  @Input() let: string;
+  @Input() of!: any[];
+  @Input() let!: string;
 
   template: string;
 
@@ -96,10 +96,12 @@ export class FxFor {
     console.assert(changes);
 
 
-    // clear old data
-    this.elementRef.shadowRoot.innerHTML = '';
+    if (this.elementRef.shadowRoot) {
+      // clear old data
+      this.elementRef.shadowRoot.innerHTML = '';
+    }
 
-    this.of.forEach(( item, index) => {
+    this.of.forEach((_item, index) => {
       const tpl = document.createElement('template');
 
       tpl.innerHTML = `
@@ -214,7 +216,7 @@ export class FxRootComponent {
 
   // numbers = [{ a: 1, b: '1' }, { a: 2, b: '2' }, { a: 3, b: '3' }, { a: 4, b: '5' }, { a: 5, b: '5' }];
 
-  numbers = new Array(2).fill(1).map((value, index) => {
+  numbers = new Array(2).fill(1).map((_value, index) => {
     return { a: index, b: `_$_${index}_$_` };
   });
 
@@ -256,23 +258,23 @@ export class FxRootComponent {
 }
 
 
-  @Component({
-    selector: 'test-component-sh',
-    shadowRoot: true,
-    template: `
-      <style>
-        :host {
-          padding: 6px;
-          border: 1px solid black;
-          border-radius: 16px;
-        }
-      </style>
+@Component({
+  selector: 'test-component-sh',
+  shadowRoot: true,
+  template: `
+    <style>
+      :host {
+        padding: 6px;
+        border: 1px solid black;
+        border-radius: 16px;
+      }
+    </style>
 
-      <span>{{firstname}}:{{lastname}}</span> ->
-      <slot></slot>
-    `
-  })
-  export class TestComponentSh {
-    @Input() firstname!: string;
-    @Input() lastname!: string;
-  }
+    <span>{{firstname}}:{{lastname}}</span> ->
+    <slot></slot>
+  `
+})
+export class TestComponentSh {
+  @Input() firstname!: string;
+  @Input() lastname!: string;
+}

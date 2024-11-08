@@ -9,7 +9,7 @@ export class FxContent {
 
 
   constructor() {
-    debugger;
+    console.log('constructing fx-content');
   }
 }
 
@@ -26,14 +26,14 @@ export class FxFor {
 
   d = console.log;
 
-  @Input() cursor: string;
-  @Input() list: any[];
+  @Input() cursor!: string;
+  @Input() list!: any[];
 
   constructor() {
     this.d('fxfor component', this);
   }
 
-  fxOnChanges(changes) {
+  fxOnChanges(changes: any) {
     console.log({ changes });
     this.d({ changes });
   }

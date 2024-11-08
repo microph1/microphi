@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy Erratic Lemon
 on:
   push:
     branches: master
@@ -29,16 +29,16 @@ jobs:
           node-version: lts/*
 
       - name: Install step
-        run: "npm install"
+        run: |
+          npm ci
 
       - name: Build step
-        run: "npm run build"
+        run: |
+          npm run build -w erratic-lemon
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
           project: "flux-home"
           entrypoint: "https://deno.land/std@0.217.0/http/file_server.ts"
-          root: "dist"
-          
-          
+          root: "apps/erratic-lemon/dist"

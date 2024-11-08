@@ -9,8 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@material/auto-init": "^14.0.0",
-    "@material/ripple": "^14.0.0",
     "@microphi/flux": "^2.7.3"
   },
   "devDependencies": {

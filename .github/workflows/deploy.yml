@@ -34,12 +34,11 @@ jobs:
 
       - name: Build step
         run: |
-          cd apps/erratic-lemon
-          npm run build
+          npm run build -w erratic-lemon
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
           project: "flux-home"
           entrypoint: "https://deno.land/std@0.217.0/http/file_server.ts"
-          root: "apps/erratic-lemon/dist"
+          root: "packages/erratic-lemon/dist"

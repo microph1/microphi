@@ -34,7 +34,7 @@ jobs:
 
       - name: Build step
         run: |
-          npm run build -w erratic-lemon
+          npm run build:ci
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1

@@ -1,11 +1,11 @@
 {
   "name": "erratic-lemon",
-  "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build:ci": "npm run build",
     "preview": "vite preview"
   },
   "dependencies": {

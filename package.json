@@ -4,9 +4,7 @@
   "licence": "MIT",
   "workspaces": {
     "packages": [
-      "apps/erratic-lemon",
-      "packages/*",
-      "flux/*"
+      "packages/*"
     ]
   },
   "scripts": {

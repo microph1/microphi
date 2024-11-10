@@ -1,19 +1,23 @@
-import { App } from '@microphi/flux';
-import { FxFor, FxIf, FxRootComponent, TestComponentSh } from './components/fx-root/fx-root.component';
+import { App, registerPipe, } from '@microphi/flux';
+import { FxRootComponent } from './components/fx-root/fx-root.component';
+import { FxIf } from './components/components/fx-if.component';
+import { FxFor } from './components/components/fx-for.component';
+import { TestLabelComponent } from './components/test-label.component';
+import { FxItem } from './components/components/fx-item.component';
 
+
+registerPipe('json', (value: object) => {
+  return JSON.stringify(value, null, 2);
+});
 
 @App({
   providers: [],
   declarations: [
     FxRootComponent,
-    TestComponentSh,
+    TestLabelComponent,
+    FxItem,
     FxIf,
     FxFor,
-    // MdcSliderComponent,
-    // MdcHeaderComponent,
-    // MdcTextFieldComponent,
-    // FxFor,
-    // FxContent,
   ]
 })
 export class FluxApp {

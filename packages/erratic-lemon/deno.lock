@@ -1,9 +1,8 @@
 {
   "version": "4",
   "specifiers": {
-    "npm:@material/auto-init@14": "14.0.0",
-    "npm:@material/ripple@14": "14.0.0",
     "npm:@microphi/flux@^2.7.3": "2.7.3_@microphi+debug@2.9.0_@microphi+di@2.9.0",
+    "npm:lightningcss@^1.28.1": "1.28.1",
     "npm:typescript@~5.6.2": "5.6.3",
     "npm:vite@^5.4.10": "5.4.10"
   },
@@ -76,64 +75,6 @@
     },
     "@esbuild/win32-x64@0.21.5": {
       "integrity": "sha512-tQd/1efJuzPC6rCFwEvLtci/xNFcTZknmXs98FYDfGE4wP9ClFV98nyKrzJKVPMhdDnjzLhdUyMX4PsQAPjwIw=="
-    },
-    "@material/animation@14.0.0": {
-      "integrity": "sha512-VlYSfUaIj/BBVtRZI8Gv0VvzikFf+XgK0Zdgsok5c1v5DDnNz5tpB8mnGrveWz0rHbp1X4+CWLKrTwNmjrw3Xw==",
-      "dependencies": [
-        "tslib"
-      ]
-    },
-    "@material/auto-init@14.0.0": {
-      "integrity": "sha512-RtrHVRTRtUvOd5PC5EZkwYrab11n4sVroYL5g9lH0+cvK6PDXv1M/wVdwOSWHYgzBUU1aSf9ZTMkKdrvharU+A==",
-      "dependencies": [
-        "@material/base",
-        "tslib"
-      ]
-    },
-    "@material/base@14.0.0": {
-      "integrity": "sha512-Ou7vS7n1H4Y10MUZyYAbt6H0t67c6urxoCgeVT7M38aQlaNUwFMODp7KT/myjYz2YULfhu3PtfSV3Sltgac9mA==",
-      "dependencies": [
-        "tslib"
-      ]
-    },
-    "@material/dom@14.0.0": {
-      "integrity": "sha512-8t88XyacclTj8qsIw9q0vEj4PI2KVncLoIsIMzwuMx49P2FZg6TsLjor262MI3Qs00UWAifuLMrhnOnfyrbe7Q==",
-      "dependencies": [
-        "@material/feature-targeting",
-        "tslib"
-      ]
-    },
-    "@material/feature-targeting@14.0.0": {
-      "integrity": "sha512-a5WGgHEq5lJeeNL5yevtgoZjBjXWy6+klfVWQEh8oyix/rMJygGgO7gEc52uv8fB8uAIoYEB3iBMOv8jRq8FeA==",
-      "dependencies": [
-        "tslib"
-      ]
-    },
-    "@material/ripple@14.0.0": {
-      "integrity": "sha512-9XoGBFd5JhFgELgW7pqtiLy+CnCIcV2s9cQ2BWbOQeA8faX9UZIDUx/g76nHLZ7UzKFtsULJxZTwORmsEt2zvw==",
-      "dependencies": [
-        "@material/animation",
-        "@material/base",
-        "@material/dom",
-        "@material/feature-targeting",
-        "@material/rtl",
-        "@material/theme",
-        "tslib"
-      ]
-    },
-    "@material/rtl@14.0.0": {
-      "integrity": "sha512-xl6OZYyRjuiW2hmbjV2omMV8sQtfmKAjeWnD1RMiAPLCTyOW9Lh/PYYnXjxUrNa0cRwIIbOn5J7OYXokja8puA==",
-      "dependencies": [
-        "@material/theme",
-        "tslib"
-      ]
-    },
-    "@material/theme@14.0.0": {
-      "integrity": "sha512-6/SENWNIFuXzeHMPHrYwbsXKgkvCtWuzzQ3cUu4UEt3KcQ5YpViazIM6h8ByYKZP8A9d8QpkJ0WGX5btGDcVoA==",
-      "dependencies": [
-        "@material/feature-targeting",
-        "tslib"
-      ]
     },
     "@microphi/debug@2.9.0": {
       "integrity": "sha512-J4PTdEF1aOHqdWhEDNufkZP0MGPT1MWNpWAhgC/pNLx5ZE0Q1RL/t10cfskMPsEu2JRQ6IdOONSGo+9EoGAfQw==",
@@ -213,6 +154,9 @@
     "@types/estree@1.0.6": {
       "integrity": "sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw=="
     },
+    "detect-libc@1.0.3": {
+      "integrity": "sha512-pGjwhsmsp4kL2RTz08wcOlGN83otlqHeD/Z5T8GXZB+/YcpQ/dgo+lbU8ZsGxV0HIvqqxo9l7mqYwyYMD9bKDg=="
+    },
     "esbuild@0.21.5": {
       "integrity": "sha512-mg3OPMV4hXywwpoDxu3Qda5xCKQi+vCTZq8S9J/EpkhB2HzKXq4SNFZE3+NK93JYxc8VMSep+lOUSC/RVKaBqw==",
       "dependencies": [
@@ -243,6 +187,52 @@
     },
     "fsevents@2.3.3": {
       "integrity": "sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw=="
+    },
+    "lightningcss-darwin-arm64@1.28.1": {
+      "integrity": "sha512-VG3vvzM0m/rguCdm76DdobNeNJnHK+jWcdkNLFWHLh9YCotRvbRIt45JxwcHlIF8TDqWStVLTdghq5NaigVCBQ=="
+    },
+    "lightningcss-darwin-x64@1.28.1": {
+      "integrity": "sha512-O7ORdislvKfMohFl4Iq7fxKqdJOuuxArcglVI3amuFO5DJ0wfV3Gxgi1JRo49slfr7OVzJQEHLG4muTWYM5cTQ=="
+    },
+    "lightningcss-freebsd-x64@1.28.1": {
+      "integrity": "sha512-b7sF89B31kYYijxVcFO7l5u6UNA862YstNu+3YbLl/IQKzveL4a5cwR5cdpG+OOhErg/c2u9WCmzZoX2I5GBvw=="
+    },
+    "lightningcss-linux-arm-gnueabihf@1.28.1": {
+      "integrity": "sha512-p61kXwvhUDLLzkWHjzSFfUBW/F0iy3jr3CWi3k8SKULtJEsJXTI9DqRm9EixxMSe2AMBQBt4auTYiQL4B1N51A=="
+    },
+    "lightningcss-linux-arm64-gnu@1.28.1": {
+      "integrity": "sha512-iO+fN9hOMmzfwqcG2/BgUtMKD48H2JO/SXU44fyIwpY2veb65QF5xiRrQ9l1FwIxbGK3231KBYCtAqv+xf+NsQ=="
+    },
+    "lightningcss-linux-arm64-musl@1.28.1": {
+      "integrity": "sha512-dnMHeXEmCUzHHZjaDpQBYuBKcN9nPC3nPFKl70bcj5Bkn5EmkcgEqm5p035LKOgvAwk1XwLpQCML6pXmCwz0NQ=="
+    },
+    "lightningcss-linux-x64-gnu@1.28.1": {
+      "integrity": "sha512-7vWDISaMUn+oo2TwRdf2hl/BLdPxvywv9JKEqNZB/0K7bXwV4XE9wN/C2sAp1gGuh6QBA8lpjF4JIPt3HNlCHA=="
+    },
+    "lightningcss-linux-x64-musl@1.28.1": {
+      "integrity": "sha512-IHCu9tVGP+x5BCpA2rF3D04DBokcBza/a8AuHQU+1AiMKubuMegPwcL7RatBgK4ztFHeYnnD5NdhwhRfYMAtNA=="
+    },
+    "lightningcss-win32-arm64-msvc@1.28.1": {
+      "integrity": "sha512-Erm72kHmMg/3h350PTseskz+eEGBM17Fuu79WW2Qqt0BfWSF1jHHc12lkJCWMYl5jcBHPs5yZdgNHtJ7IJS3Uw=="
+    },
+    "lightningcss-win32-x64-msvc@1.28.1": {
+      "integrity": "sha512-ZPQtvx+uQBzrSdHH8p4H3M9Alue+x369TPZAA3b4K3d92FPhpZCuBG04+HQzspam9sVeID9mI6f3VRAs2ezaEA=="
+    },
+    "lightningcss@1.28.1": {
+      "integrity": "sha512-KRDkHlLlNj3DWh79CDt93fPlRJh2W1AuHV0ZSZAMMuN7lqlsZTV5842idfS1urWG8q9tc17velp1gCXhY7sLnQ==",
+      "dependencies": [
+        "detect-libc",
+        "lightningcss-darwin-arm64",
+        "lightningcss-darwin-x64",
+        "lightningcss-freebsd-x64",
+        "lightningcss-linux-arm-gnueabihf",
+        "lightningcss-linux-arm64-gnu",
+        "lightningcss-linux-arm64-musl",
+        "lightningcss-linux-x64-gnu",
+        "lightningcss-linux-x64-musl",
+        "lightningcss-win32-arm64-msvc",
+        "lightningcss-win32-x64-msvc"
+      ]
     },
     "mustache@4.2.0": {
       "integrity": "sha512-71ippSywq5Yb7/tVYyGbkBggbU8H3u5Rz56fH60jGFgr8uHwxs+aSKeqmluIVzM0m0kB7xQjKS6qPfd0b2ZoqQ=="
@@ -311,9 +301,8 @@
   "workspace": {
     "packageJson": {
       "dependencies": [
-        "npm:@material/auto-init@14",
-        "npm:@material/ripple@14",
         "npm:@microphi/flux@^2.7.3",
+        "npm:lightningcss@^1.28.1",
         "npm:typescript@~5.6.2",
         "npm:vite@^5.4.10"
       ]

@@ -1,9 +1,8 @@
-import { Component, Input } from '@flux/core';
+import { Component, Input } from '@microphi/flux';
 import { faker } from '@faker-js/faker';
 
 @Component({
   selector: 'fx-root',
-  // shadowRoot: true,
   style: `
     <style>
       h1 {

@@ -1,8 +1,10 @@
 import { Component } from '@microphi/flux';
+import template from './fx-root.component.html?raw';
 
 @Component({
   selector: 'fx-root',
-  templateUrl: import.meta.resolve('./fx-root.component.html')
+  // templateUrl: import.meta.resolve('./fx-root.component.html')
+  template,
 })
 export class FxRootComponent {
   name = 'Davide';

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DI, DIOptions } from '@microphi/di';
 import { getDebugger } from '@microphi/debug';
 import { Class } from 'utility-types';
@@ -34,7 +35,7 @@ export function App(options: App) {
     start$.complete();
   });
 
-  return (target) => {
+  return (target: any) => {
     return DI({
       providers: [],
       ...options

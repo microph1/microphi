@@ -2,7 +2,7 @@ import { getDebugger } from '@microphi/debug';
 
 const d = getDebugger('traverse');
 
-export function* traverse(node: any, includeAllChildren) {
+export function* traverse(node: any, includeAllChildren: boolean) {
 
   const children = node.children;
 

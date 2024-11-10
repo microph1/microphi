@@ -8,7 +8,6 @@ describe('@Component (shadow root)', () => {
 
   @Component({
     selector: 'test-component-sh',
-    shadowRoot: true,
     template: `
       <h4>{{firstname}}:{{lastname}}</h4>
       <slot></slot>
@@ -21,7 +20,6 @@ describe('@Component (shadow root)', () => {
 
   @Component({
     selector: 'fx-simple-sh',
-    shadowRoot: true,
     template: `
     <h1>Hello Mr. {{name}}</h1>
     <test-component-sh firstname="{{name}}" lastname="{{name}}">
@@ -184,7 +182,6 @@ describe('component.decorator - attribute bindings', () => {
 
   @Component({
     selector: 'fx-simple-sh-1',
-    shadowRoot: true,
     template: `
     <h1>Hello Mr. {{name}}</h1>
     <div id="one" class="{{name}}">this is with {{name}}</div>

@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { getDebugger } from '@microphi/debug';
-import { combineLatest, Subject } from 'rxjs';
+import { combineLatest, Subject, debounceTime } from 'rxjs';
 import { getInputMetadata } from './input.decorator';
 import { addWatchers, FxComponent } from './add-watcher';
 import { Injectable } from '@microphi/di';
@@ -44,11 +45,10 @@ const ComponentSymbol = Symbol('@Component');
 
 export interface ComponentOptions {
   selector: string;
-  template?: string | ((comp: any) => string);
+  template?: string;
   templateUrl?: string;
   inputs?: string[];
   // templateHtml?: (comp: any) => string;
-  shadowRoot?: boolean;
   style?: string;
 }
 
@@ -78,15 +78,36 @@ export function Component(options: ComponentOptions): ClassDecorator {
 
   d('decorating', options.selector);
 
-  const template = document.createElement('template');
+  const templateElm = document.createElement('template');
 
-  if (typeof options.template === 'string') {
-    template.innerHTML = options.template;
-  } else if (typeof options.template === 'function') {
-    // template needs to be deferred;
-  } else {
-    console.warn('no template found on', options.selector);
-  }
+  const {templateUrl, template} = options;
+
+  const templateLoaded$ = new Promise((resolve) => {
+
+    if (template) {
+      templateElm.innerHTML = template;
+      resolve(true);
+    } else if (templateUrl) {
+      // template needs to be deferred;
+      console.log('templateUrl', templateUrl);
+
+      fetch(templateUrl)
+        .then((response) => {
+          return response.text();
+        }).then((template) => {
+          console.log({template});
+
+          templateElm.innerHTML = template;
+          console.log('template loaded');
+          resolve(true);
+        });
+
+    } else {
+      console.warn('no template found on', options.selector);
+    }
+  });
+
+
 
   return (target: any) => {
 
@@ -131,18 +152,11 @@ export function Component(options: ComponentOptions): ClassDecorator {
 
       private inited: boolean = false;
       private readonly controller = new klass(this);
-      private readonly transcludedTemplate!: string;
       private readonly connected$ = new Subject<void>();
       private nodesMap = new WeakMap<HTMLElement, string>();
 
       get content(): Node {
-
-        if (options.shadowRoot) {
-          // if option is set then `this.shadowRoot` cannot be null
-          return this.shadowRoot!;
-        }
-
-        return this;
+        return this.shadowRoot!;
       }
 
       constructor() {
@@ -156,18 +170,17 @@ export function Component(options: ComponentOptions): ClassDecorator {
           this.render();
         });
 
-
-        if (options.shadowRoot) {
-          this.attachShadow({mode: 'open'});
-        }
+        this.attachShadow({mode: 'open'});
 
         this.controller.setNativeElement(this);
 
         combineLatest([
           this.controller.propertyChange,
           start$,
+          // should not start firing changes untill component is connected
+          this.connected$,
         ]).pipe(
-          // debounceTime(10),
+          debounceTime(0),
         ).subscribe(([v]) => {
           this.log('property changed', v.event);
           if ('fxOnChanges' in this.controller) {
@@ -180,11 +193,17 @@ export function Component(options: ComponentOptions): ClassDecorator {
 
       override appendChild<T extends Node>(node: T): T {
 
-        // instrumentTemplate(node, this.shadowRoot);
-        if (options.shadowRoot)
-          return  this.shadowRoot!.appendChild(node);
-        else
-          return super.appendChild(node);
+        this.log('appendingChild', node);
+        this.scheduleRender(node);
+        return this.shadowRoot!.appendChild(node);
+      }
+
+      private scheduleRender(node: Node) {
+        // we need to ask the parent to render after `node` is rendered
+        setTimeout(() => {
+
+          this.render();
+        }, 0);
       }
 
       public connectedCallback() {
@@ -198,21 +217,14 @@ export function Component(options: ComponentOptions): ClassDecorator {
           this.controller['fxOnInit']();
         }
 
-        if (options.shadowRoot) {
-          this.shadowRoot!.appendChild(template.content.cloneNode(true));
-        } else {
-          // if (typeof options.template === 'string') {
-          //   this.appendChild(template.content.cloneNode(true));
-          // } else {
-          //
-          //   // @ts-ignore
-          //   template.innerHTML = options.template(this.controller);
-          //   this.appendChild(template.content.cloneNode(true));
-          // }
-        }
+        templateLoaded$.then(() => {
 
-        this.connected$.next();
-        this.connected$.complete();
+          this.shadowRoot!.appendChild(templateElm.content.cloneNode(true));
+
+          this.connected$.next();
+          // this.connected$.complete();
+
+        });
 
       }
 
@@ -254,7 +266,7 @@ export function Component(options: ComponentOptions): ClassDecorator {
       render() {
         // traverse the dom starting from `this.content` excluding
         // other web components and their children
-        [...traverse(this.content, options.shadowRoot)].forEach((node) => {
+        [...traverse(this.content, true)].forEach((node) => {
           if (!this.nodesMap.has(node)) {
             // only parse new nodes
 
@@ -325,7 +337,7 @@ export function Component(options: ComponentOptions): ClassDecorator {
 
         this.log('rendering starts');
 
-        [...traverse(this.content, options.shadowRoot)].forEach((node: HTMLElement) => {
+        [...traverse(this.content, true)].forEach((node: HTMLElement) => {
           node['fx'] ? '' : node['fx'] = {};
 
           this.log(node);

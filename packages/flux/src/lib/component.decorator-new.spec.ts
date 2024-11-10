@@ -42,7 +42,6 @@ xdescribe('@Component', () => {
 
     @Component({
       selector: 'test-component-sh',
-      shadowRoot: true,
       template: `
       <h4 class="{{klass}}">{{salutation}} {{name}}</h4>
       <input [value]="name">

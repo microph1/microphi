@@ -1,5 +1,5 @@
-@import "variables";
-@import "mixins";
+@use "variables" as v;
+@use "mixins" as m;
 
 $display-map: (
   "display": (
@@ -15,14 +15,14 @@ $display-map: (
 );
 
 @each $key, $utility in $display-map {
-  @include generate-utilities($utility)
+  @include m.generate-utilities($utility)
 }
 
 
-.#{$prefix}-hidden {
+.#{v.$prefix}-hidden {
   display: none;
 }
 
-@include generate-mq(#{$prefix}-hidden) {
+@include m.generate-mq(#{v.$prefix}-hidden) {
   display: none !important;
 }

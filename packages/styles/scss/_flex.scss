@@ -1,5 +1,5 @@
-@import "variables";
-@import "mixins";
+@use "variables" as var;
+@use "mixins" as mix;
 
 // Flex utilities map
 $flex-map: (
@@ -65,10 +65,10 @@ $flex-map: (
   "gap": (
     property: gap,
     shortcut: gap,
-    values: $_spacing-values
+    values: var.$values
   ),
 );
 
 @each $key, $utility in $flex-map {
-  @include generate-utilities($utility)
+  @include mix.generate-utilities($utility)
 }

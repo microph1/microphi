@@ -1,4 +1,4 @@
-@import "mixins";
+@use "mixins" as mix;
 
 $sizing-map: (
   "width": (
@@ -17,8 +17,13 @@ $sizing-map: (
     property: width,
     shortcut: vw,
     values: (
+      10: 10vw,
       25: 25vw,
+      33: 33vw,
+      40: 40vw,
       50: 50vw,
+      60: 60vw,
+      66: 66vw,
       75: 75vw,
       full: 100vw
     )
@@ -39,8 +44,13 @@ $sizing-map: (
     property: height,
     shortcut: vh,
     values: (
+      10: 10vh,
       25: 25vh,
+      33: 33vh,
+      40: 40vh,
       50: 50vh,
+      60: 60vh,
+      66: 66vh,
       75: 75vh,
       full: 100vh
     )
@@ -58,5 +68,5 @@ $sizing-map: (
 );
 
 @each $key, $utility in $sizing-map {
-  @include generate-utilities($utility)
+  @include mix.generate-utilities($utility)
 }

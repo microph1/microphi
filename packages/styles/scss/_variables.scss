@@ -26,7 +26,29 @@ $_spacing-values: (
   "a": $space-auto,
 ) !default;
 
+
+$values: (
+  "0": 0,
+  "1": var(--fx-xs),
+  "2": var(--fx-2xs),
+  "3": var(--fx-3xs),
+  "4": var(--fx-s),
+  "5": var(--fx-m),
+  "6": var(--fx-l),
+  "7": var(--fx-xl),
+  "8": var(--fx-2xl),
+  "a": $space-auto,
+) !default;
+
 $_breakpoints: (
+  'sm': 640,
+  'md': 768,
+  'lg': 1024,
+  'xl': 1280,
+  'xxl': 1536
+) !default;
+
+$breakpoints: (
   'sm': 640,
   'md': 768,
   'lg': 1024,

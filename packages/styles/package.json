@@ -1,10 +1,9 @@
 {
   "name": "@microphi/styles",
   "version": "1.1.0",
-  "description": "Flex first layout",
+  "description": "helper styles",
   "private": true,
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": " "
@@ -16,5 +15,11 @@
     "helpers"
   ],
   "author": "cavaliere.davide@gmail.com",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "utopia-core-scss": "*"
+  },
+  "peerDependencies": {
+    "utopia-core-scss": "^1.2.0"
+  }
 }

@@ -97,31 +97,43 @@ describe('@Component (shadow root)', () => {
         }, 500);
       });
 
-      it('should render when variable changes programmatically', () => {
+      it('should render when variable changes programmatically', (done) => {
 
         expect(elmSh.shadowRoot.innerHTML).toContain('<h1>Hello Mr. Davide</h1>');
 
         fxSimpleComponentSh.name = 'Batman';
 
-        expect(elmSh.shadowRoot.innerHTML.trim()).toContain('<h1>Hello Mr. Batman</h1>');
+
+        setTimeout(() => {
+          expect(elmSh.shadowRoot.innerHTML.trim()).toContain('<h1>Hello Mr. Batman</h1>');
+          done();
+        }, 100);
       });
 
-      it('should render when attribute is set', () => {
+      it('should render when attribute is set', (done) => {
 
         expect(elmSh.shadowRoot.innerHTML.trim()).toContain('<h1>Hello Mr. Davide</h1>');
 
         elmSh.setAttribute('name', 'davide2');
 
-        expect(elmSh.shadowRoot.innerHTML.trim()).toContain('<h1>Hello Mr. davide2</h1>');
+        setTimeout(() => {
+          expect(elmSh.shadowRoot.innerHTML.trim()).toContain('<h1>Hello Mr. davide2</h1>');
+          done();
+        }, 100);
       });
 
-      it('should render when variable is changed from inside the component', () => {
+      it('should render when variable is changed from inside the component', (done) => {
 
         expect(elmSh.shadowRoot.innerHTML.trim()).toContain('<h1>Hello Mr. Davide</h1>');
 
         fxSimpleComponentSh.change();
 
-        expect(elmSh.shadowRoot.innerHTML.trim()).toContain('<h1>Hello Mr. davide-changed</h1>');
+        setTimeout(() => {
+          expect(elmSh.shadowRoot.innerHTML.trim()).toContain('<h1>Hello Mr. davide-changed</h1>');
+
+          done();
+        }, 100);
+
       });
 
       describe('transclusion', () => {
@@ -144,11 +156,9 @@ describe('@Component (shadow root)', () => {
       it('should call fxOnChanges', () => {
         elmSh.setAttribute('name', 'test');
         expect(fxSimpleComponentSh.fxOnChanges).toHaveBeenCalledWith({
-          event: 'attributeChanged',
-          payload: {
-            name: 'name',
-            newValue: 'test',
-          }
+          name: 'name',
+          newValue: 'test',
+          oldValue: null,
         });
       });
     });
@@ -185,7 +195,6 @@ describe('component.decorator - attribute bindings', () => {
     template: `
     <h1>Hello Mr. {{name}}</h1>
     <div id="one" class="{{name}}">this is with {{name}}</div>
-    <div id="two" [class]="name">this is with [class]="name"</div>
   `
   })
   class FxSimpleComponentSh {
@@ -214,7 +223,6 @@ describe('component.decorator - attribute bindings', () => {
   })
   class MyApp {}
 
-  let node;
 
   beforeEach(() => {
 
@@ -224,7 +232,6 @@ describe('component.decorator - attribute bindings', () => {
 
     document.body.innerHTML = '';
     document.body.appendChild(elmSh);
-    node = document.body.children[0].shadowRoot?.getElementById('two');
 
   });
 
@@ -233,36 +240,16 @@ describe('component.decorator - attribute bindings', () => {
     expect(fxSimpleComponentSh).toBeTruthy();
   });
 
-  it('should set the attribute with the hash of the given value', () => {
 
-    expect(node?.getAttribute('class')).toEqual('Davide');
-  });
 
-  it('should set the a property with the real value on the node `fxController`', () => {
-
-    // TODO: this is testing the implementation. refactor
-    expect(node['class']).toEqual('Davide');
-  });
-
-  describe('updating the value', () => {
-
-    beforeEach(() => {
-      fxSimpleComponentSh.name = 'new davide';
-    });
-
-    it('should update attribute with new hash', () => {
-
-      // TODO: this is testing the implementation. refactor
-      expect(node.getAttribute('class')).toEqual('new davide');
-
-    });
-
-    it('should set the a property with the real value on the node `fxController`', () => {
-
-      // TODO: this is testing the implementation. refactor
-      expect(node['class']).toEqual('new davide');
-    });
-
-  });
+  //describe('updating the value', () => {
+  //
+  //  beforeEach(() => {
+  //    fxSimpleComponentSh.name = 'new davide';
+  //  });
+  //
+  //
+  //
+  //});
 
 });

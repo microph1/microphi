@@ -1,0 +1,72 @@
+@use "mixins" as mix;
+
+$sizing-map: (
+  "width": (
+    property: width,
+    shortcut: w,
+    values: (
+      0: 0,
+      25: 25%,
+      50: 50%,
+      75: 75%,
+      full: 100%,
+      auto: auto
+    )
+  ),
+  "viewport-width": (
+    property: width,
+    shortcut: vw,
+    values: (
+      10: 10vw,
+      25: 25vw,
+      33: 33vw,
+      40: 40vw,
+      50: 50vw,
+      60: 60vw,
+      66: 66vw,
+      75: 75vw,
+      full: 100vw
+    )
+  ),
+  "height": (
+    property: height,
+    shortcut: h,
+    values: (
+      0: 0,
+      25: 25%,
+      50: 50%,
+      75: 75%,
+      full: 100%,
+      auto: auto
+    )
+  ),
+  "viewport-height": (
+    property: height,
+    shortcut: vh,
+    values: (
+      10: 10vh,
+      25: 25vh,
+      33: 33vh,
+      40: 40vh,
+      50: 50vh,
+      60: 60vh,
+      66: 66vh,
+      75: 75vh,
+      full: 100vh
+    )
+  ),
+  "size": (
+    property: (width, height),
+    shortcut: size,
+    values: (
+      1\/4: 25%,
+      2\/4: 50%,
+      3\/4: 75%,
+      full: 100%
+    )
+  ),
+);
+
+@each $key, $utility in $sizing-map {
+  @include mix.generate-utilities($utility)
+}

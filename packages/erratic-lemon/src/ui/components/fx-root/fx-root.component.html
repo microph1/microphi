@@ -1,0 +1,60 @@
+<h3>Demo fx-for</h3>
+
+
+<fx-for [[let]]="'number'" [[of]]="numbers">
+  <div>fx-for -> {{number.a}}: {{number.b}}</div>
+</fx-for>
+<!---->
+<!-- <hr> -->
+<!---->
+<!-- <h3>Demo pipe</h3> -->
+<!-- <div>{{numbers | json}}</div> -->
+<!---->
+<!-- <hr> -->
+<!---->
+<!---->
+<!-- <h3>[boxed] binding on attribute {{interpolation}} on element and (event) binding to method</h3> -->
+<!---->
+<!-- <div [class]="color">Hello {{name}}</div> -->
+<button (click)="addItem()">Click</button>
+<!---->
+<!-- <hr> -->
+<!---->
+<!-- <h3>fx-if example</h3> -->
+<!---->
+<!-- <fx-if [[condition]]="showContent === 'block' ? 'block' : 'none'"> -->
+<!--   <h1>transcluded content resolves variables against parent controller name: {{name}}</h1> -->
+<!-- </fx-if> -->
+<!---->
+<!-- <hr> -->
+<!---->
+<!-- <h3>fx-item example</h3> -->
+<!---->
+<!-- <fx-item [[internal_var_name]]="name"> -->
+  <!--
+// so here we should be able to reach both the upper controller that resolves {{name}}
+// and fx-item's controller that resolves {{name}} into {{internalVarName}}
+-->
+<!--   <div>{{name}} === {{internal_var_name}}</div> -->
+<!-- </fx-item> -->
+<!---->
+<!-- <hr> -->
+<!---->
+<!-- <h3>another fx-item example</h3> -->
+<!---->
+<!-- <fx-item id="one" [[value]]="name"><div> {{value}}: {{name}} </div> </fx-item> -->
+<!---->
+<!-- <hr> -->
+<!---->
+<!-- <h3>Input example</h3> -->
+<!---->
+<!-- <input [value]="name" (keyup)="onInputChange($event)" tabindex="0"> -->
+<!-- <div><strong>{{name}}</strong></div> -->
+<!---->
+<!-- <hr> -->
+<!---->
+<!-- <h1>Test Cases</h1> -->
+<!---->
+<!-- <test-component-sh firstname="{{name}}" lastname="{{name}}"> -->
+<!--   <span>transcluded name {{name}}</span> -->
+<!-- </test-component-sh> -->

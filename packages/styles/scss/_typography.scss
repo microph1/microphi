@@ -1,0 +1,100 @@
+@use 'sass:math';
+@use "sass:map";
+
+$font-weight-map: (
+  font-thin: 100,
+  font-extralight: 200,
+  font-light: 300,
+  font-normal: 400,
+  font-medium: 500,
+  font-semibold: 600,
+  font-bold: 700,
+  font-extrabold: 800,
+  font-black: 900
+) !default;
+
+
+@each $key, $value in $font-weight-map {
+  .fx-#{$key} {
+    font-weight: #{$value};
+  }
+}
+
+
+@function project($min, $max) {
+  $r_min: 400px;
+  $r_max: 1000px;
+
+  $m: calc(($max - $min)/($r_max - $r_min) * 100);
+  @return clamp($min, min(#{$m}vw, #{$m}vh), $max);
+}
+
+// TODO: Check the line-height for headlines and subtitles
+.fx-headline-1 {
+  font-size: var(--fx-typography-6);
+  /* font-size: project(60px, 112px); */
+  font-weight: map.get($font-weight-map, font-semibold);
+  line-height: initial;
+}
+
+.fx-headline-2 {
+  font-size: var(--fx-typography-5);
+  /* font-size: project(40px, 84px); */
+  font-weight: map.get($font-weight-map, font-medium);
+  line-height: initial;
+}
+
+.fx-headline-3 {
+  font-size: var(--fx-typography-4);
+  /* font-size: project(30px, 64px); */
+  font-weight: map.get($font-weight-map, font-semibold);
+  line-height: initial;
+}
+
+.fx-headline-4 {
+  font-size: var(--fx-typography-3);
+  font-weight: map.get($font-weight-map, font-semibold);
+  line-height: initial;
+}
+
+.fx-headline-5 {
+  font-size: var(--fx-typography-3);
+  font-weight: map.get($font-weight-map, font-normal);
+  line-height: initial;
+}
+
+.fx-title {
+  font-size: var(--fx-typography-2);
+  font-weight: map.get($font-weight-map, font-medium);
+  line-height: 1.6rem;
+}
+
+.fx-subtitle {
+  font-size: var(--fx-typography-1);
+  font-weight: map.get($font-weight-map, font-normal);
+  line-height: 1.6rem;
+}
+
+.fx-body-1 {
+  font-size: var(--fx-typography-0);
+  font-weight: map.get($font-weight-map, font-normal);
+  line-height: 1.5rem;
+}
+
+.fx-body-2 {
+  font-size: var(--fx-typography--1);
+  font-weight: map.get($font-weight-map, font-light);
+  line-height: var(--fx-typography-1);
+  }
+
+.fx-caption {
+  font-size: var(--fx-typography--2);
+  font-weight: map.get($font-weight-map, font-normal);
+  line-height: initial;
+}
+
+.fx-overline {
+  font-size: var(--fx-typography--3);
+  font-weight: map.get($font-weight-map, font-light);
+  line-height: initial;
+}

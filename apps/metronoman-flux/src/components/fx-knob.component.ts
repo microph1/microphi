@@ -1,8 +1,7 @@
-import { Component, Input } from '@flux/core';
+import { Component, Input } from '@microphi/flux';
 
 @Component({
   selector: 'fx-knob',
-  shadowRoot: true,
   template: `
     <style>
 

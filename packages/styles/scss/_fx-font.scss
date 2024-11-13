@@ -1,0 +1,32 @@
+@use "sass:math";
+
+$i: 100;
+
+@while $i < 700 {
+
+
+  .fx-f-#{$i} {
+    font-weight: $i;
+  }
+
+  // do stuff
+  $i: $i + 100;
+}
+
+
+$j: 1;
+
+
+.text-ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.no-margin {
+  margin: 0 !important;
+}
+
+.fx-f-capitalize {
+  text-transform: capitalize;
+}

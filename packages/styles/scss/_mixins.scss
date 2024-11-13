@@ -1,0 +1,47 @@
+@use "variables" as v;
+@use "sass:map";
+@use "sass:list";
+@use "sass:meta";
+
+@mixin generate-utilities($utility) {
+  $values: map.get($utility, values);
+  $properties: map.get($utility, property);
+
+  // Use shortcut if present
+  $property-shortcut: if(map.has-key($utility, shortcut), map.get($utility, shortcut), list.nth($properties, 1));
+  $property-shortcut: if($property-shortcut == null, "", $property-shortcut);
+
+  // If the values are a list or string, convert it into a map
+  @if meta.type-of($values) == "string" or meta.type-of(list.nth($values, 1)) != "list" {
+    $values: list.zip($values, $values);
+  }
+
+  @each $key, $value in $values {
+    // Remove property in selector name if shortcut is null
+    $selector: if($property-shortcut == '', #{v.$prefix}-#{$key}, #{v.$prefix}-#{$property-shortcut}-#{$key});
+
+    .#{$selector} {
+      @each $property in $properties {
+        #{$property}: #{$value};
+      }
+    }
+
+    @include generate-mq($selector) {
+      @each $property in $properties {
+        #{$property}: #{$value} !important;
+      }
+    }
+  }
+}
+
+// Generate media queries classes
+// e.g. .md:fx-flex or .xl:fx-inline-flex
+@mixin generate-mq($selector, $breakpoints: v.$breakpoints) {
+  @each $breakpoint, $width in $breakpoints {
+    @media (min-width: #{$width}px) {
+      .#{$breakpoint}\:#{$selector} {
+        @content;
+      }
+    }
+  }
+}

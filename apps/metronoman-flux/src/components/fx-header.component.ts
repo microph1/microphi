@@ -1,9 +1,8 @@
-import { Component } from '@flux/core';
+import { Component } from '@microphi/flux';
 import template from './fx-header.component.html';
 
 @Component({
   selector: 'fx-header',
-  shadowRoot: false,
   template,
 })
 export class FxHeaderComponent {

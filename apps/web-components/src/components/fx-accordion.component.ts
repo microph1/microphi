@@ -1,10 +1,9 @@
-import { Component, Input } from '@flux/core';
+import { Component, Input } from '@microphi/flux';
 import styles from './fx-user.styles.scss';
 
 
 @Component({
   selector: 'fx-accordion',
-  shadowRoot: true,
   template: `
   <style>
     ${styles}

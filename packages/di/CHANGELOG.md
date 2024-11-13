@@ -3,6 +3,69 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 2.10.0 (2024-11-13)
+
+# 2.9.0 (2024-11-04)
+
+## 2.7.3 (2024-09-11)
+
+## 2.7.2 (2024-05-14)
+
+### Bug Fixes
+
+* **di:** in cjs exporting testing modules causes troubles ([fda9722](https://github.com/microph1/microphi/commit/fda972251d32dcf055837afb04d318dc76a72610))
+* **di:** remove exports field ([257eea7](https://github.com/microph1/microphi/commit/257eea7b80190babccf4c46dde844c120735e425))
+
+## 2.7.1 (2024-05-14)
+
+### Bug Fixes
+
+* publish step was failing after switch to hybrid packages ([dd621e3](https://github.com/microph1/microphi/commit/dd621e356954de1a0f58cd6043c7e29a9a7c9743))
+
+# 2.7.0 (2024-05-14)
+
+### Features
+
+* allow other packages to publish cjs ([692700c](https://github.com/microph1/microphi/commit/692700c703db8105e51455b578adbcc2f8c0075f))
+
+# 2.6.0 (2024-05-13)
+
+### Features
+
+* **debug:** Publish commonjs version ([e3a800f](https://github.com/microph1/microphi/commit/e3a800f2aa73c4f30aacc282c00376f262624400))
+
+## 2.5.1 (2024-04-26)
+
+### Bug Fixes
+
+* revert changes in building extra commonjs and default to build commonjs for some packages ([5ebd9f7](https://github.com/microph1/microphi/commit/5ebd9f72ec43171495d709f09deaf507c08bfdc7))
+
+# 2.5.0 (2024-04-26)
+
+### Features
+
+* enable publishing of commonjs builds ([db32abe](https://github.com/microph1/microphi/commit/db32abe5c1680b83ecd886b382011d834ed2006f))
+
+## 2.3.1 (2024-03-29)
+
+# 2.3.0 (2024-03-29)
+
+## 2.2.3 (2024-03-27)
+
+## 2.2.2 (2024-03-27)
+
+## 2.2.1 (2024-03-27)
+
+### Bug Fixes
+
+* **di:** it should build typings ([1c203c1](https://github.com/microph1/microphi/commit/1c203c1dec314642cc2d86f1876ee3038cc216e6))
+
+# 2.2.0 (2024-03-18)
+
+### Features
+
+* migrate @microgamma/digator to @microphi/di ([e2e71e1](https://github.com/microph1/microphi/commit/e2e71e117411efdb6f2372fee086caaa31f0d234))
+
 # [2.9.0](https://github.com/microph1/microphi/compare/v2.8.2...v2.9.0) (2024-11-04)
 
 **Note:** Version bump only for package @microphi/di

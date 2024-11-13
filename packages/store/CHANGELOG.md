@@ -3,6 +3,97 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 2.10.0 (2024-11-13)
+
+# 2.9.0 (2024-11-04)
+
+### Features
+
+* **store:** add delay decorator ([0c1ff5d](https://github.com/microph1/microphi/commit/0c1ff5d6c5feaa777d613a7ba52118c5e2e7f210))
+
+## 2.8.2 (2024-11-03)
+
+## 2.8.1 (2024-11-03)
+
+### Bug Fixes
+
+* **store:** add new stuff to public API ([0065ac6](https://github.com/microph1/microphi/commit/0065ac6b51893951a1ff5b835713b2ac9e73f6ea))
+
+# 2.8.0 (2024-11-03)
+
+### Features
+
+* **store:** add @Cache decorator ([30a8905](https://github.com/microph1/microphi/commit/30a89058e5b734d120d759f1a8e66ef5113a6c2f))
+* **store:** add debounce decorator for effects ([ea3872c](https://github.com/microph1/microphi/commit/ea3872ca5201abcc85e08478db17dc4aebd754ae))
+
+## 2.7.3 (2024-09-11)
+
+## 2.7.2 (2024-05-14)
+
+### Bug Fixes
+
+* remove exports field in package json ([3044b3e](https://github.com/microph1/microphi/commit/3044b3e6d20e026240f63cc2272823105950af22))
+
+## 2.7.1 (2024-05-14)
+
+### Bug Fixes
+
+* publish step was failing after switch to hybrid packages ([dd621e3](https://github.com/microph1/microphi/commit/dd621e356954de1a0f58cd6043c7e29a9a7c9743))
+
+# 2.7.0 (2024-05-14)
+
+### Features
+
+* allow other packages to publish cjs ([692700c](https://github.com/microph1/microphi/commit/692700c703db8105e51455b578adbcc2f8c0075f))
+
+# 2.6.0 (2024-05-13)
+
+## 2.5.1 (2024-04-26)
+
+### Bug Fixes
+
+* revert changes in building extra commonjs and default to build commonjs for some packages ([5ebd9f7](https://github.com/microph1/microphi/commit/5ebd9f72ec43171495d709f09deaf507c08bfdc7))
+
+# 2.5.0 (2024-04-26)
+
+### Features
+
+* enable publishing of commonjs builds ([db32abe](https://github.com/microph1/microphi/commit/db32abe5c1680b83ecd886b382011d834ed2006f))
+
+# 2.3.0 (2024-03-29)
+
+### Features
+
+* **json-db:** move list from store to json-db ([14b0587](https://github.com/microph1/microphi/commit/14b0587d01750005c0a763a0bcc66e2056010fc2))
+
+## 2.2.3 (2024-03-27)
+
+## 2.2.1 (2024-03-27)
+
+# 2.2.0 (2024-03-18)
+
+# 1.2.0 (2024-03-15)
+
+### Bug Fixes
+
+* merge errors ([e4535a7](https://github.com/microph1/microphi/commit/e4535a77c882a0d70851c4de600c948c1c2f3718))
+
+## 1.1.7 (2024-03-04)
+
+## 1.1.6 (2024-03-04)
+
+## 1.1.5 (2024-03-04)
+
+### Bug Fixes
+
+* need to run prepack lifecycle ([4dec0e7](https://github.com/microph1/microphi/commit/4dec0e7a269e963448c8b74a141891bd2f39e021))
+
+## 1.1.4 (2024-03-04)
+
+# 16.4.0 (2024-03-04)
+
+# 16.3.0 (2024-03-02)
+
 # [2.9.0](https://github.com/microph1/microphi/compare/v2.8.2...v2.9.0) (2024-11-04)
 
 ### Features

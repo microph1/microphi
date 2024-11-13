@@ -1,6 +1,6 @@
 {
   "name": "erratic-lemon",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@microphi/flux": "^2.7.3",
+    "@microphi/flux": "^2.8.0",
     "@monaco-editor/loader": "^1.4.0",
     "monaco-editor": "^0.52.0"
   },

@@ -1,6 +1,6 @@
 {
   "name": "@microphi/list",
-  "version": "2.9.0",
+  "version": "2.10.0",
   "description": "Simple and fast list-like class",
   "main": "lib/cjs/index.js",
   "typings": "lib/esm/index.d.ts",
@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.23.3",
-    "@microphi/debug": "^2.9.0",
+    "@microphi/debug": "^2.10.0",
     "@types/node": "^20.11.30",
     "utility-types": "^3.10.0"
   },

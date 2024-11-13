@@ -1,4 +1,4 @@
-import { App, registerGlobalStyles, registerPipe, } from '@microphi/flux';
+import { App, registerGlobalStyles, registerPipe } from '@microphi/flux';
 import { FxRootComponent } from './components/fx-root/fx-root.component';
 // import { FxIf } from './components/components/fx-if.component';
 import { FxFor } from './components/components/fx-for.component';
@@ -9,6 +9,8 @@ import { FxLabelComponent } from './label/label.component';
 import { FxSourceCodeViewer } from './source-code-viewer/source-code-viewer.component';
 
 import '../style.css';
+
+import global from '../../index.scss?url';
 
 registerPipe('json', (value: object) => {
   return JSON.stringify(value, null, 2);
@@ -30,7 +32,7 @@ export class FluxApp {
 
   constructor() {
 
-    registerGlobalStyles('/index.scss');
+    registerGlobalStyles(global);
 
     console.log('app started');
   }

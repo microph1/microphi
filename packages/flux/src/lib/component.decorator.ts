@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getDebugger } from '@microphi/debug';
-import { combineLatest, Subject, debounceTime } from 'rxjs';
-import { getInputMetadata } from './input.decorator';
-import { addWatchers, FxComponent } from './add-watcher';
 import { Injectable } from '@microphi/di';
+import { Subject, combineLatest, debounceTime } from 'rxjs';
+import { FxComponent, addWatchers } from './add-watcher';
 import { start$ } from './app.decorator';
+import { getInputMetadata } from './input.decorator';
 import { getValue, parseTemplate } from './parse-template';
-import { traverse } from './traverse';
 
 const SQUARE_BOXED_REGEX = new RegExp(/^\[(\w*)\]$/);
 const DOUBLE_SQUARE_BOXED_REGEX = new RegExp(/\[\[(\w+)]]/);
@@ -37,8 +36,13 @@ export type Directive = (node: Element, value: any, controller: any) => void;
 export const directives: { [name: string]: Directive; } = {};
 
 export function registerDirective(name: string, fn: (node: any, value: string, controller: any) => void) {
-  console.log('registering directive', name);
+  // console.log('registering directive', name);
   directives[name] = fn;
+}
+
+const globalStyles: string[] = [];
+export function registerGlobalStyles(...styles: string[]) {
+  globalStyles.push(...styles);
 }
 
 const ComponentSymbol = Symbol('@Component');
@@ -50,6 +54,7 @@ export interface ComponentOptions {
   inputs?: string[];
   // templateHtml?: (comp: any) => string;
   style?: string;
+  styleUrls?: string[];
 }
 
 interface AttributeChanged {
@@ -89,20 +94,18 @@ export function Component(options: ComponentOptions): ClassDecorator {
       resolve(true);
     } else if (templateUrl) {
       // template needs to be deferred;
-      console.log('templateUrl', templateUrl);
 
       fetch(templateUrl)
         .then((response) => {
           return response.text();
         }).then((template) => {
-          console.log({template});
 
           templateElm.innerHTML = template;
-          console.log('template loaded');
           resolve(true);
         });
 
     } else {
+      resolve(true);
       console.warn('no template found on', options.selector);
     }
   });
@@ -129,7 +132,7 @@ export function Component(options: ComponentOptions): ClassDecorator {
 
       propertyChange: Subject<LifeCycle> = new Subject<LifeCycle>();
 
-      constructor(...args) {
+      constructor(...args: any[]) {
         super(...args);
         addWatchers(this as unknown as FxComponent);
       }
@@ -151,9 +154,10 @@ export function Component(options: ComponentOptions): ClassDecorator {
       static observedAttributes = options.inputs;
 
       private inited: boolean = false;
+
       private readonly controller = new klass(this);
       private readonly connected$ = new Subject<void>();
-      private nodesMap = new WeakMap<HTMLElement, string>();
+      private readonly scheduleRender$ = new Subject<Node>();
 
       get content(): Node {
         return this.shadowRoot!;
@@ -183,28 +187,31 @@ export function Component(options: ComponentOptions): ClassDecorator {
           debounceTime(0),
         ).subscribe(([v]) => {
           this.log('property changed', v.event);
-          if ('fxOnChanges' in this.controller) {
 
+          if ('fxOnChanges' in this.controller) {
             this.controller['fxOnChanges'](v);
           }
+
           this.render();
         });
+
+        this.scheduleRender$
+          .pipe(
+            debounceTime(1),
+          )
+          .subscribe(() => {
+            this.render();
+
+          });
       }
 
       override appendChild<T extends Node>(node: T): T {
 
         this.log('appendingChild', node);
-        this.scheduleRender(node);
+
         return this.shadowRoot!.appendChild(node);
       }
 
-      private scheduleRender(node: Node) {
-        // we need to ask the parent to render after `node` is rendered
-        setTimeout(() => {
-
-          this.render();
-        }, 0);
-      }
 
       public connectedCallback() {
         this.log('connectedCallback');
@@ -219,11 +226,22 @@ export function Component(options: ComponentOptions): ClassDecorator {
 
         templateLoaded$.then(() => {
 
-          this.shadowRoot!.appendChild(templateElm.content.cloneNode(true));
+          if (options.styleUrls || globalStyles) {
 
+            for (const url of [...globalStyles, ...options.styleUrls || []]) {
+              const style = document.createElement('link');
+              style.rel = 'stylesheet';
+              style.href = url;
+              this.shadowRoot!.appendChild(style!.cloneNode(true));
+            }
+          }
+
+          if (templateElm) {
+            this.shadowRoot!.appendChild(templateElm.content.cloneNode(true));
+          }
+
+          // components without template should still fire connected$
           this.connected$.next();
-          // this.connected$.complete();
-
         });
 
       }
@@ -264,67 +282,90 @@ export function Component(options: ComponentOptions): ClassDecorator {
       }
 
       render() {
-        // traverse the dom starting from `this.content` excluding
-        // other web components and their children
-        [...traverse(this.content, true)].forEach((node) => {
-          if (!this.nodesMap.has(node)) {
-            // only parse new nodes
-
-            node['fx'] ? '' : node['fx'] = {};
-
-            for (const attributeName of node.getAttributeNames()) {
-              if (attributeName.startsWith('fx')) {
-                continue;
-              }
-
-              const attributeValue = node.getAttribute(attributeName);
-
-
-              const eventName = attributeName.match(EVENT_REGEX)?.[1];
-              if (eventName) {
-
-                const methodName = attributeValue.match(/(\w+)\(/)[1];
-
-                this.log('adding event listener on', node, 'to controller', this);
-
-                node.addEventListener(eventName, (event: any) => {
-                  this.controller[methodName](event);
-                });
-              }
-
-              const squareBoxed = attributeName.match(SQUARE_BOXED_REGEX)?.[1];
-              if (squareBoxed) {
-                this.log(`found [${squareBoxed}]`);
-                this.log('attribute value', attributeValue);
-              }
-
-              if (attributeValue.match(CURLY_BOXED_REGEX)) {
-                // here we store the original template of the attribute
-                // say we have
-                // <slot style="display: {{showContent}};"></slot>
-                node['fx'][attributeName] = attributeValue;
-                // then we have
-                // <slot style="display: {{showContent}};" fx-style="display: {{showContent}};"></slot>
-                // because after first render we will have
-                // <slot style="display: none;" fx-style="display: {{showContent}};"></slot>
-                // and we will need the original value on the second render
-
-              }
-
-              if (attributeName.match(DOUBLE_SQUARE_BOXED_REGEX)) {
-                // TODO we do not need to do this actually
-                // const evaluableName = attributeName.match(DOUBLE_SQUARE_BOXED_REGEX)[1];
-                // node.setAttribute(`fx-${evaluableName}-evaluable`, node.getAttribute(attributeName));
-              }
-            }
-
-            this.nodesMap.set(node, (node as HTMLElement).innerHTML);
+        //console.count(`render${this.fxId}`);
+        const walker = document.createTreeWalker(this.content, NodeFilter.SHOW_ELEMENT, (node) => {
+          if (node instanceof HTMLElement && node.tagName === 'SCRIPT') {
+            return NodeFilter.FILTER_REJECT;
           }
+
+          return NodeFilter.FILTER_ACCEPT;
         });
 
+        while (walker.nextNode()) {
+          const node = walker.currentNode;
+          if (node instanceof HTMLElement) {
+            node['fx'] ? '' : node['fx'] = {};
+            // console.log('parsing node', node);
+            // check if a node has been inited
+            if (!node['fx']?.inited) {
 
-        if (this.inited) {
+              for (const attributeName of node.getAttributeNames()) {
+                if (attributeName.startsWith('fx')) {
+                  continue;
+                }
 
+                const attributeValue = node.getAttribute(attributeName);
+                if (!attributeValue) {
+                  // console.log('attribute value is falsy... continuing');
+                  continue;
+
+                }
+
+
+                const eventName = attributeName.match(EVENT_REGEX)?.[1];
+                if (eventName) {
+
+                  const methodName = attributeValue?.match(/(\w+)\(/)?.[1];
+                  if (methodName) {
+                    if (typeof this.controller[methodName] !== 'function') {
+                      throw new Error(`${methodName} should be a method`);
+                    }
+
+                    this.log('adding event listener on', node, 'to controller', this);
+
+                    node.addEventListener(eventName, (event: any) => {
+                      this.controller[methodName](event);
+                    });
+
+                  } else {
+                    console.warn('TBD: we should be able to handle inline scripts');
+                  }
+
+                }
+
+                const squareBoxed = attributeName.match(SQUARE_BOXED_REGEX)?.[1];
+                if (squareBoxed) {
+                  this.log(`found [${squareBoxed}]`);
+                  this.log('attribute value', attributeValue);
+                }
+
+                if (attributeValue.match(CURLY_BOXED_REGEX)) {
+                  // here we store the original template of the attribute
+                  // say we have
+                  // <slot style="display: {{showContent}};"></slot>
+                  node['fx'][attributeName] = attributeValue;
+                  // then we have
+                  // <slot style="display: {{showContent}};" fx-style="display: {{showContent}};"></slot>
+                  // because after first render we will have
+                  // <slot style="display: none;" fx-style="display: {{showContent}};"></slot>
+                  // and we will need the original value on the second render
+
+                }
+
+                if (attributeName.match(DOUBLE_SQUARE_BOXED_REGEX)) {
+                  // TODO we do not need to do this actually
+                  // const evaluableName = attributeName.match(DOUBLE_SQUARE_BOXED_REGEX)[1];
+                  // node.setAttribute(`fx-${evaluableName}-evaluable`, node.getAttribute(attributeName));
+                }
+              }
+
+              node['fx'] = {...node['fx'], inited: true, parentController: this.controller};
+            }
+
+          }
+        }
+
+        if (!this.inited) {
 
           this.log('first rendering done');
           this.inited = true;
@@ -333,11 +374,20 @@ export function Component(options: ComponentOptions): ClassDecorator {
           if ('fxOnViewInit' in this.controller) {
             this.controller['fxOnViewInit']();
           }
+
         }
 
         this.log('rendering starts');
+        const walker3 = document.createTreeWalker(this.content, NodeFilter.SHOW_ELEMENT, (node) => {
+          if (node instanceof HTMLElement && node.tagName === 'SCRIPT') {
+            return NodeFilter.FILTER_REJECT;
+          }
 
-        [...traverse(this.content, true)].forEach((node: HTMLElement) => {
+          return NodeFilter.FILTER_ACCEPT;
+        });
+
+        while (walker3.nextNode()) {
+          const node = walker3.currentNode as HTMLElement;
           node['fx'] ? '' : node['fx'] = {};
 
           this.log(node);
@@ -352,6 +402,9 @@ export function Component(options: ComponentOptions): ClassDecorator {
 
               if (conditionToEvaluate !== null) {
                 const result = evalInScope(conditionToEvaluate, this.controller);
+                if (!node['controller']) {
+                  throw new Error(`${node.tagName} does not have a controller while it should. Are you forgetting to import it?`);
+                }
                 node['controller'][doubleSquared] = result;
                 this.log({result});
               }
@@ -394,16 +447,56 @@ export function Component(options: ComponentOptions): ClassDecorator {
             }
           }
 
-          const template = this.nodesMap.get(node);
+        }
 
-          if (template) {
-            // fx-if does not have a template
-            (node as HTMLElement).innerHTML = parseTemplate(template, { ...this.controller, ...node['controller'] });
+
+        this.log('redering text nodes with {{}}');
+
+        const textNodesWalker = document.createTreeWalker(this.content, NodeFilter.SHOW_TEXT, (node) => {
+          // do we need to check further parents?
+          const parentElement = node.parentElement;
+
+          if (parentElement?.tagName === 'SCRIPT') {
+            return NodeFilter.FILTER_REJECT;
           }
+
+          return NodeFilter.FILTER_ACCEPT;
+
         });
 
+        while (textNodesWalker.nextNode()) {
 
+          const node = textNodesWalker.currentNode;
+          const needsIterpolation = node.textContent?.match(CURLY_BOXED_REGEX);
+          if (!needsIterpolation?.[1]) {
+            if (node['fx']?.template) {
+              const parentFxComponent = getParentController(node);
+              node.textContent = parseTemplate(node['fx'].template, { ...this.controller, ...node['controller'], ...parentFxComponent});
+            }
+            continue;
+          }
+
+          const parentElement = node.parentElement;
+
+          node['fx'] = { template: needsIterpolation.input, };
+
+
+          // console.log('getting parent element');
+
+
+          if (parentElement) {
+            const template = node['fx'].template;
+
+            if (template) {
+              node.textContent = parseTemplate(template, { ...this.controller, ...getParentController(node) });
+            }
+
+          }
+        }
+
+        this.log('all nodes with {{}} rendered');
         this.log('rendering ends');
+
 
       }
 
@@ -427,13 +520,13 @@ export function getComponentMetadataFromInstance(target: any): ComponentOptions 
   return Reflect.getMetadata(ComponentSymbol, target.constructor);
 }
 
-export function getParentController(node: Node) {
+export function getParentController(node: Node): null|object {
   if (!node || !node.parentNode) {
     return null;
   }
 
   if ('controller' in node.parentNode) {
-    return node.parentNode['controller'];
+    return node.parentNode['controller'] as object;
   } else {
     return getParentController(node.parentNode);
   }
@@ -443,3 +536,14 @@ export function getParentController(node: Node) {
 function evalInScope(js: string, contextAsScope: object) {
   return new Function(`with (this) {  return ${js} }`).call(contextAsScope);
 }
+
+// function isFxComponent<T extends Node>({}: T) {
+//
+//   // console.log({node});
+//   // return [...children].some((node) => {
+//   //   return node instanceof Element && !!node.getAttribute('fxId');
+//   // });
+//
+//   return false;
+//
+// }

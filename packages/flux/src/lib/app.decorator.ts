@@ -17,6 +17,9 @@ export const start$ = new AsyncSubject<void>();
 
 export function App(options: App) {
 
+  if (!options.providers) {
+    options.providers = [];
+  }
 
   const promises: Promise<unknown>[] = [];
 

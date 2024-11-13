@@ -37,6 +37,7 @@
   },
   "peerDependencies": {
     "@microphi/debug": "^2.2.0",
-    "@microphi/di": "^2.3.0"
+    "@microphi/di": "^2.3.0",
+    "rxjs": "^7.8.1"
   }
 }

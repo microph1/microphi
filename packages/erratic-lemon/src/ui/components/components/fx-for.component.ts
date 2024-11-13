@@ -29,6 +29,7 @@ export class FxFor {
       this.elementRef.shadowRoot.innerHTML = '';
     }
 
+
     this.of.forEach((_, index) => {
       const tpl = document.createElement('template');
 

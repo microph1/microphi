@@ -6,9 +6,11 @@ import { Component, Input } from '@microphi/flux';
   template: `
     <style>
       :host {
+        display: inline-block;
         padding: 6px;
         border: 1px solid black;
         border-radius: 16px;
+        margin-top: 6px;
       }
     </style>
 

@@ -1,3 +1,4 @@
+
 import { Component, html } from '@microphi/flux';
 import counterCodeRaw from '../../counter/fx-counter.component.ts?raw';
 // import template from './fx-root.component.html?raw';
@@ -5,23 +6,15 @@ import counterCodeRaw from '../../counter/fx-counter.component.ts?raw';
 // const url = new URL('./fx-root.component.html', import.meta.url);
 // console.log(url.href, import.meta.resolve('./fx-root.component.html'));
 
-
 @Component({
   selector: 'fx-root',
   // templateUrl: import.meta.resolve('./fx-root.component.html')
   // template,
   template: html`
+    <div class="fx-flex fx-flex-row">
+      <fx-source-code-viewer code="{{code}}"></fx-source-code-viewer>
 
-    <p>Flux creates web components like Lit but is has a sintax similar to Angular</p>
-
-    <div class="fx-flex fx-flex-row fx-vh-40 fx-gap-6 fx-m-4">
-      <fx-source-code-viewer class="fx-flex fx-vw-40">
-        <script nomodule>
-        ${counterCodeRaw}
-        </script>
-      </fx-source-code-viewer>
-
-      <fx-counter class="fx-flex fx-vw-40 fx-justify-center"></fx-counter>
+      <fx-counter></fx-counter>
     </div>
     <!-- <div>{{categories|json}}</div> -->
     <!-- <button (click)="addCategory()">Add</button> -->
@@ -29,6 +22,7 @@ import counterCodeRaw from '../../counter/fx-counter.component.ts?raw';
     <!-- <div>x: {{x}} - y: {{y}}</div> -->
     <!-- <div (mousemove)="showMove(event)" style="width: 100%; height: 300px; background: gray">&nbsp</div> -->
   `,
+  styleUrls: ['http://localhost:5173/index.scss'],
 })
 export class FxRootComponent {
 

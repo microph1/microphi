@@ -1,28 +1,36 @@
-import { App, registerPipe, } from '@microphi/flux';
+import { App, registerGlobalStyles, registerPipe, } from '@microphi/flux';
 import { FxRootComponent } from './components/fx-root/fx-root.component';
-import { FxIf } from './components/components/fx-if.component';
+// import { FxIf } from './components/components/fx-if.component';
 import { FxFor } from './components/components/fx-for.component';
-import { TestLabelComponent } from './components/test-label.component';
+// import { TestLabelComponent } from './components/test-label.component';
 import { FxItem } from './components/components/fx-item.component';
+import { FxCounterComponent } from './counter/fx-counter.component';
+import { FxLabelComponent } from './label/label.component';
+import { FxSourceCodeViewer } from './source-code-viewer/source-code-viewer.component';
 
+import '../style.css';
 
 registerPipe('json', (value: object) => {
   return JSON.stringify(value, null, 2);
 });
 
 @App({
-  providers: [],
   declarations: [
+    FxCounterComponent,
+    FxLabelComponent,
     FxRootComponent,
-    TestLabelComponent,
-    FxItem,
-    FxIf,
     FxFor,
+    FxItem,
+    FxSourceCodeViewer,
+    // TestLabelComponent,
+    // FxIf,
   ]
 })
 export class FluxApp {
 
   constructor() {
+
+    registerGlobalStyles('/index.scss');
 
     console.log('app started');
   }

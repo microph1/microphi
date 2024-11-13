@@ -23,11 +23,9 @@
 //
 // setupCounter(document.querySelector<HTMLButtonElement>('#counter')!);
 //
-import '../index.css';
 import { FluxApp } from './ui/flux-app';
 import { bootstrap } from '@microphi/flux';
 
-// console.log('👋 This message is being logged by "renderer.ts", included via Vite');
 
 const app = bootstrap(FluxApp);
 

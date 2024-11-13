@@ -1,0 +1,61 @@
+@use "@microphi/styles/scss/display";
+@use "@microphi/styles/scss/flex";
+@use "@microphi/styles/scss/spacing-v2";
+@use 'utopia-core-scss/src/utopia' as utopia;
+@use "@microphi/styles/scss/typography";
+@use "@microphi/styles/scss/sizing";
+
+
+/* @import "@microphi/styles/scss/border-radius"; */
+
+html, body {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+}
+
+body {
+  flex-direction: column;
+  margin: 0;
+  font-family: 'Fira Code';
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+:root {
+  // Calling this:
+  @include utopia.generateSpaceScale((
+    "minWidth": 320,
+    "maxWidth": 1240,
+    "minSize": 12,
+    "maxSize": 25,
+    "positiveSteps": (1.5, 2, 2.5, 3),
+    "negativeSteps": (.25, .50, .75),
+    /* Optional params */
+    "usePx": true,
+    "relativeTo": "container",
+    "prefix": "fx-",
+  ));
+
+  @include utopia.generateTypeScale((
+    "minWidth": 320,
+    "maxWidth": 1240,
+    "minFontSize": 12,
+    "maxFontSize": 20,
+    "minTypeScale": 1.1,
+    "maxTypeScale": 1.1,
+    "positiveSteps": 6,
+    "negativeSteps": 3,
+    /* Optional params */
+    "relativeTo": "contaier",
+    "prefix": "fx-typography-",
+  ));
+
+}
+
+.logo {
+  aspect-ratio: 1;
+}
+

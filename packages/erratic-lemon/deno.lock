@@ -302,8 +302,12 @@
     "packageJson": {
       "dependencies": [
         "npm:@microphi/flux@^2.7.3",
+        "npm:@monaco-editor/loader@^1.4.0",
         "npm:lightningcss@^1.28.1",
+        "npm:monaco-editor@0.52",
+        "npm:sass-embedded@^1.80.6",
         "npm:typescript@~5.6.2",
+        "npm:utopia-core-scss@^1.2.0",
         "npm:vite@^5.4.10"
       ]
     }

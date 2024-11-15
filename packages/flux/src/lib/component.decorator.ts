@@ -12,6 +12,7 @@ const DOUBLE_SQUARE_BOXED_REGEX = new RegExp(/\[\[(\w+)]]/);
 const EVENT_REGEX = new RegExp(/\((\w+)\)/);
 const CURLY_BOXED_REGEX = new RegExp(/\{\{([^}]+)}}/);
 
+const IGNORED = ['SCRIPT', 'LINK'];
 
 
 
@@ -277,7 +278,7 @@ export function Component(options: ComponentOptions): ClassDecorator {
       render() {
         //console.count(`render${this.fxId}`);
         const walker = document.createTreeWalker(this.content, NodeFilter.SHOW_ELEMENT, (node) => {
-          if (node instanceof HTMLElement && node.tagName === 'SCRIPT') {
+          if (node instanceof HTMLElement && IGNORED.includes(node.tagName)) {
             return NodeFilter.FILTER_REJECT;
           }
 
@@ -372,7 +373,7 @@ export function Component(options: ComponentOptions): ClassDecorator {
 
         this.log('rendering starts');
         const walker3 = document.createTreeWalker(this.content, NodeFilter.SHOW_ELEMENT, (node) => {
-          if (node instanceof HTMLElement && node.tagName === 'SCRIPT') {
+          if (node instanceof HTMLElement && IGNORED.includes(node.tagName)) {
             return NodeFilter.FILTER_REJECT;
           }
 
@@ -449,7 +450,7 @@ export function Component(options: ComponentOptions): ClassDecorator {
           // do we need to check further parents?
           const parentElement = node.parentElement;
 
-          if (parentElement?.tagName === 'SCRIPT') {
+          if (parentElement && IGNORED.includes(parentElement.tagName)) {
             return NodeFilter.FILTER_REJECT;
           }
 

@@ -12,15 +12,8 @@ const DOUBLE_SQUARE_BOXED_REGEX = new RegExp(/\[\[(\w+)]]/);
 const EVENT_REGEX = new RegExp(/\((\w+)\)/);
 const CURLY_BOXED_REGEX = new RegExp(/\{\{([^}]+)}}/);
 
-export const HydratedSymbol = Symbol('@Hydrated');
 
-export function Hydrated(scope: string = ''): PropertyDecorator {
 
-  return (target, property) => {
-    Reflect.defineMetadata(HydratedSymbol, scope, target, property);
-  };
-
-}
 
 export type Pipe = (values: any, options?: any) => any;
 

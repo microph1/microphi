@@ -49,7 +49,7 @@ import counterCodeRaw from '../../components/counter/fx-counter.component.ts?raw
 
       <p>Implementing a conditional display block</p>
 
-      <div class="fx-flex fx-flex-row fx-gap-6 fx-vh-40 fx-justify-around">
+      <div class="fx-flex fx-flex-row fx-gap-6 fx-vh-40 fx-justify-between">
         <fx-source-code-viewer class="fx-flex fx-vw-40">
           <script>
 import {Component, Input} from '@microphi/flux';

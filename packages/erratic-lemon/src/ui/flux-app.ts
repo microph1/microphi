@@ -1,15 +1,12 @@
-import { App, registerGlobalStyles, registerPipe } from '@microphi/flux';
-import { FxRootComponent } from './components/fx-root/fx-root.component';
-import { FxFor } from './components/components/fx-for.component';
-import { FxItem } from './components/components/fx-item.component';
-import { FxCounterComponent } from './counter/fx-counter.component';
-import { FxLabelComponent } from './label/label.component';
-import { FxSourceCodeViewer } from './source-code-viewer/source-code-viewer.component';
-
 import '../style.css';
-
 import global from '../../index.scss?url';
-import { FxIf } from './components/components/fx-if.component';
+
+import { App, FxFor, FxIf, FxItem, registerGlobalStyles, registerPipe } from '@microphi/flux';
+import { FxRootComponent } from './components/fx-root/fx-root.component';
+import { FxCounterComponent } from './components/counter/fx-counter.component';
+import { FxLabelComponent } from './components/label/label.component';
+import { FxSourceCodeViewer } from './components/source-code-viewer/source-code-viewer.component';
+
 
 registerPipe('json', (value: object) => {
   return JSON.stringify(value, null, 2);
@@ -23,7 +20,7 @@ registerPipe('json', (value: object) => {
     FxFor,
     FxItem,
     FxSourceCodeViewer,
-    FxIf,
+    FxIf
   ]
 })
 export class FluxApp {

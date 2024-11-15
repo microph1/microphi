@@ -400,18 +400,6 @@ export function Component(options: ComponentOptions): ClassDecorator {
           }
         }
 
-        if (!this.inited) {
-
-          this.log('first rendering done');
-          this.inited = true;
-
-          // call lifecycle after first render is done
-          if ('fxOnViewInit' in this.controller) {
-            this.controller['fxOnViewInit']();
-          }
-
-        }
-
         this.log('rendering starts');
         const walker3 = document.createTreeWalker(this.content, NodeFilter.SHOW_ELEMENT, (node) => {
           if (node instanceof HTMLElement && IGNORED.includes(node.tagName)) {
@@ -533,6 +521,18 @@ export function Component(options: ComponentOptions): ClassDecorator {
         this.log('all nodes with {{}} rendered');
         this.log('rendering ends');
 
+
+        if (!this.inited) {
+
+          this.log('first rendering done');
+          this.inited = true;
+
+          // call lifecycle after first render is done
+          if (hasOnViewInit(this.controller)) {
+            this.controller.fxOnViewInit();
+          }
+
+        }
 
       }
 

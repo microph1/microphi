@@ -230,6 +230,14 @@ export function Component(options: ComponentOptions): ClassDecorator {
             }
           }
 
+          if (options.style) {
+
+            const style = document.createElement('style');
+            style.textContent = options.style;
+
+            this.shadowRoot?.appendChild(style);
+          }
+
           if (templateElm) {
             this.shadowRoot!.appendChild(templateElm.content.cloneNode(true));
           }

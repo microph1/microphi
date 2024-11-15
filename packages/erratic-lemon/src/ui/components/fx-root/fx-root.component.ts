@@ -1,10 +1,5 @@
 import { Component, css, html } from '@microphi/flux';
-import counterCodeRaw from '../../counter/fx-counter.component.ts?raw';
-import fxIf from '../../components/components/fx-if.component.ts?raw';
-// import template from './fx-root.component.html?raw';
-
-// const url = new URL('./fx-root.component.html', import.meta.url);
-// console.log(url.href, import.meta.resolve('./fx-root.component.html'));
+import counterCodeRaw from '../../components/counter/fx-counter.component.ts?raw';
 
 
 @Component({
@@ -57,7 +52,33 @@ import fxIf from '../../components/components/fx-if.component.ts?raw';
       <div class="fx-flex fx-flex-row fx-gap-6 fx-vh-40 fx-justify-around">
         <fx-source-code-viewer class="fx-flex fx-vw-40">
           <script>
-          ${fxIf}
+import {Component, Input} from '@microphi/flux';
+
+@Component({
+  selector: 'fx-if',
+  template: '<!-- empty: will add content when needed -->',
+})
+export class FxIf {
+  @Input() condition!: boolean;
+
+  private slot!: HTMLSlotElement;
+  private nodeElm!: Node;
+
+  constructor(private elm: HTMLElement) {
+    this.slot = document.createElement('slot');
+  }
+
+
+  fxOnChanges() {
+
+    if (this.condition) {
+      this.nodeElm = this.elm.appendChild(this.slot);
+    } else {
+      this.elm.shadowRoot!.removeChild(this.nodeElm);
+    }
+
+  }
+}
           </script>
         </fx-source-code-viewer>
 

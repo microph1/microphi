@@ -51,25 +51,43 @@ export interface ComponentOptions {
   styleUrls?: string[];
 }
 
-interface AttributeChanged {
-  event: 'attributeChanged',
-  payload: {
-    name: string;
-    newValue: any;
-    oldValue: any;
-  }
+export interface OnInit {
+  fxOnInit(): void;
 }
 
-interface OnInit {
-  event: 'onInit';
+export function hasOnInit(instance: unknown): instance is OnInit {
+  return typeof (instance as OnInit).fxOnInit === 'function';
 }
 
-interface ViewInit {
-  event: 'viewInit';
+
+export interface OnViewInit {
+  fxOnViewInit(): void;
 }
 
-type LifeCycle = AttributeChanged | OnInit | ViewInit;
+export function hasOnViewInit(instance: unknown): instance is OnViewInit {
+  return typeof (instance as OnViewInit).fxOnViewInit === 'function';
+}
 
+
+export interface PropertyChange<k extends string|number|symbol, T = unknown> {
+  name: k;
+  oldValue: T;
+  newValue: T;
+}
+
+export type Changes<T extends object> = {
+
+  [k in keyof T]: PropertyChange<k, T[k]>;
+}
+
+
+export interface OnChanges<T extends object> {
+  fxOnChanges(changes: Changes<T>): void;
+}
+
+export function hasOnChange(instance: unknown): instance is OnChanges<any> {
+  return typeof (instance as OnChanges<any>).fxOnChanges === 'function';
+}
 
 export function Component(options: ComponentOptions): ClassDecorator {
 
@@ -124,7 +142,7 @@ export function Component(options: ComponentOptions): ClassDecorator {
         Reflect.defineMetadata(ComponentSymbol, options, target);
       }
 
-      propertyChange: Subject<LifeCycle> = new Subject<LifeCycle>();
+      propertyChange = new Subject<Changes<any>>();
 
       constructor(...args: any[]) {
         super(...args);
@@ -180,10 +198,9 @@ export function Component(options: ComponentOptions): ClassDecorator {
         ]).pipe(
           debounceTime(0),
         ).subscribe(([v]) => {
-          this.log('property changed', v.event);
 
-          if ('fxOnChanges' in this.controller) {
-            this.controller['fxOnChanges'](v);
+          if (hasOnChange(this.controller)) {
+            this.controller.fxOnChanges(v);
           }
 
           this.render();
@@ -214,8 +231,8 @@ export function Component(options: ComponentOptions): ClassDecorator {
         this.setAttributeNS('fx', 'fx-id', this.fxId);
 
         // call fxOnInit before attaching the template (unparsed) to the DOM
-        if ('fxOnInit' in this.controller) {
-          this.controller['fxOnInit']();
+        if (hasOnInit(this.controller)) {
+          this.controller.fxOnInit();
         }
 
         templateLoaded$.then(() => {
@@ -278,20 +295,20 @@ export function Component(options: ComponentOptions): ClassDecorator {
 
           // skip changes until component is not initialized
           // also this.controller[name] is annotated with @Input then we need to avoid double ngChanges
-
           if (isBoxedAttribute) {
 
+            // TODO we need to to test this better
             if (!options.inputs?.includes(name)) {
 
-              if ('fxOnChanges' in this.controller && this.inited) {
-                this.controller['fxOnChanges']({name, oldValue, newValue});
+              if (hasOnChange(this.controller) && this.inited) {
+                this.controller.fxOnChanges({ name, oldValue, newValue } as unknown as Changes<any>);
               }
 
             }
           } else {
 
-            if ('fxOnChanges' in this.controller && this.inited) {
-              this.controller['fxOnChanges']({name, oldValue, newValue});
+            if (hasOnChange(this.controller) && this.inited) {
+              this.controller.fxOnChanges({ name, oldValue, newValue } as unknown as Changes<any>);
             }
 
           }

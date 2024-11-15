@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.9.0](https://github.com/microph1/microphi/compare/@microphi/flux@2.8.0...@microphi/flux@2.9.0) (2024-11-15)
+
+### Bug Fixes
+
+* **flux:** double update on [boxedAttributes] ([e8ada49](https://github.com/microph1/microphi/commit/e8ada49bbd94187125f592ffaaf77c814d2a9f61))
+
+### Features
+
+* **flux:** enable use of `style` option in decorator ([5e31792](https://github.com/microph1/microphi/commit/5e31792ac0f9b79b128c75c1605779716a892060))
+
 # 2.8.0 (2024-11-13)
 
 ### Features

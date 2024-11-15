@@ -1,6 +1,6 @@
 {
   "name": "@microphi/flux",
-  "version": "2.8.0",
+  "version": "2.9.0",
   "description": "the flux core package",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",

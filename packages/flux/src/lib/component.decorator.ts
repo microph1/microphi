@@ -12,15 +12,9 @@ const DOUBLE_SQUARE_BOXED_REGEX = new RegExp(/\[\[(\w+)]]/);
 const EVENT_REGEX = new RegExp(/\((\w+)\)/);
 const CURLY_BOXED_REGEX = new RegExp(/\{\{([^}]+)}}/);
 
-export const HydratedSymbol = Symbol('@Hydrated');
+const IGNORED = ['SCRIPT', 'LINK'];
 
-export function Hydrated(scope: string = ''): PropertyDecorator {
 
-  return (target, property) => {
-    Reflect.defineMetadata(HydratedSymbol, scope, target, property);
-  };
-
-}
 
 export type Pipe = (values: any, options?: any) => any;
 
@@ -236,6 +230,14 @@ export function Component(options: ComponentOptions): ClassDecorator {
             }
           }
 
+          if (options.style) {
+
+            const style = document.createElement('style');
+            style.textContent = options.style;
+
+            this.shadowRoot?.appendChild(style);
+          }
+
           if (templateElm) {
             this.shadowRoot!.appendChild(templateElm.content.cloneNode(true));
           }
@@ -266,25 +268,41 @@ export function Component(options: ComponentOptions): ClassDecorator {
           if (isBoxedAttribute) {
 
             // maybe if it's a boxed attribute we should `eval` it
-            this.controller[name] = this.controller.nativeElement[name] || JSON.parse(newValue);
+            this.controller[name] = this.controller.nativeElement[name] ?? JSON.parse(newValue);
 
           } else {
 
-            this.controller[name] = this.controller.nativeElement[name] || newValue;
+            this.controller[name] = this.controller.nativeElement[name] ?? newValue;
           }
 
 
           // skip changes until component is not initialized
-          if ('fxOnChanges' in this.controller && this.inited) {
-            this.controller['fxOnChanges']({name, oldValue, newValue});
+          // also this.controller[name] is annotated with @Input then we need to avoid double ngChanges
+
+          if (isBoxedAttribute) {
+
+            if (!options.inputs?.includes(name)) {
+
+              if ('fxOnChanges' in this.controller && this.inited) {
+                this.controller['fxOnChanges']({name, oldValue, newValue});
+              }
+
+            }
+          } else {
+
+            if ('fxOnChanges' in this.controller && this.inited) {
+              this.controller['fxOnChanges']({name, oldValue, newValue});
+            }
+
           }
+
         }
       }
 
       render() {
         //console.count(`render${this.fxId}`);
         const walker = document.createTreeWalker(this.content, NodeFilter.SHOW_ELEMENT, (node) => {
-          if (node instanceof HTMLElement && node.tagName === 'SCRIPT') {
+          if (node instanceof HTMLElement && IGNORED.includes(node.tagName)) {
             return NodeFilter.FILTER_REJECT;
           }
 
@@ -379,7 +397,7 @@ export function Component(options: ComponentOptions): ClassDecorator {
 
         this.log('rendering starts');
         const walker3 = document.createTreeWalker(this.content, NodeFilter.SHOW_ELEMENT, (node) => {
-          if (node instanceof HTMLElement && node.tagName === 'SCRIPT') {
+          if (node instanceof HTMLElement && IGNORED.includes(node.tagName)) {
             return NodeFilter.FILTER_REJECT;
           }
 
@@ -423,9 +441,10 @@ export function Component(options: ComponentOptions): ClassDecorator {
               if (property !== null) {
 
                 const value = getValue(property, this.controller);
-                node.setAttribute(unboxed, value);
                 // so that input updates
                 node[unboxed] = value;
+                // important: this will trigger changes so it have to happen after the line above
+                node.setAttribute(unboxed, value);
               }
 
             }
@@ -456,7 +475,7 @@ export function Component(options: ComponentOptions): ClassDecorator {
           // do we need to check further parents?
           const parentElement = node.parentElement;
 
-          if (parentElement?.tagName === 'SCRIPT') {
+          if (parentElement && IGNORED.includes(parentElement.tagName)) {
             return NodeFilter.FILTER_REJECT;
           }
 

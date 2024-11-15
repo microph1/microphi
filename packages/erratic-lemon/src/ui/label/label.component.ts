@@ -5,7 +5,7 @@ import { Component } from '@microphi/flux';
   template: `
     <style>
       .label {
-        color: purple;
+        color: cyan;
         font-size: 20px;
       }
     </style>

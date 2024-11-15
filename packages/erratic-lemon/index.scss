@@ -20,8 +20,10 @@ body {
   flex-direction: column;
   margin: 0;
   font-family: 'Fira Code';
-  max-width: 1280px;
   margin: 0 auto;
+  background: #3c3c3c;
+  color: #f0f0f0;
+  overflow: auto;
 }
 
 :root {

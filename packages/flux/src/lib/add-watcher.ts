@@ -1,8 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Subject } from 'rxjs';
-import { getComponentMetadataFromInstance, HydratedSymbol } from './component.decorator';
+import { getComponentMetadataFromInstance } from './component.decorator';
 import { getDebugger } from '@microphi/debug';
 
 const d = getDebugger('@flux:add-watcher');
+
+export const HydratedSymbol = Symbol('@Hydrated');
+
+export function Hydrated(scope: string = ''): PropertyDecorator {
+
+  return (target, property) => {
+    Reflect.defineMetadata(HydratedSymbol, scope, target, property);
+  };
+
+}
 
 export interface FxComponent {
   propertyChange: Subject<any>;
@@ -28,7 +39,6 @@ export function addWatchers(instance: FxComponent): void {
       continue;
     }
 
-    // @ts-ignore
     if (instance[property] instanceof Subject) {
       d('this is a Subject', property);
 

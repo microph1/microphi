@@ -153,13 +153,19 @@ describe('@Component (shadow root)', () => {
       });
 
 
-      it('should call fxOnChanges', () => {
+      it('should call fxOnChanges', (done) => {
         elmSh.setAttribute('name', 'test');
-        expect(fxSimpleComponentSh.fxOnChanges).toHaveBeenCalledWith({
-          name: 'name',
-          newValue: 'test',
-          oldValue: null,
-        });
+
+        setTimeout(() => {
+          expect(fxSimpleComponentSh.fxOnChanges).toHaveBeenCalledWith({
+            name: 'name',
+            newValue: 'test',
+            oldValue: null,
+          });
+
+          done();
+        }, 100);
+
       });
     });
 

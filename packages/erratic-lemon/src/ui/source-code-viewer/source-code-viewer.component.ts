@@ -1,12 +1,11 @@
 import { Component, html, Input } from '@microphi/flux';
+import type { editor } from 'monaco-editor';
 import loader from '@monaco-editor/loader';
 
 @Component({
   selector: 'fx-source-code-viewer',
   template: html`
       <style>
-
-
         #editor {
           border-radius: 8px;
           border: 1px solid #aeaeae;
@@ -17,27 +16,19 @@ import loader from '@monaco-editor/loader';
       </style>
 
       <div id="editor"></div>
-
-
   `
 })
 export class FxSourceCodeViewer {
-  @Input() code!: string;
+  @Input() isReadOnly = false;
+
+  private editor!: editor.IStandaloneCodeEditor;
 
   constructor(private elm: HTMLElement) {
   }
 
   fxOnViewInit() {
 
-    //const value = this.code;
-
     const value = this.elm.firstElementChild?.innerHTML.trim();
-
-    console.log('value to render', value);
-
-    // const codeElm = this.elm.shadowRoot?.querySelector('code');
-    // codeElm!.innerHTML = this.escapeHTML(value);
-
     const editorElm = this.elm.shadowRoot!.getElementById('editor') as HTMLElement;
 
     loader.init()
@@ -47,41 +38,33 @@ export class FxSourceCodeViewer {
           'link[rel=\'stylesheet\'][data-name=\'vs/editor/editor.main\']'
         );
         this.elm.shadowRoot!.appendChild(style!.cloneNode(true));
-        console.log('got monacor editor', monaco);
 
-        // const value = this.elm.getElementsByTagName('textarea').item(0)!.value;
-        console.log('value', value);
-
-        // Hover on each property to see its docs!
-        const myEditor = monaco.editor.create(editorElm, {
+        this.editor = monaco.editor.create(editorElm, {
           value,
           language: 'typescript',
           minimap: {enabled: false},
 
-          readOnly: true,
+          readOnly: this.isReadOnly,
           useShadowDOM: true,
           automaticLayout: true,
-
-
-          // theme: 'hc-black',
-
-          // automaticLayout: true,
+          lineNumbers: 'off',
+          theme: 'vs-dark',
         });
-        console.log(myEditor);
+
+
+        this.editor.onDidChangeModel((e) => {
+          console.log(e);
+        });
+
+        this.editor.onDidChangeModelContent((e) => {
+          console.log(e);
+        });
+
       })
       .catch((err) => {
         this.elm.replaceChild(editorElm, document.createElement('slot'));
         console.error('Error loading monaco-editor', err);
       });
-  }
-
-  escapeHTML(html: string) {
-    return html
-      .replace(/&map/g, '&')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
   }
 
 }

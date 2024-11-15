@@ -573,13 +573,3 @@ function evalInScope(js: string, contextAsScope: object) {
   return new Function(`with (this) {  return ${js} }`).call(contextAsScope);
 }
 
-// function isFxComponent<T extends Node>({}: T) {
-//
-//   // console.log({node});
-//   // return [...children].some((node) => {
-//   //   return node instanceof Element && !!node.getAttribute('fxId');
-//   // });
-//
-//   return false;
-//
-// }

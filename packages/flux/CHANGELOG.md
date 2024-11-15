@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.10.0](https://github.com/microph1/microphi/compare/@microphi/flux@2.9.0...@microphi/flux@2.10.0) (2024-11-15)
+
+### Features
+
+* **flux:** add basic components ([95708db](https://github.com/microph1/microphi/commit/95708db6577c023a26814fb27d2a7c4be2d88417))
+
 # [2.9.0](https://github.com/microph1/microphi/compare/@microphi/flux@2.8.0...@microphi/flux@2.9.0) (2024-11-15)
 
 ### Bug Fixes

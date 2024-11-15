@@ -10,3 +10,7 @@ export * from './lib/hydrate-from/hydrate-from.decorator';
 
 export * from './lib/utils';
 
+// components
+export * from './lib/components/fx-if.component';
+export * from './lib/components/fx-for.component';
+export * from './lib/components/fx-item.component';

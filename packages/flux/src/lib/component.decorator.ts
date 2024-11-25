@@ -12,7 +12,7 @@ const DOUBLE_SQUARE_BOXED_REGEX = new RegExp(/\[\[(\w+)]]/);
 const EVENT_REGEX = new RegExp(/\((\w+)\)/);
 const CURLY_BOXED_REGEX = new RegExp(/\{\{([^}]+)}}/);
 
-const IGNORED = ['SCRIPT', 'LINK'];
+const IGNORED = ['SCRIPT', 'LINK', 'NO-SCRIPT'];
 
 
 

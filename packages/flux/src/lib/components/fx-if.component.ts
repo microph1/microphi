@@ -6,7 +6,7 @@ import { Input } from '../input.decorator';
   template: '<!-- empty: will add content when needed -->',
 })
 export class FxIf {
-  @Input() condition!: boolean;
+  @Input() condition!: string|boolean;
 
   private slot!: HTMLSlotElement;
   private nodeElm!: Node;
@@ -17,11 +17,20 @@ export class FxIf {
 
 
   fxOnChanges() {
+    // TODO handle type coercion internally
+    const condition = typeof this.condition === 'boolean' ? this.condition : this.condition === 'true';
 
-    if (this.condition) {
+
+    if (condition) {
       this.nodeElm = this.elm.appendChild(this.slot);
     } else {
-      this.elm.shadowRoot!.removeChild(this.nodeElm);
+      try {
+
+        this.elm.shadowRoot!.removeChild(this.nodeElm);
+      } catch (error) {
+        console.log('Unable to remove child', this.nodeElm);
+
+      }
     }
 
   }

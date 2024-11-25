@@ -465,7 +465,8 @@ export function Component(options: ComponentOptions): ClassDecorator {
 
             if (fxAttribute) {
               // if that's the case then we will have the template to render in `fxAttribute`
-              const value = parseTemplate(fxAttribute, { ...this.controller });
+              const parentFxComponent = getParentController(node);
+              const value = parseTemplate(fxAttribute, { ...this.controller, ...node['controller'], ...parentFxComponent });
               node.setAttribute(attributeName, value);
 
             }

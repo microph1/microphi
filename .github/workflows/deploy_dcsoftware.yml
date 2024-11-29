@@ -41,8 +41,7 @@ jobs:
         - name: Build step
           run: |
             npm run build -w @microphi/flux
-            cd apps/www.dcsoftware.io
-            npm run build
+            npm run build -w www.dcsoftware.io
 
         - name: Upload to Deno Deploy
           uses: denoland/deployctl@v1

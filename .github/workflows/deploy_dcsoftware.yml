@@ -41,7 +41,7 @@ jobs:
         - name: Build step
           run: |
             cd apps/www.dcsoftware.io
-            npm build
+            npm run build
 
         - name: Upload to Deno Deploy
           uses: denoland/deployctl@v1

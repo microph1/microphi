@@ -39,6 +39,7 @@ jobs:
 
       - name: Build step
         run: |
+          npm run build -w @microphi/flux
           npm run build -w erratic-lemon
 
       - name: Upload to Deno Deploy

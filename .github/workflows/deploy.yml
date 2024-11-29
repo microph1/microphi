@@ -1,11 +1,14 @@
 name: Deploy erratic-lemon
+
 on:
   push:
-    branches: master
+    branches:
+     - master
     paths:
       - 'packages/erratic-lemon/**'
   pull_request:
-    branches: master
+    branches:
+     - master
 
 jobs:
   deploy:

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.11.0](https://github.com/microph1/microphi/compare/@microphi/flux@2.10.0...@microphi/flux@2.11.0) (2024-11-29)
+
+### Bug Fixes
+
+* **flux:** {{attributes}} should also look for upper scope variables when rendered ([41cc16b](https://github.com/microph1/microphi/commit/41cc16ba47e2933a5701ae0f652d499753a61b7f))
+* **flux:** fx-if component should check type for now. TBD handle type cohercion internally ([02400b8](https://github.com/microph1/microphi/commit/02400b82e0e5cd5f99be7cd7bf2ba4651958d2e9))
+
+### Features
+
+* **flux:** add no-script tag to ignored list ([e6e817c](https://github.com/microph1/microphi/commit/e6e817c2efc6128a41e2cbe856dea95288cbe7e4))
+
 # [2.10.0](https://github.com/microph1/microphi/compare/@microphi/flux@2.9.0...@microphi/flux@2.10.0) (2024-11-15)
 
 ### Features

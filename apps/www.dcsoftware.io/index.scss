@@ -176,7 +176,7 @@ nav a:hover {
 }
 
 /* Buttons */
-button {
+a, button {
   background-color: var(--color-background); /* Accent color */
   color: var(--color-primary);
   border: none;
@@ -188,7 +188,7 @@ button {
   // font-size: 1rem;
 }
 
-button:hover {
+a:hover, button:hover {
   background-color: var(--color-secondary); /* Secondary color on hover */
 }
 
@@ -265,14 +265,14 @@ button:hover {
   font-size: 1.2rem;
 }
 /* Links */
-a {
-  color: var(--color-accent); /* Accent color */
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
+// a {
+//   color: var(--color-accent); /* Accent color */
+//   text-decoration: none;
+// }
+//
+// a:hover {
+//   text-decoration: underline;
+// }
 
 /* Inputs */
 input, textarea {

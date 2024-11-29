@@ -126,44 +126,10 @@ export class FxRootComponent implements OnViewInit {
 
     });
 
-    const resp = await this.fetchByMaintainer('cavaliere.davide@gmail.com');
-    const datakitchenStuff = await this.fetchByKeyword('@datakitchen');
-    const repos: any[] = [...resp.objects, ...datakitchenStuff.objects];
-
-    console.log(repos);
-
-    this.repos = repos.map((elm: any) => {
-
-      return {
-        ...elm,
-        id: elm.package.name,
-        isPublisher: elm.package.publisher.email === 'cavaliere.davide@gmail.com',
-        isMaintainer: (elm.package.maintainers as any[]).includes({username: 'davidecavaliere', email: 'cavaliere.davide@gmail.com'}),
-      };
-    }).sort((a: any, b: any) => {
-
-      return new Date(b.package.date).getTime() - new Date(a.package.date).getTime();
-    });
-
   }
 
   toggle() {
     this.count$.next();
   }
 
-  private async fetchByMaintainer(text: string): {objects: any[]} {
-    const endpoint = `https://registry.npmjs.org/-/v1/search?text=maintainer:${text}`;
-    const res = await fetch(endpoint);
-    const data = await res.json();
-    console.log(data);
-    return data;
-  }
-
-  private async fetchByKeyword(text: string): {objects: any[]} {
-    const endpoint = `https://registry.npmjs.org/-/v1/search?text=${text}`;
-    const res = await fetch(endpoint);
-    const data = await res.json();
-    console.log(data);
-    return data;
-  }
 }

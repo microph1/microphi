@@ -4,8 +4,6 @@ import counterCodeRaw from '../../components/counter/fx-counter.component.ts?raw
 
 @Component({
   selector: 'fx-root',
-  // templateUrl: import.meta.resolve('./fx-root.component.html')
-  // template,
   style: css`
     :host {
       max-width: 1280px;

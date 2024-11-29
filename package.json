@@ -4,7 +4,8 @@
   "licence": "MIT",
   "workspaces": {
     "packages": [
-      "packages/*"
+      "packages/*",
+      "apps/www.dcsoftware.io"
     ]
   },
   "scripts": {

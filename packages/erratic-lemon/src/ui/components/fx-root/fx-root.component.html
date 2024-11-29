@@ -1,60 +1,85 @@
-<h3>Demo fx-for</h3>
+    <!-- Header -->
+    <header class="fx-flex fx-flex-col fx-p-2">
+      <div class="fx-flex fx-flex-row fx-gap-3">
+
+        <img src="microphi_logo_2_cropped.webp" alt="Logo" class="logo" width="89px">
+        <h1>@microphi/flux</h1>
+      </div>
+    </header>
+
+    <section class="fx-p-4">
+      <p>@microphi/flux is an experimental front-end framework with only one idea in mind: having a small footprint. Microphi is still in its early stages and has a long way to go before it reaches full maturity. We welcome contributions, feedback, and support from developers and enthusiasts who are interested in helping us shape and refine this framework. </p>
+    </section>
+
+    <section class="fx-flex fx-flex-col fx-gap-4 fx-p-4">
+
+      <p>Flux creates web components like <strong>Lit</strong> but is has a sintax similar to <strong>Angular</strong></p>
+
+      <div class="fx-flex fx-flex-row fx-vh-40 fx-gap-6 fx-justify-between">
+
+        <fx-source-code-viewer class="fx-flex fx-vw-40">
+          <!-- use script to avoid parsing from flux-->
+
+          <textareat>
+          {{code}}
+          </textareat>
+        </fx-source-code-viewer>
+
+        <div class="fx-flex fx-flex-row fx-gap fx-items-center fx-vw-40">
+          <fx-counter></fx-counter>
+        </div>
+      </div>
+
+      <hr>
+
+      <p>Implementing a conditional display block</p>
+
+      <div class="fx-flex fx-flex-row fx-gap-6 fx-vh-40 fx-justify-between">
+        <fx-source-code-viewer class="fx-flex fx-vw-40">
+          <no-script>
+import {Component, Input} from '@microphi/flux';
+
+@Component({
+  selector: 'fx-if',
+  template: '<!-- empty: will add content when needed -->',
+})
+export class FxIf {
+  @Input() condition!: boolean;
+
+  private slot!: HTMLSlotElement;
+  private nodeElm!: Node;
+
+  constructor(private elm: HTMLElement) {
+    this.slot = document.createElement('slot');
+  }
 
 
-<fx-for [[let]]="'number'" [[of]]="numbers">
-  <div>fx-for -> {{number.a}}: {{number.b}}</div>
-</fx-for>
-<!---->
-<!-- <hr> -->
-<!---->
-<!-- <h3>Demo pipe</h3> -->
-<!-- <div>{{numbers | json}}</div> -->
-<!---->
-<!-- <hr> -->
-<!---->
-<!---->
-<!-- <h3>[boxed] binding on attribute {{interpolation}} on element and (event) binding to method</h3> -->
-<!---->
-<!-- <div [class]="color">Hello {{name}}</div> -->
-<button (click)="addItem()">Click</button>
-<!---->
-<!-- <hr> -->
-<!---->
-<!-- <h3>fx-if example</h3> -->
-<!---->
-<!-- <fx-if [[condition]]="showContent === 'block' ? 'block' : 'none'"> -->
-<!--   <h1>transcluded content resolves variables against parent controller name: {{name}}</h1> -->
-<!-- </fx-if> -->
-<!---->
-<!-- <hr> -->
-<!---->
-<!-- <h3>fx-item example</h3> -->
-<!---->
-<!-- <fx-item [[internal_var_name]]="name"> -->
-  <!--
-// so here we should be able to reach both the upper controller that resolves {{name}}
-// and fx-item's controller that resolves {{name}} into {{internalVarName}}
--->
-<!--   <div>{{name}} === {{internal_var_name}}</div> -->
-<!-- </fx-item> -->
-<!---->
-<!-- <hr> -->
-<!---->
-<!-- <h3>another fx-item example</h3> -->
-<!---->
-<!-- <fx-item id="one" [[value]]="name"><div> {{value}}: {{name}} </div> </fx-item> -->
-<!---->
-<!-- <hr> -->
-<!---->
-<!-- <h3>Input example</h3> -->
-<!---->
-<!-- <input [value]="name" (keyup)="onInputChange($event)" tabindex="0"> -->
-<!-- <div><strong>{{name}}</strong></div> -->
-<!---->
-<!-- <hr> -->
-<!---->
-<!-- <h1>Test Cases</h1> -->
-<!---->
-<!-- <test-component-sh firstname="{{name}}" lastname="{{name}}"> -->
-<!--   <span>transcluded name {{name}}</span> -->
-<!-- </test-component-sh> -->
+  fxOnChanges() {
+
+    if (this.condition) {
+      this.nodeElm = this.elm.appendChild(this.slot);
+    } else {
+      this.elm.shadowRoot!.removeChild(this.nodeElm);
+    }
+
+  }
+}
+          </no-script>
+        </fx-source-code-viewer>
+
+        <div class="fx-flex fx-flex-row fx-gap-1 fx-items-center fx-vw-40">
+          <input type="checkbox" value="{{showMe}}" checked (change)="toggle();">
+
+          <fx-if [condition]="showMe">
+            <div>Now you see me</div>
+          </fx-if>
+        </div>
+      </div>
+
+      <!-- <div>{{categories|json}}</div> -->
+      <!-- <button (click)="addCategory()">Add</button> -->
+      <!---->
+      <!-- <div>x: {{x}} - y: {{y}}</div> -->
+      <!-- <div (mousemove)="showMove(event)" style="width: 100%; height: 300px; background: gray">&nbsp</div> -->
+    </section>
+

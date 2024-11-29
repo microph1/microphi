@@ -1,13 +1,18 @@
-name: Deploy Erratic Lemon
+name: Deploy erratic-lemon
+
 on:
   push:
-    branches: master
+    branches:
+     - master
+    paths:
+      - 'packages/erratic-lemon/**'
   pull_request:
-    branches: master
+    branches:
+     - master
 
 jobs:
   deploy:
-    name: Deploy
+    name: Deploy erratic-lemon
     runs-on: ubuntu-latest
 
     permissions:
@@ -34,7 +39,8 @@ jobs:
 
       - name: Build step
         run: |
-          npm run build:ci
+          npm run build -w @microphi/flux
+          npm run build -w erratic-lemon
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
@@ -42,3 +48,4 @@ jobs:
           project: "flux-home"
           entrypoint: "https://deno.land/std@0.217.0/http/file_server.ts"
           root: "packages/erratic-lemon/dist"
+

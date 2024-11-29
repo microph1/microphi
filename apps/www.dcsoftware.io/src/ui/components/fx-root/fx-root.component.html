@@ -1,0 +1,205 @@
+<!-- Header -->
+<header class="fx-flex fx-flex-col fx-p-2 fx-gap-2" [fx-parallax]="-0.2">
+  <div class="fx-flex fx-flex-row fx-gap-2 fx-items-center">
+
+    <img src="/dc_software_logo_3.webp" class="logo">
+    <h2>DC Software</h2>
+
+    <button class="fx-ml-a">
+      <span class="material-icons">menu</span>
+    </button>
+  </div>
+
+</header>
+
+<div class="fx-flex- fx-flex-col fx-items-center fx-p-2 fx-text-center">
+
+  <h2>Professional Works</h2>
+
+  <h3>Web Applications</h3>
+</div>
+
+<section class="fx-flex fx-flex-row fx-flex-wrap fx-items-center fx-justify-center">
+
+  <div class="card">
+    <h2>Microgamma</h2>
+    <p>Personal streaming Platform</p>
+    <div class="content fx-py-2">Microgamma is a multi platform music player built with ElectronJS and Angular. It allows remote control through web interface and streaming to remote devices.</div>
+
+    <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
+      <a href="//www.microgamma.io" target="_blank">
+        <span class="material-icons">public</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Heimdall</h2>
+    <p>Observability Platform for DataKitchen</p>
+
+    <div class="content fx-py-2">The Observability Platform by DataKitchen (code name Heimdall) is a PWA web application developed in Angular.</div>
+
+    <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
+      <a href="//github.com/DataKitchen/dataops-observability/tree/main/observability_ui" target="_blank">
+        <span class="material-icons">public</span>
+      </a>
+      <button>
+        <span class="material-icons">photo_library</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Automation Platform</h2>
+    <p>Automation Platform for DataKitchen</p>
+
+    <div class="content fx-py-2">DataKitchen's Automation platform enables data-ops best practices. Monolithic Angular application with Python backend</div>
+
+    <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
+      <a href="//www.datakitchen.io">
+        <span class="material-icons">public</span>
+      </a>
+      <button>
+        <span class="material-icons">photo_library</span>
+      </button>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <h2>Mortgage Self Service Platform</h2>
+    <p>Self Service Platform for Aegon NL</p>
+
+    <div class="content fx-py-2">Self Service Platform for Aegon NL enables users to manage their mortgage and to execute certain operations such as pre-payments and other regulatory fulfillments. It is a Angular micro-frontend web application with AWS Lambdas endpoints to interface with various systems.</div>
+
+  </div>
+
+  <div class="card">
+    <h2>2Lasso</h2>
+    <p>Users Management System for 2Simple Ltd.</p>
+
+    <div class="content fx-py-2">2Lasso is a web application written in AngularJS with a PHP backend that enables Schools to manage their teachers and pupils within their PurpleMash subscription handling groups and permissions.</div>
+
+    <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
+      <button>
+        <span class="material-icons">photo_library</span>
+      </button>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <h2>Dr D.</h2>
+    <p>Web application to create and manage android applicaitons</p>
+
+    <div class="content fx-py-2">Dr.D is </div>
+
+    <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
+      <button>
+        <span class="material-icons">photo_library</span>
+      </button>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <h2>FIDO</h2>
+    <p>Vouchers Manager</p>
+  </div>
+
+  <div class="card">
+    <h2>Easytest</h2>
+    <p>A Multi Choice Test Manager</p>
+  </div>
+
+</section>
+
+<div class="fx-flex break-1" [fx-parallax]="0.2">
+
+</div>
+
+<div class="fx-flex- fx-flex-col fx-items-center fx-p-2 fx-text-center">
+  <h2>Open Source Projects / Contributions</h2>
+</div>
+
+<section class="fx-flex fx-flex-row fx-flex-wrap fx-items-center fx-justify-center">
+
+    <fx-for-two let="repo" [of]="repos" track="id">
+
+      <div class="card">
+        <h2>{{repo.package.name}}</h2>
+        <p>{{repo.package.description}}</p>
+
+        <!--<fx-if condition="{{repo.isPublisher}}">-->
+        <!--  <small>Publisher</small>-->
+        <!--</fx-if>-->
+        <!--<fx-if condition="{{repo.isMaintainer}}">-->
+        <!--  <small>Maintainer</small>-->
+        <!--</fx-if>-->
+      </div>
+
+    </fx-for-two>
+
+</section>
+
+<div class="fx-flex break-2" [fx-parallax]="0.2">
+
+</div>
+
+<div class="fx-flex- fx-flex-col fx-items-center fx-p-2 fx-text-center">
+
+  <h2>Side Projects / Experiments / Fun</h2>
+
+</div>
+
+<section class="fx-flex fx-flex-row fx-flex-wrap fx-items-center fx-justify-center">
+
+  <div class="card">
+    <h2>Metronoman</h2>
+    <p>A Simple PWA metronome</p>
+  </div>
+
+  <div class="card">
+    <h2>Metronoman Flux Remix</h2>
+    <p>Same as Metronoman but made with @microphi/flux framework</p>
+  </div>
+
+  <div class="card">
+    <h2>Neovim PDE</h2>
+    <p>Personal Development Environment</p>
+  </div>
+
+  <div class="card">
+    <h2>Music</h2>
+    <p>My Music</p>
+  </div>
+</section>
+
+<div class="fx-flex break-3" [fx-parallax]="-0.2">
+
+</div>
+
+
+<footer class="footer">
+  <div class="footer-container">
+    <p class="footer-text">Get In Touch</p>
+    <ul class="footer-links">
+      <li>
+        <a href="mailto:cavaliere.davide@gmail.com">
+          <span class="material-icons">email</span> <span>cavaliere.davide@gmail.com</span>
+        </a>
+      </li>
+      <li>
+        <a href="tel:+393806472057">
+          <span class="material-icons">phone</span> <span>+39 380 647 20 57</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://x.com/davidecavaliere" target="_blank">
+          <span class="material-icons">public</span> <span>@davidecavaliere</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</footer>
+

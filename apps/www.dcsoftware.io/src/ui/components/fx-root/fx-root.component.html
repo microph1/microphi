@@ -17,6 +17,14 @@
   <h2>Professional Works</h2>
 
   <h3>Web Applications</h3>
+
+  <div class="citation-container">
+
+    <blockquote class="citation">
+      "Your work is your signature; make it excellent."
+      <cite>— Anonymous</cite>
+    </blockquote>
+  </div>
 </div>
 
 <section class="fx-flex fx-flex-row fx-flex-wrap fx-items-center fx-justify-center">
@@ -120,26 +128,43 @@
 
 <div class="fx-flex- fx-flex-col fx-items-center fx-p-2 fx-text-center">
   <h2>Open Source Projects / Contributions</h2>
+
+  <div class="citation-container">
+    <blockquote class="citation">
+      "Simplicity is the ultimate sophistication."
+      <cite>— Leonardo da Vinci</cite>
+
+
+  </div>
 </div>
 
 <section class="fx-flex fx-flex-row fx-flex-wrap fx-items-center fx-justify-center">
 
-    <fx-for-two let="repo" [of]="repos" track="id">
+  <div class="card">
+    <h2>@microphi/flux</h2>
+    <p>The @microphi/flux framework</p>
 
-      <div class="card">
-        <h2>{{repo.package.name}}</h2>
-        <p>{{repo.package.description}}</p>
+    <div class="content fx-py-2">This is an experimental frontend framework. This website has been written with it.</div>
 
-        <!--<fx-if condition="{{repo.isPublisher}}">-->
-        <!--  <small>Publisher</small>-->
-        <!--</fx-if>-->
-        <!--<fx-if condition="{{repo.isMaintainer}}">-->
-        <!--  <small>Maintainer</small>-->
-        <!--</fx-if>-->
-      </div>
+    <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
+      <a href="//www.datakitchen.io">
+        <span class="material-icons">public</span>
+      </a>
+    </div>
+  </div>
 
-    </fx-for-two>
+  <div class="card">
+    <h2>@microphi/store</h2>
+    <p>The @microphi/store</p>
 
+    <div class="content fx-py-2">It is a pure RxJS store for typescript application, it works in node as well as in the browser. Is small, fast and simple.</div>
+
+    <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
+      <a href="//www.datakitchen.io">
+        <span class="material-icons">public</span>
+      </a>
+    </div>
+  </div>
 </section>
 
 <div class="fx-flex break-2" [fx-parallax]="0.2">
@@ -179,27 +204,26 @@
 
 </div>
 
-
-<footer class="footer">
+<footer>
   <div class="footer-container">
     <p class="footer-text">Get In Touch</p>
-    <ul class="footer-links">
-      <li>
-        <a href="mailto:cavaliere.davide@gmail.com">
+    <!--<ul class="footer-links">-->
+      <div>
+        <a class="fx-flex fx-flex-row fx-gap-2" href="mailto:cavaliere.davide@gmail.com">
           <span class="material-icons">email</span> <span>cavaliere.davide@gmail.com</span>
         </a>
-      </li>
-      <li>
-        <a href="tel:+393806472057">
+      </div>
+      <div>
+        <a class="fx-flex fx-flex-row fx-gap-2" href="tel:+393806472057">
           <span class="material-icons">phone</span> <span>+39 380 647 20 57</span>
         </a>
-      </li>
-      <li>
-        <a href="https://x.com/davidecavaliere" target="_blank">
+      </div>
+      <div>
+        <a class="fx-flex fx-flex-row fx-gap-2" href="https://x.com/davidecavaliere" target="_blank">
           <span class="material-icons">public</span> <span>@davidecavaliere</span>
         </a>
-      </li>
-    </ul>
+      </div>
+    <!--</ul>-->
   </div>
 </footer>
 

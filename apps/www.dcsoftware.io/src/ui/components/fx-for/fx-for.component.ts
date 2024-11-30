@@ -20,7 +20,7 @@ export class FxFor implements OnChanges<FxFor> {
 
     // copy parent element classes and styles
 
-    this.elementRef.classList.add(this.elementRef.parentElement!.classList.value);
+    this.elementRef.classList.add(...this.elementRef.parentElement!.classList.value.split(' '));
   }
 
   fxOnChanges(changes: Changes<FxFor>) {

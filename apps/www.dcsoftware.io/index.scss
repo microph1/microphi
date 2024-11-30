@@ -130,30 +130,30 @@ header {
   color: var(--color-background); /* Light text for contrast */
   padding: 1rem;
   background-image: url('/w10.webp');
-  background-size: cover;
+  background-size: auto;
   background-repeat: no-repeat;
   background-position-x: center;
-  height: 50vh;
+  height: 75vh;
 }
 
 .break-2 {
   color: var(--color-background); /* Light text for contrast */
   padding: 1rem;
   background-image: url('/w1.webp');
-  background-size: cover;
+  background-size: auto;
   background-repeat: no-repeat;
   background-position-x: center;
-  height: 50vh;
+  height: 75vh;
 }
 
 .break-3 {
   color: var(--color-background); /* Light text for contrast */
   padding: 1rem;
   background-image: url('/w9.webp');
-  background-size: cover;
+  background-size: auto;
   background-repeat: no-repeat;
   background-position-x: center;
-  height: 50vh;
+  height: 75vh;
 }
 
 /* Navigation */
@@ -185,7 +185,14 @@ a, button {
   padding: 7px;
   border-radius: var(--border-radius);
   cursor: pointer;
+  text-decoration: none;
+  display: flex;
   // font-size: 1rem;
+
+  span {
+    white-space: nowrap;
+    display: flex;
+  }
 }
 
 a:hover, button:hover {
@@ -215,7 +222,7 @@ a:hover, button:hover {
 }
 
 /* Footer Styling */
-.footer {
+footer {
   background-color: var(--color-background);
   color: var(--color-primary);
   padding: 20px;
@@ -330,4 +337,63 @@ input:focus, textarea:focus {
 // utilities
 .fx-text-center {
   text-align: center;
+}
+
+/* General container for citations */
+.citation-container {
+  max-width: 800px;
+  margin: 20px auto;
+  font-family: var(--font-family);
+  color: #384B70;
+}
+
+/* Styling for blockquotes */
+.citation {
+  position: relative;
+  background-color: #FCFAEE;
+  border-left: 4px solid #507687;
+  padding: 15px 20px;
+  margin: 20px 0;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: #31343e;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  h2 {
+    font-size: 1.5rem;
+    margin: 30px 0 10px;
+    color: #B8001F;
+    text-align: center;
+  }
+}
+
+
+.citation cite {
+  display: block;
+  margin-top: 10px;
+  font-style: normal;
+  font-size: 0.9rem;
+  color: #507687;
+  text-align: right;
+  font-weight: bold;
+}
+
+/* References section */
+
+.reference-list {
+  list-style: decimal inside;
+  margin: 0;
+  padding: 0;
+  color: #31343e;
+}
+
+.reference-list li {
+  margin: 5px 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  padding-left: 10px;
+  border-left: 4px solid #384B70;
+  background-color: #FCFAEE;
+  padding: 8px 10px;
+  border-radius: 8px;
 }

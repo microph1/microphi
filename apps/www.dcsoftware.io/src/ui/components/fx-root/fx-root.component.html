@@ -1,18 +1,29 @@
 <!-- Header -->
-<header class="fx-flex fx-flex-col fx-p-2 fx-gap-2" [fx-parallax]="-0.2">
-  <div class="fx-flex fx-flex-row fx-gap-2 fx-items-center">
+<header class="fx-flex fx-flex-col fx-gap-2" [fx-parallax]="0.2">
+  <div class="fx-flex fx-flex-row fx-gap-2 fx-px-4 fx-py-2 fx-items-center fx-position-fixed fx-w-full">
 
     <img src="/dc_software_logo_3.webp" class="logo">
     <h2>DC Software</h2>
 
-    <button class="fx-ml-a">
-      <span class="material-icons">menu</span>
-    </button>
+
+    <fx-menu-trigger class="fx-ml-a">
+      <button>
+        <span class="material-icons">menu</span>
+      </button>
+
+      <fx-menu>
+        <fx-menu-item (click)="scrollTo('works')">Works</fx-menu-item>
+        <fx-menu-item (click)="scrollTo('open-source')">Open Source</fx-menu-item>
+        <fx-menu-item (click)="scrollTo('side-projects')">Side Projects</fx-menu-item>
+        <fx-menu-item (click)="scrollTo('contacts')">Contacts</fx-menu-item>
+      </fx-menu>
+    </fx-menu-trigger>
+
   </div>
 
 </header>
 
-<div class="fx-flex- fx-flex-col fx-items-center fx-p-2 fx-text-center">
+<div id="works" class="fx-flex- fx-flex-col fx-items-center fx-p-2 fx-text-center">
 
   <h2>Professional Works</h2>
 
@@ -27,7 +38,7 @@
   </div>
 </div>
 
-<section class="fx-flex fx-flex-row fx-flex-wrap fx-items-center fx-justify-center">
+<section class="container fx-flex fx-flex-row fx-flex-wrap fx-items-center fx-justify-center">
 
   <div class="card">
     <h2>Microgamma</h2>
@@ -126,7 +137,7 @@
 
 </div>
 
-<div class="fx-flex- fx-flex-col fx-items-center fx-p-2 fx-text-center">
+<div id="open-source" class="fx-flex- fx-flex-col fx-items-center fx-p-2 fx-text-center">
   <h2>Open Source Projects / Contributions</h2>
 
   <div class="citation-container">
@@ -138,7 +149,7 @@
   </div>
 </div>
 
-<section class="fx-flex fx-flex-row fx-flex-wrap fx-items-center fx-justify-center">
+<section class="container fx-flex fx-flex-row fx-flex-wrap fx-items-center fx-justify-center">
 
   <div class="card">
     <h2>@microphi/flux</h2>
@@ -171,13 +182,13 @@
 
 </div>
 
-<div class="fx-flex- fx-flex-col fx-items-center fx-p-2 fx-text-center">
+<div id="side-projects" class="fx-flex- fx-flex-col fx-items-center fx-p-2 fx-text-center">
 
   <h2>Side Projects / Experiments / Fun</h2>
 
 </div>
 
-<section class="fx-flex fx-flex-row fx-flex-wrap fx-items-center fx-justify-center">
+<section class="container fx-flex fx-flex-row fx-flex-wrap fx-items-center fx-justify-center">
 
   <div class="card">
     <h2>Metronoman</h2>
@@ -200,14 +211,13 @@
   </div>
 </section>
 
-<div class="fx-flex break-3" [fx-parallax]="-0.2">
+<div class="fx-flex break-3" [fx-parallax]="0.2">
 
 </div>
 
 <footer>
-  <div class="footer-container">
+  <div id="contacts" class="container">
     <p class="footer-text">Get In Touch</p>
-    <!--<ul class="footer-links">-->
       <div>
         <a class="fx-flex fx-flex-row fx-gap-2" href="mailto:cavaliere.davide@gmail.com">
           <span class="material-icons">email</span> <span>cavaliere.davide@gmail.com</span>
@@ -223,7 +233,6 @@
           <span class="material-icons">public</span> <span>@davidecavaliere</span>
         </a>
       </div>
-    <!--</ul>-->
   </div>
 </footer>
 

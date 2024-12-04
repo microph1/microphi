@@ -138,7 +138,9 @@ export class FxRootComponent implements OnViewInit {
   scrollTo(id: string) {
 
     const elm = this.elm.shadowRoot!.getElementById(id);
-    elm?.scrollIntoView({
+
+    document.body.scrollTo({
+      top: elm!.offsetTop - 80,
       behavior: 'smooth',
     });
   }

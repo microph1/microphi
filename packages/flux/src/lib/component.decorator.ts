@@ -346,20 +346,71 @@ export function Component(options: ComponentOptions): ClassDecorator {
 
                 }
 
-
                 const eventName = attributeName.match(EVENT_REGEX)?.[1];
                 if (eventName) {
 
+
                   const methodName = attributeValue?.match(/(\w+)\(/)?.[1];
+
                   if (methodName) {
-                    if (typeof this.controller[methodName] !== 'function') {
-                      throw new Error(`${methodName} should be a method`);
+                    let controller: any;
+
+                    if (typeof this.controller[methodName] === 'function') {
+
+                      controller = this.controller;
+
+                    } else if (typeof this['fx']?.parentController?.[methodName] === 'function') {
+
+                      // not sure we should do this
+                      // this is to allow a custom component to access the upstream method
+                      // like when we have an element inside the fx-for and the
+                      // event listeners need to actually be bound to the parent controller
+                      controller = this['fx'].parentController;
+
+                    } else {
+
+                      throw new Error(`Unable to find ${methodName}`);
                     }
 
-                    this.log('adding event listener on', node, 'to controller', this);
+                    this.log('adding event listener on', node, 'to controller', controller);
 
-                    node.addEventListener(eventName, (event: any) => {
-                      this.controller[methodName](event);
+                    const args = attributeValue.match(/\((.+)?,*\)/)?.[1]?.split(',').map((arg) => arg.trim());
+                    this.log(args?.[1]);
+
+                    node.addEventListener(eventName, (event: Event) => {
+
+                      // Please note: by default allow bubbling
+                      // so that the user can decide whether to stop it on not
+                      // in each handler
+
+                      const resolvedArguments: any[] = [];
+
+                      if (args) {
+
+                        for (const arg of args) {
+                          console.log('handling arg:', arg);
+
+                          if (arg === '$event') {
+                            // special word to inject actual DOM event
+                            //
+                            resolvedArguments.push(event);
+                          }
+
+                          const resolvedArg = evalInScope(arg, controller);
+
+                          resolvedArguments.push(resolvedArg);
+
+                        }
+
+                      }
+
+                      const method = controller[methodName];
+
+                      if (method && typeof method === 'function') {
+                        // eslint-disable-next-line @typescript-eslint/ban-types
+                        (method as Function).apply(controller, resolvedArguments);
+
+                      }
                     });
 
                   } else {
@@ -466,6 +517,8 @@ export function Component(options: ComponentOptions): ClassDecorator {
             if (fxAttribute) {
               // if that's the case then we will have the template to render in `fxAttribute`
               const parentFxComponent = getParentController(node);
+
+
               const value = parseTemplate(fxAttribute, { ...this.controller, ...node['controller'], ...parentFxComponent });
               node.setAttribute(attributeName, value);
 
@@ -474,8 +527,7 @@ export function Component(options: ComponentOptions): ClassDecorator {
 
         }
 
-
-        this.log('redering text nodes with {{}}');
+        //this.log('rendering text nodes with {{}}');
 
         const textNodesWalker = document.createTreeWalker(this.content, NodeFilter.SHOW_TEXT, (node) => {
           // do we need to check further parents?
@@ -513,7 +565,17 @@ export function Component(options: ComponentOptions): ClassDecorator {
             const template = node['fx'].template;
 
             if (template) {
-              node.textContent = parseTemplate(template, { ...this.controller, ...getParentController(node) });
+              // parse data stored in dataset
+              const dataset = Object.entries(parentElement.dataset).reduce((acc, [key, value]) => {
+                acc[key] = JSON.parse(value || '');
+                return acc;
+              }, {});
+
+              node.textContent = parseTemplate(template, {
+                ...this.controller,
+                ...getParentController(node),
+                ...dataset,
+              });
             }
 
           }

@@ -1,5 +1,5 @@
 <!-- Header -->
-<header class="fx-flex fx-flex-col fx-gap-2" [fx-parallax]="0.2">
+<header class="fx-flex fx-flex-col fx-gap-2">
   <div class="fx-flex fx-flex-row fx-gap-2 fx-px-4 fx-py-2 fx-items-center fx-position-fixed fx-w-full">
 
     <img src="/dc_software_logo_3.webp" class="logo">
@@ -23,11 +23,16 @@
 
 </header>
 
+<div class="break-0 fx-flex fx-flex-col fx-justify-center fx-items-center fx-p-4" [fx-parallax]="0.3">
+
+  <div class="fx-flex fx-flex-col">
+    <h1 class="hero">Crafting Software with ♥️</h1>
+  </div>
+</div>
+
 <div id="works" class="fx-flex- fx-flex-col fx-items-center fx-p-2 fx-text-center">
 
   <h2>Professional Works</h2>
-
-  <h3>Web Applications</h3>
 
   <div class="citation-container">
 
@@ -133,20 +138,19 @@
 
 </section>
 
-<div class="fx-flex break-1" [fx-parallax]="0.3">
+<div class="fx-flex break-1 fx-flex-col fx-justify-end" [fx-parallax]="0.3">
+  <div class="citation-container">
+    <blockquote class="citation">
+      "Imagination is the only weapon in the war against reality."
+      <cite>— Lewis Carroll</cite>
+    </blockquote>
+  </div>
 
 </div>
 
 <div id="open-source" class="fx-flex- fx-flex-col fx-items-center fx-p-2 fx-text-center">
   <h2>Open Source Projects / Contributions</h2>
 
-  <div class="citation-container">
-    <blockquote class="citation">
-      "Simplicity is the ultimate sophistication."
-      <cite>— Leonardo da Vinci</cite>
-
-
-  </div>
 </div>
 
 <section class="container fx-flex fx-flex-row fx-flex-wrap fx-items-center fx-justify-center">
@@ -178,19 +182,20 @@
   </div>
 </section>
 
-<div class="fx-flex break-2" [fx-parallax]="0.3">
+<div class="fx-flex break-2 fx-flex-col fx-justify-end" [fx-parallax]="0.3">
 
+  <div class="citation-container">
+    <blockquote class="citation">
+      "Simplicity is the ultimate sophistication."
+      <cite>— Leonardo da Vinci</cite>
+
+
+  </div>
 </div>
 
 <div id="side-projects" class="fx-flex- fx-flex-col fx-items-center fx-p-2 fx-text-center">
 
   <h2>Side Projects / Experiments / Fun</h2>
-  <div class="citation-container">
-    <blockquote class="citation">
-      "All work and no play makes Jack a dull boy."
-      <cite>— Anonymous</cite>
-    </blockquote>
-  </div>
 
 </div>
 
@@ -217,28 +222,47 @@
   </div>
 </section>
 
-<div class="fx-flex break-3" [fx-parallax]="0.3">
+<div class="fx-flex break-3 fx-flex-col fx-justify-end" [fx-parallax]="0.3">
 
+  <div class="citation-container">
+    <blockquote class="citation">
+      "The important thing is to never stop questioning. Curiosity has its own reason for existing."
+      <cite>— Albert Einstein</cite>
+    </blockquote>
+  </div>
 </div>
 
 <footer>
   <div id="contacts" class="container">
-    <p class="footer-text">Get In Touch</p>
+    <div class="fx-flex fx-flex-row fx-gap-2 fx-justify-around fx-items-center">
       <div>
-        <a class="fx-flex fx-flex-row fx-gap-2" href="mailto:cavaliere.davide@gmail.com">
-          <span class="material-icons">email</span> <span>cavaliere.davide@gmail.com</span>
-        </a>
+        <img class="fx-vw-25" src="/w1.webp">
       </div>
+
+      <div class="fx-flex fx-flex-col">
+
+        <div>
+          <a class="fx-flex fx-flex-row fx-gap-2" href="mailto:cavaliere.davide@gmail.com">
+            <span class="material-icons">email</span> <span>cavaliere.davide@gmail.com</span>
+          </a>
+        </div>
+        <div>
+          <a class="fx-flex fx-flex-row fx-gap-2" href="tel:+393806472057">
+            <span class="material-icons">phone</span> <span>+39 380 647 20 57</span>
+          </a>
+        </div>
+        <div>
+          <a class="fx-flex fx-flex-row fx-gap-2" href="https://x.com/davidecavaliere" target="_blank">
+            <span class="material-icons">public</span> <span>@davidecavaliere</span>
+          </a>
+        </div>
+      </div>
+
       <div>
-        <a class="fx-flex fx-flex-row fx-gap-2" href="tel:+393806472057">
-          <span class="material-icons">phone</span> <span>+39 380 647 20 57</span>
-        </a>
+        <img class="fx-vw-25" src="/w7.webp">
       </div>
-      <div>
-        <a class="fx-flex fx-flex-row fx-gap-2" href="https://x.com/davidecavaliere" target="_blank">
-          <span class="material-icons">public</span> <span>@davidecavaliere</span>
-        </a>
-      </div>
+    </div>
+    <!--<p class="footer-text">Get In Touch</p>-->
+    <!--  -->
   </div>
 </footer>
-

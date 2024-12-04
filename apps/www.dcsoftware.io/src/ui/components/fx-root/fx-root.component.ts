@@ -129,6 +129,25 @@ export class FxRootComponent implements OnViewInit {
 
     });
 
+    const header = this.elm.shadowRoot!.querySelector('header > div') as HTMLElement;
+    document.body.addEventListener('scroll', () => {
+
+      const scroll = document.body.scrollTop;
+      const height = document.body.clientHeight;
+      const scrollMax = document.body.scrollHeight;
+
+
+      // 1:percent = scrollMax:scroll
+
+      const percent = (scroll) / scrollMax;
+      console.log({height, scroll, scrollMax, percent});
+
+      header!.style.backgroundColor = `rgba(0,0,0, ${percent})`;
+      header!.style.backdropFilter = `blur(${2 * percent}px)`;
+
+
+    });
+
   }
 
   toggle() {

@@ -20,8 +20,9 @@ export function registerDirective(name: string, cb: Directive) {
       gap: 12px;
     }
 
-    .max-width {
-      max-width: 1280px;
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
     }
 
 
@@ -33,6 +34,8 @@ export class FxRootComponent implements OnViewInit {
 
   count$ = new Subject<void>();
   repos: any[] = [];
+
+  items: string[] = ['Menu 1', 'Menu 2'];
 
   constructor(private elm: HTMLElement) {
     this.count$.pipe(
@@ -62,7 +65,7 @@ export class FxRootComponent implements OnViewInit {
   async fxOnViewInit() {
 
     registerDirective('fx-parallax', (elm: HTMLElement) => {
-      console.log('I do my thing in the House', elm);
+      //console.log('I do my thing in the House', elm);
       const parent: HTMLElement = document.body;
 
       // makes it a bit smoother
@@ -99,7 +102,7 @@ export class FxRootComponent implements OnViewInit {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            console.log('Element is visible!', entry.target);
+            //console.log('Element is visible!', entry.target);
           }
         });
       }, {
@@ -126,10 +129,39 @@ export class FxRootComponent implements OnViewInit {
 
     });
 
+    const header = this.elm.shadowRoot!.querySelector('header > div') as HTMLElement;
+    document.body.addEventListener('scroll', () => {
+
+      const scroll = document.body.scrollTop;
+      const height = document.body.clientHeight;
+      const scrollMax = document.body.scrollHeight;
+
+
+      // 1:percent = scrollMax:scroll
+
+      const percent = (scroll) / scrollMax;
+      console.log({height, scroll, scrollMax, percent});
+
+      header!.style.backgroundColor = `rgba(0,0,0, ${percent})`;
+      header!.style.backdropFilter = `blur(${2 * percent}px)`;
+
+
+    });
+
   }
 
   toggle() {
     this.count$.next();
+  }
+
+  scrollTo(id: string) {
+
+    const elm = this.elm.shadowRoot!.getElementById(id);
+
+    document.body.scrollTo({
+      top: elm!.offsetTop - 80,
+      behavior: 'smooth',
+    });
   }
 
 }

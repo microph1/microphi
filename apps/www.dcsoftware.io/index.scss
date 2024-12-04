@@ -267,8 +267,10 @@ a:hover, button:hover {
   padding: 1rem;
   box-shadow: var(--box-shadow);
   margin: 1rem;
-  width: 460px;
-  min-height: calc(460px / 1.618033);
+  width: 33vw;
+  max-width: 460px;
+  min-width: 320px;
+  min-height: calc(33vw / 1.618033);
   display: flex;
   flex-direction: column;
 }

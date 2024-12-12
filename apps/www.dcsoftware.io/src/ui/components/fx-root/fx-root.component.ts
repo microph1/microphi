@@ -1,8 +1,8 @@
 import { Component, css, FxElement, OnViewInit } from '@microphi/flux';
 import { EMPTY, interval, scan, Subject, switchMap } from 'rxjs';
-import templateUrl from './fx-root.component.html?url';
+import { projects } from '../../projects';
 import { FxOverlayComponent } from '../fx-overlay/fx-overlay.component';
-import { heimdall, projects } from '../../projects';
+import templateUrl from './fx-root.component.html?url';
 
 type Directive = (this: FxRootComponent, elm: HTMLElement) => void;
 

@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getDebugger } from '@microphi/debug';
 import { Injectable } from '@microphi/di';
 import { Subject, combineLatest, debounceTime } from 'rxjs';
 import { FxComponent, addWatchers } from './add-watcher';
 import { start$ } from './app.decorator';
 import { getInputMetadata } from './input.decorator';
 import { getValue, parseTemplate } from './parse-template';
+import { getHostListeners } from './decorators/host-listener.decorator';
 
 const SQUARE_BOXED_REGEX = new RegExp(/^\[(\w*)\]$/);
 const DOUBLE_SQUARE_BOXED_REGEX = new RegExp(/\[\[(\w+)]]/);
@@ -37,6 +37,10 @@ export function registerDirective(name: string, fn: (node: any, value: string, c
 const globalStyles: string[] = [];
 export function registerGlobalStyles(...styles: string[]) {
   globalStyles.push(...styles);
+}
+
+export interface FxElement<T> {
+  controller: T;
 }
 
 const ComponentSymbol = Symbol('@Component');
@@ -91,9 +95,7 @@ export function hasOnChange(instance: unknown): instance is OnChanges<any> {
 
 export function Component(options: ComponentOptions): ClassDecorator {
 
-  const d = getDebugger(`@flux:@Component:${options.selector}`);
 
-  d('decorating', options.selector);
 
   const templateElm = document.createElement('template');
 
@@ -137,8 +139,6 @@ export function Component(options: ComponentOptions): ClassDecorator {
 
         options.inputs = getInputMetadata(target) || [];
 
-        d('creating custom component', options.selector);
-
         Reflect.defineMetadata(ComponentSymbol, options, target);
       }
 
@@ -156,8 +156,6 @@ export function Component(options: ComponentOptions): ClassDecorator {
 
 
     customElements.define(options.selector, class extends HTMLElement {
-
-      log = getDebugger(`@flux:${options.selector}`);
 
       public parent!: Node;
 
@@ -182,7 +180,6 @@ export function Component(options: ComponentOptions): ClassDecorator {
           this.connected$,
           start$,
         ]).pipe().subscribe(() => {
-          this.log('------------------------- component starting now -------------------------');
           this.render();
         });
 
@@ -214,18 +211,17 @@ export function Component(options: ComponentOptions): ClassDecorator {
             this.render();
 
           });
+
       }
 
       override appendChild<T extends Node>(node: T): T {
 
-        this.log('appendingChild', node);
 
         return this.shadowRoot!.appendChild(node);
       }
 
 
       public connectedCallback() {
-        this.log('connectedCallback');
 
         this.setAttributeNS('fx', 'fx-component', options.selector);
         this.setAttributeNS('fx', 'fx-id', this.fxId);
@@ -259,6 +255,14 @@ export function Component(options: ComponentOptions): ClassDecorator {
             this.shadowRoot!.appendChild(templateElm.content.cloneNode(true));
           }
 
+          // get @HostListeners
+          const listeners = getHostListeners(this.controller);
+          for (const listener of listeners) {
+            this.shadowRoot!.addEventListener(listener.event, (event) => {
+              this.controller[listener.handler](event);
+            });
+
+          }
           // components without template should still fire connected$
           this.connected$.next();
         });
@@ -266,7 +270,6 @@ export function Component(options: ComponentOptions): ClassDecorator {
       }
 
       public attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-        this.log('attributeChangedCallback');
         if (oldValue !== newValue) {
           // values are always string because they're the old/new value set using
           // `setAttribute(name, newValue)`
@@ -334,7 +337,13 @@ export function Component(options: ComponentOptions): ClassDecorator {
             // check if a node has been inited
             if (!node['fx']?.inited) {
 
+
               for (const attributeName of node.getAttributeNames()) {
+                if (attributeName?.startsWith('#')) {
+                  const name = attributeName.slice(1);
+                  this.controller[name] = node;
+                }
+
                 if (attributeName.startsWith('fx')) {
                   continue;
                 }
@@ -346,32 +355,75 @@ export function Component(options: ComponentOptions): ClassDecorator {
 
                 }
 
-
                 const eventName = attributeName.match(EVENT_REGEX)?.[1];
                 if (eventName) {
 
+
                   const methodName = attributeValue?.match(/(\w+)\(/)?.[1];
+
                   if (methodName) {
-                    if (typeof this.controller[methodName] !== 'function') {
-                      throw new Error(`${methodName} should be a method`);
+                    let controller: any;
+
+                    if (typeof this.controller[methodName] === 'function') {
+
+                      controller = this.controller;
+
+                    } else if (typeof this['fx']?.parentController?.[methodName] === 'function') {
+
+                      // not sure we should do this
+                      // this is to allow a custom component to access the upstream method
+                      // like when we have an element inside the fx-for and the
+                      // event listeners need to actually be bound to the parent controller
+                      controller = this['fx'].parentController;
+
+                    } else {
+
+                      throw new Error(`Unable to find ${methodName}`);
                     }
 
-                    this.log('adding event listener on', node, 'to controller', this);
 
-                    node.addEventListener(eventName, (event: any) => {
-                      this.controller[methodName](event);
+                    const args = attributeValue.match(/\((.+)?,*\)/)?.[1]?.split(',').map((arg) => arg.trim());
+
+                    node.addEventListener(eventName, (event: Event) => {
+
+                      // Please note: by default allow bubbling
+                      // so that the user can decide whether to stop it on not
+                      // in each handler
+
+                      const resolvedArguments: any[] = [];
+
+                      if (args) {
+
+                        for (const arg of args) {
+                          console.log('handling arg:', arg);
+
+                          if (arg === '$event') {
+                            // special word to inject actual DOM event
+                            //
+                            resolvedArguments.push(event);
+                          }
+
+                          const resolvedArg = evalInScope(arg, controller);
+
+                          resolvedArguments.push(resolvedArg);
+
+                        }
+
+                      }
+
+                      const method = controller[methodName];
+
+                      if (method && typeof method === 'function') {
+                        // eslint-disable-next-line @typescript-eslint/ban-types
+                        (method as Function).apply(controller, resolvedArguments);
+
+                      }
                     });
 
                   } else {
                     console.warn('TBD: we should be able to handle inline scripts');
                   }
 
-                }
-
-                const squareBoxed = attributeName.match(SQUARE_BOXED_REGEX)?.[1];
-                if (squareBoxed) {
-                  this.log(`found [${squareBoxed}]`);
-                  this.log('attribute value', attributeValue);
                 }
 
                 if (attributeValue.match(CURLY_BOXED_REGEX)) {
@@ -400,7 +452,6 @@ export function Component(options: ComponentOptions): ClassDecorator {
           }
         }
 
-        this.log('rendering starts');
         const walker3 = document.createTreeWalker(this.content, NodeFilter.SHOW_ELEMENT, (node) => {
           if (node instanceof HTMLElement && IGNORED.includes(node.tagName)) {
             return NodeFilter.FILTER_REJECT;
@@ -413,7 +464,6 @@ export function Component(options: ComponentOptions): ClassDecorator {
           const node = walker3.currentNode as HTMLElement;
           node['fx'] ? '' : node['fx'] = {};
 
-          this.log(node);
 
           for (const attributeName of node.getAttributeNames()) {
 
@@ -421,7 +471,6 @@ export function Component(options: ComponentOptions): ClassDecorator {
             const doubleSquared = attributeName.match(DOUBLE_SQUARE_BOXED_REGEX)?.[1];
             if (doubleSquared) {
               const conditionToEvaluate = node.getAttribute(attributeName);
-              this.log({conditionToEvaluate});
 
               if (conditionToEvaluate !== null) {
                 const result = evalInScope(conditionToEvaluate, this.controller);
@@ -429,7 +478,6 @@ export function Component(options: ComponentOptions): ClassDecorator {
                   throw new Error(`${node.tagName} does not have a controller while it should. Are you forgetting to import it?`);
                 }
                 node['controller'][doubleSquared] = result;
-                this.log({result});
               }
 
             }
@@ -439,13 +487,24 @@ export function Component(options: ComponentOptions): ClassDecorator {
             const unboxed = attributeName.match(SQUARE_BOXED_REGEX)?.[1];
             // parse [attr] boxed attributes
             if (unboxed) {
-              this.log(`found square boxed attribute: ${attributeName}`);
 
               const property = node.getAttribute(attributeName);
 
               if (property !== null) {
 
-                const value = getValue(property, this.controller);
+                const parentController = getParentController(node);
+
+                const dataset = Object.entries(node.dataset).reduce((acc, [key, value]) => {
+                  acc[key] = JSON.parse(value || '');
+                  return acc;
+                }, {});
+
+                const value = getValue(property, {
+                  ...this.controller,
+                  ...parentController,
+                  ...dataset,
+                });
+
                 // so that input updates
                 node[unboxed] = value;
                 // important: this will trigger changes so it have to happen after the line above
@@ -466,7 +525,13 @@ export function Component(options: ComponentOptions): ClassDecorator {
             if (fxAttribute) {
               // if that's the case then we will have the template to render in `fxAttribute`
               const parentFxComponent = getParentController(node);
-              const value = parseTemplate(fxAttribute, { ...this.controller, ...node['controller'], ...parentFxComponent });
+
+              const dataset = Object.entries(node.dataset).reduce((acc, [key, value]) => {
+                acc[key] = JSON.parse(value || '');
+                return acc;
+              }, {});
+
+              const value = parseTemplate(fxAttribute, { ...this.controller, ...node['controller'], ...parentFxComponent, ...dataset });
               node.setAttribute(attributeName, value);
 
             }
@@ -474,8 +539,7 @@ export function Component(options: ComponentOptions): ClassDecorator {
 
         }
 
-
-        this.log('redering text nodes with {{}}');
+        //this.log('rendering text nodes with {{}}');
 
         const textNodesWalker = document.createTreeWalker(this.content, NodeFilter.SHOW_TEXT, (node) => {
           // do we need to check further parents?
@@ -513,19 +577,26 @@ export function Component(options: ComponentOptions): ClassDecorator {
             const template = node['fx'].template;
 
             if (template) {
-              node.textContent = parseTemplate(template, { ...this.controller, ...getParentController(node) });
+              // parse data stored in dataset
+              const dataset = Object.entries(parentElement.dataset).reduce((acc, [key, value]) => {
+                acc[key] = JSON.parse(value || '');
+                return acc;
+              }, {});
+
+              node.textContent = parseTemplate(template, {
+                ...this.controller,
+                ...getParentController(node),
+                ...dataset,
+              });
             }
 
           }
         }
 
-        this.log('all nodes with {{}} rendered');
-        this.log('rendering ends');
 
 
         if (!this.inited) {
 
-          this.log('first rendering done');
           this.inited = true;
 
           // call lifecycle after first render is done

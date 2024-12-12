@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, Directive, OnInit } from '@angular/core';
-import { combineLatest, Observable } from 'rxjs';
+import { Component, Directive, OnInit } from '@angular/core';
 import 'reflect-metadata';
+import { Observable, combineLatest } from 'rxjs';
 import { Primitive } from 'utility-types';
 import { SpeakersComponent } from './speakers/speakers.component';
 

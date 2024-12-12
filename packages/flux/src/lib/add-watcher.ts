@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Subject } from 'rxjs';
 import { getComponentMetadataFromInstance } from './component.decorator';
-import { getDebugger } from '@microphi/debug';
 
-const d = getDebugger('@flux:add-watcher');
 
 export const HydratedSymbol = Symbol('@Hydrated');
 
@@ -22,13 +20,10 @@ export interface FxComponent {
 
 export function addWatchers(instance: FxComponent): void {
 
-  d('adding watchers');
-
   const metadata = getComponentMetadataFromInstance(instance);
   const properties = Object.getOwnPropertyNames(instance);
 
   const allProperties = new Set([...(metadata.inputs || []), ...properties]);
-  d('properties', properties);
 
   for (const property of allProperties) {
 
@@ -40,14 +35,11 @@ export function addWatchers(instance: FxComponent): void {
     }
 
     if (instance[property] instanceof Subject) {
-      d('this is a Subject', property);
-
       Object.defineProperty(instance, `${property}$$`, {
         writable: true
       });
 
       (instance[property] as Subject<any>).subscribe((value) => {
-        d('watched property changed', value);
         instance[`${property}$$`] = value;
 
         instance.propertyChange.next(({

@@ -38,13 +38,13 @@
     "lint:ci": "eslint ./src"
   },
   "dependencies": {
-    "reflect-metadata": "^0.1.13",
     "tslib": "^2.5.0"
   },
   "devDependencies": {
     "utility-types": "^3.10.0"
   },
   "peerDependencies": {
+    "reflect-metadata": "^0.2.2",
     "rxjs": "~7.8.0"
   }
 }

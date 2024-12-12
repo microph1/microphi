@@ -13,7 +13,7 @@
   ],
   "license": "MIT",
   "keywords": [
-    "typescirpt",
+    "typescript",
     "decorator",
     "dependency injection",
     "di container"
@@ -30,13 +30,11 @@
     "test:ci": "jest --coverage --ci",
     "lint": "eslint ./src"
   },
-  "dependencies": {
-    "reflect-metadata": "^0.1.13"
+  "peerDependencies": {
+    "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.23.3"
   },
-  "peerDepenencies": {
-    "@microphi/debug": "^2.5.1"
-  }
+  "sideEffects": false
 }

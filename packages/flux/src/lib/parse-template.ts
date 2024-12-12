@@ -1,7 +1,5 @@
 import { pipes } from './component.decorator';
-import { getDebugger } from '@microphi/debug';
 
-const d = getDebugger('@flux:render');
 
 /**
  * Get a property using the dot notation from subs
@@ -47,7 +45,6 @@ export function parseTemplate(template: string, subs: object) {
     let value = getValue(key, subs);
 
     if (key.endsWith('$')) {
-      d('rendering an observable');
       value = subs[`${key}$$`];
     }
 

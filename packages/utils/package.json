@@ -32,5 +32,8 @@
     "build:ci": "npm run build",
     "test:ci": "jest --coverage --ci",
     "lint": "eslint ./src"
+  },
+  "peerDependencies": {
+    "reflect-metadata": "^0.2.2"
   }
 }

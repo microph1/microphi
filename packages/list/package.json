@@ -34,7 +34,6 @@
     "utility-types": "^3.10.0"
   },
   "peerDependencies": {
-    "@microphi/debug": "^2.5.1",
     "rxjs": "~7.8.0"
   }
 }

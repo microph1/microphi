@@ -337,7 +337,13 @@ export function Component(options: ComponentOptions): ClassDecorator {
             // check if a node has been inited
             if (!node['fx']?.inited) {
 
+
               for (const attributeName of node.getAttributeNames()) {
+                if (attributeName?.startsWith('#')) {
+                  const name = attributeName.slice(1);
+                  this.controller[name] = node;
+                }
+
                 if (attributeName.startsWith('fx')) {
                   continue;
                 }
@@ -486,7 +492,19 @@ export function Component(options: ComponentOptions): ClassDecorator {
 
               if (property !== null) {
 
-                const value = getValue(property, this.controller);
+                const parentController = getParentController(node);
+
+                const dataset = Object.entries(node.dataset).reduce((acc, [key, value]) => {
+                  acc[key] = JSON.parse(value || '');
+                  return acc;
+                }, {});
+
+                const value = getValue(property, {
+                  ...this.controller,
+                  ...parentController,
+                  ...dataset,
+                });
+
                 // so that input updates
                 node[unboxed] = value;
                 // important: this will trigger changes so it have to happen after the line above
@@ -508,8 +526,12 @@ export function Component(options: ComponentOptions): ClassDecorator {
               // if that's the case then we will have the template to render in `fxAttribute`
               const parentFxComponent = getParentController(node);
 
+              const dataset = Object.entries(node.dataset).reduce((acc, [key, value]) => {
+                acc[key] = JSON.parse(value || '');
+                return acc;
+              }, {});
 
-              const value = parseTemplate(fxAttribute, { ...this.controller, ...node['controller'], ...parentFxComponent });
+              const value = parseTemplate(fxAttribute, { ...this.controller, ...node['controller'], ...parentFxComponent, ...dataset });
               node.setAttribute(attributeName, value);
 
             }

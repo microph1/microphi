@@ -1,10 +1,8 @@
 import Mock = jest.Mock;
 import FunctionPropertyNames = jest.FunctionPropertyNames;
-import { getDebugger } from '@microphi/debug';
 import { FunctionKeys } from 'utility-types';
 import { Instance, Klass } from '../types';
 
-const d = getDebugger('microphi:di:mocked');
 
 const MockedSymbol = Symbol('Mocked');
 
@@ -21,10 +19,7 @@ export const Mocked = <BaseClass extends Klass, K extends object = InstanceType<
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     constructor(...ops: any[]) {
 
-      d({ options });
-
       const methods = [...getPropertyNames(base.prototype)];
-      d('methods', methods);
 
       methods
         .forEach((m) => {
@@ -35,10 +30,8 @@ export const Mocked = <BaseClass extends Klass, K extends object = InstanceType<
 
             if (options[m] !== 'NO_MOCK' && typeof options[m] === 'function') {
               this[m] = options[m];
-              d('mocking method', m, 'with custom implementation');
             }
           } else {
-            d('mocking method', m, 'with spy fn');
             this[m] = jest.fn();
           }
         });

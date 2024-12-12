@@ -5,6 +5,7 @@ import { FxComponent, addWatchers } from './add-watcher';
 import { start$ } from './app.decorator';
 import { getInputMetadata } from './input.decorator';
 import { getValue, parseTemplate } from './parse-template';
+import { getHostListeners } from './decorators/host-listener.decorator';
 
 const SQUARE_BOXED_REGEX = new RegExp(/^\[(\w*)\]$/);
 const DOUBLE_SQUARE_BOXED_REGEX = new RegExp(/\[\[(\w+)]]/);
@@ -36,6 +37,10 @@ export function registerDirective(name: string, fn: (node: any, value: string, c
 const globalStyles: string[] = [];
 export function registerGlobalStyles(...styles: string[]) {
   globalStyles.push(...styles);
+}
+
+export interface FxElement<T> {
+  controller: T;
 }
 
 const ComponentSymbol = Symbol('@Component');
@@ -250,6 +255,14 @@ export function Component(options: ComponentOptions): ClassDecorator {
             this.shadowRoot!.appendChild(templateElm.content.cloneNode(true));
           }
 
+          // get @HostListeners
+          const listeners = getHostListeners(this.controller);
+          for (const listener of listeners) {
+            this.shadowRoot!.addEventListener(listener.event, (event) => {
+              this.controller[listener.handler](event);
+            });
+
+          }
           // components without template should still fire connected$
           this.connected$.next();
         });

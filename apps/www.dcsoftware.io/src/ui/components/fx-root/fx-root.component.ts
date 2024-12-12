@@ -1,6 +1,8 @@
-import { Component, css, OnViewInit } from '@microphi/flux';
+import { Component, css, FxElement, OnViewInit } from '@microphi/flux';
 import { EMPTY, interval, scan, Subject, switchMap } from 'rxjs';
-import template from './fx-root.component.html?raw';
+import templateUrl from './fx-root.component.html?url';
+import { FxOverlayComponent } from '../fx-overlay/fx-overlay.component';
+import { heimdall, projects } from '../../projects';
 
 type Directive = (this: FxRootComponent, elm: HTMLElement) => void;
 
@@ -12,7 +14,7 @@ export function registerDirective(name: string, cb: Directive) {
 
 @Component({
   selector: 'fx-root',
-  template,
+  templateUrl,
   style: css`
     :host {
       display: flex;
@@ -33,9 +35,13 @@ export class FxRootComponent implements OnViewInit {
   timer = 0;
 
   count$ = new Subject<void>();
-  repos: any[] = [];
 
-  items: string[] = ['Menu 1', 'Menu 2'];
+  projects = projects;
+  heimdall = projects.heimdall;
+  automation = projects.automation;
+  lasso = projects['2Lasso'];
+  drD = projects['drD'];
+  easytest = projects['Easytest'];
 
   constructor(private elm: HTMLElement) {
     this.count$.pipe(
@@ -59,10 +65,45 @@ export class FxRootComponent implements OnViewInit {
 
     });
 
+    const originalPushState = history.pushState;
+    history.pushState = function (...args) {
+      const result = originalPushState.apply(this, args);
+      window.dispatchEvent(new Event('urlchange'));
+      return result;
+    };
+
+    const originalReplaceState = history.replaceState;
+    history.replaceState = function (...args) {
+      const result = originalReplaceState.apply(this, args);
+      window.dispatchEvent(new Event('urlchange'));
+      return result;
+    };
+
+    window.addEventListener('urlchange', () => {
+      console.log('URL changed to:', location.href);
+    });
+
+
+
+
 
   }
 
   async fxOnViewInit() {
+    this.elm.shadowRoot!.addEventListener('click', (event) => {
+      // Check if the clicked element is an <a> element
+      const target = event.target;
+      if (target instanceof HTMLAnchorElement && target.tagName === 'A' && target.href) {
+        event.preventDefault(); // Prevent the default browser navigation
+        console.log('Intercepted link click:', target.href);
+
+        // Handle the custom logic for navigation here
+        // For example, update the URL using the History API
+        history.pushState(null, '', target.href);
+
+        // Trigger any additional logic (e.g., re-rendering a section)
+      }
+    });
 
     registerDirective('fx-parallax', (elm: HTMLElement) => {
       //console.log('I do my thing in the House', elm);
@@ -133,21 +174,14 @@ export class FxRootComponent implements OnViewInit {
     document.body.addEventListener('scroll', () => {
 
       const scroll = document.body.scrollTop;
-      const height = document.body.clientHeight;
       const scrollMax = document.body.scrollHeight;
 
-
       // 1:percent = scrollMax:scroll
-
       const percent = (scroll) / scrollMax;
-      console.log({height, scroll, scrollMax, percent});
 
       header!.style.backgroundColor = `rgba(0,0,0, ${percent})`;
       header!.style.backdropFilter = `blur(${2 * percent}px)`;
-
-
     });
-
   }
 
   toggle() {
@@ -155,7 +189,6 @@ export class FxRootComponent implements OnViewInit {
   }
 
   scrollTo(id: string) {
-
     const elm = this.elm.shadowRoot!.getElementById(id);
 
     document.body.scrollTo({
@@ -164,4 +197,9 @@ export class FxRootComponent implements OnViewInit {
     });
   }
 
+  openScreenshots(overlayElement: FxElement<FxOverlayComponent>) {
+    console.log('should open screenshots for', overlayElement);
+
+    overlayElement.controller.show();
+  }
 }

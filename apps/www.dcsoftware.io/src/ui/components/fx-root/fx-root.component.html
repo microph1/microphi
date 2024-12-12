@@ -58,7 +58,7 @@
   </div>
 
   <div class="card">
-    <h2>Heimdall</h2>
+    <h2>Observability</h2>
     <p>Observability Platform for DataKitchen</p>
 
     <div class="content fx-py-2">The Observability Platform by DataKitchen (code name Heimdall) is a PWA web application developed in Angular.</div>
@@ -67,7 +67,18 @@
       <a class="button" href="//github.com/DataKitchen/dataops-observability/tree/main/observability_ui" target="_blank">
         <span class="material-icons">public</span>
       </a>
-      <button>
+      <fx-overlay #overlay class="bg-medium">
+        <div class="fx-flex fx-flex-col fx-justify-center fx-gap-6 fx-text-center">
+
+          <h1>Observability Platform for DataKitchen</h1>
+
+          <fx-for-two let="url" [of]="heimdall" class="fx-flex fx-flex-col fx-gap-5 fx-items-center container">
+            <img [src]="url" class="fx-vw-75 lg:fx-vw-50 xl:fx-vw-25">
+          </fx-for-two>
+
+        </div>
+      </fx-overlay>
+      <button (click)="openScreenshots(overlay)">
         <span class="material-icons">photo_library</span>
       </button>
     </div>
@@ -79,11 +90,23 @@
 
     <div class="content fx-py-2">DataKitchen's Automation platform enables data-ops best practices. Monolithic Angular application with Python backend</div>
 
+    <fx-overlay #overlay1 class="bg-medium">
+      <div class="fx-flex fx-flex-col fx-justify-center fx-px-4 fx-gap-6 fx-text-center">
+
+        <h1>Automation Platform for DataKitchen</h1>
+
+        <fx-for-two let="url" [of]="automation" class="fx-flex fx-flex-col fx-gap-5 fx-items-center container">
+          <img [src]="url" class="fx-vw-full lg:fx-vw-50 xl:fx-vw-25">
+        </fx-for-two>
+
+      </div>
+    </fx-overlay>
+
     <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
-      <a class="button" href="//www.datakitchen.io">
+      <a class="button" href="//www.datakitchen.io" target="_blank">
         <span class="material-icons">public</span>
       </a>
-      <button>
+      <button (click)="openScreenshots(overlay1)">
         <span class="material-icons">photo_library</span>
       </button>
     </div>
@@ -104,8 +127,23 @@
 
     <div class="content fx-py-2">2Lasso is a web application written in AngularJS with a PHP backend that enables Schools to manage their teachers and pupils within their PurpleMash subscription handling groups and permissions.</div>
 
+    <fx-overlay #overlay2 class="bg-medium">
+      <div class="fx-flex fx-flex-col fx-justify-center fx-px-4 fx-gap-6 fx-text-center back">
+
+        <h1>2Lasso</h1>
+
+        <fx-for-two let="url" [of]="lasso" class="fx-flex fx-flex-col fx-gap-5 fx-items-center container">
+          <img [src]="url" class="fx-vw-full lg:fx-vw-50 xl:fx-vw-25">
+        </fx-for-two>
+
+      </div>
+    </fx-overlay>
+
     <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
-      <button>
+      <a class="button" href="//www.2simple.com" target="_blank">
+        <span class="material-icons">public</span>
+      </a>
+      <button (click)="openScreenshots(overlay2)">
         <span class="material-icons">photo_library</span>
       </button>
     </div>
@@ -118,25 +156,27 @@
 
     <div class="content fx-py-2">Dr.D is a web application written in AngularJS on the MEAN stack. It was developed as a PoC and unfortunately it have never been developed further. The idea was to let the user design its own Android application the would have then automatically build using the Ionic framework.</div>
 
+    <fx-overlay #overlay3 class="bg-medium">
+      <div class="fx-flex fx-flex-col fx-justify-center fx-px-4 fx-gap-6 fx-text-center back">
+
+        <h1>Dr. D</h1>
+
+        <fx-for-two let="url" [of]="drD" class="fx-flex fx-flex-col fx-gap-5 fx-items-center container">
+          <img [src]="url" class="fx-vw-full lg:fx-vw-50 xl:fx-vw-25">
+        </fx-for-two>
+
+      </div>
+    </fx-overlay>
+
     <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
-      <button>
+      <button (click)="openScreenshots(overlay3)">
         <span class="material-icons">photo_library</span>
       </button>
     </div>
 
   </div>
 
-  <div class="card">
-    <h2>FIDO</h2>
-    <p>Vouchers Manager</p>
-    <div class="content fx-py-2">FIDO is an AngularJS application built on the MEAN stack to handle vouchers, clients and materials/items.</div>
 
-    <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
-      <button>
-        <span class="material-icons">photo_library</span>
-      </button>
-    </div>
-  </div>
 
   <div class="card">
     <h2>Easytest</h2>
@@ -144,15 +184,23 @@
 
     <div class="content fx-py-2">Easytest is a web application written for the Liferay portal. It features json API endpoints and AngularJS client side.</div>
 
+    <fx-overlay #overlay4 class="bg-medium">
+      <div class="fx-flex fx-flex-col fx-justify-center fx-px-4 fx-gap-6 fx-text-center back">
+
+        <h1>Easytest</h1>
+
+        <fx-for-two let="url" [of]="easytest" class="fx-flex fx-flex-col fx-gap-5 fx-items-center container">
+          <img [src]="url" class="fx-vw-full lg:fx-vw-50 xl:fx-vw-25">
+        </fx-for-two>
+
+      </div>
+    </fx-overlay>
+
     <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
-      <a class="button" href="//www.datakitchen.io">
-        <span class="material-icons">public</span>
-      </a>
-      <button>
+      <button (click)="openScreenshots(overlay4)">
         <span class="material-icons">photo_library</span>
       </button>
     </div>
-  </div>
 
 </section>
 
@@ -177,10 +225,10 @@
     <h2>@microphi/flux</h2>
     <p>The @microphi/flux framework</p>
 
-    <div class="content fx-py-2">This is an experimental frontend framework. <br>This website has been written with it.</div>
+    <div class="content fx-py-2">This is an experimental frontend framework for building web component. It features: a small footprint and rxjs based change detection. <br>This website has been made with it.</div>
 
     <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
-      <a class="button" href="//www.datakitchen.io">
+      <a class="button" href="//flux.microphi.io" target="_blank">
         <span class="material-icons">public</span>
       </a>
     </div>
@@ -188,12 +236,124 @@
 
   <div class="card">
     <h2>@microphi/store</h2>
-    <p>The @microphi/store</p>
+    <p>High performance state manger for Javascript / Node.js</p>
 
     <div class="content fx-py-2">It is a pure RxJS store for typescript application, it works in node as well as in the browser. Is small, fast and simple.</div>
 
     <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
-      <a class="button" href="//www.datakitchen.io">
+      <a class="button" href="https://github.com/microph1/microphi/tree/master/packages/store" target="_blank">
+        <span class="material-icons">public</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>@microphi/di</h2>
+    <p>Powerful Dependency Injection Framework</p>
+
+    <div class="content fx-py-2">A minimalistic and full featured dependency injection framework for Javascript.</div>
+
+    <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
+      <a class="button" href="https://github.com/microph1/microphi/tree/master/packages/di" target="_blank">
+        <span class="material-icons">public</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>@microphi/debug</h2>
+    <p>Just another wrapper around console.log</p>
+
+    <div class="content fx-py-2">@microphi/debug allows log filtering, has a nice timestamp and colors and an hook to manually handle logs regardless whether they'd be displayed on the console or not.</div>
+
+    <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
+      <a class="button" href="https://github.com/microph1/microphi/tree/master/packages/debug" target="_blank">
+        <span class="material-icons">public</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>@microphi/list</h2>
+    <p>Combine Javascript Arrays and Maps for the ultimate flexibility</p>
+
+    <div class="content fx-py-2">
+      @microphi/list is a wrapper around a Javascript array and a Map allowing O(1) access to the data stored while conserving ordering and ease of inserting data of an array.
+    </div>
+
+    <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
+      <a class="button" href="https://github.com/microph1/microphi/tree/master/packages/list" target="_blank">
+        <span class="material-icons">public</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>@microphi/json-db</h2>
+    <p>Store data on a json file on Node.js/Deno applications</p>
+
+    <div class="content fx-py-2">
+      @microphi/json-db allows storing data on json files, automatically splitting data to files. It also encapsulates <a href="https://github.com/lucaong/minisearch" target="_blank">Minisearch</a> to allow fast and fuzzy search.
+    </div>
+
+    <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
+      <a class="button" href="https://github.com/microph1/microphi/tree/master/packages/json-db" target="_blank">
+        <span class="material-icons">public</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>@microphi/styles</h2>
+    <p>Flex first layout and fluid responsiveness</p>
+
+    <div class="content fx-py-2">
+      @microphi/styles is a set of scss utility classes to allow easy layout with flex and to use <a href="https://utopia.fyi/" target="_blank">Utopia</a> fluid responsiveness.
+    </div>
+
+    <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
+      <a class="button" href="https://github.com/microph1/microphi/tree/master/packages/styles" target="_blank">
+        <span class="material-icons">public</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>@datakitchen/ngx-toolkit</h2>
+
+
+    <div class="content fx-py-2">Provides solutions and best practices for implementing and synchronizing various features, including search inputs, pagination, and persistence using localStorage or query parameters. Also contains mocking utilities, a simplified version of Angular's typed reactive forms, and other small utilities that any Angular developer may need.
+    </div>
+
+    <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
+      <a class="button" href="https://github.com/DataKitchen/ngx-toolkit/blob/master/projects/core/README.md" target="_blank">
+        <span class="material-icons">public</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>@datakitchen/ngx-monaco-editor</h2>
+
+
+    <div class="content fx-py-2">A wrapper around <a href="https://microsoft.github.io/monaco-editor/">Microsoft's monaco editor</a> made specifically for use with Angular's Material form field.</div>
+
+    <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
+      <a class="button" href="https://github.com/DataKitchen/ngx-toolkit/blob/master/projects/ngx-monaco-editor/README.md" target="_blank">
+        <span class="material-icons">public</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>@datakitchen/rxjs-marbles</h2>
+
+
+    <div class="content fx-py-2">A wrapper around rxjs' TestScheduler which is easier to use in unit tests and play nice with the `rxjs-scheduler` provider in `ngx-toolkit`.
+    </div>
+
+    <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
+      <a class="button" href="https://github.com/DataKitchen/ngx-toolkit/blob/master/projects/rxjs-marbles/README.md" target="_blank">
         <span class="material-icons">public</span>
       </a>
     </div>
@@ -221,22 +381,58 @@
 
   <div class="card">
     <h2>Metronoman</h2>
+
+
     <p>A Simple PWA metronome</p>
+    <div class="content fx-py-2"></div>
+    <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
+      <a class="button" href="//www.metronoman.com" target="_blank">
+        <span class="material-icons">public</span>
+      </a>
+    </div>
   </div>
 
   <div class="card">
     <h2>Metronoman Flux Remix</h2>
-    <p>Same as Metronoman but made with @microphi/flux framework</p>
+    <div class="content fx-py-2">Same as Metronoman but made with @microphi/flux framework</div>
+    <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
+      <a class="button" href="//flux.metronoman.com" target="_blank">
+        <span class="material-icons">public</span>
+      </a>
+    </div>
   </div>
 
   <div class="card">
     <h2>Neovim PDE</h2>
-    <p>Personal Development Environment</p>
+    <div class="content fx-py-2">Personal Development Environment</div>
+    <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
+      <a class="button" href="https://github.com/microph1/nvim-pde" target="_blank">
+        <span class="material-icons">public</span>
+      </a>
+    </div>
   </div>
 
   <div class="card">
     <h2>Music</h2>
-    <p>My Music</p>
+    <div class="content fx-py-2">My Music</div>
+
+    <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
+      <a class="button" href="https://www.soundcloud.com/davidecavaliere" target="_blank">
+        <span class="material-icons">public</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Blog</h2>
+
+    <div class="content fx-py-2">Articles published on dev.to</div>
+
+    <div class="fx-flex fx-flex-row fx-justify-end fx-gap-1">
+      <a class="button" href="https://dev.to/davidecavaliere" target="_blank">
+        <span class="material-icons">public</span>
+      </a>
+    </div>
   </div>
 </section>
 
@@ -254,23 +450,23 @@
   <div id="contacts" class="container">
     <div class="fx-flex fx-flex-row xs:fx-flex-col fx-gap-2 fx-justify-around fx-items-center">
       <div>
-        <img class="fx-vw-25" src="/dc_software_logo_3.webp">
+        <img class="footer-logo" src="/w1.webp">
       </div>
 
       <div class="fx-flex fx-flex-col">
 
         <div>
-          <a class="fx-flex fx-flex-row fx-gap-2" href="mailto:cavaliere.davide@gmail.com">
+          <a class="label fx-flex fx-flex-row fx-gap-2" href="mailto:cavaliere.davide@gmail.com">
             <span class="material-icons">email</span> <span>cavaliere.davide@gmail.com</span>
           </a>
         </div>
         <div>
-          <a class="fx-flex fx-flex-row fx-gap-2" href="tel:+393806472057">
+          <a class="label fx-flex fx-flex-row fx-gap-2" href="tel:+393806472057">
             <span class="material-icons">phone</span> <span>+39 380 647 20 57</span>
           </a>
         </div>
         <div>
-          <a class="fx-flex fx-flex-row fx-gap-2" href="https://x.com/davidecavaliere" target="_blank">
+          <a class="label fx-flex fx-flex-row fx-gap-2" href="https://x.com/davidecavaliere" target="_blank">
             <span class="material-icons">public</span> <span>@davidecavaliere</span>
           </a>
         </div>

@@ -25,19 +25,17 @@
     "lint": "eslint ./src"
   },
   "dependencies": {
-    "mustache": "^4.2.0",
     "tslib": "^2.6.2"
   },
   "devDependencies": {
-    "@microphi/debug": "^2.10.1",
     "@microphi/di": "^2.10.0",
-    "@types/mustache": "^4.2.4",
     "jest-environment-jsdom": "^29.6.4",
     "typescript": "^5.4.2"
   },
   "peerDependencies": {
-    "@microphi/debug": "^2.2.0",
+    "reflect-metadata": "^0.2.2",
     "@microphi/di": "^2.3.0",
     "rxjs": "^7.8.1"
-  }
+  },
+  "sideEffects": false
 }

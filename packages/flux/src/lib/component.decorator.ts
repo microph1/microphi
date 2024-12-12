@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getDebugger } from '@microphi/debug';
 import { Injectable } from '@microphi/di';
 import { Subject, combineLatest, debounceTime } from 'rxjs';
 import { FxComponent, addWatchers } from './add-watcher';
@@ -91,9 +90,7 @@ export function hasOnChange(instance: unknown): instance is OnChanges<any> {
 
 export function Component(options: ComponentOptions): ClassDecorator {
 
-  const d = getDebugger(`@flux:@Component:${options.selector}`);
 
-  d('decorating', options.selector);
 
   const templateElm = document.createElement('template');
 
@@ -137,8 +134,6 @@ export function Component(options: ComponentOptions): ClassDecorator {
 
         options.inputs = getInputMetadata(target) || [];
 
-        d('creating custom component', options.selector);
-
         Reflect.defineMetadata(ComponentSymbol, options, target);
       }
 
@@ -156,8 +151,6 @@ export function Component(options: ComponentOptions): ClassDecorator {
 
 
     customElements.define(options.selector, class extends HTMLElement {
-
-      log = getDebugger(`@flux:${options.selector}`);
 
       public parent!: Node;
 
@@ -182,7 +175,6 @@ export function Component(options: ComponentOptions): ClassDecorator {
           this.connected$,
           start$,
         ]).pipe().subscribe(() => {
-          this.log('------------------------- component starting now -------------------------');
           this.render();
         });
 
@@ -214,18 +206,17 @@ export function Component(options: ComponentOptions): ClassDecorator {
             this.render();
 
           });
+
       }
 
       override appendChild<T extends Node>(node: T): T {
 
-        this.log('appendingChild', node);
 
         return this.shadowRoot!.appendChild(node);
       }
 
 
       public connectedCallback() {
-        this.log('connectedCallback');
 
         this.setAttributeNS('fx', 'fx-component', options.selector);
         this.setAttributeNS('fx', 'fx-id', this.fxId);
@@ -266,7 +257,6 @@ export function Component(options: ComponentOptions): ClassDecorator {
       }
 
       public attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-        this.log('attributeChangedCallback');
         if (oldValue !== newValue) {
           // values are always string because they're the old/new value set using
           // `setAttribute(name, newValue)`
@@ -372,10 +362,8 @@ export function Component(options: ComponentOptions): ClassDecorator {
                       throw new Error(`Unable to find ${methodName}`);
                     }
 
-                    this.log('adding event listener on', node, 'to controller', controller);
 
                     const args = attributeValue.match(/\((.+)?,*\)/)?.[1]?.split(',').map((arg) => arg.trim());
-                    this.log(args?.[1]);
 
                     node.addEventListener(eventName, (event: Event) => {
 
@@ -419,12 +407,6 @@ export function Component(options: ComponentOptions): ClassDecorator {
 
                 }
 
-                const squareBoxed = attributeName.match(SQUARE_BOXED_REGEX)?.[1];
-                if (squareBoxed) {
-                  this.log(`found [${squareBoxed}]`);
-                  this.log('attribute value', attributeValue);
-                }
-
                 if (attributeValue.match(CURLY_BOXED_REGEX)) {
                   // here we store the original template of the attribute
                   // say we have
@@ -451,7 +433,6 @@ export function Component(options: ComponentOptions): ClassDecorator {
           }
         }
 
-        this.log('rendering starts');
         const walker3 = document.createTreeWalker(this.content, NodeFilter.SHOW_ELEMENT, (node) => {
           if (node instanceof HTMLElement && IGNORED.includes(node.tagName)) {
             return NodeFilter.FILTER_REJECT;
@@ -464,7 +445,6 @@ export function Component(options: ComponentOptions): ClassDecorator {
           const node = walker3.currentNode as HTMLElement;
           node['fx'] ? '' : node['fx'] = {};
 
-          this.log(node);
 
           for (const attributeName of node.getAttributeNames()) {
 
@@ -472,7 +452,6 @@ export function Component(options: ComponentOptions): ClassDecorator {
             const doubleSquared = attributeName.match(DOUBLE_SQUARE_BOXED_REGEX)?.[1];
             if (doubleSquared) {
               const conditionToEvaluate = node.getAttribute(attributeName);
-              this.log({conditionToEvaluate});
 
               if (conditionToEvaluate !== null) {
                 const result = evalInScope(conditionToEvaluate, this.controller);
@@ -480,7 +459,6 @@ export function Component(options: ComponentOptions): ClassDecorator {
                   throw new Error(`${node.tagName} does not have a controller while it should. Are you forgetting to import it?`);
                 }
                 node['controller'][doubleSquared] = result;
-                this.log({result});
               }
 
             }
@@ -490,7 +468,6 @@ export function Component(options: ComponentOptions): ClassDecorator {
             const unboxed = attributeName.match(SQUARE_BOXED_REGEX)?.[1];
             // parse [attr] boxed attributes
             if (unboxed) {
-              this.log(`found square boxed attribute: ${attributeName}`);
 
               const property = node.getAttribute(attributeName);
 
@@ -581,13 +558,10 @@ export function Component(options: ComponentOptions): ClassDecorator {
           }
         }
 
-        this.log('all nodes with {{}} rendered');
-        this.log('rendering ends');
 
 
         if (!this.inited) {
 
-          this.log('first rendering done');
           this.inited = true;
 
           // call lifecycle after first render is done

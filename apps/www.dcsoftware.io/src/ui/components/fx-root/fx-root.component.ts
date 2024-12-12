@@ -112,7 +112,7 @@ export class FxRootComponent implements OnViewInit {
       // makes it a bit smoother
       //elm.style.setProperty('transition', 'background-position-y 0.1s linear');
 
-      parent.addEventListener('scroll', (_event) => {
+      parent.addEventListener('scroll', () => {
 
         //let parentHeight;
         //let scrollTop; if (parent === window) {

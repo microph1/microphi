@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.12.0](https://github.com/microph1/microphi/compare/@microphi/flux@2.11.0...@microphi/flux@2.12.0) (2024-12-13)
+
+### Features
+
+* **flux:** allow @HostListener decorator for methods ([1d79ed2](https://github.com/microph1/microphi/commit/1d79ed2c8bb4dcc3332076d532f3da3d0229235e))
+* **flux:** allow generate handlers in html using # ([d9a26a8](https://github.com/microph1/microphi/commit/d9a26a84b4def1b5c8bfe2536611bfa0281a42f3))
+* **flux:** enable arguments injection in (eventHandlers) and use dataset property to store scoped variables for template resolution ([7c9478d](https://github.com/microph1/microphi/commit/7c9478de76c6e2a12cd145ea20e060060c45dd96))
+
 # [2.11.0](https://github.com/microph1/microphi/compare/@microphi/flux@2.10.0...@microphi/flux@2.11.0) (2024-11-29)
 
 ### Bug Fixes

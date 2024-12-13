@@ -1,6 +1,6 @@
 {
   "name": "@microphi/list",
-  "version": "2.10.1",
+  "version": "2.10.2",
   "description": "Simple and fast list-like class",
   "main": "lib/cjs/index.js",
   "typings": "lib/esm/index.d.ts",

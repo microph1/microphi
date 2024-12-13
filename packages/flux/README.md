@@ -11,7 +11,7 @@ With your favourite package manager
 ```
 and install the peers packages
 ```
-@microphi/debug @microphi/di rxjs
+@microphi/di rxjs
 ```
 ## Boostrap an application
 ```typescript

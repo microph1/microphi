@@ -8,6 +8,8 @@ export class FxFor implements OnChanges<FxFor> {
   @Input() let!: string;
   @Input() track!: string;
 
+  private ids = new Set<string>();
+
   template: string;
 
 
@@ -20,7 +22,10 @@ export class FxFor implements OnChanges<FxFor> {
 
     // copy parent element classes and styles
 
-    this.elementRef.classList.add(this.elementRef.parentElement!.classList.value);
+    if (this.elementRef.classList.value) {
+
+      //this.elementRef.classList.add(...this.elementRef.parentElement!.classList.value.split(' '));
+    }
   }
 
   fxOnChanges(changes: Changes<FxFor>) {
@@ -29,19 +34,19 @@ export class FxFor implements OnChanges<FxFor> {
       return ;
     }
 
-    // find elements that have been removed
-    // @ts-ignore
-    const ids = this.of.map((item) => item[this.track]);
+
+
+
 
     const elements = this.elementRef.shadowRoot!.querySelectorAll('fx-item');
     // get all elements
 
 
-    for (const elm of elements) {
-      // @ts-ignore
-      const elmId = elm[this.track];
 
-      if (!ids.includes(elmId)) {
+    for (const elm of elements) {
+      const elmId = elm.id;
+
+      if (!this.ids.has(elmId)) {
         this.elementRef.shadowRoot!.removeChild(elm);
       }
 
@@ -52,27 +57,50 @@ export class FxFor implements OnChanges<FxFor> {
 
 
       const tpl = document.createElement('template');
+      let id: string;
 
-      // @ts-ignore
-      const id = item[this.track];
+      if (item !== null && this.track && typeof item === 'object' && this.track in item) {
 
-      tpl.innerHTML = `
-        <fx-item id="${id}" [[${this.let}]]="of[${index}]">
-            ${this.template}
-        </fx-item>
-        `;
+        id = sanitizeStringForHTMLID((item as {[k: string]: string})[this.track]);
+      } else {
+        id = sanitizeStringForHTMLID(item as string);
+      }
+
+      tpl.innerHTML = this.template;
 
       const elm = this.elementRef.shadowRoot!.getElementById(id);
 
+      const clone = tpl.content.cloneNode(true);
+
+      [...(clone as HTMLElement).children].forEach((elm) => {
+
+
+        (elm as HTMLElement).dataset[this.let] = JSON.stringify(this.of[index]);
+      });
+
 
       if (elm) {
-        this.elementRef.shadowRoot!.replaceChild(elm, tpl.content.cloneNode(true));
+        this.elementRef.shadowRoot!.replaceChild(elm, clone);
       } else {
-        this.elementRef.appendChild(tpl.content.cloneNode(true));
+        this.ids.add(id);
+        this.elementRef.appendChild(clone);
       }
+
     });
 
 
   }
 
+}
+
+function sanitizeStringForHTMLID(input: string) {
+  // Replace invalid characters with a hyphen
+  let sanitized = input.replace(/[^a-zA-Z0-9-_\.]/g, '-');
+
+  // Ensure the ID starts with a letter
+  if (!/^[a-zA-Z]/.test(sanitized)) {
+    sanitized = 'id-' + sanitized;
+  }
+
+  return sanitized;
 }

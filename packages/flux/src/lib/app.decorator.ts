@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { DI, DIOptions } from '@microphi/di';
-import { getDebugger } from '@microphi/debug';
 import { Class } from 'utility-types';
 import { getComponentMetadata } from './component.decorator';
 import { AsyncSubject } from 'rxjs';
 
-const d = getDebugger('@flux:core:@App');
 
 export const AppSymbol = Symbol('@App');
 
@@ -26,14 +24,13 @@ export function App(options: App) {
   for (const declared of options.declarations!) {
 
     const metadata = getComponentMetadata(declared);
-    // d('parsing declared', declared, metadata);
     promises.push(
       customElements.whenDefined(metadata.selector)
     );
   }
 
   Promise.all(promises).then(() => {
-    d('all component declared we can start app now!');
+    // all component declared we can start app now!
     start$.next();
     start$.complete();
   });
@@ -45,7 +42,6 @@ export function App(options: App) {
     })(class extends target {
 
       constructor() {
-        d('this is the augmented app constructor');
         super();
       }
     });

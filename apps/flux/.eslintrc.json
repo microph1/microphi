@@ -1,5 +1,4 @@
 {
-  "extends": "../../.eslintrc.json",
   "parserOptions": {
     "project": [
       "apps/flux/tsconfig.app.json",

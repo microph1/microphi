@@ -1,11 +1,7 @@
 import 'reflect-metadata';
-import { getDebugger } from '@microphi/debug';
 import { injector } from './injector';
 import { getInjectMetadata } from './inject.decorator';
 import { Klass } from '../types';
-
-const d = getDebugger('microphi:di:injectable.decorator');
-
 
 export const ClassNameSymbol = Symbol('ClassName');
 
@@ -15,7 +11,6 @@ export const ClassNameSymbol = Symbol('ClassName');
  */
 export function Injectable() {
   return target => {
-    d('annotating', target.name);
     return InjectableDecorator(target);
   };
 }
@@ -34,14 +29,7 @@ export function InjectableDecorator<T extends {new(...args: any[]): {}}>(klass: 
   return class extends klass {
     static [ClassNameSymbol] = `${klass.name}_${suffix}`;
 
-    static {
-      d('this is the static portion of', klass.name + suffix);
-      d('here symbol has been set');
-    }
-
     constructor(...args: any[]) {
-      d(args);
-      d({ injectMetadata });
 
       for (const {parameterIndex, klass} of injectMetadata) {
         // TODO implement a factory

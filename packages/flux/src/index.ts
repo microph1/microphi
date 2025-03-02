@@ -3,6 +3,7 @@ export * from './lib/directive.decorator';
 export * from './lib/input.decorator';
 export * from './lib/app.decorator';
 export * from './lib/decorators/host-listener.decorator';
+export * from './lib/decorators/view-child.decorator';
 
 
 export * from './lib/bootstrap';

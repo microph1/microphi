@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@microphi/di';
-import { Subject, combineLatest, debounceTime } from 'rxjs';
+import { AsyncSubject, Subject, combineLatest, debounceTime, takeUntil } from 'rxjs';
 import { FxComponent, addWatchers } from './add-watcher';
 import { start$ } from './app.decorator';
 import { getInputMetadata } from './input.decorator';
 import { getValue, parseTemplate } from './parse-template';
 import { getHostListeners } from './decorators/host-listener.decorator';
+import { getViewChildMetadata } from './decorators/view-child.decorator';
 
 const SQUARE_BOXED_REGEX = new RegExp(/^\[(\w*)\]$/);
 const DOUBLE_SQUARE_BOXED_REGEX = new RegExp(/\[\[(\w+)]]/);
@@ -72,6 +73,13 @@ export function hasOnViewInit(instance: unknown): instance is OnViewInit {
   return typeof (instance as OnViewInit).fxOnViewInit === 'function';
 }
 
+export interface OnDestroy {
+  fxOnDestroy(): void;
+}
+
+export function hasOnDestroy(instance: unknown): instance is OnDestroy {
+  return typeof (instance as OnDestroy).fxOnDestroy === 'function';
+}
 
 export interface PropertyChange<k extends string|number|symbol, T = unknown> {
   name: k;
@@ -80,7 +88,6 @@ export interface PropertyChange<k extends string|number|symbol, T = unknown> {
 }
 
 export type Changes<T extends object> = {
-
   [k in keyof T]: PropertyChange<k, T[k]>;
 }
 
@@ -169,6 +176,8 @@ export function Component(options: ComponentOptions): ClassDecorator {
       private readonly connected$ = new Subject<void>();
       private readonly scheduleRender$ = new Subject<Node>();
 
+      private disconnected$ = new AsyncSubject<void>();
+
       get content(): Node {
         return this.shadowRoot!;
       }
@@ -179,7 +188,9 @@ export function Component(options: ComponentOptions): ClassDecorator {
         combineLatest([
           this.connected$,
           start$,
-        ]).pipe().subscribe(() => {
+        ]).pipe(
+          takeUntil(this.disconnected$),
+        ).subscribe(() => {
           this.render();
         });
 
@@ -194,6 +205,7 @@ export function Component(options: ComponentOptions): ClassDecorator {
           this.connected$,
         ]).pipe(
           debounceTime(0),
+          takeUntil(this.disconnected$),
         ).subscribe(([v]) => {
 
           if (hasOnChange(this.controller)) {
@@ -206,10 +218,10 @@ export function Component(options: ComponentOptions): ClassDecorator {
         this.scheduleRender$
           .pipe(
             debounceTime(1),
+            takeUntil(this.disconnected$),
           )
           .subscribe(() => {
             this.render();
-
           });
 
       }
@@ -269,6 +281,15 @@ export function Component(options: ComponentOptions): ClassDecorator {
 
       }
 
+
+      disconnectedCallback() {
+        if (hasOnDestroy(this.controller)) {
+          this.controller.fxOnDestroy();
+        }
+        this.disconnected$.next();
+        this.disconnected$.complete();
+      }
+
       public attributeChangedCallback(name: string, oldValue: string, newValue: string) {
         if (oldValue !== newValue) {
           // values are always string because they're the old/new value set using
@@ -288,7 +309,7 @@ export function Component(options: ComponentOptions): ClassDecorator {
           if (isBoxedAttribute) {
 
             // maybe if it's a boxed attribute we should `eval` it
-            this.controller[name] = this.controller.nativeElement[name] ?? JSON.parse(newValue);
+            this.controller[name] = this.controller.nativeElement[name] ?? eval(newValue);
 
           } else {
 
@@ -395,7 +416,7 @@ export function Component(options: ComponentOptions): ClassDecorator {
                       if (args) {
 
                         for (const arg of args) {
-                          console.log('handling arg:', arg);
+                          //console.log('handling arg:', arg);
 
                           if (arg === '$event') {
                             // special word to inject actual DOM event
@@ -593,6 +614,19 @@ export function Component(options: ComponentOptions): ClassDecorator {
           }
         }
 
+
+        // parse @ViewChild decorator
+        const viewchildren = getViewChildMetadata(target);
+        if (viewchildren) {
+
+          for (const viewChild of viewchildren) {
+
+            if (!(viewChild.property in this.controller)) {
+              console.error('Unable to link @ViewChild', viewChild);
+            }
+
+          }
+        }
 
 
         if (!this.inited) {

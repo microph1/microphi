@@ -2,16 +2,16 @@ import { Subject } from 'rxjs';
 import { $Keys, FunctionKeys } from 'utility-types';
 
 
-export interface Operation {
+export interface Operation<T extends object> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   op: FunctionKeys<List<any>>;
-  payload?: unknown;
+  payload?: T[];
   timestamp: Date;
 }
 
 export class List<EntityType extends object> implements Iterable<EntityType> {
 
-  public operations$ = new Subject<Operation>();
+  public operations$ = new Subject<Operation<EntityType>>();
 
   public readonly entities = new Map<string, EntityType>();
 

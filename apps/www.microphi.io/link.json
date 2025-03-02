@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "npm:@microphi/flux": "../../flux/core/"
+   }
+}

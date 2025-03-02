@@ -99,20 +99,20 @@ export class FxMenuTrigger implements OnViewInit {
   private menu!: HTMLElement;
 
   constructor(private elm: HTMLElement) {
-    console.log({elm: this.elm});
+    //console.log({elm: this.elm});
   }
 
   fxOnViewInit() {
     this.menu = this.elm.querySelector('fx-menu')!;
 
-    console.log({menu: this.menu});
+    //console.log({menu: this.menu});
 
   }
 
 
   toggle() {
     this.opened = !this.opened;
-    console.log(this.opened);
+    //console.log(this.opened);
 
 
     // @ts-ignore

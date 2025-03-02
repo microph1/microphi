@@ -1,8 +1,13 @@
-import { Component, css, FxElement, OnViewInit } from '@microphi/flux';
+import { Component, css, OnViewInit, ViewChild } from '@microphi/flux';
+import type { FxElement } from '@microphi/flux';
 import { EMPTY, interval, scan, Subject, switchMap } from 'rxjs';
 import { projects } from '../../projects';
 import { FxOverlayComponent } from '../fx-overlay/fx-overlay.component';
 import templateUrl from './fx-root.component.html?url';
+import worker from './fx-worker.ts?worker';
+import { FxSpectrumAnalyzer } from '../fx-spectrum-analyzer.component';
+
+console.log({worker});
 
 type Directive = (this: FxRootComponent, elm: HTMLElement) => void;
 
@@ -32,6 +37,8 @@ export function registerDirective(name: string, cb: Directive) {
 })
 export class FxRootComponent implements OnViewInit {
 
+  @ViewChild('analyzer') analyzer!: FxElement<FxSpectrumAnalyzer>;
+
   timer = 0;
 
   count$ = new Subject<void>();
@@ -44,6 +51,12 @@ export class FxRootComponent implements OnViewInit {
   easytest = projects['Easytest'];
 
   constructor(private elm: HTMLElement) {
+    const w = new worker();
+
+    console.log({w});
+
+    w.postMessage({message: 'test', projects});
+
     this.count$.pipe(
 
       scan((status, _) => {
@@ -83,10 +96,6 @@ export class FxRootComponent implements OnViewInit {
       console.log('URL changed to:', location.href);
     });
 
-
-
-
-
   }
 
   async fxOnViewInit() {
@@ -103,6 +112,18 @@ export class FxRootComponent implements OnViewInit {
 
         // Trigger any additional logic (e.g., re-rendering a section)
       }
+    });
+
+    registerDirective('fx-focus', (elm: HTMLElement) => {
+
+
+      setTimeout(() => {
+
+        elm.scrollIntoView({
+          behavior: 'smooth',
+        });
+      }, 100);
+
     });
 
     registerDirective('fx-parallax', (elm: HTMLElement) => {
@@ -181,6 +202,11 @@ export class FxRootComponent implements OnViewInit {
 
       header!.style.backgroundColor = `rgba(0,0,0, ${percent})`;
       header!.style.backdropFilter = `blur(${2 * percent}px)`;
+    });
+
+    navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+      this.analyzer.controller.start(stream);
+
     });
   }
 

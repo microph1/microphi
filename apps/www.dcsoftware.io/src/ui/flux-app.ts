@@ -6,6 +6,8 @@ import { FxRootComponent } from './components/fx-root/fx-root.component';
 import { FxFor } from './components/fx-for/fx-for.component';
 import { FxMenuComponent } from './components/fx-menu/fx-menu.component';
 import { FxOverlayComponent } from './components/fx-overlay/fx-overlay.component';
+import { FxSpectrumAnalyzer } from './components/fx-spectrum-analyzer.component';
+console.log(FxSpectrumAnalyzer);
 
 registerPipe('json', (value: object) => {
   return JSON.stringify(value, null, 2);

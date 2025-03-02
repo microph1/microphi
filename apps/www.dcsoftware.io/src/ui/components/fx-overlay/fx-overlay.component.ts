@@ -32,10 +32,7 @@ export class FxOverlayComponent {
   opacity = 0;
 
 
-  constructor(private elm: HTMLElement) {
-    console.log({elm: this.elm});
-
-  }
+  //constructor(private elm: HTMLElement) {}
 
   show() {
     this.display = 'flex';

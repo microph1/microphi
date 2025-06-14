@@ -5,7 +5,8 @@
     "declarationMap": true,
     "target": "es2020",
     "declaration": true,
-    "inlineSources": true
+    "inlineSources": true,
+    "types": ["web"]
   },
   "include": [
     "src/**/*"

@@ -2,8 +2,7 @@ import type { Config } from 'jest';
 
 
 const config: Config = {
-  displayName: 'socket.io-rpc',
-  // testEnvironment: 'jsdom',
+  displayName: 'web-socket-client',
   transform: {
     '^.+\\.tsx?$': [
       'ts-jest',
@@ -13,21 +12,22 @@ const config: Config = {
       },
     ],
   },
-  coverageDirectory: '<rootDir>/../../coverage/socket.io-rpc',
+  testEnvironment: 'jsdom',
+  coverageDirectory: '<rootDir>/../../coverage/debug',
   coverageReporters: ['json', 'lcov', 'text-summary', 'html'],
   collectCoverageFrom: [
     '**/src/**/!(*.spec).ts',
     '!**/*.experiment.ts',
     '!**/index.ts',
   ],
-  // coverageThreshold: {
-  //   global: {
-  //     statements: 88.89,
-  //     branches: 57.14,
-  //     functions: 100,
-  //     lines: 88.89,
-  //   }
-  // },
+  coverageThreshold: {
+    global: {
+      statements: 88.89,
+      branches: 57.14,
+      functions: 100,
+      lines: 88.89,
+    }
+  },
 };
 
 

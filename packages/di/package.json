@@ -3,23 +3,22 @@
   "version": "2.10.1",
   "description": "Handcrafted DI container",
   "exports": {
+    "./package.json": {
+      "default": "./package.json"
+    },
     ".": {
-      "import": "./lib/esm/index.js",
-      "types": "./lib/esm/index.d.ts",
-      "require": "./lib/cjs/index.js"
+      "types": "./index.d.ts",
+      "import": "./lib/esm//index.js",
+      "esm": "./lib/esm/index.js",
+      "default": "./cjs/index.js"
     },
     "./testing": {
-      "import": "./lib/esm/lib/testing/index.js",
-      "types": "./lib/esm/lib/testing/index.d.ts",
-      "require": "./lib/cjs/lib/testing/index.js"
+      "types": "./testing/index.d.ts",
+      "import": "./esm2022/testing/testing.mjs",
+      "esm": "./esm2022/testing/testing.mjs",
+      "default": "./fesm2022/testing.mjs"
     }
   },
-  "directories": {
-    "lib": "lib"
-  },
-  "files": [
-    "lib"
-  ],
   "license": "MIT",
   "keywords": [
     "typescript",

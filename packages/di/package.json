@@ -2,23 +2,15 @@
   "name": "@microphi/di",
   "version": "2.10.1",
   "description": "Handcrafted DI container",
-  "exports": {
-    "./package.json": {
-      "default": "./package.json"
-    },
-    ".": {
-      "types": "./index.d.ts",
-      "import": "./lib/esm//index.js",
-      "esm": "./lib/esm/index.js",
-      "default": "./cjs/index.js"
-    },
-    "./testing": {
-      "types": "./testing/index.d.ts",
-      "import": "./esm2022/testing/testing.mjs",
-      "esm": "./esm2022/testing/testing.mjs",
-      "default": "./fesm2022/testing.mjs"
-    }
+  "main": "lib/cjs/index.js",
+  "typings": "lib/esm/index.d.ts",
+  "module": "lib/esm/index.js",
+  "directories": {
+    "lib": "lib"
   },
+  "files": [
+    "lib"
+  ],
   "license": "MIT",
   "keywords": [
     "typescript",

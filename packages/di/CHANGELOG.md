@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.2](https://github.com/microph1/microphi/compare/@microphi/di@2.10.1...@microphi/di@2.10.2) (2025-06-18)
+
+### Bug Fixes
+
+* **@microphi/di:** export testing utilities ([28d398b](https://github.com/microph1/microphi/commit/28d398baa8700fbb2863517a1d113be7a03daa1e))
+* **di:** expose using main index.ts file ([a1b7699](https://github.com/microph1/microphi/commit/a1b76997ef774529c4a8e6fcafaa9e254dda5316))
+* **di:** restoring original package.json ([ea9de31](https://github.com/microph1/microphi/commit/ea9de31c6a4a288bba237c4b6c8d75050f2ed5d2))
+* **di:** wrong imports ([c189fca](https://github.com/microph1/microphi/commit/c189fca30398b95a710e977bec34fa14db8fe802))
+
 ## [2.10.1](https://github.com/microph1/microphi/compare/@microphi/di@2.10.0...@microphi/di@2.10.1) (2024-12-13)
 
 **Note:** Version bump only for package @microphi/di

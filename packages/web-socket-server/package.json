@@ -1,6 +1,6 @@
 {
   "name": "@microphi/web-socket-server",
-  "version": "2.10.1",
+  "version": "2.10.2",
   "description": "A WebSocket Server implementation that handles reconnects and ping timeouts",
   "main": "lib/cjs/index.js",
   "typings": "lib/esm/index.d.ts",

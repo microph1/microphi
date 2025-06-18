@@ -1,6 +1,6 @@
-import { DI, DIOptions, providers } from '../container/di.decorator';
-import { Klass } from '../types';
-import { bootstrap } from '../container/bootstrap';
+import { bootstrap } from '../lib/container/bootstrap';
+import { DI, DIOptions, providers } from '../lib/container/di.decorator';
+import { Klass } from '../lib/types';
 
 export class TestBed {
 

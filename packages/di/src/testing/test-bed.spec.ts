@@ -1,6 +1,6 @@
 import { TestBed } from './test-bed';
-import { Injectable } from '../injctable/injectable.decorator';
 import { Mocked } from './mocked';
+import { Injectable } from '../lib/injctable/injectable.decorator';
 
 describe('TestBed', () => {
   let instance: TestClassB;

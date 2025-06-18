@@ -13,5 +13,5 @@ export * from './lib/container/bootstrap';
 
 export * from './lib/scan';
 
-export * from './lib/testing/mocked';
-export * from './lib/testing/test-bed';
+export * from './testing/mocked';
+export * from './testing/test-bed';

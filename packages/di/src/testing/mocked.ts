@@ -1,7 +1,7 @@
+import { Instance, Klass } from '../lib/types';
 import Mock = jest.Mock;
 import FunctionPropertyNames = jest.FunctionPropertyNames;
 import { FunctionKeys } from 'utility-types';
-import { Instance, Klass } from '../types';
 
 
 const MockedSymbol = Symbol('Mocked');

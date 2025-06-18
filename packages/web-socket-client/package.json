@@ -12,7 +12,7 @@
     "lib"
   ],
   "licence": "MIT",
-  "private": false,
+  "private": true,
   "keywords": [
     "log",
     "debug",

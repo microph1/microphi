@@ -1,6 +1,6 @@
 {
   "name": "@microphi/flux",
-  "version": "2.12.1",
+  "version": "2.12.2",
   "description": "the flux core package",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -28,7 +28,7 @@
     "tslib": "^2.6.2"
   },
   "devDependencies": {
-    "@microphi/di": "^2.10.2",
+    "@microphi/di": "^2.10.3",
     "jest-environment-jsdom": "^29.6.4",
     "typescript": "^5.4.2"
   },

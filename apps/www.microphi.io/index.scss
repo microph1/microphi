@@ -65,32 +65,19 @@ body {
 
 
 // /* Root Variables */
-// :root {
-//   --color-primary: #384B70; /* Primary color */
-//   --color-secondary: #507687; /* Secondary color */
-//   --color-background: #FCFAEE; /* Background color */
-//   --color-background-dark: #31343e;
-//   --color-accent: #B8001F; /* Accent color */
-//   --font-family: 'Roboto', sans-serif;
-//   --font-headings: 'Montserrat', sans-serif;
-//   --font-tech: 'Orbitron';
-//   --border-radius: 8px;
-//   --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-// }
-
-/* Dark Theme Variables */
 :root {
-  --color-primary: #FCFAEE; /* Light color for primary elements */
-  --color-secondary: #A6B8D0; /* Muted light secondary color */
-  --color-background: #1C1F26; /* Dark background */
-  --color-background-dark: #121417; /* Even darker background */
-  --color-accent: #FF4C4C; /* Bright accent color for emphasis */
+  --color-primary: #457B9D; /* Muted slate blue as the main color */
+  --color-secondary: #A8DADC; /* Soft pastel teal for secondary elements */
+  --color-background: #1D3557; /* Deep navy as the primary background */
+  --color-background-dark: #0B132B; /* Even darker navy for contrast */
+  --color-accent: #E63946; /* Gentle pastel red for highlights */
   --font-family: 'Roboto', sans-serif;
-  --font-headings: 'Montserrat', sans-serif;
-  --font-tech: 'Orbitron';
+  --font-headings: 'Roboto', sans-serif;
+  --font-tech: 'Zen Dots';
   --border-radius: 8px;
-  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Slightly darker shadow for dark theme */
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
+
 
 /* General Reset */
 body, h1, h2, h3, h4, h5, h6, p, ul, ol, li, a, div, span, button, input {
@@ -212,7 +199,7 @@ header {
 .break-3 {
   color: var(--color-background); /* Light text for contrast */
   padding: 1rem;
-  background-image: url('/w13.webp');
+  background-image: url('/w000.webp');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -287,7 +274,7 @@ a:hover, button:hover {
 /* Cards */
 .card {
   background-color: var(--color-primary);
-  color: var(--color-background);
+  color: var(--color-secondary);
   border-radius: var(--border-radius);
   padding: var(--fx-3xs);
   box-shadow: var(--box-shadow);
@@ -301,7 +288,7 @@ a:hover, button:hover {
 }
 
 .card h2 {
-  color: var(--color-background);
+  color: var(--color-secondary);
 }
 
 .card .content {

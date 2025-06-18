@@ -1,0 +1,38 @@
+{
+  "name": "@microphi/web-socket-client",
+  "version": "2.10.1",
+  "description": "A WebSocket client implementation that handles reconnects and ping timeouts",
+  "main": "lib/cjs/index.js",
+  "typings": "lib/esm/index.d.ts",
+  "module": "lib/esm/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "licence": "MIT",
+  "private": false,
+  "keywords": [
+    "log",
+    "debug",
+    "console"
+  ],
+  "author": {
+    "email": "cavaliere.davide@gmail.com",
+    "name": "Davide Cavaliere",
+    "url": "www.microphi.io"
+  },
+  "homepage": "https://github.com/microph1/microphi",
+  "dependencies": {
+    "tslib": "^2.5.0"
+  },
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json && tsc -b tsconfig.cjs.json",
+    "lint": "eslint ./src"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.18.0",
+    "jest-websocket-mock": "^2.5.0"
+  }
+}

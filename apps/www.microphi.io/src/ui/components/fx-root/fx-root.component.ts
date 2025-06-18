@@ -1,14 +1,8 @@
-import { Component, css, OnViewInit, ViewChild } from '@microphi/flux';
-import type { FxElement } from '@microphi/flux';
+import { Component, css, FxElement, OnViewInit } from '@microphi/flux';
 import { EMPTY, interval, scan, Subject, switchMap } from 'rxjs';
 import { projects } from '../../projects';
 import { FxOverlayComponent } from '../fx-overlay/fx-overlay.component';
 import templateUrl from './fx-root.component.html?url';
-import worker from './fx-worker.ts?worker';
-import { FxSpectrumAnalyzer } from '../fx-spectrum-analyzer.component';
-
-console.log({worker});
-
 type Directive = (this: FxRootComponent, elm: HTMLElement) => void;
 
 export const directives: {[name: string]: Directive} = {};
@@ -17,6 +11,7 @@ export function registerDirective(name: string, cb: Directive) {
   directives[name] = cb;
 }
 
+
 @Component({
   selector: 'fx-root',
   templateUrl,
@@ -24,6 +19,7 @@ export function registerDirective(name: string, cb: Directive) {
     :host {
       display: flex;
       flex-direction: column;
+      flex-grow: 1;
       gap: 12px;
     }
 
@@ -37,8 +33,6 @@ export function registerDirective(name: string, cb: Directive) {
 })
 export class FxRootComponent implements OnViewInit {
 
-  @ViewChild('analyzer') analyzer!: FxElement<FxSpectrumAnalyzer>;
-
   timer = 0;
 
   count$ = new Subject<void>();
@@ -51,11 +45,7 @@ export class FxRootComponent implements OnViewInit {
   easytest = projects['Easytest'];
 
   constructor(private elm: HTMLElement) {
-    const w = new worker();
 
-    console.log({w});
-
-    w.postMessage({message: 'test', projects});
 
     this.count$.pipe(
 
@@ -202,11 +192,6 @@ export class FxRootComponent implements OnViewInit {
 
       header!.style.backgroundColor = `rgba(0,0,0, ${percent})`;
       header!.style.backdropFilter = `blur(${2 * percent}px)`;
-    });
-
-    navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-      this.analyzer.controller.start(stream);
-
     });
   }
 

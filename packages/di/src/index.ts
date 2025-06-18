@@ -12,3 +12,6 @@ export * from './lib/types';
 export * from './lib/container/bootstrap';
 
 export * from './lib/scan';
+
+export * from './testing/mocked';
+export * from './testing/test-bed';

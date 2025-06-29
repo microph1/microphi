@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.2](https://example.com/compare/@microphi/styles@1.2.1...@microphi/styles@1.2.2) (2025-06-29)
+
+### Bug Fixes
+
+* **styles:** adjust widths and heights so that we can always make 100 ([8ae3b5a](https://example.com/commits/8ae3b5aa4925f9a6f27b59e5537438fb2b713437))
+
 ## [1.2.1](https://example.com/compare/@microphi/styles@1.2.0...@microphi/styles@1.2.1) (2024-11-15)
 
 **Note:** Version bump only for package @microphi/styles

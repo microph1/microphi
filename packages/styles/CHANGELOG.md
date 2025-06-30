@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.3](https://example.com/compare/@microphi/styles@1.2.2...@microphi/styles@1.2.3) (2025-06-30)
+
+### Bug Fixes
+
+* **styles:** add more sizing options ([11c5de2](https://example.com/commits/11c5de2cd29088e3f69ed89e2c3ce1ea0fce3782))
+
 ## [1.2.2](https://example.com/compare/@microphi/styles@1.2.1...@microphi/styles@1.2.2) (2025-06-29)
 
 ### Bug Fixes

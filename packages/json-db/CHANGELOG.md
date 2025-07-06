@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.1](https://github.com/microph1/microphi/compare/@microphi/json-db@2.11.0...@microphi/json-db@2.11.1) (2025-07-06)
+
+### Bug Fixes
+
+* **json-db:** still makes sense to expose the whole minisearch object ([7ee8ab2](https://github.com/microph1/microphi/commit/7ee8ab2657202401c4adf1b9f2b31aaedba97b89))
+
 # [2.11.0](https://github.com/microph1/microphi/compare/@microphi/json-db@2.10.3...@microphi/json-db@2.11.0) (2025-07-06)
 
 ### Features

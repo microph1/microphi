@@ -82,7 +82,7 @@ export class JsonStorage<T extends object> {
   index = new List<withAutoTrail<{ id: string; path: string; }>>('id', []);
 
 
-  private _search!: MiniSearch<T>;
+  _search!: MiniSearch<T>;
 
 
   constructor(
@@ -109,7 +109,6 @@ export class JsonStorage<T extends object> {
     if (searchIndexOptions) {
       this._search = new MiniSearch(searchIndexOptions);
     }
-
 
   }
 

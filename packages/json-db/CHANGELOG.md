@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.11.0](https://github.com/microph1/microphi/compare/@microphi/json-db@2.10.3...@microphi/json-db@2.11.0) (2025-07-06)
+
+### Features
+
+* **json-storage:** add ready handler so that we know when data has been loaded ([949d070](https://github.com/microph1/microphi/commit/949d070066ba07a1d0abd44eeb6cc5fba706ecda))
+
 ## [2.10.3](https://github.com/microph1/microphi/compare/@microphi/json-db@2.10.2...@microphi/json-db@2.10.3) (2025-06-18)
 
 **Note:** Version bump only for package @microphi/json-db

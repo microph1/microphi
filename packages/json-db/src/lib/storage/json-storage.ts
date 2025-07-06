@@ -25,6 +25,60 @@ export class JsonStorage<T extends object> {
 
   syncPending$ = new Subject<boolean>();
 
+  ready = new Promise((resolve, reject) => {
+
+    this.getIndex().then((data) => {
+
+      this.index.upsert(...data);
+
+      this.#l(`loaded index for ${data.length} items`);
+      this.#l('getting documents');
+
+      const documents = [...this.index].map(({ id }) => {
+        return this.get(id);
+      });
+
+      this.#l(`got ${documents.length} documents`);
+
+      if (this.searchIndexOptions) {
+        this.#l('reading files to generate search index');
+
+        Promise.all(documents).then((actualDocs) => {
+
+          this.#l('rebuilding search index with', actualDocs.length);
+
+          actualDocs.forEach((doc) => {
+
+            try {
+
+              if (doc && doc['id']) {
+                // this.l(`adding document with id ${doc['id']}`);
+
+                this._search.add(doc);
+              }
+
+            } catch (err) {
+              console.error('Error while loading entity into search index');
+              this.#l(doc);
+              // console.error(actualDocs);
+              console.error(err);
+              reject(err);
+            }
+
+          });
+
+          this.#l('search index rebuilt');
+          this.#l(`handling ${this._search.documentCount} documents for free search`);
+
+
+          resolve(true);
+        });
+      } else {
+        resolve(true);
+      }
+    });
+  });
+
   index = new List<withAutoTrail<{ id: string; path: string; }>>('id', []);
 
 
@@ -35,7 +89,7 @@ export class JsonStorage<T extends object> {
     private entity: string,
     private basePath: string,
     // minisearch index options
-    searchIndexOptions?: Options,
+    private searchIndexOptions?: Options,
     // Debounce time in ms
     debounce?: number,
     private scheduler?: Scheduler,
@@ -56,49 +110,6 @@ export class JsonStorage<T extends object> {
       this._search = new MiniSearch(searchIndexOptions);
     }
 
-    this.getIndex().then((data) => {
-
-      this.index.upsert(...data);
-
-      this.#l(`loaded index for ${data.length} items`);
-      this.#l('getting documents');
-
-      const documents = [...this.index].map(({ id }) => {
-        return this.get(id);
-      });
-      this.#l(`got ${documents.length} documents`);
-
-      if (searchIndexOptions) {
-        this.#l('reading files to generate search index');
-        Promise.all(documents).then((actualDocs) => {
-
-          this.#l('rebuilding search index with', actualDocs.length);
-
-          actualDocs.forEach((doc) => {
-
-            try {
-
-              if (doc && doc['id']) {
-                // this.l(`adding document with id ${doc['id']}`);
-
-                this._search.add(doc);
-              }
-
-            } catch (err) {
-              console.error('Error while loading entity into search index');
-              this.#l(doc);
-              // console.error(actualDocs);
-              console.error(err);
-            }
-
-          });
-
-          this.#l('search index rebuilt');
-          this.#l(`handling ${this._search.documentCount} documents for free search`);
-
-        });
-      }
-    });
 
   }
 

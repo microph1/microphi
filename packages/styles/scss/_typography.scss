@@ -66,25 +66,25 @@ $font-weight-map: (
 .fx-title {
   font-size: var(--fx-typography-1);
   font-weight: map.get($font-weight-map, font-medium);
-  line-height: 1.6rem;
+  line-height: calc(var(--fx-typography-1) + 2px);
 }
 
 .fx-subtitle {
   font-size: var(--fx-typography-0);
   font-weight: map.get($font-weight-map, font-normal);
-  line-height: 1.6rem;
+  line-height: calc(var(--fx-typography-0) + 2px);
 }
 
 .fx-body-1 {
   font-size: var(--fx-typography--1);
   font-weight: map.get($font-weight-map, font-normal);
-  line-height: 1.5rem;
+  line-height: calc(var(--fx-typography--1) + 2px);
 }
 
 .fx-body-2 {
   font-size: var(--fx-typography--2);
   font-weight: map.get($font-weight-map, font-light);
-  line-height: var(--fx-typography--2);
+  line-height: calc(var(--fx-typography--2) + 2px);
   }
 
 .fx-caption {

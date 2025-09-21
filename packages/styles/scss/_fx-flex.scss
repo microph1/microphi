@@ -29,65 +29,65 @@
 
   .#{$actual-prefix}fx-flex-column {
     display: flex;
-    flex-direction: column;
+    flex-direction: column !important;
   }
 
   .#{$actual-prefix}fx-flex-row {
     display: flex;
-    flex-direction: row;
+    flex-direction: row !important;
   }
 
   .#{$actual-prefix}fx-flex-nowrap {
-    flex-wrap: nowrap;
+    flex-wrap: nowrap !important;
   }
 
   .#{$actual-prefix}fx-flex-wrap {
-    flex-wrap: wrap;
+    flex-wrap: wrap !important;
   }
 
   .#{$actual-prefix}fx-flex-align-items-center {
-    align-items: center;
+    align-items: center !important;
   }
 
   .#{$actual-prefix}fx-flex-align-items-baseline {
-    align-items: baseline;
+    align-items: baseline !important;
   }
 
   .#{$actual-prefix}fx-flex-justify-center {
-    justify-content: center;
+    justify-content: center !important;
   }
 
   .#{$actual-prefix}fx-flex-align-items-start {
-    align-items: flex-start;
+    align-items: flex-start !important;
   }
 
   .#{$actual-prefix}fx-flex-align-items-end {
-    align-items: flex-end;
+    align-items: flex-end !important;
   }
 
   .#{$actual-prefix}fx-flex-align-items-baseline {
-    align-items: baseline;
+    align-items: baseline !important;
   }
 
   .#{$actual-prefix}fx-flex-align-center-center {
-    align-items: center;
-    justify-content: center;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
   .#{$actual-prefix}fx-flex-justify-space-evenly {
-    justify-content: space-around;
+    justify-content: space-around !important;
   }
 
   .#{$actual-prefix}fx-flex-justify-space-around {
-    justify-content: space-around;
+    justify-content: space-around !important;
   }
 
   .#{$actual-prefix}fx-flex-justify-space-between {
-    justify-content: space-between;
+    justify-content: space-between !important;
   }
 
   .#{$actual-prefix}fx-flex-justify-end {
-    justify-content: end;
+    justify-content: end !important;
   }
 
 
@@ -95,11 +95,11 @@
   @while $i <= 100 {
 
     .#{$actual-prefix}fx-w-#{$i} {
-      width: #{$i}vw;
+      width: #{$i}vw !important;
     }
 
     .#{$actual-prefix}fx-h-#{$i} {
-      height: #{$i}vh;
+      height: #{$i}vh !important;
     }
 
 

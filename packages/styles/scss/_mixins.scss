@@ -44,4 +44,23 @@
       }
     }
   }
+
+  @media (max-aspect-ratio: 4/4) {
+    .taller\:#{$selector} {
+      @content;
+    }
+  }
+
+  @media (min-aspect-ratio: 4/4) {
+    .wider\:#{$selector} {
+      @content;
+    }
+  }
+
+  @media (min-aspect-ratio: 8/4) {
+    .wider\:#{$selector} {
+      @content;
+    }
+  }
+
 }

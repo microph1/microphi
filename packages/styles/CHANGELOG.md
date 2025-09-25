@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://example.com/compare/@microphi/styles@1.2.5...@microphi/styles@1.3.0) (2025-09-25)
+
+### Features
+
+* **styles:** font-weight should bring !important ([9bd1fda](https://example.com/commits/9bd1fdaadf01e1e18c327c78526d156029b8aba0))
+
 ## [1.2.5](https://example.com/compare/@microphi/styles@1.2.4...@microphi/styles@1.2.5) (2025-09-21)
 
 **Note:** Version bump only for package @microphi/styles

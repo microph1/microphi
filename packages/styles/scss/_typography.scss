@@ -16,7 +16,7 @@ $font-weight-map: (
 
 @each $key, $value in $font-weight-map {
   .fx-#{$key} {
-    font-weight: #{$value};
+    font-weight: #{$value} !important;
   }
 }
 

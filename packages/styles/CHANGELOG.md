@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.1](https://example.com/compare/@microphi/styles@1.3.0...@microphi/styles@1.3.1) (2025-10-09)
+
+**Note:** Version bump only for package @microphi/styles
+
 # [1.3.0](https://example.com/compare/@microphi/styles@1.2.5...@microphi/styles@1.3.0) (2025-09-25)
 
 ### Features

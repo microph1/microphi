@@ -1,0 +1,11 @@
+{
+  "name": "@microphi/log",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./src/index.js",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint ./src",
+    "test": "node --test src/index.spec.js"
+  }
+}

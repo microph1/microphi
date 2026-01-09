@@ -4,34 +4,34 @@ const isNode = typeof process !== 'undefined' && process.versions && process.ver
 // Timestamp configuration
 const enableTimestamp = isNode ? process.env.LOG_TIMESTAMP === 'true' : true;
 
-// Color palettes
+// Color palettes (with bold)
 const nodeColors = [
-  '\x1b[34m', // blue
-  '\x1b[36m', // cyan
-  '\x1b[92m', // bright green
-  '\x1b[93m', // bright yellow
-  '\x1b[95m', // bright magenta
-  '\x1b[94m', // bright blue
-  '\x1b[96m', // bright cyan
-  '\x1b[32m', // green
-  '\x1b[33m', // yellow
-  '\x1b[35m', // magenta
-  '\x1b[91m', // bright red
-  '\x1b[31m'  // red
+  '\x1b[1;34m', // bold blue
+  '\x1b[1;36m', // bold cyan
+  '\x1b[1;92m', // bold bright green
+  '\x1b[1;93m', // bold bright yellow
+  '\x1b[1;95m', // bold bright magenta
+  '\x1b[1;94m', // bold bright blue
+  '\x1b[1;96m', // bold bright cyan
+  '\x1b[1;32m', // bold green
+  '\x1b[1;33m', // bold yellow
+  '\x1b[1;35m', // bold magenta
+  '\x1b[1;91m', // bold bright red
+  '\x1b[1;31m'  // bold red
 ];
 const browserColors = [
-  'color: #0000ff', // blue
-  'color: #00ffff', // cyan
-  'color: #00ff00', // green
-  'color: #ffff00', // yellow
-  'color: #ff00ff', // magenta
-  'color: #4169e1', // royal blue
-  'color: #00ced1', // dark turquoise
-  'color: #32cd32', // lime green
-  'color: #ffd700', // gold
-  'color: #da70d6', // orchid
-  'color: #dc143c', // crimson
-  'color: #ff0000'  // red
+  'color: #0000ff; font-weight: bold;', // bold blue
+  'color: #00ffff; font-weight: bold;', // bold cyan
+  'color: #00ff00; font-weight: bold;', // bold green
+  'color: #ffff00; font-weight: bold;', // bold yellow
+  'color: #ff00ff; font-weight: bold;', // bold magenta
+  'color: #4169e1; font-weight: bold;', // bold royal blue
+  'color: #00ced1; font-weight: bold;', // bold dark turquoise
+  'color: #32cd32; font-weight: bold;', // bold lime green
+  'color: #ffd700; font-weight: bold;', // bold gold
+  'color: #da70d6; font-weight: bold;', // bold orchid
+  'color: #dc143c; font-weight: bold;', // bold crimson
+  'color: #ff0000; font-weight: bold;'  // bold red
 ];
 const resetColor = '\x1b[0m';
 

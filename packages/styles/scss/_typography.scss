@@ -1,5 +1,7 @@
 @use 'sass:math';
 @use "sass:map";
+@use "sass:list";
+@use "sass:meta";
 
 $font-weight-map: (
   font-thin: 100,
@@ -13,88 +15,124 @@ $font-weight-map: (
   font-black: 900
 ) !default;
 
-
 @each $key, $value in $font-weight-map {
   .fx-#{$key} {
     font-weight: #{$value} !important;
   }
 }
 
+// Define typography scale range - users can override these values
+// This should match the positiveSteps and negativeSteps used in utopia
+$positive-steps: 6 !default;  // Number of positive steps (should match utopia positiveSteps)
+$negative-steps: 4 !default;  // Number of negative steps (should match utopia negativeSteps)
 
-@function project($min, $max) {
-  $r_min: 400px;
-  $r_max: 1000px;
+// Create a map of typography variables - users can override this to match their utopia prefix
+// To customize, users can define their own $typography-vars map before importing this file
+// Example:
+// $typography-vars: (
+//   1: var(--step-typography-1),
+//   2: var(--step-typography-2),
+//   // ... etc up to positiveSteps and negativeSteps
+// ) !default;
 
-  $m: calc(($max - $min)/($r_max - $r_min) * 100);
-  @return clamp($min, min(#{$m}vw, #{$m}vh), $max);
+// Default map with the most common range of steps
+$typography-vars: (
+  0: var(--fx-typography-0),
+  1: var(--fx-typography-1),
+  2: var(--fx-typography-2),
+  3: var(--fx-typography-3),
+  4: var(--fx-typography-4),
+  5: var(--fx-typography-5),
+  6: var(--fx-typography-6),
+  7: var(--fx-typography-7),
+  8: var(--fx-typography-8),
+  -1: var(--fx-typography--1),
+  -2: var(--fx-typography--2),
+  -3: var(--fx-typography--3),
+  -4: var(--fx-typography--4),
+  -5: var(--fx-typography--5),
+  -6: var(--fx-typography--6),
+  -7: var(--fx-typography--7),
+  -8: var(--fx-typography--8)
+) !default;
+
+// Function to get the appropriate CSS variable name from the map
+// If the exact index isn't in the map, fall back to default naming
+@function get-typography-var($step) {
+  @if map.has-key($typography-vars, $step) {
+    @return map.get($typography-vars, $step);
+  } @else {
+    // Fallback to dynamically generated variable name if not in map
+    @return var(--fx-typography-#{$step});
+  }
 }
 
-// TODO: Check the line-height for headlines and subtitles
-.fx-headline-1 {
-  font-size: var(--fx-typography-6);
-  /* font-size: project(60px, 112px); */
-  font-weight: map.get($font-weight-map, font-semibold);
-  line-height: initial;
+// Generate font size classes dynamically based on the typography scale
+@for $i from $positive-steps * -1 through $positive-steps {
+  @if $i != 0 {
+    .fx-text-#{$i} {
+      font-size: get-typography-var($i);
+    }
+  } @else {
+    .fx-text-0 {
+      font-size: get-typography-var(0);
+    }
+  }
 }
 
-.fx-headline-2 {
-  font-size: var(--fx-typography-5);
-  /* font-size: project(40px, 84px); */
-  font-weight: map.get($font-weight-map, font-medium);
-  line-height: initial;
+// Define specific semantic typography classes
+// Headline classes - dynamically generated based on positive steps
+@for $i from 1 through $positive-steps {
+  .fx-headline-#{$i} {
+    font-size: get-typography-var($i);
+    font-weight: if($i <= 3, map.get($font-weight-map, font-semibold), map.get($font-weight-map, font-medium));
+    line-height: initial;
+  }
 }
 
-.fx-headline-3 {
-  font-size: var(--fx-typography-4);
-  /* font-size: project(30px, 64px); */
-  font-weight: map.get($font-weight-map, font-semibold);
-  line-height: initial;
-}
-
-.fx-headline-4 {
-  font-size: var(--fx-typography-3);
-  font-weight: map.get($font-weight-map, font-semibold);
-  line-height: initial;
-}
-
-.fx-headline-5 {
-  font-size: var(--fx-typography-2);
-  font-weight: map.get($font-weight-map, font-normal);
-  line-height: initial;
-}
-
+// Body and other semantic classes
 .fx-title {
-  font-size: var(--fx-typography-1);
+  font-size: get-typography-var(1);
   font-weight: map.get($font-weight-map, font-medium);
-  line-height: calc(var(--fx-typography-1) + var(--fx-xs));
+  line-height: calc(get-typography-var(1) + var(--fx-xs));
 }
 
 .fx-subtitle {
-  font-size: var(--fx-typography-0);
+  font-size: get-typography-var(0);
   font-weight: map.get($font-weight-map, font-normal);
-  line-height: calc(var(--fx-typography-0) + var(--fx-xs));
+  line-height: calc(get-typography-var(0) + var(--fx-xs));
 }
 
-.fx-body-1 {
-  font-size: var(--fx-typography--1);
-  font-weight: map.get($font-weight-map, font-normal);
-  line-height: calc(var(--fx-typography--1) + var(--fx-xs));
-}
-
-.fx-body-2 {
-  font-size: var(--fx-typography--2);
-  font-weight: map.get($font-weight-map, font-light);
-  line-height: calc(var(--fx-typography--2) + var(--fx-xs));
+@for $i from 1 through $negative-steps {
+  .fx-body-#{$i} {
+    font-size: get-typography-var(-$i);
+    font-weight: if($i == 1, map.get($font-weight-map, font-normal), map.get($font-weight-map, font-light));
+    line-height: calc(get-typography-var(-$i) + var(--fx-xs));
   }
+}
 
-.fx-caption {
-  font-size: var(--fx-typography--3);
-  font-weight: map.get($font-weight-map, font-normal);
-  line-height: initial;
+@for $i from 1 through $negative-steps {
+  $caption-index: $i - 1;
+  @if $caption-index == 0 {
+    .fx-caption {
+      font-size: get-typography-var(-$i);
+      font-weight: map.get($font-weight-map, font-normal);
+      line-height: initial;
+    }
+  } @else if $caption-index > 0 {
+    .fx-caption-#{$caption-index} {
+      font-size: get-typography-var(-$i);
+      font-weight: map.get($font-weight-map, font-normal);
+      line-height: initial;
+    }
+  }
 }
 
 .fx-overline {
-  font-size: var(--fx-typography--4);
+  font-size: get-typography-var(-4);
   font-weight: map.get($font-weight-map, font-light);
   line-height: initial;
 }
+
+// Additional utility: helper function for responsive typography if needed
+// The responsive classes will be generated by the existing mixins system

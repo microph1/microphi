@@ -80,10 +80,7 @@ export class JsonStorage<T extends object> {
   });
 
   index = new List<withAutoTrail<{ id: string; path: string; }>>('id', []);
-
-
   _search!: MiniSearch<T>;
-
 
   constructor(
     private entity: string,

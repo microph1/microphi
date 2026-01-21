@@ -111,6 +111,56 @@ All grid utilities are responsive and support breakpoints:
 </div>
 ```
 
+### Typography System
+
+The library provides a flexible typography system that works with the Utopia scale generator. You can customize the typography scale using the Utopia package and map the generated CSS variables to the fx-scss classes.
+
+#### Dynamic Font Size Classes
+
+The system generates font size classes dynamically based on your Utopia configuration:
+
+```html
+<!-- Generate classes from --fx-typography--6 to --fx-typography-6 based on your scale -->
+<p class="fx-text-3">Larger text using --fx-typography-3 variable</p>
+<p class="fx-text-0">Base text using --fx-typography-0 variable</p>
+<p class="fx-text--2">Smaller text using --fx-typography--2 variable</p>
+```
+
+#### Semantic Typography Classes
+
+The library also provides semantic classes that map to specific scale steps:
+
+```html
+<h1 class="fx-headline-1">Headline 1 using --fx-typography-1</h1>
+<h2 class="fx-headline-2">Headline 2 using --fx-typography-2</h2>
+<p class="fx-title">Title using --fx-typography-1</p>
+<p class="fx-subtitle">Subtitle using --fx-typography-0</p>
+<p class="fx-body-1">Body 1 using --fx-typography--1</p>
+<p class="fx-body-2">Body 2 using --fx-typography--2</p>
+<p class="fx-caption">Caption using --fx-typography--3</p>
+<p class="fx-overline">Overline using --fx-typography--4</p>
+```
+
+#### Customizing Typography Variables
+
+To customize which CSS variables the classes use (e.g., if using a different prefix in Utopia), define a custom `$typography-vars` map before importing fx-scss:
+
+```scss
+// Define custom mapping to match your Utopia configuration
+$typography-vars: (
+  1: var(--step-typography-1),
+  2: var(--step-typography-2),
+  3: var(--step-typography-3),
+  0: var(--step-typography-0),
+  -1: var(--step-typography--1),
+  -2: var(--step-typography--2),
+  // ... etc for all steps in your scale
+) !default;
+
+// Now import fx-scss
+@import 'path/to/fx-scss/main';
+```
+
 ## Folder Structure
 
 The SCSS library follows a clean, modular structure:

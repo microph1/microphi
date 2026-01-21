@@ -31,6 +31,7 @@
   },
   "private": true,
   "devDependencies": {
+    "@angular/language-server": "^17.3.2",
     "@faker-js/faker": "^7.3.0",
     "@lerna-lite/changed": "^3.9.1",
     "@lerna-lite/cli": "^3.9.1",

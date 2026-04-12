@@ -52,8 +52,13 @@ export abstract class Store<State, A> {
       this.actions.set(key, new Subject());
 
       const effect = this.effects.find((e) => e.action === key);
+      if (!effect) {
+        throw new Error(`Cannot find effect for action "${key}". Did you decorate a "${key}" method with @Effect()?`);
+      }
 
-      const operator = Store.getOperator(effect!.strategy);
+      const reducerName = this.ensureReducerForAction(key);
+
+      const operator = Store.getOperator(effect.strategy);
 
       const action = this.actions.get(key);
 
@@ -105,11 +110,7 @@ export abstract class Store<State, A> {
                 //
                 // network connection is lost connection is lost
 
-                // by convention reducer name must be
-                // on + Action
-                const reducerName = `on${(name[0]).toUpperCase()}${(name as string).slice(1)}` as keyof this;
-
-                return (this[reducerName] as Fn)(this._store$.getValue(), response);
+                return (this[reducerName as keyof this] as Fn)(this._store$.getValue(), response);
               }),
               // error need to be swallowed here too otherwise the observable chain will be broken
               // meaning that once an action goes into an error it cannot be dispatched again
@@ -163,6 +164,26 @@ export abstract class Store<State, A> {
     } else {
       return switchMap;
     }
+  }
+
+  private static getReducerName(action: string) {
+    const firstChar = action.charAt(0);
+    if (!firstChar) {
+      throw new Error('Cannot derive reducer name from an empty action');
+    }
+
+    return `on${firstChar.toUpperCase()}${action.slice(1)}`;
+  }
+
+  private ensureReducerForAction(action: string): string {
+    const reducerName = Store.getReducerName(action);
+    const reducer = (this as Record<string, unknown>)[reducerName];
+
+    if (typeof reducer !== 'function') {
+      throw new Error(`Cannot find reducer "${reducerName}" for action "${action}". Ensure the reducer follows the "on<Action>" naming convention and is decorated with @Reduce().`);
+    }
+
+    return reducerName;
   }
 
   private swallowError(key: string, error: Error, payload: any) {

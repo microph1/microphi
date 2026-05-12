@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { asapScheduler, BehaviorSubject, EMPTY, Observable, of, SchedulerLike, Subject } from 'rxjs';
-import { catchError, concatMap, filter, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { catchError, concatMap, distinctUntilChanged, filter, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { Effect, EffectStrategy, getEffects } from '../effect/effect';
 import { CacheSymbol } from '../operators/cache';
 import { debounceOrNothing, getDebounce } from '../operators/debounce';
@@ -126,7 +126,8 @@ export abstract class Store<State, A> {
 
   select<R>(projection: (s: State) => R) {
     return this.state$.pipe(
-      map(projection)
+      map(projection),
+      distinctUntilChanged(),
     );
   }
 

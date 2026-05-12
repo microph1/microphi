@@ -41,3 +41,17 @@ onMessage((message) => {
   // do something
 });
 ```
+
+### Console to File
+To redirect all `console.log` calls to a file instead of the console, import the decorator:
+
+```javascript
+import '@microphi/debug/console-to-file';
+
+// Now all console.log calls will append to a file
+console.log('This goes to file');
+```
+
+Set the `CONSOLE_LOG_FILE` environment variable to specify the file path (default: `./console.log`).
+
+Note: This is only effective in Node.js environments. In browsers, it will log a warning and have no effect.

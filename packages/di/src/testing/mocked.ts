@@ -1,12 +1,10 @@
 import { Instance, Klass } from '../lib/types';
-import Mock = jest.Mock;
-import FunctionPropertyNames = jest.FunctionPropertyNames;
 import { FunctionKeys } from 'utility-types';
 
 
 const MockedSymbol = Symbol('Mocked');
 
-export type MockedOptions<InstanceType extends object> = Partial<Record<FunctionKeys<InstanceType>, Mock|'NO_MOCK'>>;
+export type MockedOptions<InstanceType extends object> = Partial<Record<FunctionKeys<InstanceType>, Function | 'NO_MOCK'>>;
 
 export const Mocked = <BaseClass extends Klass, K extends object = InstanceType<BaseClass>>(
   base: BaseClass,
@@ -18,6 +16,17 @@ export const Mocked = <BaseClass extends Klass, K extends object = InstanceType<
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     constructor(...ops: any[]) {
+
+      const fn = (() => {
+        try {
+          // @ts-ignore - vitest global
+          if (typeof vi !== 'undefined') return vi.fn;
+        } catch {}
+        try {
+          if (typeof jest !== 'undefined') return jest.fn;
+        } catch {}
+        return () => () => {};
+      })();
 
       const methods = [...getPropertyNames(base.prototype)];
 
@@ -32,13 +41,13 @@ export const Mocked = <BaseClass extends Klass, K extends object = InstanceType<
               this[m] = options[m];
             }
           } else {
-            this[m] = jest.fn();
+            this[m] = fn();
           }
         });
     }
   } as BaseClass;
 
-export type WithMock<T> = T & Record<FunctionPropertyNames<T>, Mock>;
+export type WithMock<T> = T & Record<string, Function>;
 
 
 function *getPropertyNames(instance: Instance) {

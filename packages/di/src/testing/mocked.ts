@@ -4,7 +4,7 @@ import { FunctionKeys } from 'utility-types';
 
 const MockedSymbol = Symbol('Mocked');
 
-export type MockedOptions<InstanceType extends object> = Partial<Record<FunctionKeys<InstanceType>, Function | 'NO_MOCK'>>;
+export type MockedOptions<InstanceType extends object> = Partial<Record<FunctionKeys<InstanceType>, ((...args: any[]) => any) | 'NO_MOCK'>>;
 
 export const Mocked = <BaseClass extends Klass, K extends object = InstanceType<BaseClass>>(
   base: BaseClass,
@@ -21,10 +21,10 @@ export const Mocked = <BaseClass extends Klass, K extends object = InstanceType<
         try {
           // @ts-ignore - vitest global
           if (typeof vi !== 'undefined') return vi.fn;
-        } catch {}
+        } catch { /* vi not defined in this environment */ }
         try {
           if (typeof jest !== 'undefined') return jest.fn;
-        } catch {}
+        } catch { /* jest not defined in this environment */ }
         return () => () => {};
       })();
 
@@ -47,7 +47,7 @@ export const Mocked = <BaseClass extends Klass, K extends object = InstanceType<
     }
   } as BaseClass;
 
-export type WithMock<T> = T & Record<string, Function>;
+export type WithMock<T> = T & Record<string, (...args: any[]) => any>;
 
 
 function *getPropertyNames(instance: Instance) {

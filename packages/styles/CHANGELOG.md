@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://example.com/compare/@microphi/styles@1.3.1...@microphi/styles@1.4.0) (2026-07-22)
+
+### Features
+
+* **microphi:** update styles, debug, and json-db packages ([38118b2](https://example.com/commits/38118b233d2e52a701065b34a889c153107edee5))
+* **styles:** add CSS Grid utilities and documentation 🎉 ([c1b2739](https://example.com/commits/c1b2739a61df448fe52c9ba6c0deb4d7029b6924))
+* **styles:** add opacity, text-transform, letter-spacing & min/max sizing utilities; fix .fx-grid display ✨ ([0c6d75b](https://example.com/commits/0c6d75b00129236dfcc5c674f0fc57c0aeca5b0f))
+
 ## [1.3.1](https://example.com/compare/@microphi/styles@1.3.0...@microphi/styles@1.3.1) (2025-10-09)
 
 **Note:** Version bump only for package @microphi/styles

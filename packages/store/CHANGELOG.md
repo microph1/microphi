@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.11.0](https://github.com/microph1/microphi/compare/@microphi/store@2.10.2...@microphi/store@2.11.0) (2026-07-22)
+
+### Bug Fixes
+
+* **store:** validate effect/reducer pairing at construction time ([3ab50f1](https://github.com/microph1/microphi/commit/3ab50f143075ff7765697bd539692df56147eda0))
+
+### Features
+
+* **microphi:** add console-to-file module, distinctUntilChanged in store select, and expand docs ([978c0b6](https://github.com/microph1/microphi/commit/978c0b68bc009a91b0e570a323d7d450838e739a))
+
 ## [2.10.2](https://github.com/microph1/microphi/compare/@microphi/store@2.10.1...@microphi/store@2.10.2) (2024-12-13)
 
 **Note:** Version bump only for package @microphi/store

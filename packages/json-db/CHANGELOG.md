@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.12.0](https://github.com/microph1/microphi/compare/@microphi/json-db@2.11.1...@microphi/json-db@2.12.0) (2026-07-22)
+
+### Bug Fixes
+
+* **ci:** make PR pipeline green — lint, coverage, flaky test, dead deploys 🟢 ([3d983b5](https://github.com/microph1/microphi/commit/3d983b52eba09e474c26abd8f37cecc0ef16a280))
+
+### Features
+
+* **microphi:** update styles, debug, and json-db packages ([38118b2](https://github.com/microph1/microphi/commit/38118b233d2e52a701065b34a889c153107edee5))
+
 ## [2.11.1](https://github.com/microph1/microphi/compare/@microphi/json-db@2.11.0...@microphi/json-db@2.11.1) (2025-07-06)
 
 ### Bug Fixes

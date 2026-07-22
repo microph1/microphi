@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.11.0](https://github.com/microph1/microphi/compare/@microphi/debug@2.10.1...@microphi/debug@2.11.0) (2026-07-22)
+
+### Bug Fixes
+
+* **ci:** make PR pipeline green — lint, coverage, flaky test, dead deploys 🟢 ([3d983b5](https://github.com/microph1/microphi/commit/3d983b52eba09e474c26abd8f37cecc0ef16a280))
+
+### Features
+
+* **microphi:** add console-to-file module, distinctUntilChanged in store select, and expand docs ([978c0b6](https://github.com/microph1/microphi/commit/978c0b68bc009a91b0e570a323d7d450838e739a))
+* **microphi:** update styles, debug, and json-db packages ([38118b2](https://github.com/microph1/microphi/commit/38118b233d2e52a701065b34a889c153107edee5))
+
 ## [2.10.1](https://github.com/microph1/microphi/compare/@microphi/debug@2.10.0...@microphi/debug@2.10.1) (2024-11-29)
 
 **Note:** Version bump only for package @microphi/debug

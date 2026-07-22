@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.11.0](https://github.com/microph1/microphi/compare/@microphi/di@2.10.3...@microphi/di@2.11.0) (2026-07-22)
+
+### Bug Fixes
+
+* **ci:** make PR pipeline green — lint, coverage, flaky test, dead deploys 🟢 ([3d983b5](https://github.com/microph1/microphi/commit/3d983b52eba09e474c26abd8f37cecc0ef16a280))
+
+### Features
+
+* **di:** make DI testing framework-agnostic to support both vitest and jest ✨ ([c3d953d](https://github.com/microph1/microphi/commit/c3d953dee9cbf18edfb83098e29ab6b5ce4b5690))
+
 ## [2.10.3](https://github.com/microph1/microphi/compare/@microphi/di@2.10.2...@microphi/di@2.10.3) (2025-06-18)
 
 **Note:** Version bump only for package @microphi/di

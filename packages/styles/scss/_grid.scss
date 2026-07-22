@@ -1,0 +1,311 @@
+@use "variables" as var;
+@use "mixins" as mix;
+
+// Grid utilities map
+$grid-map: (
+  // display:grid / inline-grid are emitted as bare .fx-grid / .fx-inline-grid
+  // by the display values map in _display.scss.
+  "grid-template-columns": (
+    property: grid-template-columns,
+    shortcut: grid-cols,
+    values: (
+      1: repeat(1, minmax(0, 1fr)),
+      2: repeat(2, minmax(0, 1fr)),
+      3: repeat(3, minmax(0, 1fr)),
+      4: repeat(4, minmax(0, 1fr)),
+      5: repeat(5, minmax(0, 1fr)),
+      6: repeat(6, minmax(0, 1fr)),
+      7: repeat(7, minmax(0, 1fr)),
+      8: repeat(8, minmax(0, 1fr)),
+      9: repeat(9, minmax(0, 1fr)),
+      10: repeat(10, minmax(0, 1fr)),
+      11: repeat(11, minmax(0, 1fr)),
+      12: repeat(12, minmax(0, 1fr)),
+      none: none,
+      subgrid: subgrid
+    )
+  ),
+  "grid-template-rows": (
+    property: grid-template-rows,
+    shortcut: grid-rows,
+    values: (
+      1: repeat(1, minmax(0, 1fr)),
+      2: repeat(2, minmax(0, 1fr)),
+      3: repeat(3, minmax(0, 1fr)),
+      4: repeat(4, minmax(0, 1fr)),
+      5: repeat(5, minmax(0, 1fr)),
+      6: repeat(6, minmax(0, 1fr)),
+      none: none,
+      subgrid: subgrid
+    )
+  ),
+  "grid-template-areas": (
+    property: grid-template-areas,
+    shortcut: grid-areas,
+    values: (
+      none: none,
+      subgrid: subgrid
+    )
+  ),
+  "grid-auto-flow": (
+    property: grid-auto-flow,
+    shortcut: grid-flow,
+    values: (
+      row: row,
+      column: column,
+      dense: dense,
+      row-dense: row dense,
+      col-dense: column dense
+    )
+  ),
+  "grid-auto-columns": (
+    property: grid-auto-columns,
+    shortcut: grid-auto-cols,
+    values: (
+      auto: auto,
+      max: max-content,
+      min: min-content
+    )
+  ),
+  "grid-auto-rows": (
+    property: grid-auto-rows,
+    shortcut: grid-auto-rows,
+    values: (
+      auto: auto,
+      max: max-content,
+      min: min-content
+    )
+  ),
+  "grid-gap": (
+    property: gap,
+    shortcut: gap,
+    values: var.$values
+  ),
+  "grid-column-gap": (
+    property: column-gap,
+    shortcut: gap-col,
+    values: var.$values
+  ),
+  "grid-row-gap": (
+    property: row-gap,
+    shortcut: gap-row,
+    values: var.$values
+  ),
+  "justify-items": (
+    property: justify-items,
+    shortcut: justify-items,
+    values: (
+      start: start,
+      end: end,
+      center: center,
+      stretch: stretch
+    )
+  ),
+  "align-items": (
+    property: align-items,
+    shortcut: items,
+    values: (
+      start: start,
+      end: end,
+      center: center,
+      stretch: stretch
+    )
+  ),
+  "justify-content": (
+    property: justify-content,
+    shortcut: justify-content,
+    values: (
+      start: start,
+      end: end,
+      center: center,
+      stretch: stretch,
+      space-around: space-around,
+      space-between: space-between,
+      space-evenly: space-evenly
+    )
+  ),
+  "align-content": (
+    property: align-content,
+    shortcut: content,
+    values: (
+      start: start,
+      end: end,
+      center: center,
+      stretch: stretch,
+      space-around: space-around,
+      space-between: space-between,
+      space-evenly: space-evenly
+    )
+  )
+);
+
+@each $key, $utility in $grid-map {
+  @include mix.generate-utilities($utility)
+}
+
+// Additional grid utilities for grid column and row spans
+$grid-span-map: (
+  "grid-column": (
+    property: grid-column,
+    shortcut: col-span,
+    values: (
+      1: span 1,
+      2: span 2,
+      3: span 3,
+      4: span 4,
+      5: span 5,
+      6: span 6,
+      7: span 7,
+      8: span 8,
+      9: span 9,
+      10: span 10,
+      11: span 11,
+      12: span 12,
+      auto: auto,
+      full: 1 / -1
+    )
+  ),
+  "grid-row": (
+    property: grid-row,
+    shortcut: row-span,
+    values: (
+      1: span 1,
+      2: span 2,
+      3: span 3,
+      4: span 4,
+      5: span 5,
+      6: span 6,
+      auto: auto,
+      full: 1 / -1
+    )
+  ),
+  "grid-column-start": (
+    property: grid-column-start,
+    shortcut: col-start,
+    values: (
+      1: 1,
+      2: 2,
+      3: 3,
+      4: 4,
+      5: 5,
+      6: 6,
+      7: 7,
+      8: 8,
+      9: 9,
+      10: 10,
+      11: 11,
+      12: 12,
+      13: 13,
+      auto: auto
+    )
+  ),
+  "grid-column-end": (
+    property: grid-column-end,
+    shortcut: col-end,
+    values: (
+      1: 1,
+      2: 2,
+      3: 3,
+      4: 4,
+      5: 5,
+      6: 6,
+      7: 7,
+      8: 8,
+      9: 9,
+      10: 10,
+      11: 11,
+      12: 12,
+      13: 13,
+      auto: auto,
+      full: -1
+    )
+  ),
+  "grid-row-start": (
+    property: grid-row-start,
+    shortcut: row-start,
+    values: (
+      1: 1,
+      2: 2,
+      3: 3,
+      4: 4,
+      5: 5,
+      6: 6,
+      7: 7,
+      auto: auto
+    )
+  ),
+  "grid-row-end": (
+    property: grid-row-end,
+    shortcut: row-end,
+    values: (
+      1: 1,
+      2: 2,
+      3: 3,
+      4: 4,
+      5: 5,
+      6: 6,
+      7: 7,
+      auto: auto,
+      full: -1
+    )
+  )
+);
+
+@each $key, $utility in $grid-span-map {
+  @include mix.generate-utilities($utility)
+}
+
+// Additional grid placement utilities
+$grid-placement-map: (
+  "grid-area": (
+    property: grid-area,
+    shortcut: area,
+    values: (
+      auto: auto,
+      span-1: span 1,
+      span-2: span 2,
+      span-3: span 3,
+      span-4: span 4,
+      span-5: span 5,
+      span-6: span 6
+    )
+  ),
+  "place-items": (
+    property: place-items,
+    shortcut: place-items,
+    values: (
+      start: start,
+      center: center,
+      end: end,
+      stretch: stretch
+    )
+  ),
+  "place-content": (
+    property: place-content,
+    shortcut: place-content,
+    values: (
+      start: start,
+      center: center,
+      end: end,
+      stretch: stretch,
+      space-around: space-around,
+      space-between: space-between,
+      space-evenly: space-evenly
+    )
+  ),
+  "place-self": (
+    property: place-self,
+    shortcut: place-self,
+    values: (
+      auto: auto,
+      start: start,
+      end: end,
+      center: center,
+      stretch: stretch
+    )
+  )
+);
+
+@each $key, $utility in $grid-placement-map {
+  @include mix.generate-utilities($utility)
+}

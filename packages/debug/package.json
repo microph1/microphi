@@ -5,6 +5,18 @@
   "main": "lib/cjs/index.js",
   "typings": "lib/esm/index.d.ts",
   "module": "lib/esm/index.js",
+  "exports": {
+    ".": {
+      "import": "./lib/esm/index.js",
+      "require": "./lib/cjs/index.js",
+      "types": "./lib/esm/index.d.ts"
+    },
+    "./console-to-file": {
+      "import": "./lib/esm/lib/console-to-file.js",
+      "require": "./lib/cjs/lib/console-to-file.js",
+      "types": "./lib/esm/lib/console-to-file.d.ts"
+    }
+  },
   "directories": {
     "lib": "lib"
   },

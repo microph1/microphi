@@ -6,9 +6,6 @@ on:
       - master
     paths:
       - 'apps/www.dcsoftware.io/**'
-  pull_request:
-    branches:
-     - master
 
 jobs:
     deploy_2:

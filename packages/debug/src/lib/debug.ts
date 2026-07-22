@@ -1,7 +1,6 @@
 import { getEnvironmentVariables } from './get-environment-varialbles';
 import { isNodejs } from './is_nodejs';
 
-
 const colors = new Map<string, string>();
 
 const colorPalette: string[] = [];

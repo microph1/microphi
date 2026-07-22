@@ -1,0 +1,22 @@
+@use "mixins" as mix;
+
+// Letter-spacing (tracking) utilities map
+// Generates .fx-tracking-{tighter,tight,normal,wide,wider,widest}
+$letter-spacing-map: (
+  "letter-spacing": (
+    property: letter-spacing,
+    shortcut: tracking,
+    values: (
+      tighter: -0.05em,
+      tight: -0.025em,
+      normal: 0,
+      wide: 0.025em,
+      wider: 0.05em,
+      widest: 0.1em
+    )
+  ),
+);
+
+@each $key, $utility in $letter-spacing-map {
+  @include mix.generate-utilities($utility)
+}

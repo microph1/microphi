@@ -1,0 +1,30 @@
+@use "mixins" as mix;
+
+// Opacity utilities map
+// Generates .fx-opacity-{0..100} for opacity 0.0 to 1.0
+$opacity-map: (
+  "opacity": (
+    property: opacity,
+    shortcut: opacity,
+    values: (
+      0: 0,
+      5: 0.05,
+      10: 0.1,
+      20: 0.2,
+      25: 0.25,
+      30: 0.3,
+      40: 0.4,
+      50: 0.5,
+      60: 0.6,
+      70: 0.7,
+      75: 0.75,
+      80: 0.8,
+      90: 0.9,
+      100: 1
+    )
+  ),
+);
+
+@each $key, $utility in $opacity-map {
+  @include mix.generate-utilities($utility)
+}

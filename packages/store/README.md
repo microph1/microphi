@@ -219,3 +219,34 @@ It will deley an effect as in a RxJS pipe.
 ```
 ⚠️ Note the use of `concatMap` strategy. If another strategy is used the effect of `@DelayTime` may be not what really expected.
 Please see [delay.spec.ts](./src/lib/operators/delay.spec.ts) for all possible combination of `strategy` and `@DelayTime`
+
+## .skills
+Automation agents can invoke the following skills when working inside `packages/store`.
+
+### build-store-lib
+- Goal: emit both ESM and CJS bundles from `src`.
+- Run from repo root (ensures workspace deps resolve):
+  1. `npm install` (first run or when deps change).
+  2. `npm run build -- --scope @microphi/store` to leverage Lerna caching, or `cd packages/store && npm run build` for isolated builds.
+- Checks: confirm `packages/store/lib/esm/index.js` and `packages/store/lib/cjs/index.js` are regenerated.
+
+### test-store-lib
+- Goal: execute package-specific Jest suite with coverage, mirroring CI.
+- Commands:
+  1. `cd packages/store`.
+  2. `npm run test:ci` (wraps `jest --coverage --ci`).
+- When debugging a single spec use `npx jest src/lib/store/store.spec.ts --runTestsByPath` within this folder.
+
+### lint-store-lib
+- Goal: enforce the repo’s TypeScript + ESLint rules before commits.
+- Commands:
+  1. `cd packages/store`.
+  2. `npm run lint:ci` (runs `eslint ./src`).
+- Fix order: apply autofixes via `npx eslint ./src --fix`, rerun lint, then tests.
+
+### release-store-docs
+- Goal: regenerate docs after updating public APIs.
+- Commands:
+  1. From repo root `npm run docs -- --scope @microphi/store` if scoped docs exist, otherwise invoke `npm run docs` to rebuild all packages.
+  2. Run `npm run postdocs` to refresh aggregated docs.
+- Verify README snippets still compile by running the TypeScript samples inside `examples/` or via `ts-node` scratch files as needed.

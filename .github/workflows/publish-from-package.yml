@@ -1,0 +1,37 @@
+name: Publish from-package (recovery)
+
+# Manual recovery for when git tags/releases were created but the npm publish
+# step failed (e.g. an expired NPM_TOKEN). `lerna publish from-package` ignores
+# conventional commits and publishes whatever package.json version each package
+# declares that the registry does not yet have. Trigger from the Actions tab.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish_from_package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org/'
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build:ci
+
+      - name: Publish from-package
+        # No --create-release: the GitHub releases/tags already exist from the
+        # failed run; only the npm publish is outstanding.
+        run: npx lerna publish from-package -y --no-private --loglevel verbose
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

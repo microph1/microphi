@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.1](https://example.com/compare/@microphi/styles@1.3.0...@microphi/styles@1.3.1) (2025-10-09)
+
+**Note:** Version bump only for package @microphi/styles
+
+# [1.3.0](https://example.com/compare/@microphi/styles@1.2.5...@microphi/styles@1.3.0) (2025-09-25)
+
+### Features
+
+* **styles:** font-weight should bring !important ([9bd1fda](https://example.com/commits/9bd1fdaadf01e1e18c327c78526d156029b8aba0))
+
+## [1.2.5](https://example.com/compare/@microphi/styles@1.2.4...@microphi/styles@1.2.5) (2025-09-21)
+
+**Note:** Version bump only for package @microphi/styles
+
+## [1.2.4](https://example.com/compare/@microphi/styles@1.2.3...@microphi/styles@1.2.4) (2025-09-21)
+
+### Bug Fixes
+
+* **styles:** add more sizing options ([e944403](https://example.com/commits/e944403c47ec1d5e1f0625f6ffa638d86d191e85))
+
+## [1.2.3](https://example.com/compare/@microphi/styles@1.2.2...@microphi/styles@1.2.3) (2025-06-30)
+
+### Bug Fixes
+
+* **styles:** add more sizing options ([11c5de2](https://example.com/commits/11c5de2cd29088e3f69ed89e2c3ce1ea0fce3782))
+
 ## [1.2.2](https://example.com/compare/@microphi/styles@1.2.1...@microphi/styles@1.2.2) (2025-06-29)
 
 ### Bug Fixes

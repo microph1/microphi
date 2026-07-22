@@ -1,0 +1,22 @@
+@use "mixins" as mix;
+
+// Text-transform utilities map
+// Uses an empty shortcut so selectors are bare: .fx-uppercase, .fx-lowercase,
+// .fx-capitalize, .fx-normal-case. (The legacy .fx-f-capitalize in _fx-font.scss
+// is intentionally left untouched.)
+$text-transform-map: (
+  "text-transform": (
+    property: text-transform,
+    shortcut: "",
+    values: (
+      uppercase: uppercase,
+      lowercase: lowercase,
+      capitalize: capitalize,
+      normal-case: none
+    )
+  ),
+);
+
+@each $key, $utility in $text-transform-map {
+  @include mix.generate-utilities($utility)
+}

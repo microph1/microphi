@@ -3,11 +3,8 @@
 
 // Grid utilities map
 $grid-map: (
-  "display-grid": (
-    property: display,
-    shortcut: grid,
-    values: (grid)
-  ),
+  // display:grid / inline-grid are emitted as bare .fx-grid / .fx-inline-grid
+  // by the display values map in _display.scss.
   "grid-template-columns": (
     property: grid-template-columns,
     shortcut: grid-cols,

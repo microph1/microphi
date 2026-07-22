@@ -1,0 +1,57 @@
+@use "mixins" as mix;
+
+// Min/max sizing utilities map
+// Generates .fx-min-w-*, .fx-max-w-*, .fx-min-h-*, .fx-max-h-*
+// The rem scale is shared by the max-* families (3xs..lg); note 2xs = 10rem (~160px).
+$min-max-sizing-map: (
+  "min-width": (
+    property: min-width,
+    shortcut: min-w,
+    values: (
+      0: 0,
+      full: 100%
+    )
+  ),
+  "min-height": (
+    property: min-height,
+    shortcut: min-h,
+    values: (
+      0: 0,
+      full: 100%
+    )
+  ),
+  "max-width": (
+    property: max-width,
+    shortcut: max-w,
+    values: (
+      0: 0,
+      none: none,
+      "3xs": 8rem,
+      "2xs": 10rem,
+      "xs": 12rem,
+      "sm": 16rem,
+      "md": 24rem,
+      "lg": 32rem,
+      full: 100%
+    )
+  ),
+  "max-height": (
+    property: max-height,
+    shortcut: max-h,
+    values: (
+      0: 0,
+      none: none,
+      "3xs": 8rem,
+      "2xs": 10rem,
+      "xs": 12rem,
+      "sm": 16rem,
+      "md": 24rem,
+      "lg": 32rem,
+      full: 100%
+    )
+  ),
+);
+
+@each $key, $utility in $min-max-sizing-map {
+  @include mix.generate-utilities($utility)
+}

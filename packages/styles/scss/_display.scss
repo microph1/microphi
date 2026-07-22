@@ -5,7 +5,7 @@ $display-map: (
   "display": (
     property: display,
     shortcut: null,
-    values: (block, inline-block, inline, flex, inline-flex)
+    values: (block, inline-block, inline, flex, inline-flex, grid, inline-grid)
   ),
   "overflow": (
     property: overflow,

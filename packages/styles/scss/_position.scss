@@ -1,0 +1,59 @@
+@use "mixins" as mix;
+
+// Position / layer / object utilities (fx-absolute, fx-inset-0, fx-z-*, …).
+$position-map: (
+  "position": (
+    property: position,
+    shortcut: null,
+    values: (static, relative, absolute, fixed, sticky)
+  ),
+  "inset": (
+    property: inset,
+    shortcut: inset,
+    values: (0: 0, auto: auto)
+  ),
+  "top": (
+    property: top,
+    shortcut: top,
+    values: (0: 0, auto: auto)
+  ),
+  "right": (
+    property: right,
+    shortcut: right,
+    values: (0: 0, auto: auto)
+  ),
+  "bottom": (
+    property: bottom,
+    shortcut: bottom,
+    values: (0: 0, auto: auto)
+  ),
+  "left": (
+    property: left,
+    shortcut: left,
+    values: (0: 0, auto: auto)
+  ),
+  "z-index": (
+    property: z-index,
+    shortcut: z,
+    values: (0: 0, 1: 1, 10: 10, 100: 100, 1000: 1000)
+  ),
+  "object-fit": (
+    property: object-fit,
+    shortcut: object,
+    values: (contain, cover, fill, none)
+  ),
+  "aspect-ratio": (
+    property: aspect-ratio,
+    shortcut: aspect,
+    values: (square: (1 / 1), video: (16 / 9))
+  ),
+  "cursor": (
+    property: cursor,
+    shortcut: cursor,
+    values: (pointer, "zoom-in", default, not-allowed)
+  ),
+);
+
+@each $key, $utility in $position-map {
+  @include mix.generate-utilities($utility)
+}

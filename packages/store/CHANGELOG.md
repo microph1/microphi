@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.1](https://github.com/microph1/microphi/compare/@microphi/store@2.11.0...@microphi/store@2.11.1) (2026-09-12)
+
+### Bug Fixes
+
+* **store:** re-export delay operator from public API ([3d11192](https://github.com/microph1/microphi/commit/3d111922d0b5fd2626703fb00fc1be007b2c82b9))
+
 # [2.11.0](https://github.com/microph1/microphi/compare/@microphi/store@2.10.2...@microphi/store@2.11.0) (2026-07-22)
 
 ### Bug Fixes

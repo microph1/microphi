@@ -7,4 +7,5 @@ export * from './lib/effect/effect';
 export * from './lib/reduce/reduce';
 export * from './lib/operators/cache';
 export * from './lib/operators/debounce';
+export * from './lib/operators/delay';
 export * from './lib/store/types';

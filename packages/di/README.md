@@ -128,7 +128,7 @@ class SongDb {
 - `ttl`: time to live in ms, default 5 minutes
 - `trackBy`: builds the cache key from the arguments, default `JSON.stringify(args)`
 
-The returned value itself is cached, so for a `Promise` (or `Observable`) concurrent callers share the same pending call, and a rejection is cached for the `ttl` too.
+The returned value itself is cached, so for a `Promise` concurrent callers share the same pending call, and a rejection is cached for the `ttl` too. An `Observable` is cached as is: a cold one re-runs its work on every subscription unless it is shared (e.g. `shareReplay(1)`).
 
 ## Testing
 

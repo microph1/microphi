@@ -353,7 +353,7 @@ export function Component(options: ComponentOptions): ClassDecorator {
         while (walker.nextNode()) {
           const node = walker.currentNode;
           if (node instanceof HTMLElement) {
-            node['fx'] ||= {};
+            node['fx'] = node['fx'] || {};
             // console.log('parsing node', node);
             // check if a node has been inited
             if (!node['fx']?.inited) {
@@ -483,7 +483,7 @@ export function Component(options: ComponentOptions): ClassDecorator {
 
         while (walker3.nextNode()) {
           const node = walker3.currentNode as HTMLElement;
-          node['fx'] ||= {};
+          node['fx'] = node['fx'] || {};
 
 
           for (const attributeName of node.getAttributeNames()) {

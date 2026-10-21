@@ -36,6 +36,9 @@
     "url": "www.microphi.io"
   },
   "homepage": "https://github.com/microph1/microphi",
+  "repository": {
+    "url": "git+https://github.com/microph1/microphi"
+  },
   "dependencies": {
     "tslib": "^2.5.0"
   },

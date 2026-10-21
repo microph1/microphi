@@ -1,61 +1,68 @@
-# @microphi/json-db [![npm version](https://badge.fury.io/js/%40microphi%2Fjsob-db.svg)](https://badge.fury.io/js/%40microphi%2Fjson-db)
+# @microphi/json-db [![npm](https://img.shields.io/npm/v/@microphi/json-db)](https://www.npmjs.com/package/@microphi/json-db)
 
-> Small, fast and simple file based json-db super powered by [minisearch](https://github.com/lucaong/minisearch)
+> Small file-based JSON database with full-text search ([minisearch](https://github.com/lucaong/minisearch))
 
 ## Install
-With your preferred package manager install
-```
-@microphi/json-db
+
+```sh
+npm i @microphi/json-db @microphi/list minisearch rxjs
 ```
 
+Node only: documents are stored on the file system.
+
 ## How to use
-### Basic usage:
+
 ```typescript
+import { JsonStorage } from '@microphi/json-db';
+
 interface User {
   id: string;
   name: string;
 }
 
-// create a new storage for User
-const storage = new JsonStorage<User>('users', '.data');
+// stores users under .data/users/
+const users = new JsonStorage<User>('users', '.data');
 
-await storage.upsert({id: '1', name:'superman'});
-await storage.upsert({id: '2', name:'batman'});
+await users.upsert({ id: '1', name: 'superman' }, { id: '2', name: 'batman' });
 
-// getting a document by id
-const batman = await storage.get('2');
-// updating a document
-await storage.upsert({id: '2', name: 'super-batman'});
+const batman = await users.get('2');
+await users.upsert({ id: '2', name: 'super-batman' }); // update
 
-// get all documents
-const docs = await storage.getAll();
+users.has('1');      // true
+users.getCount();    // 2
+await users.getAll();
 
-// remove a document
-await storage.remove('1');
-
-// remove all documents
-await storage.deleteAll();
-
+await users.remove('1');
+await users.deleteAll();
 ```
-A directory with the name provided (in this case `.data`) will be created and inside there another folder with the entity name.
-Data is save in `json` files as in `${id}.json` and an `index.json` will collect all stored documents metadata such as modified date and create date.
 
-### Enable minisearch
-To enable minisearch create instantiate a storage class such as
+Each document is saved as `<basePath>/<entity>/<id>.json`. An `index.json` next to them tracks every document's path and its `created` / `modified` timestamps.
+
+### Full-text search
+
+Pass [minisearch options](https://lucaong.github.io/minisearch/classes/MiniSearch.MiniSearch.html#constructor) as the third argument to index documents as they are written:
+
 ```typescript
-const storage = new JsonStorage<User>('users', '.data', {
+const users = new JsonStorage<User>('users', '.data', {
   fields: ['name'],
   idField: 'id',
 });
+
+users.search('batman', { fields: ['name'] });
 ```
-The third object in the JsonStorage constructor is the `Options` object of minisearch which documentation can be found [here](https://lucaong.github.io/minisearch/classes/MiniSearch.MiniSearch.html#constructor)
 
-JsonStorage uses internally rxjs to queue the operations on the index and so to avoid too many read/write to occur simultaneously. By default `index.json` is written on disk after 3 second of inactivity. This can be changed using the fourth argument of the constructor specifying the time in milliseconds. Also a fifth argument can be passed to change the default rxjs scheduler (asapScheduler).
+Documents are added, updated and removed from the search index automatically.
 
-#### Minisearch
-minisearch functionalities are available through the `search` field.
+### Index writes
+
+Index updates are queued through RxJS and `index.json` is written after 3 seconds of inactivity, so bursts of writes don't hit the disk on every change.
+
 ```typescript
-storage.search.search('batman', { fields: ['name'] });
+new JsonStorage<User>(
+  'users',
+  '.data',
+  searchOptions, // optional
+  1_000,         // index write debounce in ms, default 3000
+  scheduler,     // RxJS scheduler for the debounce, default asapScheduler
+);
 ```
-Remember documents are added/updated/removed to minisearch automatically.
-For more info on minisearch please consult their [repo](https://github.com/lucaong/minisearch).

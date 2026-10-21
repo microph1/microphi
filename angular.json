@@ -143,34 +143,6 @@
         }
       }
     },
-    "phi": {
-      "projectType": "library",
-      "root": "projects/phi",
-      "sourceRoot": "projects/phi/src",
-      "prefix": "phi",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "tsConfig": "projects/phi/tsconfig.lib.json",
-            "project": "projects/phi/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/phi/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/phi/src/test.ts",
-            "tsConfig": "projects/phi/tsconfig.spec.json",
-            "karmaConfig": "projects/phi/karma.conf.js"
-          }
-        }
-      }
-    },
     "flux": {
       "projectType": "application",
       "schematics": {},

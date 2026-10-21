@@ -7,7 +7,6 @@ import tseslint from 'typescript-eslint';
 export default defineConfig(
   {
     ignores: [
-      'projects/styles/**',
       '**/dist/**',
       '**/coverage/**',
       'scripts/**',

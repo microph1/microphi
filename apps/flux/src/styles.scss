@@ -4,8 +4,8 @@
 
 @import "@angular/material/prebuilt-themes/indigo-pink.css";
 //
-@import "../../../projects/styles/scss/fx-flex.scss";
-@import "../../../projects/styles/scss/spacing";
+@import "./scss/fx-flex.scss";
+@import "./scss/spacing";
 //
 
 @include mat.core();

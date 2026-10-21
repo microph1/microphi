@@ -8,7 +8,6 @@ export default defineConfig(
   {
     ignores: [
       'projects/styles/**',
-      'projects/cache/**',
       '**/dist/**',
       '**/coverage/**',
       'scripts/**',

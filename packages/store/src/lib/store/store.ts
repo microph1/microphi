@@ -2,7 +2,7 @@
 import { asapScheduler, BehaviorSubject, EMPTY, Observable, of, SchedulerLike, Subject } from 'rxjs';
 import { catchError, concatMap, distinctUntilChanged, filter, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { Effect, EffectStrategy, getEffects } from '../effect/effect';
-import { CacheSymbol } from '../operators/cache';
+import { CacheMap, CacheSymbol } from '../operators/cache';
 import { debounceOrNothing, getDebounce } from '../operators/debounce';
 import { delayOrNothing, getDelay } from '../operators/delay';
 import { getReducers, Reducer } from '../reduce/reduce';
@@ -11,7 +11,7 @@ import { Fn, getPayloadFromActionType, LoadingState } from './types';
 
 export abstract class Store<State, A> {
 
-  protected [CacheSymbol] = new Map<string, {timestamp: number; value: Observable<any>}>();
+  protected [CacheSymbol]: CacheMap = new Map();
 
   private readonly actions: Map<string, Subject<{ name: string, payload?: any }>> = new Map();
 

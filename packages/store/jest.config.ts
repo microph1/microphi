@@ -14,7 +14,8 @@ const config: Config = {
         tsconfig: '<rootDir>/tsconfig.spec.json',
       },
     ],
-    // [...]
+    // `@microphi/di` resolves to its ESM build
+    '\\.js$': ['babel-jest', {rootMode: 'upward'}],
   },
   moduleNameMapper,
   coverageDirectory: '<rootDir>/../../coverage/store',

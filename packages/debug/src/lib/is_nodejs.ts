@@ -8,7 +8,7 @@ export function isNodejs() {
     if (typeof process === 'object') {
       isNode = true;
     }
-  } catch (error) {
+  } catch {
 
     console.log('process is not an object. this is likely the browser');
   }

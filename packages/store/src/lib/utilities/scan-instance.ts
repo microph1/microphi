@@ -18,7 +18,7 @@ export function scanInstance<T extends object>(instance: T, cb: (proto: Class<T>
 
     try {
       proto = Object.getPrototypeOf(proto);
-    } catch (e) {
+    } catch {
       proto = null;
     }
   }

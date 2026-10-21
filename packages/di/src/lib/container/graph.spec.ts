@@ -149,7 +149,7 @@ describe('Graph', () =>  {
     });
 
     it('Should compute topological sort tricky case.', () => {
-      // eslint-disable-next-line indent
+      // eslint-disable-next-line @stylistic/indent
                                //     / \
       graph.addEdge('a', 'b'); //    b   |
       graph.addEdge('a', 'd'); //    |   d

@@ -10,13 +10,14 @@ describe('console-to-file', () => {
   });
 
   it('overrides console.log to append formatted output to the configured file in nodejs', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const fs = require('fs');
     const appendSpy = jest.spyOn(fs, 'appendFileSync').mockImplementation(() => undefined);
     process.env['CONSOLE_LOG_FILE'] = '/tmp/microphi-console-to-file.test.log';
 
     jest.isolateModules(() => {
       // importing runs the module-level side effect that patches console.log
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       require('./console-to-file');
     });
 
@@ -32,7 +33,7 @@ describe('console-to-file', () => {
   });
 
   it('falls back to the original console.log when the file write throws', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const fs = require('fs');
     jest.spyOn(fs, 'appendFileSync').mockImplementation(() => {
       throw new Error('disk full');
@@ -44,6 +45,7 @@ describe('console-to-file', () => {
     console.log = fallback;
 
     jest.isolateModules(() => {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       require('./console-to-file');
     });
 

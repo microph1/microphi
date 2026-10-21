@@ -89,7 +89,7 @@ export interface PropertyChange<k extends string|number|symbol, T = unknown> {
 
 export type Changes<T extends object> = {
   [k in keyof T]: PropertyChange<k, T[k]>;
-}
+};
 
 
 export interface OnChanges<T extends object> {
@@ -353,7 +353,7 @@ export function Component(options: ComponentOptions): ClassDecorator {
         while (walker.nextNode()) {
           const node = walker.currentNode;
           if (node instanceof HTMLElement) {
-            node['fx'] ? '' : node['fx'] = {};
+            node['fx'] ||= {};
             // console.log('parsing node', node);
             // check if a node has been inited
             if (!node['fx']?.inited) {
@@ -435,7 +435,7 @@ export function Component(options: ComponentOptions): ClassDecorator {
                       const method = controller[methodName];
 
                       if (method && typeof method === 'function') {
-                        // eslint-disable-next-line @typescript-eslint/ban-types
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
                         (method as Function).apply(controller, resolvedArguments);
 
                       }
@@ -483,7 +483,7 @@ export function Component(options: ComponentOptions): ClassDecorator {
 
         while (walker3.nextNode()) {
           const node = walker3.currentNode as HTMLElement;
-          node['fx'] ? '' : node['fx'] = {};
+          node['fx'] ||= {};
 
 
           for (const attributeName of node.getAttributeNames()) {

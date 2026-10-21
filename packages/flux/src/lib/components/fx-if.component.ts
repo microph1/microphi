@@ -27,7 +27,7 @@ export class FxIf {
       try {
 
         this.elm.shadowRoot!.removeChild(this.nodeElm);
-      } catch (error) {
+      } catch {
         console.log('Unable to remove child', this.nodeElm);
 
       }

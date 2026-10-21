@@ -13,11 +13,11 @@ import { List } from '@microphi/list';
 export type withAutoTrail<T> = T & {
   modified?: string;
   created?: string;
-}
+};
 
 export type withId<T extends object> = T & {
   id: string;
-}
+};
 
 export class JsonStorage<T extends object> {
 
@@ -227,7 +227,7 @@ export class JsonStorage<T extends object> {
       entity = JSON.parse(data);
 
       return entity;
-    } catch (e) {
+    } catch {
       // console.log(e);
       this.#l(`error while trying to load data for item with id ${id}`);
       this.#l('item does not exists');

@@ -14,7 +14,7 @@ describe('@DI', () => {
       ++A.instance;
     }
 
-    sayHello = jest.fn();
+    sayHello = vi.fn();
   }
 
   @Injectable()

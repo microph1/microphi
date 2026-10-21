@@ -3,7 +3,7 @@ import 'reflect-metadata';
 import { Observable, of, Subject } from 'rxjs';
 import { Falsey } from 'utility-types';
 
-xdescribe('experiments with new ways of thinking a state manager', () => {
+describe.skip('experiments with new ways of thinking a state manager', () => {
 
   type functionKeys<T> = {
     [k in keyof T]: T[k] extends Falsey ? never : T[k] extends (...args: any[]) => any ? k : never

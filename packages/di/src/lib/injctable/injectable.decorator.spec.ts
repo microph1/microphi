@@ -14,7 +14,7 @@ describe('@Injectable', () => {
     // expect(injectables.get('TestClassB')).toEqual(Object.getPrototypeOf(TestClassB));
   });
 
-  xit('injectables should not be instantiated yet', () => {
+  it.skip('injectables should not be instantiated yet', () => {
     // expect(singletons.size).toEqual(0);
   });
 

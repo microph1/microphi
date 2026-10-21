@@ -30,7 +30,7 @@
   "scripts": {
     "build": "tsc -b tsconfig.build.json && tsc -b tsconfig.cjs.json",
     "build:ci": "npm run build",
-    "test:ci": "jest --coverage --ci",
+    "test:ci": "vitest run --coverage",
     "lint": "eslint ./src"
   },
   "peerDependencies": {

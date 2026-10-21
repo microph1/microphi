@@ -3,7 +3,8 @@ import { Config } from 'jest';
 const jestConfig: Config = {
   testEnvironment: 'node',
   projects: [
-    'packages/*'
+    'packages/flux',
+    'packages/utils',
   ],
   transform: {
     '^.+.tsx?$': ['ts-jest',{}],

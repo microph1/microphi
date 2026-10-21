@@ -5,7 +5,8 @@
     "noEmit": false,
     "inlineSources": false,
     "sourceMap": false,
-    "composite": true
+    "composite": true,
+    "types": ["node"]
   },
   "include": ["src/**/*.ts"],
   "exclude": [

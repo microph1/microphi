@@ -4,22 +4,18 @@ describe('console-to-file', () => {
 
   afterEach(() => {
     console.log = originalConsoleLog;
-    jest.restoreAllMocks();
-    jest.resetModules();
+    vi.restoreAllMocks();
+    vi.resetModules();
     delete process.env['CONSOLE_LOG_FILE'];
   });
 
-  it('overrides console.log to append formatted output to the configured file in nodejs', () => {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const fs = require('fs');
-    const appendSpy = jest.spyOn(fs, 'appendFileSync').mockImplementation(() => undefined);
+  it('overrides console.log to append formatted output to the configured file in nodejs', async () => {
+    const fs = (await import('node:fs')).default;
+    const appendSpy = vi.spyOn(fs, 'appendFileSync').mockImplementation(() => undefined);
     process.env['CONSOLE_LOG_FILE'] = '/tmp/microphi-console-to-file.test.log';
 
-    jest.isolateModules(() => {
-      // importing runs the module-level side effect that patches console.log
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      require('./console-to-file');
-    });
+    // importing runs the module-level side effect that patches console.log
+    await import('./console-to-file');
 
     console.log('hello', { a: 1 });
 
@@ -32,22 +28,18 @@ describe('console-to-file', () => {
     expect(message.endsWith('\n')).toBe(true);
   });
 
-  it('falls back to the original console.log when the file write throws', () => {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const fs = require('fs');
-    jest.spyOn(fs, 'appendFileSync').mockImplementation(() => {
+  it('falls back to the original console.log when the file write throws', async () => {
+    const fs = (await import('node:fs')).default;
+    vi.spyOn(fs, 'appendFileSync').mockImplementation(() => {
       throw new Error('disk full');
     });
 
     // capture the pre-patch console.log so we can assert the fallback path;
     // no CONSOLE_LOG_FILE set here, exercising the default-path branch too
-    const fallback = jest.fn();
+    const fallback = vi.fn();
     console.log = fallback;
 
-    jest.isolateModules(() => {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      require('./console-to-file');
-    });
+    await import('./console-to-file');
 
     console.log('boom');
 

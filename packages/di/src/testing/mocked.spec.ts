@@ -1,9 +1,9 @@
 import { Mocked, WithMock } from './mocked';
-import isMockFunction = jest.isMockFunction;
+import isMockFunction = vi.isMockFunction;
 
 describe('Mocked', () => {
 
-  const spy = jest.fn();
+  const spy = vi.fn();
 
   class BaseClass {
     baseMethod() {}
@@ -28,7 +28,7 @@ describe('Mocked', () => {
   beforeEach(() => {
     const MockedClass = Mocked(TestClass, {
       willNotBeMocked: 'NO_MOCK',
-      willBeMockedWithCustomImplementation: jest.fn().mockReturnValue(['jello']),
+      willBeMockedWithCustomImplementation: vi.fn().mockReturnValue(['jello']),
     });
 
     // Normally both `TestClass` and `MockedClass` instatiation will be handled

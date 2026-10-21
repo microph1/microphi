@@ -14,12 +14,12 @@ Playbook for automated contributors working inside the Microphi monorepo. Follow
 - `npm run build:ci` — runs CI-safe build pipeline (`lerna run build:ci`) with production configs (Angular apps use `production` configurations defined in `angular.json`).
 - `npm run start` — proxied to `ng serve`; pass `--project <name>` to target apps like `microphi` or `dcsoftware`.
 - `npm run lint:ci` — runs `lerna run lint --parallel`; lint before opening PRs or staging large diffs.
-- `npm run test` — root Jest entry (covers TypeScript libraries listed in `jest.config.ts`).
+- `npm run test` — root entry: Jest for the jsdom packages (`flux`, `utils`, listed in `jest.config.ts`), then Vitest for the node packages (`debug`, `di`, `list`, `store`, `json-db`, listed via `vitest.config.mts` projects).
 - `npm run test:ci` — `lerna run test:ci` fan-out; required pre-commit.
 - `npm run docs && npm run postdocs` — generates per-package docs and rewrites aggregates via `scripts/post-doc.mjs`.
 
 ## Running a Single Test
-- For a specific spec, use Jest directly: `npx jest packages/store/src/lib/store/store.spec.ts --runTestsByPath`.
+- For a specific spec in a Vitest package, run it from the package: `cd packages/store && npx vitest run src/lib/store/store.spec.ts`; for `flux`/`utils` use Jest: `npx jest packages/flux/src/lib/... --runTestsByPath`.
 - Narrow to a single test name with `--testNamePattern "should update loading state"` (regex friendly).
 - When debugging a package script, target it with Lerna scope: `npx lerna run test --scope @microphi/store --stream -- --watch`.
 - Angular component tests follow the same Jest harness because `jest-preset-angular` is wired globally—no `ng test` wrappers exist.
@@ -35,7 +35,7 @@ Playbook for automated contributors working inside the Microphi monorepo. Follow
 ## Toolchain Reference
 - Angular CLI config lives in `angular.json`; prefer `ng g` schematics for components/services.
 - Lerna-lite handles versioning (`npm run release`) and deployment (`npm run deploy:ci`).
-- Testing: Jest + `ts-jest` + `jest-preset-angular`; `jest.config.ts` lists `packages/*` as projects so new packages must register there.
+- Testing: Vitest (`vitest.config.mts` per package, v8 coverage) for the node packages; Jest + `ts-jest` + `jest-preset-angular` for `flux` and `utils`. New packages need a `vitest.config.mts` (or a Jest project entry in `jest.config.ts`).
 - Linting: `.eslintrc.js` enforces `eslint:recommended` + `@typescript-eslint/recommended` with repo-specific rules (2-space indent, single quotes, mandatory semicolons).
 - RxJS is ubiquitous; use `rxjs/operators` imports to keep tree-shaking effective.
 
@@ -85,7 +85,7 @@ Playbook for automated contributors working inside the Microphi monorepo. Follow
 - Unit tests live beside implementation (`*.spec.ts`); integration/e2e tests should go under `projects/*/e2e` when needed.
 - Mock RxJS streams with marble helpers or `of`/`Subject`—never rely on real timers; use `fakeSchedulers` where appropriate.
 - Snapshot tests are acceptable for presentational components only; stores/services should assert emitted values explicitly.
-- Use `jest.spyOn(console, 'log')` when verifying logging behavior to keep output clean.
+- Use `vi.spyOn(console, 'log')` (or `jest.spyOn` in Jest packages) when verifying logging behavior to keep output clean.
 - Generated code (Angular schematics) should still have smoke tests; run `ng g` components with `--skip-tests=false`.
 
 ## Documentation & Comments

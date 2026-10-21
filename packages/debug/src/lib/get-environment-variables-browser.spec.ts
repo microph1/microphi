@@ -1,9 +1,9 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 import { getEnvironmentVariables } from './get-environment-varialbles';
 
-jest.mock('./is_nodejs', () => {
+vi.mock('./is_nodejs', () => {
   return {
 
     isNodejs: () => {

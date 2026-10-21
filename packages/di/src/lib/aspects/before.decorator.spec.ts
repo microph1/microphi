@@ -13,7 +13,7 @@ describe('before decorator', () => {
 
   class TestClass {
 
-    public static log = jest.fn();
+    public static log = vi.fn();
 
     @Before<string>((name) => {
       return name.toUpperCase();

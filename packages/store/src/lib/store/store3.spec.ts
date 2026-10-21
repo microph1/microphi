@@ -4,7 +4,7 @@ import { filter, map, withLatestFrom } from 'rxjs/operators';
 import { $Keys } from 'utility-types';
 import { getPayloadFromActionType } from './types';
 
-xdescribe('experiment 2', () => {
+describe.skip('experiment 2', () => {
 
   type Class = new (...args: any[]) => {};
 

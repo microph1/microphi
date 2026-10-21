@@ -31,6 +31,9 @@
     "url": "www.microphi.io"
   },
   "homepage": "https://github.com/microph1/microphi",
+  "repository": {
+    "url": "git+https://github.com/microph1/microphi"
+  },
   "scripts": {
     "build": "tsc -b tsconfig.build.json && tsc -b tsconfig.cjs.json",
     "build:ci": "npm run build",

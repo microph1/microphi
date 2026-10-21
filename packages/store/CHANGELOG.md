@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.3](https://github.com/microph1/microphi/compare/%40microphi%2Fstore%402.11.2...%40microphi%2Fstore%402.11.3) (2026-10-21)
+
+### Bug Fixes
+
+* **microphi:** correct package metadata ([eb6e965](https://github.com/microph1/microphi/commit/eb6e965dfe6609f8ae6c9e122aad3ade468c89f2))
+* **microphi:** declare repository for di and store ([301b770](https://github.com/microph1/microphi/commit/301b7701d7b9e18fae978be7186a3f1f01040c64))
+* **microphi:** point author url at github.com/microph1 ([93d926a](https://github.com/microph1/microphi/commit/93d926ac8e5c56b30f02ba7619e128f0b4d507db))
+
 ## [2.11.2](https://github.com/microph1/microphi/compare/@microphi/store@2.11.1...@microphi/store@2.11.2) (2026-10-21)
 
 **Note:** Version bump only for package @microphi/store

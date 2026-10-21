@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.1](https://github.com/microph1/microphi/compare/%40microphi%2Fstyles%401.5.0...%40microphi%2Fstyles%401.5.1) (2026-10-21)
+
+### Bug Fixes
+
+* **microphi:** correct package metadata ([eb6e965](https://github.com/microph1/microphi/commit/eb6e965dfe6609f8ae6c9e122aad3ade468c89f2))
+* **microphi:** point author url at github.com/microph1 ([93d926a](https://github.com/microph1/microphi/commit/93d926ac8e5c56b30f02ba7619e128f0b4d507db))
+
 # [1.5.0](https://example.com/compare/@microphi/styles@1.4.0...@microphi/styles@1.5.0) (2026-08-22)
 
 ### Features

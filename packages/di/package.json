@@ -1,6 +1,6 @@
 {
   "name": "@microphi/di",
-  "version": "2.12.0",
+  "version": "2.12.1",
   "description": "Handcrafted DI container: @Injectable, @Inject, @DI, aspects (@Before, @After, @Cache) and a TestBed",
   "main": "lib/cjs/index.js",
   "typings": "lib/esm/index.d.ts",

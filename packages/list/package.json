@@ -1,6 +1,6 @@
 {
   "name": "@microphi/list",
-  "version": "2.10.4",
+  "version": "2.10.5",
   "description": "List with array ordering and direct lookup by id (Map + id array)",
   "main": "lib/cjs/index.js",
   "typings": "lib/esm/index.d.ts",
@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.23.3",
-    "@microphi/debug": "^2.11.0",
+    "@microphi/debug": "^2.11.1",
     "@types/node": "^20.11.30",
     "utility-types": "^3.10.0"
   },

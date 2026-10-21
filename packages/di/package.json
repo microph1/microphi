@@ -1,7 +1,7 @@
 {
   "name": "@microphi/di",
   "version": "2.12.0",
-  "description": "Handcrafted DI container",
+  "description": "Handcrafted DI container: @Injectable, @Inject, @DI, aspects (@Before, @After, @Cache) and a TestBed",
   "main": "lib/cjs/index.js",
   "typings": "lib/esm/index.d.ts",
   "module": "lib/esm/index.js",
@@ -19,15 +19,20 @@
     "di container"
   ],
   "author": {
-    "email": "cavaliere.davide@gmail.com",
     "name": "Davide Cavaliere",
-    "url": "https://www.microphi.io"
+    "email": "cavaliere.davide@gmail.com",
+    "url": "https://github.com/microph1"
   },
-  "homepage": "https://github.com/microph1/microphi",
+  "homepage": "https://github.com/microph1/microphi/tree/master/packages/di#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/microph1/microphi.git",
+    "directory": "packages/di"
+  },
   "scripts": {
     "build": "tsc -b tsconfig.build.json && tsc -b tsconfig.cjs.json",
     "build:ci": "npm run build",
-    "test:ci": "jest --coverage --ci",
+    "test:ci": "vitest run --coverage",
     "lint": "eslint ./src"
   },
   "peerDependencies": {
@@ -36,5 +41,8 @@
   "devDependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.23.3"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "bugs": {
+    "url": "https://github.com/microph1/microphi/issues"
+  }
 }

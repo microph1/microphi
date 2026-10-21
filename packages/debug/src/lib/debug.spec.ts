@@ -1,6 +1,6 @@
 import { Log, getDebugger, onMessage } from './debug';
 
-jest.mock('./get-environment-varialbles', () => {
+vi.mock('./get-environment-varialbles', () => {
   return {
 
     getEnvironmentVariables: () => {
@@ -18,7 +18,7 @@ describe('debug', () => {
   beforeEach(() => {
     d = getDebugger('namespace');
     notD = getDebugger('this_wont_log');
-    const spy = jest.spyOn(console, 'log');
+    const spy = vi.spyOn(console, 'log');
     spy.mockReset();
   });
 
@@ -38,7 +38,7 @@ describe('debug', () => {
 
 
   describe('onMessage', () => {
-    const spy = jest.fn();
+    const spy = vi.fn();
 
     beforeEach(() => {
       spy.mockReset();

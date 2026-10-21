@@ -4,6 +4,15 @@ on:
   push:
     branches:
       - master
+  # Manual recovery for when git tags/releases were created but the npm publish
+  # step failed. npm trusted publishing accepts a single workflow file per
+  # package, so recovery lives here rather than in its own workflow.
+  workflow_dispatch:
+    inputs:
+      from_package:
+        description: 'Publish versions declared in package.json that npm does not have yet (lerna publish from-package)'
+        type: boolean
+        default: true
 
 jobs:
 
@@ -53,7 +62,14 @@ jobs:
         run: |
           npm run test:ci
 
+      - name: Publish_from_package
+        if: github.event_name == 'workflow_dispatch' && inputs.from_package
+        # No --create-release: the GitHub releases/tags already exist from the
+        # failed run; only the npm publish is outstanding.
+        run: npx lerna publish from-package -y --no-private --loglevel verbose
+
       - name: Version_and_Deploy
+        if: github.event_name == 'push'
         run: |
           npm run deploy:ci
         # this will call lerna publish.

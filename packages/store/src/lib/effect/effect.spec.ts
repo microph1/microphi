@@ -29,15 +29,15 @@ describe('@Effect', () => {
       return of();
     }
 
-    onONE<O>(state: any, payload: any): any {
+    onONE(_state: any, _payload: any): any {
       // no empty
     }
 
-    onTHREE<O>(state: any, payload: any): any {
+    onTHREE(_state: any, _payload: any): any {
       // no empty
     }
 
-    onTWO<O>(state: any, payload: any): any {
+    onTWO(_state: any, _payload: any): any {
       // no empty
     }
 

@@ -2,7 +2,7 @@ import { Cache, CacheSymbol } from './cache.decorator';
 
 describe('@Cache', () => {
 
-  const spy = jest.fn();
+  const spy = vi.fn();
 
   // a plain class: nothing pre-seeds the cache map
   class SongDb {
@@ -31,13 +31,13 @@ describe('@Cache', () => {
 
   beforeEach(() => {
     now = 1_000;
-    jest.spyOn(Date, 'now').mockImplementation(() => now);
+    vi.spyOn(Date, 'now').mockImplementation(() => now);
     spy.mockReset();
     instance = new SongDb();
   });
 
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('should lazily create the cache on a non-store instance', () => {

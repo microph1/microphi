@@ -23,6 +23,7 @@ export const Mocked = <BaseClass extends Klass, K extends object = InstanceType<
           if (typeof vi !== 'undefined') return vi.fn;
         } catch { /* vi not defined in this environment */ }
         try {
+          // @ts-ignore - jest global
           if (typeof jest !== 'undefined') return jest.fn;
         } catch { /* jest not defined in this environment */ }
         return () => () => {};

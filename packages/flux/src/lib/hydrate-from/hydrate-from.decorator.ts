@@ -1,4 +1,15 @@
-export function readFromStorage<T = unknown>(storage: Storage, namespace: string, parser?: (v: any) => any): T {
+export interface HydrateFromOptions<T = any> {
+  /**
+   * turns the stored string back into the property value, default `JSON.parse`
+   */
+  parser?: (v: string) => T;
+  /**
+   * turns the property value into the string to store, default `JSON.stringify`
+   */
+  serializer?: (v: T) => string;
+}
+
+export function readFromStorage<T = unknown>(storage: Storage, namespace: string, parser?: (v: string) => T): T {
   const value = storage.getItem(namespace) || 'false';
 
   if (parser) {
@@ -7,11 +18,11 @@ export function readFromStorage<T = unknown>(storage: Storage, namespace: string
   return JSON.parse(value) || undefined;
 }
 
-export function writeToStorage<T = unknown>(storage: Storage, key: string, value: T) {
-  storage.setItem(key, JSON.stringify(value));
+export function writeToStorage<T = unknown>(storage: Storage, key: string, value: T, serializer?: (v: T) => string) {
+  storage.setItem(key, serializer ? serializer(value) : JSON.stringify(value));
 }
 
-export function HydrateFrom(storage: Storage) {
+export function HydrateFrom(storage: Storage, options?: HydrateFromOptions) {
 
   return (target, key) => {
 
@@ -21,11 +32,10 @@ export function HydrateFrom(storage: Storage) {
     Object.defineProperty(target, keyString, {
       get(): any {
 
-        return readFromStorage(storage, storageName);
+        return readFromStorage(storage, storageName, options?.parser);
       },
       set(v: any): void {
-        // this[storagePropertyName] = v;
-        writeToStorage(storage, storageName, v);
+        writeToStorage(storage, storageName, v, options?.serializer);
       }
     });
 

@@ -35,4 +35,26 @@ describe('@HydrateFrom', () => {
 
   });
 
+  describe('custom parser and serializer', () => {
+
+    class MapHolder {
+      @HydrateFrom(localStorage, {
+        serializer: (v: Map<string, number>) => JSON.stringify([...v.entries()]),
+        parser: (v: string) => new Map<string, number>(JSON.parse(v) || []),
+      })
+      public scores!: Map<string, number>;
+    }
+
+    it('should store the serialized value and read it back through the parser', () => {
+      new MapHolder().scores = new Map([['alice', 3], ['bob', 5]]);
+
+      expect(localStorage.getItem('MapHolder_###_scores')).toEqual('[["alice",3],["bob",5]]');
+
+      const scores = new MapHolder().scores;
+      expect(scores).toBeInstanceOf(Map);
+      expect(scores.get('bob')).toEqual(5);
+    });
+
+  });
+
 });

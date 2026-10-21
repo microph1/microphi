@@ -1,12 +1,13 @@
 {
   "name": "@microphi/styles",
   "version": "1.5.0",
-  "description": "helper styles",
+  "description": "Flex-first SCSS utilities",
   "scripts": {},
   "private": false,
   "repository": {
     "type": "git",
-    "url": " "
+    "url": "git+https://github.com/microph1/microphi.git",
+    "directory": "packages/styles"
   },
   "keywords": [
     "styles",
@@ -14,12 +15,23 @@
     "scss",
     "helpers"
   ],
-  "author": "cavaliere.davide@gmail.com",
-  "license": "ISC",
+  "author": {
+    "name": "Davide Cavaliere",
+    "email": "cavaliere.davide@gmail.com",
+    "url": "https://github.com/microph1"
+  },
+  "license": "MIT",
   "devDependencies": {
     "utopia-core-scss": "*"
   },
   "peerDependencies": {
     "utopia-core-scss": "^1.2.0"
-  }
+  },
+  "homepage": "https://github.com/microph1/microphi/tree/master/packages/styles#readme",
+  "bugs": {
+    "url": "https://github.com/microph1/microphi/issues"
+  },
+  "files": [
+    "scss"
+  ]
 }

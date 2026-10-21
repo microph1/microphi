@@ -1,180 +1,189 @@
-# @microphi/di [![npm version](https://badge.fury.io/js/%40microphi%2Fdi.svg)](https://badge.fury.io/js/%40microphi%2Fdi)
+# @microphi/di [![npm](https://img.shields.io/npm/v/@microphi/di)](https://www.npmjs.com/package/@microphi/di)
 
-> Yet another di container for javascript/typescript
+> Handcrafted DI container: `@Injectable`, `@Inject`, `@DI`, aspects (`@Before`, `@After`, `@Cache`) and a `TestBed`
 
-## install
+## Install
 
-`npm i -S @microphi/di` or `yarn add @microphi/di`
+```sh
+npm i @microphi/di reflect-metadata
+```
+
+`reflect-metadata` is a peer dependency (di imports it itself). Enable legacy decorators in `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "experimentalDecorators": true
+  }
+}
+```
 
 ## How to use
 
-Decorate a class with `@Injectable()`.
+Decorate a class with `@Injectable()`:
 
 ```typescript
-// my-class.ts
-
-
 import { Injectable } from '@microphi/di';
 
 @Injectable()
-class MyClass {
-
-  public sayHello(name: string) {
+export class Greeter {
+  sayHello(name: string) {
     return `Hello ${name}`;
   }
 }
 ```
 
-Inject it using `@Inject(<Class>)`
+Inject it with `@Inject(<Class>)`. The consumer must be `@Injectable()` too: that is what resolves its constructor parameters.
 
 ```typescript
-// consumer.ts
+import { Inject, Injectable } from '@microphi/di';
 
-import { Inject } from '@microphi/di';
-
-class Consumer {
-
-  constructor(
-    @Inject(MyClass) public myClassSingleton: MyClass
-  ) {
-    this.myClassSingleton.sayHello('consumer');
+@Injectable()
+export class Consumer {
+  constructor(@Inject(Greeter) private greeter: Greeter) {
+    this.greeter.sayHello('consumer');
   }
-
 }
 ```
 
-Getting a singleton programmatically
+Register the providers on a root class and bootstrap it:
 
 ```typescript
-// my-script.ts
-
-const singleton = injector(MyClass);
-
-```
-
-Create the app
-
-```typescript
+import { bootstrap, DI } from '@microphi/di';
 
 @DI({
-  providers: [
-    MyClass,
-  ]
+  providers: [Greeter, Consumer],
 })
-class App {
-}
+class App {}
 
 const app = bootstrap(App);
 ```
 
-## Providing custom implementation
-`providers` array also accept an object such as:
+Every provider is a singleton. Get one programmatically with `injector`:
+
+```typescript
+import { injector } from '@microphi/di';
+
+const greeter = injector(Greeter);
+```
+
+A dependency cycle (`A` injects `B` injects `A`) throws when the classes are declared, not when they are instantiated.
+
+### Providing a custom implementation
 
 ```typescript
 @DI({
   providers: [
-    {
-      provide: MyClass,
-      useClass: MyCustomImplementation,
-    },
-  ]
+    { provide: Greeter, useClass: LoudGreeter },
+  ],
 })
-class App {
+class App {}
+```
+
+## Aspects
+
+Method decorators that work on any class, injectable or not.
+
+### `@Before(fn)`
+
+Runs `fn` with the method's arguments before the method. If `fn` returns a value, it replaces the arguments (return an array for several); returning `undefined` keeps the originals.
+
+```typescript
+class Greeter {
+  @Before<string>((name) => name.toUpperCase())
+  sayHello(name: string) {
+    return `Hello ${name}`;
+  }
 }
 
-const app = bootstrap(App);
+new Greeter().sayHello('bob'); // Hello BOB
 ```
+
+### `@After(fn)`
+
+Runs `fn` with the method's return value; whatever `fn` returns is what the caller gets.
+
+```typescript
+class Greeter {
+  @After<string>((greeting) => `${greeting}!`)
+  sayHello(name: string) {
+    return `Hello ${name}`;
+  }
+}
+```
+
+### `@Cache(options?)`
+
+Caches the value returned by the method, per instance, keyed by its arguments.
+
+```typescript
+class SongDb {
+  @Cache({ ttl: 60_000, trackBy: (id: string) => id })
+  async fetchCoverArt(id: string) {
+    return fetch(`/cover/${id}`);
+  }
+}
+```
+
+- `ttl`: time to live in ms, default 5 minutes
+- `trackBy`: builds the cache key from the arguments, default `JSON.stringify(args)`
+
+The returned value itself is cached, so for a `Promise` concurrent callers share the same pending call, and a rejection is cached for the `ttl` too. An `Observable` is cached as is: a cold one re-runs its work on every subscription unless it is shared (e.g. `shareReplay(1)`).
 
 ## Testing
-In order to test a singleton and mock dependencies use `TestBed`
+
+`TestBed` gives each test a fresh container:
 
 ```typescript
-import { Inject } from '@microphi/di';
+import { Inject, Injectable, TestBed } from '@microphi/di';
 
+@Injectable()
+class HttpService {}
 
-describe('MyClass', () => {
+@Injectable()
+class UserService {
+  constructor(@Inject(HttpService) public http: HttpService) {}
+}
 
-  @Injectable()
-  class HttpService {
-  }
-
-  @Injectable()
-  class TestClass {
-    constructor(
-      @Inject(HttpService) http: HttpService,
-    ) {
-    }
-  }
-
-  let instance;
+describe('UserService', () => {
+  let service: UserService;
 
   beforeEach(() => {
     TestBed.configure({
       providers: [
-        TestClass,
-        {
-          provide: HttpService,
-          useClass: class {
-            // test implementation
-          }
-        }
-      ]
+        UserService,
+        { provide: HttpService, useClass: class { /* test implementation */ } },
+      ],
     });
 
-    instance = TestBed.inject(TestClass);
+    service = TestBed.inject(UserService);
   });
 
   it('should exist', () => {
-    expect(instance).toBeTruthy();
+    expect(service).toBeTruthy();
   });
 });
-
 ```
 
-## Mocked
-Only if jest is used the `Mocked` utility can be used to automatically mock any given class.
+### `Mocked`
+
+`Mocked(Class, options?)` builds a class whose methods are all mocks: `vi.fn()` under vitest, `jest.fn()` under jest, no-op functions otherwise.
 
 ```typescript
-import { Inject } from '@microphi/di';
+import { Mocked, TestBed } from '@microphi/di';
 
-
-describe('MyClass', () => {
-
-  @Injectable()
-  class HttpService {
-  }
-
-  @Injectable()
-  class TestClass {
-    constructor(
-      @Inject(HttpService) http: HttpService,
-    ) {
-    }
-  }
-
-  let instance;
-
-  beforeEach(() => {
-    TestBed.configure({
-      providers: [
-        TestClass,
-        {
-          provide: HttpService,
-          useClass: Mocked(HttpService)
-        }
-      ]
-    });
-
-    instance = TestBed.inject(TestClass);
-  });
-
-  it('should exist', () => {
-    expect(instance).toBeTruthy();
-  });
+TestBed.configure({
+  providers: [
+    UserService,
+    {
+      provide: HttpService,
+      useClass: Mocked(HttpService, {
+        get: () => of({ id: 1 }), // custom implementation
+        post: 'NO_MOCK',          // keep the real method
+      }),
+    },
+  ],
 });
 ```
-for more info look at its [tests](src/lib/testing/mocked.spec.ts)
 
-
-## DEBUG
-Prepend `DEBUG=microgamma:digator*` to your script to see debugging information.
+For more examples see its [tests](src/testing/mocked.spec.ts).

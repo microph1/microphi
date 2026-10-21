@@ -19,7 +19,7 @@ export type makeEffects<Actions> = {
   [k in keyof Actions]: Actions[k] extends PureReducer<Primitive>
     ? never
     : Actions[k]
-}
+};
 
 export type makeStore<State, Actions> =
   {
@@ -31,10 +31,10 @@ export type makeStore<State, Actions> =
   {
     // Reducers
     [k in keyof Actions as `on${Capitalize<string & k>}`]: Actions[k] extends (...args: any) => Observable<infer O>
-    ? (state: State, payload: O) => State
-    : Actions[k] extends PureReducer<infer O>
-      ? (state?: State, payload?: O) => State
-      : (state?: State) => State
+      ? (state: State, payload: O) => State
+      : Actions[k] extends PureReducer<infer O>
+        ? (state?: State, payload?: O) => State
+        : (state?: State) => State
 
   };
 

@@ -7,7 +7,7 @@ import { Cache } from './cache';
 
 describe('@Cache', () => {
 
-  const spy = jest.fn();
+  const spy = vi.fn();
 
   interface State {
     items: string[],

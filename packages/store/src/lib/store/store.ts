@@ -35,7 +35,7 @@ export abstract class Store<State, A> {
     return this._store$.asObservable();
   }
 
-  constructor(private initialState: State, scheduler: SchedulerLike = asapScheduler) {
+  constructor(private initialState: State, _scheduler: SchedulerLike = asapScheduler) {
 
     this.effects = getEffects(this);
     this.reducers = getReducers(this);

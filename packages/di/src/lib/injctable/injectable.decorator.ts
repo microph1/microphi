@@ -15,7 +15,7 @@ export function Injectable() {
   };
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export function InjectableDecorator<T extends {new(...args: any[]): {}}>(klass: T) {
   // this is needed because minified code can have different classes with the same name
   // leading to a dependency cycle error which is not really there

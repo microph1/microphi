@@ -149,7 +149,7 @@ describe('json-storage', () => {
         // land in the same millisecond as the setup timestamp and the assertion
         // below flakes (fails under load, passes in isolation).
         const later = new Date(Date.now() + 1000).toISOString();
-        const toISOStringSpy = jest.spyOn(Date.prototype, 'toISOString').mockReturnValue(later);
+        const toISOStringSpy = vi.spyOn(Date.prototype, 'toISOString').mockReturnValue(later);
 
         await storage.upsert({id: '0', name: 'super-superman-1'});
 

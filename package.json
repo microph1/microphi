@@ -5,8 +5,7 @@
   "workspaces": {
     "packages": [
       "packages/*",
-      "apps/www.dcsoftware.io",
-      "apps/www.microphi.io"
+      "apps/www.dcsoftware.io"
     ]
   },
   "scripts": {
@@ -15,23 +14,18 @@
     "start": "ng serve",
     "build": "lerna run build",
     "build:ci": "lerna run build:ci",
-    "test": "jest",
+    "test": "jest && vitest run",
     "test:ci": "lerna run test:ci",
     "lint:ci": "lerna run lint --parallel",
     "e2e": "ng e2e",
     "deploy:ci": "lerna publish -y --conventional-commits --create-release github --loglevel verbose --no-private",
     "release": "lerna version --conventional-commits",
-    "predeploy:dcsoftware": "ng build dcsoftware --configuration production",
-    "deploy:dcsoftware": "cd projects/dcsoftware && npm run sls client deploy --no-confirm",
-    "deploy:store": "ng deploy store --configuration=production",
-    "predeploy:microphi": "ng build microphi --configuration production",
-    "deploy": "lerna run deploy --stream --scope",
-    "docs": "lerna run docs --stream",
-    "postdocs": "node --experimental-modules scripts/post-doc.mjs"
+    "deploy": "lerna run deploy --stream --scope"
   },
   "private": true,
   "devDependencies": {
     "@angular/language-server": "^17.3.2",
+    "@eslint/js": "^10.0.1",
     "@faker-js/faker": "^7.3.0",
     "@lerna-lite/changed": "^5.6.4",
     "@lerna-lite/cli": "^5.6.4",
@@ -42,11 +36,12 @@
     "@lerna-lite/run": "^5.6.4",
     "@lerna-lite/version": "^5.6.4",
     "@lerna-lite/watch": "^5.6.4",
+    "@stylistic/eslint-plugin": "^5.10.0",
     "@types/jest": "^29.5.12",
-    "@types/node": "^20.11.24",
-    "@typescript-eslint/eslint-plugin": "^7.2.0",
-    "@typescript-eslint/parser": "^7.2.0",
-    "eslint": "^8.53.0",
+    "@types/node": "^24.19.2",
+    "@vitest/coverage-v8": "^5.0.5",
+    "eslint": "^10.13.0",
+    "globals": "^17.13.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "jest-junit": "^16.0.0",
@@ -57,6 +52,8 @@
     "serverless-finch": "^4.0.0",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.8.1",
-    "typescript": "~5.4.2"
+    "typescript": "~5.4.2",
+    "typescript-eslint": "^8.72.0",
+    "vitest": "^5.0.5"
   }
 }

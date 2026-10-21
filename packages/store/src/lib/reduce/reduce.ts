@@ -9,7 +9,7 @@ export interface Reducer {
 }
 
 export function Reduce(): MethodDecorator {
-  return (target, propertyKey, descriptor) => {
+  return (target, propertyKey) => {
     // by convention a reducer have name such as onFindAll
     // where findAll is the associated action
     // with the following we extract the action's name

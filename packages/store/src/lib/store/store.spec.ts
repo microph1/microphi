@@ -38,8 +38,8 @@ describe('store', () => {
 
     public users$ = this.select(({users}) => users);
 
-    public reduceSpy = jest.fn();
-    public effectSpy = jest.fn();
+    public reduceSpy = vi.fn();
+    public effectSpy = vi.fn();
 
     constructor() {
       super(initialState);
@@ -152,7 +152,7 @@ describe('store', () => {
     scheduler = new TestScheduler();
 
     // silent console.error
-    jest.spyOn(console, 'error').mockImplementation();
+    vi.spyOn(console, 'error').mockImplementation();
   });
 
   it('should create', () => {
@@ -304,7 +304,7 @@ describe('store', () => {
   describe('error handling', () => {
 
     beforeEach(() => {
-      jest.spyOn(console, 'log').mockImplementation();
+      vi.spyOn(console, 'log').mockImplementation();
     });
 
     it('should emit the error through loading$ and keep the state', () => {
@@ -438,7 +438,7 @@ describe('store', () => {
 
     beforeEach(() => {
       innerObservableStore = new TestInnerObservableStore();
-      jest.spyOn(innerObservableStore, 'onConnect');
+      vi.spyOn(innerObservableStore, 'onConnect');
     });
 
     it('should connect', () => {

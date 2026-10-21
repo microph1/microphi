@@ -1,7 +1,7 @@
 {
   "name": "@microphi/debug",
   "version": "2.11.0",
-  "description": "A very simple wrapper around console.log",
+  "description": "Namespaced console.log wrapper, filtered by the DEBUG env var",
   "main": "lib/cjs/index.js",
   "typings": "lib/esm/index.d.ts",
   "module": "lib/esm/index.js",
@@ -23,7 +23,7 @@
   "files": [
     "lib"
   ],
-  "licence": "MIT",
+  "license": "MIT",
   "private": false,
   "keywords": [
     "log",
@@ -31,18 +31,26 @@
     "console"
   ],
   "author": {
-    "email": "cavaliere.davide@gmail.com",
     "name": "Davide Cavaliere",
-    "url": "www.microphi.io"
+    "email": "cavaliere.davide@gmail.com",
+    "url": "https://github.com/microph1"
   },
-  "homepage": "https://github.com/microph1/microphi",
+  "homepage": "https://github.com/microph1/microphi/tree/master/packages/debug#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/microph1/microphi.git",
+    "directory": "packages/debug"
+  },
   "dependencies": {
     "tslib": "^2.5.0"
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json && tsc -b tsconfig.cjs.json",
     "build:ci": "npm run build",
-    "test:ci": "jest --coverage --ci",
+    "test:ci": "vitest run --coverage",
     "lint": "eslint ./src"
+  },
+  "bugs": {
+    "url": "https://github.com/microph1/microphi/issues"
   }
 }

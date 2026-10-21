@@ -1,252 +1,200 @@
-# @microphi/store
+# @microphi/store [![npm](https://img.shields.io/npm/v/@microphi/store)](https://www.npmjs.com/package/@microphi/store)
 
-@microphi/store is a pure RxJS state manager.
+> Pure RxJS state manager driven by `@Effect` / `@Reduce` decorators
 
 ## Install
-With your favourite package manager install
-```
-@microphi/store
+
+```sh
+npm i @microphi/store @microphi/di rxjs reflect-metadata
 ```
 
+Enable legacy decorators in `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "experimentalDecorators": true
+  }
+}
+```
+
+## How to use
+
 ### Define the state
+
 ```typescript
-interface ItemsState {
+interface UsersState {
   users: string[];
-  selected?: [number, string];
+  selected?: string;
 }
 ```
 
 ### Define the actions
+
+Every action returns an `Observable`; its arguments are what `dispatch` takes.
+
 ```typescript
-interface ItemsActions {
-  // An action MUST always return an Observable
+interface UsersActions {
   findAll: () => Observable<string[]>;
-  // select: (name: string) => Observable<[number, string]>;
+  findOne: (id: string) => Observable<string>;
 }
 ```
-### Implement effects and reducers in the store
+
+### Implement effects and reducers
+
+For each action the store needs an `@Effect()` method named like the action and an `@Reduce()` method named `on` + `PascalCase(action)`. A missing one throws when the store is constructed.
 
 ```typescript
-import { Store, Effect, Reduce } from '@microphi/store';
+import { Observable, of } from 'rxjs';
+import { Effect, makeStore, Reduce, Store } from '@microphi/store';
 
-// -> Create a class that extends `Store` such as
-class MyStore extends Store<ItemsState, ItemsActions>
-    implements makeStore<ItemsState, ItemsActions> {
-  // -> optionally implement `makeStore` to add extra type checking
+class UsersStore extends Store<UsersState, UsersActions>
+  // optional: type-checks that every effect and reducer is implemented
+  implements makeStore<UsersState, UsersActions> {
 
   constructor() {
-    // -> Set the initial state
-    super({
-      users: ['alice', 'bob'],
-    });
+    // initial state, must be serializable: each instance gets its own deep copy
+    super({ users: ['alice', 'bob'] });
   }
 
   @Effect()
-  // -> Implement `findAll` method
   findAll(): Observable<string[]> {
-    // - Simulate an async call
-    return of(['alice', 'bob', 'carl', 'denise']);
+    return of(['carl', 'denise']);
   }
 
-  @Reduce() // - Decorate with `@Reduce` so the `Store` knows this is a reducer
-  // -> Method name MUST be `on` + capitalized `actionName`
-  //  its first argument is always the current state
-  //  its second argument is the output of its action without the Observable.
-  public onFindAll(state: ItemsState, payload: string[]) {
-    // -> add state transition logic here
+  // receives the current state and the value emitted by the effect
+  @Reduce()
+  onFindAll(state: UsersState, users: string[]): UsersState {
+    return { ...state, users: [...state.users, ...users] };
+  }
 
-    // -> Return the new state
-    return {
-      users: [...state.users, ...payload]
-    };
+  @Effect()
+  findOne(id: string): Observable<string> {
+    return fromFetch(`https://my.endpoint/users/${id}`).pipe(switchMap((r) => r.json()));
+  }
+
+  @Reduce()
+  onFindOne(state: UsersState, selected: string): UsersState {
+    return { ...state, selected };
   }
 }
 ```
 
-### Dispatch and select state
+### Dispatch and select
+
 ```typescript
-// given an instance of the store
-const store = new MyStore();
+const store = new UsersStore();
 
-// subscribe to any state change
-store.state$.subscribe((state) => console.log({ state }) );
+// every state change
+store.state$.subscribe((state) => console.log(state));
 
-// or better select a projection of the state
-store.select(({users}) => users).subscribe((users) => console.log({ users }));
+// or a projection, emitted only when it changes
+store.select(({ users }) => users).subscribe((users) => console.log(users));
 
-// finally dispatch an action
 store.dispatch('findAll');
-
+store.dispatch('findOne', 'alice'); // arguments are type-checked against UsersActions
 ```
 
-#### Watch loading state
-We assume every action to be an asyncronious task so every action as a loading state associated to it. Loading state can we subscribed such as:
+### Loading and errors
+
+Every action is treated as async, so each has a loading state:
+
 ```typescript
-store.getLoadingFor('findAll').subscribe((loading) => {
-
-  console.log({loading});
-
-});
-
+store.getLoadingFor('findOne').subscribe((loading) => console.log({ loading }));
 ```
 
-### Choose the right strategy
-We assume that an action always execute an async effect. Internally such effect is wrapped in a RxJS pipe, as such there are several way this can be done.
-So for example when we dispatch an action such as `findOne` let's say its effect is a call to and endpoint to retrieve an entity by its id.
-Dependending on the scenario we may want to `switchMap`, `mergeMap` or `concatMap`.
+`loading$` carries the full event: `{ code, payload, status, response?, error? }`.
 
-This can be achieved passing the `strategy` argument to the `@Effect` decorator such as:
+If an effect errors, the error is logged and emitted on `loading$` (with `status: false` and `error`), the state is left untouched and the action can be dispatched again.
+
+### Effects that emit more than once
+
+The reducer runs for every value the effect emits, so a long-lived effect (a connection, a socket) keeps updating the state after the dispatch that started it.
+
+## Strategies
+
+When an action is dispatched again while its previous effect is still running, the strategy passed to `@Effect` decides what happens:
+
+| Strategy | Behaviour |
+|---|---|
+| `switchMap` (default) | the pending effect is cancelled, only the latest one reduces |
+| `mergeMap` | effects run in parallel, each reduces as it completes |
+| `concatMap` | effects run one after the other, in dispatch order |
 
 ```typescript
-
-class MyStore extends Store<ItemsState, ItemsActions>
-    implements makeStore<ItemsState, ItemsActions> {
-
-  constructor() {
-    super({
-      users: ['alice', 'bob'],
-      selected: undefined,
-
-    });
-  }
-
-  @Effect('mergeMap')
-  findOne(id: string): Observable<string> {
-    return fromFetch(`http://my.super.endpoint/${id}`)
-  }
-
-  @Reduce()
-  public onFindOne(state: ItemsState, select: string) {
-    return {
-      ...state,
-      selected,
-    };
-  }
+@Effect('mergeMap')
+findOne(id: string): Observable<string> {
+  return fromFetch(`https://my.endpoint/users/${id}`).pipe(switchMap((r) => r.json()));
 }
 ```
 
-### Operators
-When dispatching actions some RxJS operators can be applied using decorators:
+## Operators
 
-#### Cache
-It caches the value returned from the effect (i.e.: its observable) for 300_000 (default) milliseconds (i.e.: 5 mins) or the amount of milliseconds provided in the `ttl` field.
-The effect will be cached according to its arguments. I.e.: like a memoized function `@Cache` will get check arguments and cache their result separately.
+### `@Cache`
 
-Optionally a `trackBy` function can be provided in order to customized how arguments are considered for caching.
-If not provided `JSON.stringify` is used to serialize the arguments.
-If provided `trackBy` will have the exact same arguments of the effect being annotated.
+Caches the Observable an effect returns, per store instance and per arguments, so a cached dispatch does not call the effect method again. The Observable itself is resubscribed: a cold one (like `fromFetch`) re-runs its request unless it is shared, e.g. with `shareReplay(1)`.
+
 ```typescript
-
-class MyStore extends Store<ItemsState, ItemsActions>
-    implements makeStore<ItemsState, ItemsActions> {
-
-  constructor() {
-    super({
-      users: ['alice', 'bob'],
-      selected: undefined,
-
-    });
-  }
-
-  @Effect('mergeMap')
-  @Cache({ttl: 1_000, trackBy: (id: string) => id.toLowerCase()})
-  findOne(id: string): Observable<string> {
-    return fromFetch(`http://my.super.endpoint/${id}`)
-  }
-
-  @Reduce()
-  public onFindOne(state: ItemsState, select: string) {
-    return {
-      ...state,
-      selected,
-    };
-  }
+@Effect('mergeMap')
+@Cache({ ttl: 1_000, trackBy: (id: string) => id.toLowerCase() })
+findOne(id: string): Observable<string> {
+  return fromFetch(`https://my.endpoint/users/${id}`).pipe(
+    switchMap((r) => r.json()),
+    shareReplay(1),
+  );
 }
 ```
 
+- `ttl`: time to live in ms, default 5 minutes
+- `trackBy`: builds the cache key from the effect's arguments, default `JSON.stringify(args)`
 
-#### DebounceTime
-It will debouce calling the effect as in a RxJS pipe
+`@Cache` lives in `@microphi/di` and works on any class; it is re-exported here.
+
+### `@DebounceTime`
+
+Debounces dispatches of the action, as `debounceTime` in an RxJS pipe:
 
 ```typescript
-
-class MyStore extends Store<ItemsState, ItemsActions>
-    implements makeStore<ItemsState, ItemsActions> {
-
-  constructor() {
-    super({
-      users: ['alice', 'bob'],
-      selected: undefined,
-
-    });
-  }
-
-  @Effect('mergeMap')
-  @DebounceTime(300)
-  findOne(id: string): Observable<string> {
-    return fromFetch(`http://my.super.endpoint/${id}`)
-  }
-
-  @Reduce()
-  public onFindOne(state: ItemsState, select: string) {
-    return {
-      ...state,
-      selected,
-    };
-  }
+@Effect('switchMap')
+@DebounceTime(300)
+search(query: string): Observable<string[]> {
+  return fromFetch(`https://my.endpoint/search?q=${query}`).pipe(switchMap((r) => r.json()));
 }
 ```
 
-#### DelayTime
-It will deley an effect as in a RxJS pipe.
+### `@DelayTime`
+
+Delays each effect's result, as `delay` in an RxJS pipe:
+
 ```typescript
-  class TestClass extends Store<State, Actions> {
-
-    /**
-     * this effect will be rate limited at one call per 100 ms
-     */
-    @Effect('concatMap')
-    @DelayTime(100)
-    effectWithDelay(id: string) {
-      return fromFetch(`http://my.super.endpoint/${id}`)
-    }
-
-    @Reduce()
-    onEffectWithDelay(state: State, payload: string): State {
-      return {...state, items: [...state.items, payload]};
-    }
-  }
+/**
+ * with concatMap this rate-limits the effect to one call per 100 ms
+ */
+@Effect('concatMap')
+@DelayTime(100)
+track(id: string) {
+  return fromFetch(`https://my.endpoint/track/${id}`);
+}
 ```
-⚠️ Note the use of `concatMap` strategy. If another strategy is used the effect of `@DelayTime` may be not what really expected.
-Please see [delay.spec.ts](./src/lib/operators/delay.spec.ts) for all possible combination of `strategy` and `@DelayTime`
+
+⚠️ With strategies other than `concatMap` the result may not be what you expect: see [delay.spec.ts](./src/lib/operators/delay.spec.ts) for every combination.
+
+`@DebounceTime` and `@DelayTime` are read by the store's dispatch pipeline, so they only have an effect on a `Store` subclass.
 
 ## .skills
+
 Automation agents can invoke the following skills when working inside `packages/store`.
 
 ### build-store-lib
 - Goal: emit both ESM and CJS bundles from `src`.
-- Run from repo root (ensures workspace deps resolve):
-  1. `npm install` (first run or when deps change).
-  2. `npm run build -- --scope @microphi/store` to leverage Lerna caching, or `cd packages/store && npm run build` for isolated builds.
-- Checks: confirm `packages/store/lib/esm/index.js` and `packages/store/lib/cjs/index.js` are regenerated.
+- From the repo root: `npm install` (first run or when deps change), then `npm run build -w packages/di -w packages/store` (store needs di's `lib/` output).
+- Checks: `packages/store/lib/esm/index.js` and `packages/store/lib/cjs/index.js` are regenerated.
 
 ### test-store-lib
-- Goal: execute package-specific Jest suite with coverage, mirroring CI.
-- Commands:
-  1. `cd packages/store`.
-  2. `npm run test:ci` (wraps `jest --coverage --ci`).
-- When debugging a single spec use `npx jest src/lib/store/store.spec.ts --runTestsByPath` within this folder.
+- Goal: run the package's vitest suite with coverage, mirroring CI.
+- `cd packages/store && npm run test:ci` (wraps `vitest run --coverage`).
+- Single spec: `npx vitest run src/lib/store/store.spec.ts` within this folder.
 
 ### lint-store-lib
-- Goal: enforce the repo’s TypeScript + ESLint rules before commits.
-- Commands:
-  1. `cd packages/store`.
-  2. `npm run lint:ci` (runs `eslint ./src`).
-- Fix order: apply autofixes via `npx eslint ./src --fix`, rerun lint, then tests.
-
-### release-store-docs
-- Goal: regenerate docs after updating public APIs.
-- Commands:
-  1. From repo root `npm run docs -- --scope @microphi/store` if scoped docs exist, otherwise invoke `npm run docs` to rebuild all packages.
-  2. Run `npm run postdocs` to refresh aggregated docs.
-- Verify README snippets still compile by running the TypeScript samples inside `examples/` or via `ts-node` scratch files as needed.
+- Goal: enforce the repo's TypeScript + ESLint rules before commits.
+- `cd packages/store && npm run lint` (runs `eslint ./src`); autofix with `npx eslint ./src --fix`, then rerun lint and tests.

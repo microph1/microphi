@@ -1,9 +1,9 @@
 import { isNodejs } from './is_nodejs';
 
 if (isNodejs()) {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const fs = require('fs');
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const util = require('util');
 
   const originalLog = console.log;

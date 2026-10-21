@@ -1,7 +1,7 @@
 {
   "name": "@microphi/list",
   "version": "2.10.4",
-  "description": "Simple and fast list-like class",
+  "description": "List with array ordering and direct lookup by id (Map + id array)",
   "main": "lib/cjs/index.js",
   "typings": "lib/esm/index.d.ts",
   "module": "lib/esm/index.js",
@@ -16,15 +16,20 @@
     "list"
   ],
   "author": {
-    "email": "cavaliere.davide@gmail.com",
     "name": "Davide Cavaliere",
-    "url": "www.microphi.io"
+    "email": "cavaliere.davide@gmail.com",
+    "url": "https://github.com/microph1"
   },
-  "homepage": "https://github.com/microph1/microphi",
+  "homepage": "https://github.com/microph1/microphi/tree/master/packages/list#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/microph1/microphi.git",
+    "directory": "packages/list"
+  },
   "scripts": {
     "build": "tsc -b tsconfig.build.json && tsc -b tsconfig.cjs.json",
     "build:ci": "npm run build",
-    "test:ci": "jest --coverage --ci",
+    "test:ci": "vitest run --coverage",
     "lint": "eslint ./src"
   },
   "devDependencies": {
@@ -35,5 +40,8 @@
   },
   "peerDependencies": {
     "rxjs": "~7.8.0"
+  },
+  "bugs": {
+    "url": "https://github.com/microph1/microphi/issues"
   }
 }

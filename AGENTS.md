@@ -12,7 +12,7 @@ Playbook for automated contributors working inside the Microphi monorepo. Follow
 ## Build, Lint, Test Commands
 - `npm run build` — orchestrates `lerna run build` for every package/app; default target is dev.
 - `npm run build:ci` — runs CI-safe build pipeline (`lerna run build:ci`) with production configs (Angular apps use `production` configurations defined in `angular.json`).
-- `npm run start` — proxied to `ng serve`; pass `--project <name>` to target apps like `microphi` or `dcsoftware`.
+- `npm run start` — proxied to `ng serve`; `flux` (the Angular app in `apps/flux`) is the only Angular CLI project left.
 - `npm run lint:ci` — runs `lerna run lint --parallel`; lint before opening PRs or staging large diffs.
 - `npm run test` — root entry: Jest for `flux` (jsdom, listed in `jest.config.ts`), then Vitest for the node packages (`debug`, `di`, `list`, `store`, `json-db`, listed via `vitest.config.mts` projects).
 - `npm run test:ci` — `lerna run test:ci` fan-out; required pre-commit.
@@ -27,8 +27,7 @@ Playbook for automated contributors working inside the Microphi monorepo. Follow
 
 ## Project Layout
 - `packages/store`, `packages/flux`, `packages/debug`, etc. house publishable libraries; each exposes a `src/lib` entry and a generated `lib/esm` output for consumers via path aliases in `tsconfig.json`.
-- `apps/*` folders are frontends; `apps/www.microphi.io` is the marketing site, `apps/www.dcsoftware.io` mirrors the consulting site.
-- `projects/*` contains Angular builders/deploy targets (e.g., `projects/dcsoftware` ships via Serverless).
+- `apps/*` folders are frontends: `www.microphi.io` (site), `www.dcsoftware.io` (consulting site, deployed to Deno Deploy by `deploy_dcsoftware.yml`), `flux` (Angular loudspeaker-design app), `metronoman-flux` (flux metronome experiment).
 - `scripts/` contains release and doc tooling; treat `.mjs` files as ESM modules.
 - `dist/`, `coverage/`, `lerna-debug.log`, `node_modules/` are artifacts—never edit by hand.
 
@@ -82,7 +81,7 @@ Playbook for automated contributors working inside the Microphi monorepo. Follow
 - Dispatchers must validate actions before pushing (see `dispatch` guard that throws when the action name is unknown).
 
 ## Testing Guidelines
-- Unit tests live beside implementation (`*.spec.ts`); integration/e2e tests should go under `projects/*/e2e` when needed.
+- Unit tests live beside implementation (`*.spec.ts`); integration/e2e tests should go under `apps/*/e2e` when needed.
 - Mock RxJS streams with marble helpers or `of`/`Subject`—never rely on real timers; use `fakeSchedulers` where appropriate.
 - Snapshot tests are acceptable for presentational components only; stores/services should assert emitted values explicitly.
 - Use `vi.spyOn(console, 'log')` (or `jest.spyOn` in Jest packages) when verifying logging behavior to keep output clean.
@@ -118,7 +117,6 @@ Playbook for automated contributors working inside the Microphi monorepo. Follow
 
 ## Environment & Configuration
 - Angular environment settings live under `apps/*/src/environments`; avoid hardcoding secrets in code—use environment tokens or Serverless parameters.
-- Serverless deployments in `projects/dcsoftware` rely on AWS credentials in the shell; confirm they exist before invoking `npm run deploy:dcsoftware`.
 - Feature flags belong in typed config objects; add interfaces describing each flag so tree-shaking works across packages.
 - Browser-only globals should be guarded with `isPlatformBrowser` or `typeof window !== 'undefined'` checks to protect SSR builds.
 - Keep `.env` files out of the repo; sample values go into `README.md` or `docs/`.
@@ -139,14 +137,11 @@ Playbook for automated contributors working inside the Microphi monorepo. Follow
 
 ## Support Scripts & Utilities
 - `scripts/post-doc.mjs` re-links docs after `lerna run docs`; rerun both commands whenever a package README changes.
-- Investigate `integrations/` and `projects/*` helpers before writing new deployment scripts—most scaffolding already exists there.
-- Use `npm run predeploy:microphi` to generate production assets for the marketing site; deploy hooks assume the build folder exists.
+- Investigate `integrations/` and `.github/workflows/` before writing new deployment scripts—most scaffolding already exists there.
 - Prefer `npx lerna list --scope <pkg>` to confirm package names before targeting them in commands.
 - Capture repeatable local workflows inside `scripts/` with descriptive filenames instead of ad-hoc shell snippets.
 
 ## Additional Tooling Notes
-- Serverless deploy scripts live under `projects/dcsoftware`; use `npm run predeploy:dcsoftware` + `npm run deploy:dcsoftware` pairings to avoid stale builds.
-- `deploy:store` and `predeploy:microphi` wrap Angular CLI deploy targets; keep them in sync with `angular.json` if names change.
 - There are no Cursor `.cursor/rules` or Copilot instruction files to honor; if one is added later, surface it in this document immediately.
 - Respect `.gitignore`; never commit `dist`, `coverage`, `lerna-debug.log`, or local env files.
 - Prefer `npm` over `yarn`/`pnpm` to avoid mismatched lockfiles.

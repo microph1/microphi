@@ -1,7 +1,7 @@
 {
   "name": "@microphi/debug",
   "version": "2.11.0",
-  "description": "A very simple wrapper around console.log",
+  "description": "Namespaced console.log wrapper, filtered by the DEBUG env var",
   "main": "lib/cjs/index.js",
   "typings": "lib/esm/index.d.ts",
   "module": "lib/esm/index.js",

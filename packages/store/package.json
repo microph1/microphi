@@ -1,7 +1,7 @@
 {
   "name": "@microphi/store",
   "version": "2.11.2",
-  "description": "Pure RxJS state manager",
+  "description": "Pure RxJS state manager driven by @Effect / @Reduce decorators",
   "main": "lib/cjs/index.js",
   "typings": "lib/esm/index.d.ts",
   "module": "lib/esm/index.js",

@@ -1,7 +1,7 @@
 {
   "name": "@microphi/list",
   "version": "2.10.4",
-  "description": "Simple and fast list-like class",
+  "description": "List with array ordering and direct lookup by id (Map + id array)",
   "main": "lib/cjs/index.js",
   "typings": "lib/esm/index.d.ts",
   "module": "lib/esm/index.js",

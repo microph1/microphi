@@ -1,7 +1,7 @@
 {
   "name": "@microphi/flux",
   "version": "2.12.4",
-  "description": "the flux core package",
+  "description": "Web-component framework: @Component, template bindings, fx-for / fx-if",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "module": "lib/index.js",

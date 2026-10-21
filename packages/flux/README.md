@@ -100,6 +100,16 @@ export class FxPlayerComponent {
 }
 ```
 
+`@HydrateFrom` stores values as JSON; pass `{ parser, serializer }` for anything JSON can't round-trip:
+
+```typescript
+@HydrateFrom(localStorage, {
+  serializer: (v: Map<string, number>) => JSON.stringify([...v.entries()]),
+  parser: (v: string) => new Map(JSON.parse(v) || []),
+})
+scores!: Map<string, number>;
+```
+
 ### Lifecycle
 
 Implement any of `OnInit`, `OnViewInit`, `OnChanges`, `OnDestroy`:

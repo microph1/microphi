@@ -9,7 +9,7 @@ export = (mod: { typescript: typeof ts }) => {
 
       const logger = new Logger(info);
 
-      logger.log(`creating plugin`);
+      logger.log('creating plugin');
 
       return decorateWithTemplateLanguageService(
         mod.typescript,

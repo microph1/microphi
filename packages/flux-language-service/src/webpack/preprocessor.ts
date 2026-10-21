@@ -1,4 +1,4 @@
-import { getDebugger } from '@microgamma/loggator';
+import { getDebugger } from '@microphi/debug';
 
 const d = getDebugger('@flux/webpack/html-parser');
 

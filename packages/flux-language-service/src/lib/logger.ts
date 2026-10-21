@@ -1,3 +1,4 @@
+import type * as ts from 'typescript/lib/tsserverlibrary';
 import { Logger as _Logger } from 'typescript-template-language-service-decorator';
 
 export class Logger implements _Logger {

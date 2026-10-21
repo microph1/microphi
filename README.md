@@ -16,6 +16,8 @@ Monorepo for the microphi (μφ) project: small, decorator-driven TypeScript lib
 | [`@microphi/list`](packages/list) | [![npm](https://img.shields.io/npm/v/@microphi/list)](https://www.npmjs.com/package/@microphi/list) | List with array ordering and direct lookup by id (Map + id array) |
 | [`@microphi/debug`](packages/debug) | [![npm](https://img.shields.io/npm/v/@microphi/debug)](https://www.npmjs.com/package/@microphi/debug) | Namespaced `console.log` wrapper, filtered by the `DEBUG` env var |
 
+Work in progress, not published: [`@microphi/flux-language-service`](packages/flux-language-service), a TypeScript language service plugin for flux templates (the flux counterpart of `@angular/language-service`).
+
 ## Development
 
 Requires Node 24 and npm.

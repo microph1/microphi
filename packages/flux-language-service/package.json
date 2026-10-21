@@ -1,0 +1,37 @@
+{
+  "name": "@microphi/flux-language-service",
+  "version": "1.1.0",
+  "description": "TypeScript language service plugin for @microphi/flux templates (work in progress)",
+  "private": true,
+  "license": "MIT",
+  "author": {
+    "name": "Davide Cavaliere",
+    "email": "cavaliere.davide@gmail.com",
+    "url": "https://www.microphi.io"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/microph1/microphi.git",
+    "directory": "packages/flux-language-service"
+  },
+  "homepage": "https://github.com/microph1/microphi/tree/master/packages/flux-language-service#readme",
+  "bugs": {
+    "url": "https://github.com/microph1/microphi/issues"
+  },
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "build:ci": "npm run build",
+    "lint": "eslint ./src"
+  },
+  "dependencies": {
+    "@microphi/debug": "^2.11.0",
+    "typescript-template-language-service-decorator": "^2.3.2"
+  },
+  "peerDependencies": {
+    "typescript": ">=5"
+  }
+}

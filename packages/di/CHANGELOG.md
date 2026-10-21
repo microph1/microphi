@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.12.0](https://github.com/microph1/microphi/compare/@microphi/di@2.11.0...@microphi/di@2.12.0) (2026-10-21)
+
+### Features
+
+* **di:** add @Cache method decorator ([e171b71](https://github.com/microph1/microphi/commit/e171b71df2f7fdcf7312e9fe16a59fcd93a23750))
+
 # [2.11.0](https://github.com/microph1/microphi/compare/@microphi/di@2.10.3...@microphi/di@2.11.0) (2026-07-22)
 
 ### Bug Fixes

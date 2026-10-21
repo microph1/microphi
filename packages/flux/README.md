@@ -1,82 +1,124 @@
-# @microphi/flux
+# @microphi/flux [![npm](https://img.shields.io/npm/v/@microphi/flux)](https://www.npmjs.com/package/@microphi/flux)
 
-> Yet another frontend framework
+> Web-component framework: `@Component`, template bindings, `fx-for` / `fx-if`
 
-Microphi is an experimental front-end framework designed to push the boundaries of modern web development. While it showcases some innovative ideas, Microphi is still in its early stages and has a long way to go before it reaches full maturity. We welcome contributions, feedback, and support from developers and enthusiasts who are interested in helping us shape and refine this framework. Together, we can drive Microphi towards a stable, efficient, and user-friendly platform. Join us on this journey and make an impact!
+Experimental: every component is a native custom element with its own shadow DOM, wired with decorators and resolved through [`@microphi/di`](../di).
 
 ## Install
-With your favourite package manager
-```
-@microphi/flux
-```
-and install the peers packages
-```
-@microphi/di rxjs
-```
-## Boostrap an application
-```typescript
-import { bootstrap } from '@microphi/flux';
-import { App } from '@microphi/flux';
-import { FxRootComponent } from './fx-root.component';
 
+```sh
+npm i @microphi/flux @microphi/di rxjs reflect-metadata
+```
 
-@App({
-  declarations: [
-    FxRootComponent,
-  ]
-})
-export class FluxApp {
+Enable legacy decorators in `tsconfig.json`:
 
-  constructor() {
-    console.log('app started');
+```json
+{
+  "compilerOptions": {
+    "experimentalDecorators": true
   }
 }
-
-const app = bootstrap(FluxApp);
-
-console.log('App created', app);
 ```
-Let's create a counter component
+
+## Bootstrap an application
+
 ```typescript
-import { Component } from '@microphi/flux';
+import { App, bootstrap } from '@microphi/flux';
+import { FxCounterComponent } from './fx-counter.component';
+
+@App({
+  declarations: [FxCounterComponent],
+  providers: [], // @microphi/di providers
+})
+class FluxApp {}
+
+bootstrap(FluxApp);
+```
+
+## Components
+
+```typescript
+import { Component, html } from '@microphi/flux';
 
 @Component({
   selector: 'fx-counter',
-  template: `
+  template: html`
     <style>
-      .flex-row {
-        display: flex;
-        flex-direction: row;
-        gap: 6px;
-      }
-
+      .row { display: flex; gap: 6px; }
     </style>
 
-    <div class="flex-row">
-      <button (click)="increase()">+</button>
-      <div>
-        {{counter}}
-      </div>
+    <div class="row">
       <button (click)="decrease()">-</button>
+      <span>{{counter}}</span>
+      <button (click)="increase()">+</button>
     </div>
-  `
+  `,
 })
 export class FxCounterComponent {
   counter = 0;
 
-  increase() {
-    this.counter++;
-  }
-
-  decrease() {
-    this.counter--;
-  }
+  increase() { this.counter++; }
+  decrease() { this.counter--; }
 }
 ```
-With the code above we are creating a web component and as such it can contain its `<style>` tag.
 
-Web components ensure style encapsulation and allow transclusion seamlessly leveraging the `<slot>` element.
+Styles in the template are encapsulated by the shadow DOM, and `<slot>` works as usual for transclusion.
+
+`@Component` options:
+
+| Option | |
+|---|---|
+| `selector` | custom element tag name |
+| `template` / `templateUrl` | inline template, or a URL fetched at runtime |
+| `style` / `styleUrls` | component styles, inline or linked |
+
+`registerGlobalStyles(...urls)` adds stylesheets to every component's shadow root. `html` and `css` are no-op template tags, there for editor highlighting.
+
+### Template syntax
+
+| Syntax | |
+|---|---|
+| `{{expr}}` | text interpolation |
+| `{{value \| json}}` | interpolation through a pipe registered with `registerPipe('json', fn)` |
+| `(click)="method(arg, $event)"` | event binding |
+| `[value]="expr"` | property binding, also how a parent sets a child's `@Input` |
+| `#name` | assigns the element to `this.name` on the component |
+
+### Decorators
 
 ```typescript
+@Component({ selector: 'fx-player', template: html`<canvas #canvas></canvas>` })
+export class FxPlayerComponent {
+  @Input() src!: string;                          // settable via [src]="..."
 
+  @ViewChild('canvas') canvas!: HTMLCanvasElement; // linked from #canvas
+
+  @HydrateFrom(localStorage) volume = 1;          // persisted in the given Storage
+
+  @HostListener('click')
+  toggle() { /* click on the host element */ }
+}
+```
+
+### Lifecycle
+
+Implement any of `OnInit`, `OnViewInit`, `OnChanges`, `OnDestroy`:
+
+| Hook | Called |
+|---|---|
+| `fxOnInit()` | once the component is connected |
+| `fxOnViewInit()` | after the template is rendered |
+| `fxOnChanges(changes)` | when an `@Input` changes, with `{ [input]: { name, oldValue, newValue } }` |
+| `fxOnDestroy()` | when the element is removed |
+
+## Built-in components
+
+```html
+<fx-if [condition]="isVisible">
+  <p>shown only when isVisible is truthy</p>
+</fx-if>
+
+<fx-for let="user" [of]="users">
+  <li>{{user}}</li>
+</fx-for>
 ```

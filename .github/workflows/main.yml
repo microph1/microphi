@@ -9,6 +9,11 @@ jobs:
 
   Build_Test_Lint_Deploy:
     runs-on: ubuntu-latest
+    permissions:
+      # push the version commit/tags and create GitHub releases
+      contents: write
+      # npm trusted publishing (OIDC)
+      id-token: write
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
@@ -24,7 +29,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '24.x'
           cache: 'npm'
           # Optional registry to set up for auth. Will set the registry in a project level .npmrc and .yarnrc file,
           # and set up auth to read in from env.NODE_AUTH_TOKEN.
@@ -61,6 +66,6 @@ jobs:
         # and here we leverage the prepack lifecycle hook to build each package
         # This voids the build step done before a probably we can get rid of it for now I'm just leaving it
         # so that the pipeline stops earlier if for any reason the build fails.
+        # npm auth is via trusted publishing (OIDC), no NPM_TOKEN
         env:
           GH_TOKEN: ${{ github.token }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

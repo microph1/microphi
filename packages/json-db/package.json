@@ -16,13 +16,15 @@
     "json-db"
   ],
   "author": {
-    "email": "cavaliere.davide@gmail.com",
     "name": "Davide Cavaliere",
-    "url": "www.microphi.io"
+    "email": "cavaliere.davide@gmail.com",
+    "url": "https://www.microphi.io"
   },
-  "homepage": "https://github.com/microph1/microphi",
+  "homepage": "https://github.com/microph1/microphi/tree/master/packages/json-db#readme",
   "repository": {
-    "url": "git+https://github.com/microph1/microphi"
+    "type": "git",
+    "url": "git+https://github.com/microph1/microphi.git",
+    "directory": "packages/json-db"
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json && tsc -b tsconfig.cjs.json",
@@ -45,5 +47,8 @@
     "@microphi/list": "^2.3.0",
     "minisearch": "^7.1.0",
     "rxjs": "~7.8.0"
+  },
+  "bugs": {
+    "url": "https://github.com/microph1/microphi/issues"
   }
 }

@@ -23,7 +23,7 @@
   "files": [
     "lib"
   ],
-  "licence": "MIT",
+  "license": "MIT",
   "private": false,
   "keywords": [
     "log",
@@ -31,13 +31,15 @@
     "console"
   ],
   "author": {
-    "email": "cavaliere.davide@gmail.com",
     "name": "Davide Cavaliere",
-    "url": "www.microphi.io"
+    "email": "cavaliere.davide@gmail.com",
+    "url": "https://www.microphi.io"
   },
-  "homepage": "https://github.com/microph1/microphi",
+  "homepage": "https://github.com/microph1/microphi/tree/master/packages/debug#readme",
   "repository": {
-    "url": "git+https://github.com/microph1/microphi"
+    "type": "git",
+    "url": "git+https://github.com/microph1/microphi.git",
+    "directory": "packages/debug"
   },
   "dependencies": {
     "tslib": "^2.5.0"
@@ -47,5 +49,8 @@
     "build:ci": "npm run build",
     "test:ci": "vitest run --coverage",
     "lint": "eslint ./src"
+  },
+  "bugs": {
+    "url": "https://github.com/microph1/microphi/issues"
   }
 }

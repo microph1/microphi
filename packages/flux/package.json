@@ -12,9 +12,15 @@
     "lib"
   ],
   "repository": {
-    "url": "git+https://github.com/microph1/microphi"
+    "type": "git",
+    "url": "git+https://github.com/microph1/microphi.git",
+    "directory": "packages/flux"
   },
-  "author": "Davide Cavaliere",
+  "author": {
+    "name": "Davide Cavaliere",
+    "email": "cavaliere.davide@gmail.com",
+    "url": "https://www.microphi.io"
+  },
   "license": "MIT",
   "private": false,
   "scripts": {
@@ -37,5 +43,16 @@
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "homepage": "https://github.com/microph1/microphi/tree/master/packages/flux#readme",
+  "bugs": {
+    "url": "https://github.com/microph1/microphi/issues"
+  },
+  "keywords": [
+    "web components",
+    "custom elements",
+    "shadow dom",
+    "decorators",
+    "framework"
+  ]
 }

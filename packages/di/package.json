@@ -19,13 +19,15 @@
     "di container"
   ],
   "author": {
-    "email": "cavaliere.davide@gmail.com",
     "name": "Davide Cavaliere",
+    "email": "cavaliere.davide@gmail.com",
     "url": "https://www.microphi.io"
   },
-  "homepage": "https://github.com/microph1/microphi",
+  "homepage": "https://github.com/microph1/microphi/tree/master/packages/di#readme",
   "repository": {
-    "url": "git+https://github.com/microph1/microphi"
+    "type": "git",
+    "url": "git+https://github.com/microph1/microphi.git",
+    "directory": "packages/di"
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json && tsc -b tsconfig.cjs.json",
@@ -39,5 +41,8 @@
   "devDependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.23.3"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "bugs": {
+    "url": "https://github.com/microph1/microphi/issues"
+  }
 }

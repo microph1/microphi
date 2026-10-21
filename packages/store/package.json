@@ -11,7 +11,7 @@
   "files": [
     "lib"
   ],
-  "licence": "MIT",
+  "license": "MIT",
   "keywords": [
     "redux",
     "reducer",
@@ -26,13 +26,15 @@
     "elm"
   ],
   "author": {
-    "email": "cavaliere.davide@gmail.com",
     "name": "Davide Cavaliere",
-    "url": "www.microphi.io"
+    "email": "cavaliere.davide@gmail.com",
+    "url": "https://www.microphi.io"
   },
-  "homepage": "https://github.com/microph1/microphi",
+  "homepage": "https://github.com/microph1/microphi/tree/master/packages/store#readme",
   "repository": {
-    "url": "git+https://github.com/microph1/microphi"
+    "type": "git",
+    "url": "git+https://github.com/microph1/microphi.git",
+    "directory": "packages/store"
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json && tsc -b tsconfig.cjs.json",
@@ -48,8 +50,11 @@
     "utility-types": "^3.10.0"
   },
   "peerDependencies": {
-    "@microphi/di": "^2.11.0",
+    "@microphi/di": "^2.12.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "~7.8.0"
+  },
+  "bugs": {
+    "url": "https://github.com/microph1/microphi/issues"
   }
 }

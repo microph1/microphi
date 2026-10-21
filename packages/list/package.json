@@ -16,13 +16,15 @@
     "list"
   ],
   "author": {
-    "email": "cavaliere.davide@gmail.com",
     "name": "Davide Cavaliere",
-    "url": "www.microphi.io"
+    "email": "cavaliere.davide@gmail.com",
+    "url": "https://www.microphi.io"
   },
-  "homepage": "https://github.com/microph1/microphi",
+  "homepage": "https://github.com/microph1/microphi/tree/master/packages/list#readme",
   "repository": {
-    "url": "git+https://github.com/microph1/microphi"
+    "type": "git",
+    "url": "git+https://github.com/microph1/microphi.git",
+    "directory": "packages/list"
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json && tsc -b tsconfig.cjs.json",
@@ -38,5 +40,8 @@
   },
   "peerDependencies": {
     "rxjs": "~7.8.0"
+  },
+  "bugs": {
+    "url": "https://github.com/microph1/microphi/issues"
   }
 }

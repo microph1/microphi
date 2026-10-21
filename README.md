@@ -24,7 +24,7 @@ Requires Node 24 and npm.
 npm install
 npm run build      # build every package (dependents need their deps' lib/ output)
 npm run lint:ci
-npm run test:ci    # vitest for node packages, jest for flux and utils
+npm run test:ci    # vitest for node packages, jest for flux
 ```
 
 ## Releasing

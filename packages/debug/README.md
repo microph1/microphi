@@ -1,57 +1,65 @@
-# @microphi/debug
+# @microphi/debug [![npm](https://img.shields.io/npm/v/@microphi/debug)](https://www.npmjs.com/package/@microphi/debug)
 
-> Super simple wrapper around console.log
+> Namespaced `console.log` wrapper, filtered by the `DEBUG` env var
 
+## Install
 
-# Install
+```sh
+npm i @microphi/debug
 ```
-@microphi/debug
+
+## How to use
+
+```typescript
+import { getDebugger } from '@microphi/debug';
+
+const d = getDebugger('musicbox:player');
+
+d('loading', { track: 42 });
 ```
 
-## Use in nodejs
+Each namespace gets its own colour, and lines are prefixed with the time, or with the ms since the previous line when they come less than a second apart.
 
-```javascript
-import { getDebugger } from "@microphi/debug";
+### Node.js
 
-export const d = getDebugger('namespace1');
+Set `DEBUG` to a comma-separated list of regexes; a namespace that matches any of them is logged.
 
-// any where in the code
-d('test');
-setTimeout(() => {
-  d('hello there');
-}, 500);
+```sh
+DEBUG=musicbox:.*,db node app.js
 ```
-Set `DEBUG` environment variable with a comma separated list of regex: if a match happens with a namespace then the text will be logged using `console.log`.
 
+![nodejs example output](https://raw.githubusercontent.com/microph1/microphi/master/.github/assets/debug_nodejs_output.png)
 
-![nodejs example output](../../.github/assets/debug_nodejs_output.png)
+### Browser
 
-## Use in the browser
-Set `localStorage.debug` with a comma separated list of regex: if a match happens with a namespace then the text will be logged using `console.log`.
+Same, through `localStorage.debug`:
 
-![browser example output](../../.github/assets/debug_browser_output.png)
+```js
+localStorage.debug = 'musicbox:.*';
+```
 
-In this case `localStorage.debug` is set to `musicbox:*`
+![browser example output](https://raw.githubusercontent.com/microph1/microphi/master/.github/assets/debug_browser_output.png)
 
-### OnMessage handler
-With `OnMessage` is possible to handle each message logged regardless of the regexes provided. This may be usefull to send the logs to a server or to to store them to a file.
+## `onMessage`
 
-```javascript
-onMessage((message) => {
-  // do something
+Registers a callback that receives every message, matching or not, as long as `DEBUG` is set. Handy to ship logs to a server or a file.
+
+```typescript
+import { onMessage } from '@microphi/debug';
+
+onMessage(({ formattedTime, namespace, args }) => {
+  // ...
 });
 ```
 
-### Console to File
-To redirect all `console.log` calls to a file instead of the console, import the decorator:
+## Console to file
 
-```javascript
+Node only: importing this entry point redirects every `console.log` to a file.
+
+```typescript
 import '@microphi/debug/console-to-file';
 
-// Now all console.log calls will append to a file
-console.log('This goes to file');
+console.log('this goes to the file');
 ```
 
-Set the `CONSOLE_LOG_FILE` environment variable to specify the file path (default: `./console.log`).
-
-Note: This is only effective in Node.js environments. In browsers, it will log a warning and have no effect.
+The path comes from `CONSOLE_LOG_FILE` (default `./console.log`). If a write fails, it falls back to the original `console.log`.

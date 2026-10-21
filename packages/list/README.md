@@ -1,52 +1,57 @@
-# @microphi/list [![npm version](https://badge.fury.io/js/%40microphi%2Flist.svg)](https://badge.fury.io/js/%40microphi%2Flist)
+# @microphi/list [![npm](https://img.shields.io/npm/v/@microphi/list)](https://www.npmjs.com/package/@microphi/list)
 
-> Simple and fast list-like class
+> List with array ordering and direct lookup by id (Map + id array)
 
-It combines internally a javascrript map and an array of ids. The combination give this class the flexibility of an array and the ability to access directly to an element from its id.
-
+Internally a `Map` of entities plus an array of ids: iteration follows the array's order, lookups by id go straight to the map.
 
 ## Install
-With your preferred package manager install
-```
-@microphi/list
+
+```sh
+npm i @microphi/list rxjs
 ```
 
 ## How to use
-```typescript
 
-interface Entity {
+```typescript
+import { List } from '@microphi/list';
+
+interface User {
   id: string;
-  user: {
-    email: string;
-    name: string;
-  };
-  anotherField?: any;
+  name: string;
 }
 
-const users: Entity[] = [
-  { id: 'abc', user: {email: 'email1', name: 'name1'}},
-  { id: 'bcd', user: {email: 'email2', name: 'name2'}},
-  { id: 'cdf', user: {email: 'email3', name: 'name3'}},
-];
+// the id field, and optionally the initial items
+const users = new List<User>('id', [
+  { id: 'a', name: 'alice' },
+  { id: 'b', name: 'bob' },
+]);
 
-// Create a list of users, specifying the `id` field and optionally an array of initial values.
-const list = new List<Entity>('id', users);
+users.get('a');   // { id: 'a', name: 'alice' }
+users.has('c');   // false
+users.size;       // 2
 
-// upsert items. I.e.: append if new, update otherwise
-list.upsert({
-  id: 'trs',
-  user: {email: 'emailtrs', name: 'nametrs'},
+for (const user of users) { /* in list order */ }
+[...users].map((u) => u.name);
+```
+
+### Adding and removing
+
+All methods accept one or more items.
+
+| Method | New id | Existing id |
+|---|---|---|
+| `upsert(...items)` | appended | replaced in place |
+| `append(...items)` | appended | replaced and moved to the end |
+| `prepend(...items)` | added at the start | replaced and moved to the start |
+| `delete(...items)` | — | removed |
+| `clear()` | | removes everything |
+
+### Watching changes
+
+Every mutation emits on `operations$`:
+
+```typescript
+users.operations$.subscribe(({ op, payload, timestamp }) => {
+  console.log(op, payload); // 'upsert' | 'append' | 'prepend' | 'delete' | 'clear'
 });
-
-const user1 = {
-  id: 'lmn',
-  user: {email: 'emaillmn', name: 'namelmn'}
-};
-
-// prepend items. I.e.: add at the beginning if new, update otherwise
-list.prepend(user1);
-
-// remove items.
-list.delete(user1);
-
 ```

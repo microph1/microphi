@@ -1,6 +1,7 @@
 export * from './lib/injctable/injectable.decorator';
 export * from './lib/aspects/before.decorator';
 export * from './lib/aspects/after.decorator';
+export * from './lib/aspects/cache.decorator';
 export * from './lib/container/di.decorator';
 
 export * from './lib/provider/providers';

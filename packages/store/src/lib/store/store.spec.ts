@@ -5,7 +5,7 @@ import { Reduce } from '../reduce/reduce';
 import { Store } from './store';
 import { Effect } from '../effect/effect';
 import { DebounceTime } from '../operators/debounce';
-import { makeStore } from './types';
+import { LoadingState, makeStore } from './types';
 
 describe('store', () => {
   interface ItemsState {
@@ -275,17 +275,100 @@ describe('store', () => {
 
   });
 
-  xdescribe('error handling', () => {
+  describe('loading', () => {
 
-    fit('should get an error through the error subject (effect that throws)', () => {
-      store.loading$.subscribe((state) => {
-        console.log(state);
+    it('should report loading for an action until its effect responds', () => {
+      const values: boolean[] = [];
+      store.getLoadingFor('findOne').subscribe((v) => values.push(v));
+
+      scheduler.run(({flush}) => {
+        store.dispatch('findOne', 'bob');
+        expect(values).toEqual([true]);
+
+        flush();
+        expect(values).toEqual([true, false]);
       });
+    });
 
-      scheduler.run(({expectObservable}) => {
+    it('should not report loading for other actions', () => {
+      const values: boolean[] = [];
+      store.getLoadingFor('findOne').subscribe((v) => values.push(v));
+
+      store.dispatch('findAll');
+
+      expect(values).toEqual([]);
+    });
+
+  });
+
+  describe('error handling', () => {
+
+    beforeEach(() => {
+      jest.spyOn(console, 'log').mockImplementation();
+    });
+
+    it('should emit the error through loading$ and keep the state', () => {
+      const events: LoadingState<ItemsActions>[] = [];
+      store.loading$.subscribe((e) => events.push(e));
+
+      scheduler.run(({flush}) => {
         store.dispatch('actionEffectThrows');
-        expectObservable(store.loading$).toBe('a');
+        flush();
       });
+
+      expect(events).toEqual([
+        {code: 'actionEffectThrows', payload: [], status: true},
+        {code: 'actionEffectThrows', payload: [], status: false, error: new Error('Effect error')},
+      ]);
+      expect(console.log).toHaveBeenCalledWith('Error handling action "actionEffectThrows"', new Error('Effect error'));
+      scheduler.expect$(store.state$).toContain(initialState);
+    });
+
+    it('should allow dispatching an action again after its effect errored', () => {
+      const values: boolean[] = [];
+      store.getLoadingFor('actionEffectThrows').subscribe((v) => values.push(v));
+
+      scheduler.run(({flush}) => {
+        store.dispatch('actionEffectThrows');
+        flush();
+        store.dispatch('actionEffectThrows');
+        flush();
+      });
+
+      expect(values).toEqual([true, false, true, false]);
+    });
+
+  });
+
+  describe('guards', () => {
+
+    it('should throw when dispatching an unknown action', () => {
+      // @ts-expect-error: dispatching an action the store does not declare
+      expect(() => store.dispatch('unknown')).toThrow('Cannot find action unknown');
+    });
+
+    it('should throw when an action has a reducer but no effect', () => {
+      class NoEffectStore extends Store<ItemsState, { load: () => Observable<string> }> {
+        @Reduce()
+        onLoad(state: ItemsState) {
+          return state;
+        }
+      }
+
+      expect(() => new NoEffectStore(initialState))
+        .toThrow('Cannot find effect for action "load". Did you decorate a "load" method with @Effect()?');
+    });
+
+    it('should throw when an effect has no matching reducer', () => {
+      class NoReducerStore extends Store<ItemsState, { load: () => Observable<string> }> {
+        @Effect()
+        load() {
+          return of('loaded');
+        }
+      }
+
+      expect(() => new NoReducerStore(initialState))
+        .toThrow('Cannot find reducer "onLoad" for action "load".');
     });
 
   });

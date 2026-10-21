@@ -13,6 +13,7 @@
     "src/lib/store/store-3.experiment.ts"
   ],
   "references": [
-    { "path": "../debug/tsconfig.build.json" }
+    { "path": "../debug/tsconfig.build.json" },
+    { "path": "../di/tsconfig.build.json" }
   ]
 }

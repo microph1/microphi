@@ -4,7 +4,7 @@ Playbook for automated contributors working inside the Microphi monorepo. Follow
 
 ## Quick Orientation
 - Monorepo uses Angular CLI + custom TypeScript packages managed via Lerna workspaces (`packages/*`, `apps/www.dcsoftware.io`).
-- Toolchain expects Node 18+ with npm; lockfiles are `package-lock.json` and `deno.lock` (respect both when adding deps).
+- Toolchain expects Node 24 with npm; the lockfile is `package-lock.json`.
 - TypeScript is strict (`tsconfig.json` enforces `strict`, `noImplicitOverride`, `forceConsistentCasingInFileNames`).
 - RxJS, custom stores, and decorators power most runtime behavior—prefer extending existing abstractions instead of inventing new ones.
 - There are no Cursor or GitHub Copilot rule files in this repo; this document is the single source of truth for agent guidance.
@@ -113,7 +113,7 @@ Playbook for automated contributors working inside the Microphi monorepo. Follow
 - External deps should target the Angular/Node majors already in use; avoid introducing experimental releases without ADR discussion.
 - When adding a dependency for a single package, update that package's `package.json` and rerun the relevant `lerna run build` to ensure typings emit correctly.
 - Keep devDependencies lightweight inside packages; favor root-level tooling unless the package is published independently.
-- Never remove entries from `deno.lock` or `package-lock.json` manually—re-run the command that generated them instead.
+- Never edit `package-lock.json` by hand—re-run the npm command that generated it instead.
 
 ## Environment & Configuration
 - Angular environment settings live under `apps/*/src/environments`; avoid hardcoding secrets in code—use environment tokens or Serverless parameters.

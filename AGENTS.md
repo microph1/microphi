@@ -3,7 +3,7 @@
 Playbook for automated contributors working inside the Microphi monorepo. Follow every section in order—skipping steps creates drift that is painful to unwind later.
 
 ## Quick Orientation
-- Monorepo uses Angular CLI + custom TypeScript packages managed via Lerna workspaces (`packages/*`, `apps/www.dcsoftware.io`, `apps/www.microphi.io`).
+- Monorepo uses Angular CLI + custom TypeScript packages managed via Lerna workspaces (`packages/*`, `apps/www.dcsoftware.io`).
 - Toolchain expects Node 18+ with npm; lockfiles are `package-lock.json` and `deno.lock` (respect both when adding deps).
 - TypeScript is strict (`tsconfig.json` enforces `strict`, `noImplicitOverride`, `forceConsistentCasingInFileNames`).
 - RxJS, custom stores, and decorators power most runtime behavior—prefer extending existing abstractions instead of inventing new ones.
@@ -27,7 +27,7 @@ Playbook for automated contributors working inside the Microphi monorepo. Follow
 
 ## Project Layout
 - `packages/store`, `packages/flux`, `packages/debug`, etc. house publishable libraries; each exposes a `src/lib` entry and a generated `lib/esm` output for consumers via path aliases in `tsconfig.json`.
-- `apps/*` folders are frontends: `www.microphi.io` (site), `www.dcsoftware.io` (consulting site, deployed to Deno Deploy by `deploy_dcsoftware.yml`), `flux` (Angular loudspeaker-design app), `metronoman-flux` (flux metronome experiment).
+- `apps/*` folders are frontends: `www.dcsoftware.io` (consulting site, deployed to Deno Deploy by `deploy_dcsoftware.yml`), `flux` (Angular loudspeaker-design app), `metronoman-flux` (flux metronome experiment).
 - `scripts/` contains release and doc tooling; treat `.mjs` files as ESM modules.
 - `dist/`, `coverage/`, `lerna-debug.log`, `node_modules/` are artifacts—never edit by hand.
 

@@ -5,8 +5,7 @@
   "workspaces": {
     "packages": [
       "packages/*",
-      "apps/www.dcsoftware.io",
-      "apps/www.microphi.io"
+      "apps/www.dcsoftware.io"
     ]
   },
   "scripts": {

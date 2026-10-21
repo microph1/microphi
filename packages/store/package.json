@@ -38,7 +38,7 @@
     "build": "tsc -b tsconfig.build.json && tsc -b tsconfig.cjs.json",
     "build:ci": "npm run build",
     "test:ci": "jest --coverage --ci",
-    "lint:ci": "eslint ./src"
+    "lint": "eslint ./src"
   },
   "dependencies": {
     "tslib": "^2.5.0"

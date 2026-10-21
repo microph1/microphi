@@ -32,6 +32,7 @@
   "private": true,
   "devDependencies": {
     "@angular/language-server": "^17.3.2",
+    "@eslint/js": "^10.0.1",
     "@faker-js/faker": "^7.3.0",
     "@lerna-lite/changed": "^5.6.4",
     "@lerna-lite/cli": "^5.6.4",
@@ -42,11 +43,11 @@
     "@lerna-lite/run": "^5.6.4",
     "@lerna-lite/version": "^5.6.4",
     "@lerna-lite/watch": "^5.6.4",
+    "@stylistic/eslint-plugin": "^5.10.0",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.11.24",
-    "@typescript-eslint/eslint-plugin": "^7.2.0",
-    "@typescript-eslint/parser": "^7.2.0",
-    "eslint": "^8.53.0",
+    "eslint": "^10.13.0",
+    "globals": "^17.13.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "jest-junit": "^16.0.0",
@@ -57,6 +58,7 @@
     "serverless-finch": "^4.0.0",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.8.1",
-    "typescript": "~5.4.2"
+    "typescript": "~5.4.2",
+    "typescript-eslint": "^8.72.0"
   }
 }

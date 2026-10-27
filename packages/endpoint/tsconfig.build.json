@@ -1,0 +1,25 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./lib/esm",
+    "noEmit": false,
+    "inlineSources": false,
+    "sourceMap": false,
+    "composite": true,
+    "types": []
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "src/**/*.spec.ts"
+  ],
+  "references": [
+    {
+      "path": "../debug/tsconfig.build.json"
+    },
+    {
+      "path": "../di/tsconfig.build.json"
+    }
+  ]
+}

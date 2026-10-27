@@ -22,12 +22,15 @@ export function InjectableDecorator<T extends {new(...args: any[]): {}}>(klass: 
   // appending a random number will fix this problem
   // TODO ideally this should be collision free hashing
   const suffix = (Math.random() * 10_000).toFixed(0).toString();
+  const name = `${klass.name}_${suffix}`;
 
-  Reflect.metadata(ClassNameSymbol, klass)(klass);
+  // the undecorated class resolves to the same provider as the returned one:
+  // member decorators only ever see the original class (e.g. `target.constructor`)
+  Reflect.defineMetadata(ClassNameSymbol, name, klass);
   const injectMetadata = getInjectMetadata(klass);
 
   return class extends klass {
-    static [ClassNameSymbol] = `${klass.name}_${suffix}`;
+    static [ClassNameSymbol] = name;
 
     constructor(...args: any[]) {
 

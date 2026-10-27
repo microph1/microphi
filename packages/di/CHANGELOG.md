@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.2](https://github.com/microph1/microphi/compare/%40microphi%2Fdi%402.12.1...%40microphi%2Fdi%402.12.2) (2026-10-27)
+
+### Bug Fixes
+
+* **di:** resolve an undecorated class to its provider ([4a3ad56](https://github.com/microph1/microphi/commit/4a3ad562fd58c7d5bd7631ac56537b87158d755d))
+
 ## [2.12.1](https://github.com/microph1/microphi/compare/%40microphi%2Fdi%402.12.0...%40microphi%2Fdi%402.12.1) (2026-10-21)
 
 ### Bug Fixes

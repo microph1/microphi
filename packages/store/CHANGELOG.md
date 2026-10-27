@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.4](https://github.com/microph1/microphi/compare/%40microphi%2Fstore%402.11.3...%40microphi%2Fstore%402.11.4) (2026-10-27)
+
+**Note:** Version bump only for package @microphi/store
+
 ## [2.11.3](https://github.com/microph1/microphi/compare/%40microphi%2Fstore%402.11.2...%40microphi%2Fstore%402.11.3) (2026-10-21)
 
 ### Bug Fixes

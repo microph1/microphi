@@ -1,0 +1,60 @@
+{
+  "name": "@microphi/endpoint",
+  "version": "2.2.0",
+  "description": "Decorators for API endpoints (@Endpoint, @Lambda, @Body, @Path) whose metadata drives AWS Lambda and Express handlers and the serverless.yml functions block",
+  "main": "lib/cjs/index.js",
+  "typings": "lib/esm/index.d.ts",
+  "module": "lib/esm/index.js",
+  "files": [
+    "lib"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "Davide Cavaliere",
+    "email": "cavaliere.davide@gmail.com",
+    "url": "https://github.com/microph1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/microph1/microphi.git",
+    "directory": "packages/endpoint"
+  },
+  "homepage": "https://github.com/microph1/microphi/tree/master/packages/endpoint#readme",
+  "bugs": {
+    "url": "https://github.com/microph1/microphi/issues"
+  },
+  "keywords": [
+    "typescript",
+    "decorator",
+    "lambda",
+    "aws",
+    "express",
+    "serverless",
+    "api",
+    "endpoint"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json && tsc -b tsconfig.cjs.json",
+    "build:ci": "npm run build",
+    "test:ci": "vitest run --coverage",
+    "lint": "eslint ./src"
+  },
+  "dependencies": {
+    "@types/aws-lambda": "^8.10.96",
+    "@types/serverless": "^3.12.0"
+  },
+  "peerDependencies": {
+    "@microphi/debug": "^2.11.0",
+    "@microphi/di": "^2.12.0",
+    "reflect-metadata": "^0.2.2"
+  },
+  "devDependencies": {
+    "@microphi/debug": "^2.11.0",
+    "@microphi/di": "^2.12.0",
+    "utility-types": "^3.10.0"
+  },
+  "sideEffects": false
+}

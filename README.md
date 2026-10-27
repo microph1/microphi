@@ -9,6 +9,7 @@ Monorepo for the microphi (μφ) project: small, decorator-driven TypeScript lib
 | Package | | Description |
 |---|---|---|
 | [`@microphi/di`](packages/di) | [![npm](https://img.shields.io/npm/v/@microphi/di)](https://www.npmjs.com/package/@microphi/di) | Handcrafted DI container: `@Injectable`, `@Inject`, `@DI`, aspects (`@Before`, `@After`, `@Cache`) and a `TestBed` |
+| [`@microphi/endpoint`](packages/endpoint) | [![npm](https://img.shields.io/npm/v/@microphi/endpoint)](https://www.npmjs.com/package/@microphi/endpoint) | API endpoint decorators (`@Endpoint`, `@Lambda`, `@Body`, `@Path`) for AWS Lambda / Express, driving serverless.yml (formerly `@microgamma/apigator`) |
 | [`@microphi/store`](packages/store) | [![npm](https://img.shields.io/npm/v/@microphi/store)](https://www.npmjs.com/package/@microphi/store) | Pure RxJS state manager driven by `@Effect` / `@Reduce` decorators |
 | [`@microphi/flux`](packages/flux) | [![npm](https://img.shields.io/npm/v/@microphi/flux)](https://www.npmjs.com/package/@microphi/flux) | Web-component framework: `@Component`, template bindings, `fx-for` / `fx-if` |
 | [`@microphi/styles`](packages/styles) | [![npm](https://img.shields.io/npm/v/@microphi/styles)](https://www.npmjs.com/package/@microphi/styles) | Flex-first SCSS utilities |

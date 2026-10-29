@@ -1,28 +1,29 @@
 name: Pull Request Checks
 
-# Controls when the workflow will run
 on:
   pull_request:
     branches:
       - master
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# a new push to the same PR supersedes the previous run
+concurrency:
+  group: pr-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
 
   build_test:
     runs-on: ubuntu-latest
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.head_ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          # full history: affected packages are computed against the merge base with master
           fetch-depth: 0
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: '24.x'
           cache: 'npm'
@@ -30,25 +31,33 @@ jobs:
       - name: Install
         run: npm ci
 
-      - name: Build
+      - name: Select packages
+        # Only packages changed since master, plus their dependents (tests) and
+        # dependencies (build). Anything changed outside packages/ (root config,
+        # lockfile, workflows) can affect every package, so it runs them all.
         run: |
-          npm run build:ci
+          git fetch --no-tags origin master
+          if git diff --name-only origin/master...HEAD | grep -qv '^packages/'; then
+            echo "FILTER=" >> "$GITHUB_ENV"
+          else
+            echo "FILTER=--since origin/master --include-dependents --include-dependencies" >> "$GITHUB_ENV"
+          fi
+
+      - name: Build
+        run: npx lerna run build:ci --stream $FILTER
 
       - name: Test
-        run: |
-          npm run test:ci
+        run: npx lerna run test:ci --stream $FILTER
 
   lint:
     runs-on: ubuntu-latest
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.head_ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
-          fetch-depth: 0
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: '24.x'
           cache: 'npm'
@@ -57,6 +66,4 @@ jobs:
         run: npm ci
 
       - name: Lint
-        run: |
-          npm run lint:ci
-      # This workflow contains a single job called "build"
+        run: npm run lint:ci

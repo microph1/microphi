@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.3](https://github.com/microph1/microphi/compare/%40microphi%2Fdi%402.12.2...%40microphi%2Fdi%402.12.3) (2026-10-29)
+
+**Note:** Version bump only for package @microphi/di
+
 ## [2.12.2](https://github.com/microph1/microphi/compare/%40microphi%2Fdi%402.12.1...%40microphi%2Fdi%402.12.2) (2026-10-27)
 
 ### Bug Fixes

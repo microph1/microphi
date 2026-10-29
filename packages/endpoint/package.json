@@ -1,6 +1,6 @@
 {
   "name": "@microphi/endpoint",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "Decorators for API endpoints (@Endpoint, @Lambda, @Body, @Path) whose metadata drives AWS Lambda and Express handlers and the serverless.yml functions block",
   "main": "lib/cjs/index.js",
   "typings": "lib/esm/index.d.ts",
@@ -53,7 +53,7 @@
   },
   "devDependencies": {
     "@microphi/debug": "^2.11.0",
-    "@microphi/di": "^2.12.2",
+    "@microphi/di": "^2.12.3",
     "utility-types": "^3.10.0"
   },
   "sideEffects": false

@@ -7,6 +7,7 @@ import { getInputMetadata } from './input.decorator';
 import { getValue, parseTemplate } from './parse-template';
 import { getHostListeners } from './decorators/host-listener.decorator';
 import { getViewChildMetadata } from './decorators/view-child.decorator';
+import { FluxError } from './errors';
 
 const SQUARE_BOXED_REGEX = new RegExp(/^\[(\w*)\]$/);
 const DOUBLE_SQUARE_BOXED_REGEX = new RegExp(/\[\[(\w+)]]/);
@@ -399,7 +400,7 @@ export function Component(options: ComponentOptions): ClassDecorator {
 
                     } else {
 
-                      throw new Error(`Unable to find ${methodName}`);
+                      throw new FluxError('FLUX001', `Unable to find ${methodName}: the event binding calls a method that neither the component nor its parent controller declares.`);
                     }
 
 
@@ -496,7 +497,7 @@ export function Component(options: ComponentOptions): ClassDecorator {
               if (conditionToEvaluate !== null) {
                 const result = evalInScope(conditionToEvaluate, this.controller);
                 if (!node['controller']) {
-                  throw new Error(`${node.tagName} does not have a controller while it should. Are you forgetting to import it?`);
+                  throw new FluxError('FLUX002', `${node.tagName} does not have a controller while it should. Are you forgetting to import it?`);
                 }
                 node['controller'][doubleSquared] = result;
               }

@@ -9,7 +9,9 @@
     "lib": "lib"
   },
   "files": [
-    "lib"
+    "lib",
+    "AGENTS.md",
+    "ERRORS.md"
   ],
   "repository": {
     "type": "git",

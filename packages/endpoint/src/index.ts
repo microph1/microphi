@@ -8,5 +8,6 @@ export * from './lib/lambda/handler';
 export * from './lib/serverless/serverless.decorator';
 export * from './lib/errors';
 export * from './lib/mcp';
+export * from './lib/worker';
 
 export * from './lib/testing';

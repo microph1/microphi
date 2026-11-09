@@ -1,8 +1,8 @@
 # @microphi/endpoint [![npm](https://img.shields.io/npm/v/@microphi/endpoint)](https://www.npmjs.com/package/@microphi/endpoint)
 
-> Decorators for API endpoints (`@Endpoint`, `@Lambda`, `@Body`, `@Path`) served on AWS Lambda, Express or as MCP tools, with Standard Schema validation; their metadata also drives the serverless.yml functions block
+> Decorators for API endpoints (`@Endpoint`, `@Lambda`, `@Body`, `@Path`) served on AWS Lambda, Express, Cloudflare Workers or as MCP tools, with Standard Schema validation; their metadata also drives the serverless.yml functions block
 
-Formerly `@microgamma/apigator`. Decorate a class with `@Endpoint` and its methods with `@Lambda`; the metadata they record is read at runtime to bind each method to a platform (AWS Lambda, Express.js or MCP), and by the [serverless-apigator](https://github.com/davidecavaliere/-microgamma/blob/master/packages/serverless-apigator/README.md) plugin to generate the `functions` section of `serverless.yml`.
+Formerly `@microgamma/apigator`. Decorate a class with `@Endpoint` and its methods with `@Lambda`; the metadata they record is read at runtime to bind each method to a platform (AWS Lambda, Express.js, Cloudflare Workers or MCP), and by the [serverless-apigator](https://github.com/davidecavaliere/-microgamma/blob/master/packages/serverless-apigator/README.md) plugin to generate the `functions` section of `serverless.yml`.
 
 ## Install
 
@@ -131,6 +131,7 @@ Its message is `[404] user 42 not found`, the form API Gateway's `lambda` integr
 |---|---|
 | `AwsEventHandler` | AWS Lambda |
 | `ExpressEventHandler` | Express.js (responds with `res.json`, errors with their status) |
+| `WorkerEventHandler` | Cloudflare Workers, or any Fetch API runtime (see below) |
 | `McpEventHandler` | MCP tools (see below) |
 | `LambdaTestingHandler` | tests: passes the arguments straight through |
 
@@ -149,6 +150,37 @@ for (const lambda of getLambdaMetadataFromClass(UsersEndpoint)) {
 
 app.listen(3000);
 ```
+
+### Cloudflare Workers
+
+Provide `WorkerEventHandler` and export the router `worker(App)` returns; the app is bootstrapped once, when the module loads:
+
+```typescript
+import { LambdaDefaultHandler, Serverless, worker, WorkerEventHandler } from '@microphi/endpoint';
+
+@Serverless({
+  service: UsersEndpoint, // @Endpoint({ name: 'users', basePath: '/api' })
+  providers: [{ provide: LambdaDefaultHandler, useClass: WorkerEventHandler }],
+})
+class App {}
+
+export default worker(App);
+```
+
+- Paths use the AWS notation: `{id}` matches a segment, `{path+}` the rest of the path; values are URI-decoded and `basePath` is prepended. Literal segments win over parameters (`/users/me` before `/users/{id}`).
+- A JSON request body (`application/json`, `*+json`) is parsed for `@Body()`; invalid JSON is a 400. Header names are lowercase: `@Header('authorization')`.
+- A method answers with its value as JSON (200), with 204 when it returns `undefined`, or with the `Response` it returns, untouched. Errors answer `{ message, details? }` with their status; 5xx are also logged with `console.error`.
+- `fetch` answers 404 when no path matches, and 405 with `Allow` when the path matches but the method doesn't. `route(request)` returns `undefined` in both cases instead, to fall through to something else:
+
+```typescript
+const api = worker(App);
+
+export default {
+  fetch: (request: Request, env: Env) => api.route(request) ?? env.ASSETS.fetch(request),
+};
+```
+
+Bindings are not passed to the methods: read them with `import { env } from 'cloudflare:workers'`. The adapter only uses the Fetch API (`Request`, `Response`), so it runs, and is tested, in Node as well.
 
 ### MCP
 

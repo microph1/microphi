@@ -7,9 +7,13 @@ export function getEnvironmentVariables() {
   if (isNodejs()) {
 
     DEBUG = process.env['DEBUG'] || '';
-  } else {
+  } else if (typeof localStorage !== 'undefined') {
 
     DEBUG = localStorage.getItem('debug') || '';
+  } else {
+
+    // neither Node nor a browser (e.g. Cloudflare Workers without nodejs_compat)
+    DEBUG = '';
   }
 
   return { DEBUG };

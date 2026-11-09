@@ -14,6 +14,7 @@ Monorepo for the microphi (μφ) project: small, decorator-driven TypeScript lib
 | [`@microphi/flux`](packages/flux) | [![npm](https://img.shields.io/npm/v/@microphi/flux)](https://www.npmjs.com/package/@microphi/flux) | Web-component framework: `@Component`, template bindings, `fx-for` / `fx-if` |
 | [`@microphi/styles`](packages/styles) | [![npm](https://img.shields.io/npm/v/@microphi/styles)](https://www.npmjs.com/package/@microphi/styles) | Flex-first SCSS utilities |
 | [`@microphi/json-db`](packages/json-db) | [![npm](https://img.shields.io/npm/v/@microphi/json-db)](https://www.npmjs.com/package/@microphi/json-db) | Small file-based JSON database with full-text search ([minisearch](https://github.com/lucaong/minisearch)) |
+| [`@microphi/sql`](packages/sql) | [![npm](https://img.shields.io/npm/v/@microphi/sql)](https://www.npmjs.com/package/@microphi/sql) | Decorator-driven SQLite storage (`@Entity`, `@Column`, `@PrimaryKey`) over `node:sqlite` or Cloudflare D1 |
 | [`@microphi/list`](packages/list) | [![npm](https://img.shields.io/npm/v/@microphi/list)](https://www.npmjs.com/package/@microphi/list) | List with array ordering and direct lookup by id (Map + id array) |
 | [`@microphi/debug`](packages/debug) | [![npm](https://img.shields.io/npm/v/@microphi/debug)](https://www.npmjs.com/package/@microphi/debug) | Namespaced `console.log` wrapper, filtered by the `DEBUG` env var |
 

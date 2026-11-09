@@ -1,4 +1,5 @@
 import { Subject } from 'rxjs';
+import { ListError } from '../errors';
 import { $Keys, FunctionKeys } from 'utility-types';
 
 
@@ -23,7 +24,7 @@ export class List<EntityType extends object> implements Iterable<EntityType> {
   public get size() {
     if (this.ids.length !== this.entities.size) {
 
-      throw new Error(`Size Mismatch ${this.ids.length} !== ${this.entities.size}`);
+      throw new ListError('LIST002', `Size mismatch: ${this.ids.length} ids !== ${this.entities.size} entities. The list was mutated outside its methods.`);
     }
 
     return this.entities.size;
@@ -60,7 +61,7 @@ export class List<EntityType extends object> implements Iterable<EntityType> {
       if (entity) {
         yield entity;
       } else {
-        throw new Error(`Cannot get entity with id ${id}`);
+        throw new ListError('LIST001', `Cannot get entity with id ${id}. The list was mutated outside its methods.`);
       }
     }
   }

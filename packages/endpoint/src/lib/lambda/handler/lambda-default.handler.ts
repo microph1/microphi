@@ -1,41 +1,52 @@
 import { Injectable } from '@microphi/di';
+import { HttpError } from '../../errors';
 
+/** a `@Lambda` method as the handler calls it */
+export type LambdaFunction = (...args: unknown[]) => unknown;
+
+/** path or header parameters by name */
+export type LambdaParams = Record<string, unknown>;
+
+/**
+ * Binds `@Lambda` methods to a platform: extracts body, path and header
+ * parameters from the arguments the platform calls the handler with, and
+ * turns the method's result (or error) into the platform's response.
+ *
+ * Provide a subclass in `@Serverless({ providers: [{ provide: LambdaDefaultHandler, useClass: ... }] })`.
+ */
 @Injectable()
 export class LambdaDefaultHandler {
 
-  public getBody(args) {
+  // the default handler is a pass-through: it calls the method with the
+  // original arguments, so these only return what they are given
+
+  public getBody(args: unknown[]): unknown {
     return args;
   }
 
-  public getPathParams(args) {
-    return args;
+  public getPathParams(args: unknown[]): LambdaParams {
+    return args as unknown as LambdaParams;
   }
 
-  public getHeaderParams(args) {
-    return args;
+  public getHeaderParams(args: unknown[]): LambdaParams {
+    return args as unknown as LambdaParams;
   }
 
-  public async runOriginalFunction(originalFunction, instance, newArgs, originalArgs?) {
+  /**
+   * @param originalFunction - the decorated method
+   * @param instance - the endpoint instance to call it on
+   * @param _newArgs - the method's arguments, extracted with the getters above
+   * @param originalArgs - the arguments the platform called the handler with
+   */
+  public async runOriginalFunction(originalFunction: LambdaFunction, instance: object, _newArgs: unknown[], originalArgs: unknown[] = []): Promise<unknown> {
     try {
-      return originalFunction.apply(instance, originalArgs);
+      return await originalFunction.apply(instance, originalArgs);
     } catch (e) {
       throw this.handleError(e);
     }
   }
 
-  protected handleError(e) {
-    if (e instanceof Error) {
-
-      if (e.message.match(/^\[[0-9]{3,}](.)+/)) {
-        return e;
-      } else {
-        return Error(`[500] ${e.message}`);
-      }
-
-    }
-
-    // encapsulate any other type of error
-    return Error(e);
-
+  protected handleError(e: unknown): HttpError {
+    return HttpError.from(e);
   }
 }

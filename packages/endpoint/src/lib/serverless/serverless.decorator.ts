@@ -20,6 +20,6 @@ export function Serverless(options: ServerlessOptions): ClassDecorator {
  * @param klass - the class
  * @return ServerlessOptions
  */
-export function getServerlessMetadataFromClass(klass): ServerlessOptions {
+export function getServerlessMetadataFromClass(klass: Klass): ServerlessOptions {
   return getDIMetadata(klass) as ServerlessOptions;
 }

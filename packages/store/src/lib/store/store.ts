@@ -6,6 +6,7 @@ import { CacheMap, CacheSymbol } from '../operators/cache';
 import { debounceOrNothing, getDebounce } from '../operators/debounce';
 import { delayOrNothing, getDelay } from '../operators/delay';
 import { getReducers, Reducer } from '../reduce/reduce';
+import { StoreError } from '../errors';
 import { Fn, getPayloadFromActionType, LoadingState } from './types';
 
 
@@ -53,7 +54,7 @@ export abstract class Store<State, A> {
 
       const effect = this.effects.find((e) => e.action === key);
       if (!effect) {
-        throw new Error(`Cannot find effect for action "${key}". Did you decorate a "${key}" method with @Effect()?`);
+        throw new StoreError('STORE002', `Cannot find effect for action "${key}". Did you decorate a "${key}" method with @Effect()?`);
       }
 
       const reducerName = this.ensureReducerForAction(key);
@@ -144,7 +145,7 @@ export abstract class Store<State, A> {
   ) {
 
     if (!this.actions.has(action as string)) {
-      throw new Error(`Cannot find action ${String(action)}`);
+      throw new StoreError('STORE001', `Cannot find action ${String(action)}. Dispatchable actions are the ones with an @Effect() or an @Reduce() method.`);
     }
 
     const name: string = (typeof (this as unknown as A)[action] === 'function' ? action : 'noopEffect') as string;
@@ -170,7 +171,7 @@ export abstract class Store<State, A> {
   private static getReducerName(action: string) {
     const firstChar = action.charAt(0);
     if (!firstChar) {
-      throw new Error('Cannot derive reducer name from an empty action');
+      throw new StoreError('STORE003', 'Cannot derive reducer name from an empty action');
     }
 
     return `on${firstChar.toUpperCase()}${action.slice(1)}`;
@@ -181,7 +182,7 @@ export abstract class Store<State, A> {
     const reducer = (this as Record<string, unknown>)[reducerName];
 
     if (typeof reducer !== 'function') {
-      throw new Error(`Cannot find reducer "${reducerName}" for action "${action}". Ensure the reducer follows the "on<Action>" naming convention and is decorated with @Reduce().`);
+      throw new StoreError('STORE004', `Cannot find reducer "${reducerName}" for action "${action}". Ensure the reducer follows the "on<Action>" naming convention and is decorated with @Reduce().`);
     }
 
     return reducerName;

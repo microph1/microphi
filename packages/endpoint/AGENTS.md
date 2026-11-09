@@ -30,6 +30,7 @@ class App {}
 export default worker(App); // { fetch, route }
 ```
 
+- One worker serves several endpoints: `@Serverless({ service: [SpeakersEndpoint, ProjectsEndpoint], ... })`. Two lambdas on the same method and path make `worker()` throw.
 - Paths use `{param}` (and `{param+}` for the rest of the path), prefixed by `@Endpoint({ basePath })`; literal segments win over parameters.
 - Header names are lowercase: `@Header('authorization')`.
 - A JSON content type is parsed into `@Body()` (invalid JSON is a 400); other bodies are not read.

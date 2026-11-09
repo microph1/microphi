@@ -1,9 +1,9 @@
-import { injector, Klass } from '@microphi/di';
+import { className, injector, Klass } from '@microphi/di';
 import { bootstrap } from '../bootstrap/bootstrap';
 import { getEndpointMetadataFromClass } from '../endpoint/endpoint.decorator';
 import { LambdaDefaultHandler } from '../lambda/handler/lambda-default.handler';
 import { getLambdaMetadataFromClass } from '../lambda/lambda.decorator';
-import { getServerlessMetadataFromClass } from '../serverless/serverless.decorator';
+import { getServerlessMetadataFromClass, serviceList } from '../serverless/serverless.decorator';
 import { WorkerCall, WorkerEventHandler } from './worker-event.handler';
 
 /** a `@Serverless` app served on Cloudflare Workers */
@@ -16,9 +16,14 @@ export interface WorkerApp {
 
 interface Route {
   method: string;
-  name: string;
+  /** the full path, for messages */
+  path: string;
   pattern: RegExp;
   keys: string[];
+  /** `endpoint.method`, for messages */
+  service: string;
+  name: string;
+  handle(call: WorkerCall): Promise<Response>;
 }
 
 type Match =
@@ -48,15 +53,39 @@ function compile(path: string): Pick<Route, 'pattern' | 'keys'> {
 }
 
 function routesOf(service: Klass): Route[] {
-  const basePath = getEndpointMetadataFromClass(service)?.basePath ?? '';
+  const metadata = getEndpointMetadataFromClass(service);
+  const basePath = metadata?.basePath ?? '';
+  const endpoint = injector(service) as Record<string, (call: WorkerCall) => Promise<Response>>;
 
-  const routes = getLambdaMetadataFromClass(service)
+  return getLambdaMetadataFromClass(service)
     .filter((lambda) => lambda.path !== undefined && lambda.method !== undefined)
     .map((lambda) => ({
       method: String(lambda.method).toUpperCase(),
       name: String(lambda.name),
+      path: normalize(`${basePath}/${lambda.path}`),
+      // the @Endpoint name: bundlers rename classes (`_b`)
+      service: metadata?.name ?? className(service),
+      handle: (call: WorkerCall) => endpoint[String(lambda.name)](call),
       ...compile(`${basePath}/${lambda.path}`),
     }));
+}
+
+/** one table for every service; throws when two lambdas answer the same method and path */
+function routingTable(services: Klass[]): Route[] {
+  const routes = services.flatMap(routesOf);
+  const seen = new Map<string, Route>();
+
+  for (const route of routes) {
+    // param names don't matter: /x/{id} and /x/{key} are the same route
+    const key = `${route.method} ${route.pattern.source}`;
+    const other = seen.get(key);
+
+    if (other) {
+      throw new Error(`${route.method} ${route.path} is served by both ${other.service}.${other.name} and ${route.service}.${route.name}; remove or rename one of them`);
+    }
+
+    seen.set(key, route);
+  }
 
   // literal segments win over parameters: /users/me before /users/{id}
   const weight = (route: Route) => route.keys.length + (route.pattern.source.includes('(.+)') ? 100 : 0);
@@ -73,7 +102,8 @@ function error(status: number, message: string, headers?: HeadersInit): Response
 }
 
 /**
- * Serve a `@Serverless` app on Cloudflare Workers. The app must provide
+ * Serve a `@Serverless` app on Cloudflare Workers, routing across every
+ * service in `@Serverless({ service })` (one class or a list). The app must provide
  * `{ provide: LambdaDefaultHandler, useClass: WorkerEventHandler }`; it is
  * bootstrapped once, here.
  *
@@ -85,13 +115,13 @@ function error(status: number, message: string, headers?: HeadersInit): Response
  * `import { env } from 'cloudflare:workers'`.
  */
 export function worker(app: Klass): WorkerApp {
-  const endpoint = bootstrap(app) as Record<string, (call: WorkerCall) => Promise<Response>>;
+  bootstrap(app);
 
   if (!(injector(LambdaDefaultHandler) instanceof WorkerEventHandler)) {
     throw new Error('worker needs the app to provide { provide: LambdaDefaultHandler, useClass: WorkerEventHandler } in @Serverless');
   }
 
-  const routes = routesOf(getServerlessMetadataFromClass(app).service);
+  const routes = routingTable(serviceList(getServerlessMetadataFromClass(app).service));
 
   function match(request: Request): Match {
     const path = normalize(new URL(request.url).pathname);
@@ -135,7 +165,7 @@ export function worker(app: Klass): WorkerApp {
       }
     }
 
-    return endpoint[route.name]({ request, params, body });
+    return route.handle({ request, params, body });
   }
 
   return {

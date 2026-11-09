@@ -6,6 +6,7 @@ import { LambdaDefaultHandler } from '../lambda/handler';
 import { Lambda } from '../lambda/lambda.decorator';
 import { Body, Header, Path } from '../parameters/parameters.decorator';
 import { Serverless } from '../serverless/serverless.decorator';
+import { bootstrap } from '../bootstrap/bootstrap';
 import { WorkerEventHandler } from './worker-event.handler';
 import { worker, WorkerApp } from './worker';
 
@@ -170,5 +171,73 @@ describe('worker', () => {
     TestBed.configure({ providers: [] });
 
     expect(() => worker(LambdaApp)).toThrow(/WorkerEventHandler/);
+  });
+});
+
+describe('worker with several services', () => {
+
+  @Endpoint({ name: 'projects', basePath: '/api' })
+  @Injectable()
+  class ProjectsEndpoint {
+
+    @Lambda({ method: 'GET', path: '/projects/{id}' })
+    public findOne(@Path('id') id: string) {
+      return { project: id };
+    }
+
+    @Lambda({ method: 'POST', path: '/speakers/{key}' })
+    public attach(@Path('key') key: string) {
+      return { attached: key };
+    }
+  }
+
+  @Serverless({
+    service: [SpeakersEndpoint, ProjectsEndpoint],
+    providers: [{ provide: LambdaDefaultHandler, useClass: WorkerEventHandler }],
+  })
+  class MultiApp {}
+
+  let app: WorkerApp;
+
+  beforeAll(() => {
+    TestBed.configure({ providers: [] });
+    app = worker(MultiApp);
+  });
+
+  it('should route to every service', async () => {
+    expect(await (await app.fetch(new Request(`${base}/api/projects/7`))).json()).toEqual({ project: '7' });
+    expect(await (await app.fetch(new Request(`${base}/api/speakers/me`))).json()).toEqual({ id: 'me' });
+    expect(await (await app.fetch(new Request(`${base}/api/speakers/3`, { method: 'POST' }))).json()).toEqual({ attached: '3' });
+  });
+
+  it('should merge Allow across services', async () => {
+    const res = await app.fetch(new Request(`${base}/api/speakers/3`, { method: 'PATCH' }));
+
+    expect(res.headers.get('allow')).toBe('GET, PUT, DELETE, POST');
+  });
+
+  it('should bootstrap to the first service', () => {
+    TestBed.configure({ providers: [] });
+    expect(bootstrap(MultiApp)).toBeInstanceOf(SpeakersEndpoint);
+  });
+
+  it('should refuse two lambdas answering the same method and path', () => {
+    @Endpoint({ name: 'clash' })
+    @Injectable()
+    class ClashEndpoint {
+      @Lambda({ method: 'GET', path: '/api/speakers/{other}' })
+      public clash() {
+        return undefined;
+      }
+    }
+
+    @Serverless({
+      service: [SpeakersEndpoint, ClashEndpoint],
+      providers: [{ provide: LambdaDefaultHandler, useClass: WorkerEventHandler }],
+    })
+    class ClashApp {}
+
+    TestBed.configure({ providers: [] });
+    expect(() => worker(ClashApp)).toThrow('GET /api/speakers/{other} is served by both speakers.findOne and clash.clash');
   });
 });

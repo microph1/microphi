@@ -167,6 +167,7 @@ class App {}
 export default worker(App);
 ```
 
+- `service` can be a list, `@Serverless({ service: [UsersEndpoint, ProjectsEndpoint] })`: the worker routes across all of them (each with its own `basePath`, `Allow` merged), and throws at startup when two lambdas answer the same method and path. `bootstrap` returns the first one.
 - Paths use the AWS notation: `{id}` matches a segment, `{path+}` the rest of the path; values are URI-decoded and `basePath` is prepended. Literal segments win over parameters (`/users/me` before `/users/{id}`).
 - A JSON request body (`application/json`, `*+json`) is parsed for `@Body()`; invalid JSON is a 400. Header names are lowercase: `@Header('authorization')`.
 - A method answers with its value as JSON (200), with 204 when it returns `undefined`, or with the `Response` it returns, untouched. Errors answer `{ message, details? }` with their status; 5xx are also logged with `console.error`.

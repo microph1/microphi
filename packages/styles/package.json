@@ -32,6 +32,7 @@
     "url": "https://github.com/microph1/microphi/issues"
   },
   "files": [
-    "scss"
+    "scss",
+    "AGENTS.md"
   ]
 }

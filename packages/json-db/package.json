@@ -9,7 +9,8 @@
     "lib": "lib"
   },
   "files": [
-    "lib"
+    "lib",
+    "AGENTS.md"
   ],
   "license": "MIT",
   "keywords": [

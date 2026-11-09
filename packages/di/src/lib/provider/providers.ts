@@ -1,4 +1,5 @@
 import { ClassNameSymbol, getInjectableMetadata, } from '../injctable/injectable.decorator';
+import { className, DiError } from '../errors';
 import { Instance, isSingletonDefinition, Klass, Provider } from '../types';
 
 
@@ -12,7 +13,7 @@ export class Providers {
 
     if (isSingletonDefinition(provider)) {
       if (!(ClassNameSymbol in provider.provide)) {
-        throw Error(`Is ${provider.provide.name} annotated with @Injectable()?`);
+        throw new DiError('DI001', `${className(provider.provide)} is not decorated with @Injectable(); decorate it before providing it.`);
       }
 
       this.providers.set(provider.provide[ClassNameSymbol], provider.provide);
@@ -20,7 +21,7 @@ export class Providers {
 
     } else {
       if (!(ClassNameSymbol in provider)) {
-        throw Error(`Is ${provider.name} annotated with @Injectable()?`);
+        throw new DiError('DI001', `${className(provider)} is not decorated with @Injectable(); decorate it before providing it.`);
       }
 
       this.providers.set(provider[ClassNameSymbol], provider);
@@ -39,27 +40,27 @@ export class Providers {
 
   getInstance(klass: Klass) {
     // TODO optimization needed
-    const className = Providers.getName(klass);
-    if (this.instances.has(className)) {
-      return this.instances.get(className);
+    const name = Providers.getName(klass);
+    if (this.instances.has(name)) {
+      return this.instances.get(name);
     }
 
-    if (this.useClass.has(className)) {
-      const k = this.useClass.get(className);
+    if (this.useClass.has(name)) {
+      const k = this.useClass.get(name);
       if (!k) {
-        throw new Error('Unable to instantiat class');
+        throw new DiError('DI004', `Unable to instantiate ${className(klass)}: its provider resolved to no class.`);
       }
       const instance = new k();
-      this.instances.set(className, instance);
+      this.instances.set(name, instance);
       return instance;
     }
 
-    const k = this.providers.get(className);
+    const k = this.providers.get(name);
     if (!k) {
-      throw new Error('Unable to instantiat class');
+      throw new DiError('DI004', `Unable to instantiate ${className(klass)}: its provider resolved to no class.`);
     }
     const instance = new k();
-    this.instances.set(className, instance);
+    this.instances.set(name, instance);
     return instance;
 
   }

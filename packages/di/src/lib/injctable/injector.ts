@@ -1,4 +1,5 @@
 import { Class } from 'utility-types';
+import { className, DiError } from '../errors';
 import { ClassNameSymbol } from './injectable.decorator';
 import { providers } from '../container/di.decorator';
 
@@ -14,10 +15,10 @@ export function injector<K extends Class<any>>(klass: K): InstanceType<K> {
     // 1 - is annotated with `@Injectable` but is not "provided" in the DI container
     // 2 - it is not annotated
     if (ClassNameSymbol in klass) {
-      throw Error(`Did you forgot to add ${klass[ClassNameSymbol]} to the list of providers`);
+      throw new DiError('DI002', `${className(klass)} is not provided; add it to the providers of @DI() (or TestBed.configure in tests).`);
     } else {
 
-      throw Error(`Is ${klass.name} annotated with @Injectable()`);
+      throw new DiError('DI001', `${className(klass)} is not decorated with @Injectable(); decorate it and add it to the providers of @DI().`);
     }
   }
 }

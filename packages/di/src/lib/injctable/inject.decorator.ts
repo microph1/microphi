@@ -1,3 +1,4 @@
+import { className, DiError } from '../errors';
 import { Graph } from '../container/graph';
 import { Class } from 'utility-types';
 import { ClassNameSymbol } from './injectable.decorator';
@@ -19,7 +20,7 @@ export function Inject<K extends Class<unknown>>(klass: K): ParameterDecorator {
 
     if (dependencies.hasCycle()) {
       console.error(dependencies.serialize());
-      throw new Error(`Cycle dependency found ${originalClassName}`);
+      throw new DiError('DI003', `Cyclic dependency: ${targetClassName} and ${className(klass)} depend on each other, directly or through other classes. Break the cycle, e.g. by moving the shared logic into a third service.`);
     }
 
     const deps = getInjectMetadata(target);

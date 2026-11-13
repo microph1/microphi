@@ -39,7 +39,7 @@
     "utility-types": "^3.10.0"
   },
   "peerDependencies": {
-    "rxjs": "~7.8.0"
+    "rxjs": "^7.8.2"
   },
   "bugs": {
     "url": "https://github.com/microph1/microphi/issues"

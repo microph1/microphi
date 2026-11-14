@@ -11,6 +11,8 @@ export class Providers {
   private providers: Map<Klass, Klass> = new Map();
   private useClass: Map<Klass, Klass> = new Map();
   private instances: Map<Klass, Instance> = new Map();
+  /** the tokens being instantiated, outermost first */
+  private resolving: Klass[] = [];
 
 
   addInjectable(provider: Provider): void {
@@ -57,9 +59,24 @@ export class Providers {
       throw new DiError('DI004', `Unable to instantiate ${className(klass)}: its provider resolved to no class.`);
     }
 
-    const instance = new k();
-    this.instances.set(token, instance);
-    return instance;
+    // a cycle cannot be caught when the classes are declared: writing one makes
+    // `@Inject(B)` read B before it is defined (a TDZ ReferenceError, or
+    // `undefined` across an import cycle); it only closes through providers,
+    // e.g. `{ provide: A, useClass: AImpl }` where AImpl injects B and B injects A
+    const start = this.resolving.indexOf(token);
+    if (start !== -1) {
+      const path = [...this.resolving.slice(start), token].map((t) => className(t)).join(' -> ');
+      throw new DiError('DI003', `Cyclic dependency: ${path}. Break the cycle, e.g. by moving the shared logic into a third service.`);
+    }
+
+    this.resolving.push(token);
+    try {
+      const instance = new k();
+      this.instances.set(token, instance);
+      return instance;
+    } finally {
+      this.resolving.pop();
+    }
   }
 
   hasUseClass(klass: Klass) {
@@ -78,5 +95,6 @@ export class Providers {
     this.providers.clear();
     this.useClass.clear();
     this.instances.clear();
+    this.resolving = [];
   }
 }

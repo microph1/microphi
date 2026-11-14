@@ -67,7 +67,7 @@ import { injector } from '@microphi/di';
 const greeter = injector(Greeter);
 ```
 
-A dependency cycle (`A` injects `B` injects `A`) throws when the classes are declared, not when they are instantiated.
+A dependency cycle (`A` injects `B` injects `A`) throws `DI003` when one of its classes is first instantiated, naming the path (`A -> B -> A`). It cannot be caught when the classes are declared: `@Inject(B)` reads `B` at that point, so a cycle written directly fails earlier with a `ReferenceError` (or `B` is `undefined` across an import cycle). A cycle the container can see closes through providers, e.g. `{ provide: A, useClass: AImpl }` where `AImpl` injects something that injects `A`.
 
 ### Providing a custom implementation
 

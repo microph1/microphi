@@ -41,7 +41,7 @@
     "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
-    "@babel/plugin-transform-modules-commonjs": "^7.23.3"
+    "@babel/plugin-transform-modules-commonjs": "^7.29.14"
   },
   "sideEffects": false,
   "bugs": {

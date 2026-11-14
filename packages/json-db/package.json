@@ -37,7 +37,7 @@
     "@microphi/debug": "^2.11.2"
   },
   "devDependencies": {
-    "@babel/plugin-transform-modules-commonjs": "^7.23.3",
+    "@babel/plugin-transform-modules-commonjs": "^7.29.14",
     "@datakitchen/rxjs-marbles": "^17.0.0",
     "@microphi/list": "^2.11.0",
     "@types/node": "^20.11.30",

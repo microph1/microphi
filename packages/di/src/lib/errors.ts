@@ -1,4 +1,5 @@
 import { Klass } from './types';
+import { getProviderName } from './injctable/provider-token';
 
 const DOCS = 'https://github.com/microph1/microphi/blob/master/packages/di/ERRORS.md';
 
@@ -25,7 +26,11 @@ export class DiError extends Error {
   }
 }
 
-/** the name a class was declared with: @Injectable() returns an anonymous subclass */
+/**
+ * the name a class was declared with: @Injectable() returns a subclass whose own
+ * name is empty, or a temp name such as `_b` once a bundler lowers it, so name
+ * the class it was decorated from
+ */
 export function className(klass: Klass): string {
-  return klass.name || Object.getPrototypeOf(klass)?.name || String(klass);
+  return getProviderName(klass) || klass.name || Object.getPrototypeOf(klass)?.name || String(klass);
 }

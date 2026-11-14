@@ -32,7 +32,9 @@ Fix: add the class to `providers`. `TestBed.configure` replaces every provider, 
 
 **Cyclic dependency.**
 
-Two classes `@Inject` each other, directly or through other classes, so neither can be built first.
+Two classes `@Inject` each other, directly or through other classes, so neither can be built first. Thrown when one of them is first instantiated (by `injector`, `bootstrap` or `TestBed.inject`), not when they are declared; the message lists the path, e.g. `A -> B -> A`.
+
+A cycle the container sees closes through a provider, e.g. `{ provide: A, useClass: AImpl }` where `AImpl` injects `B` and `B` injects `A`. A cycle written directly between two classes never reaches the container: `@Inject(B)` reads `B` before it is defined, so it fails at declaration with a `ReferenceError` (`Cannot access 'B' before initialization`), or `B` is `undefined` when the classes sit in modules that import each other.
 
 Fix: break the cycle, typically by moving the logic both need into a third service both inject.
 

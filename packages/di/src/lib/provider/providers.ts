@@ -1,85 +1,100 @@
-import { ClassNameSymbol, getInjectableMetadata, } from '../injctable/injectable.decorator';
+import { getProviderToken } from '../injctable/provider-token';
 import { className, DiError } from '../errors';
 import { Instance, isSingletonDefinition, Klass, Provider } from '../types';
 
 
+/**
+ * Every map is keyed by provider token: the class @Injectable() decorated, which
+ * the decorated subclass and the original class both resolve to.
+ */
 export class Providers {
-  private providers: Map<unknown, Klass> = new Map();
-  private useClass: Map<unknown, Klass> = new Map();
-  private instances: Map<unknown, Instance> = new Map();
+  private providers: Map<Klass, Klass> = new Map();
+  private useClass: Map<Klass, Klass> = new Map();
+  private instances: Map<Klass, Instance> = new Map();
+  /** the tokens being instantiated, outermost first */
+  private resolving: Klass[] = [];
 
 
   addInjectable(provider: Provider): void {
 
     if (isSingletonDefinition(provider)) {
-      if (!(ClassNameSymbol in provider.provide)) {
+      const token = getProviderToken(provider.provide);
+      if (!token) {
         throw new DiError('DI001', `${className(provider.provide)} is not decorated with @Injectable(); decorate it before providing it.`);
       }
 
-      this.providers.set(provider.provide[ClassNameSymbol], provider.provide);
-      this.useClass.set(provider.provide[ClassNameSymbol], provider.useClass);
+      this.providers.set(token, provider.provide);
+      this.useClass.set(token, provider.useClass);
 
     } else {
-      if (!(ClassNameSymbol in provider)) {
+      const token = getProviderToken(provider);
+      if (!token) {
         throw new DiError('DI001', `${className(provider)} is not decorated with @Injectable(); decorate it before providing it.`);
       }
 
-      this.providers.set(provider[ClassNameSymbol], provider);
+      this.providers.set(token, provider);
     }
   }
 
   hasInjectable(klass: Klass) {
-    const name = Providers.getName(klass);
+    const token = getProviderToken(klass);
 
-    return this.providers.has(name);
+    return !!token && this.providers.has(token);
   }
 
   hasInstance(klass: Klass) {
-    return this.instances.has(Providers.getName(klass));
+    const token = getProviderToken(klass);
+
+    return !!token && this.instances.has(token);
   }
 
   getInstance(klass: Klass) {
-    // TODO optimization needed
-    const name = Providers.getName(klass);
-    if (this.instances.has(name)) {
-      return this.instances.get(name);
+    const token = getProviderToken(klass);
+    if (token && this.instances.has(token)) {
+      return this.instances.get(token);
     }
 
-    if (this.useClass.has(name)) {
-      const k = this.useClass.get(name);
-      if (!k) {
-        throw new DiError('DI004', `Unable to instantiate ${className(klass)}: its provider resolved to no class.`);
-      }
-      const instance = new k();
-      this.instances.set(name, instance);
-      return instance;
-    }
-
-    const k = this.providers.get(name);
-    if (!k) {
+    const k = token && (this.useClass.has(token) ? this.useClass.get(token) : this.providers.get(token));
+    if (!token || !k) {
       throw new DiError('DI004', `Unable to instantiate ${className(klass)}: its provider resolved to no class.`);
     }
-    const instance = new k();
-    this.instances.set(name, instance);
-    return instance;
 
+    // a cycle cannot be caught when the classes are declared: writing one makes
+    // `@Inject(B)` read B before it is defined (a TDZ ReferenceError, or
+    // `undefined` across an import cycle); it only closes through providers,
+    // e.g. `{ provide: A, useClass: AImpl }` where AImpl injects B and B injects A
+    const start = this.resolving.indexOf(token);
+    if (start !== -1) {
+      const path = [...this.resolving.slice(start), token].map((t) => className(t)).join(' -> ');
+      throw new DiError('DI003', `Cyclic dependency: ${path}. Break the cycle, e.g. by moving the shared logic into a third service.`);
+    }
+
+    this.resolving.push(token);
+    try {
+      const instance = new k();
+      this.instances.set(token, instance);
+      return instance;
+    } finally {
+      this.resolving.pop();
+    }
   }
 
   hasUseClass(klass: Klass) {
-    return this.useClass.has(Providers.getName(klass));
+    const token = getProviderToken(klass);
+
+    return !!token && this.useClass.has(token);
   }
 
   getUseClass(klass: Klass) {
-    return this.useClass.get(Providers.getName(klass));
-  }
+    const token = getProviderToken(klass);
 
-  private static getName(klass: Klass) {
-    return ClassNameSymbol in klass ? klass[ClassNameSymbol] : getInjectableMetadata(klass);
+    return token && this.useClass.get(token);
   }
 
   reset() {
     this.providers.clear();
     this.useClass.clear();
     this.instances.clear();
+    this.resolving = [];
   }
 }

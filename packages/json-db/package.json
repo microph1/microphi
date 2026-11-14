@@ -41,7 +41,7 @@
     "@datakitchen/rxjs-marbles": "^17.0.0",
     "@microphi/list": "^2.11.0",
     "@types/node": "^20.11.30",
-    "minisearch": "^6.3.0",
+    "minisearch": "^7.2.0",
     "utility-types": "^3.10.0"
   },
   "peerDependencies": {

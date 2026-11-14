@@ -1,6 +1,6 @@
 {
   "name": "@microphi/endpoint",
-  "version": "2.3.1",
+  "version": "2.4.0",
   "description": "Decorators for API endpoints (@Endpoint, @Lambda, @Body, @Path) served on AWS Lambda, Express, Cloudflare Workers or as MCP tools, with Standard Schema validation; their metadata also drives the serverless.yml functions block",
   "main": "lib/cjs/index.js",
   "typings": "lib/esm/index.d.ts",
@@ -58,8 +58,8 @@
     "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
-    "@microphi/debug": "^2.11.0",
-    "@microphi/di": "^2.12.3",
+    "@microphi/debug": "^2.11.2",
+    "@microphi/di": "^2.13.0",
     "@modelcontextprotocol/sdk": "^1.32.2",
     "utility-types": "^3.10.0",
     "zod": "^4.6.7"

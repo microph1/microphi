@@ -1,6 +1,6 @@
 {
   "name": "@microphi/flux",
-  "version": "2.13.2",
+  "version": "2.14.0",
   "description": "Web-component framework: @Component, template bindings, fx-for / fx-if",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -36,7 +36,7 @@
     "tslib": "^2.6.2"
   },
   "devDependencies": {
-    "@microphi/di": "^2.12.3",
+    "@microphi/di": "^2.13.0",
     "jest-environment-jsdom": "^29.6.4",
     "typescript": "^5.4.2"
   },

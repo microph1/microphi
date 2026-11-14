@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.12.0](https://github.com/microph1/microphi/compare/%40microphi%2Fstore%402.11.5...%40microphi%2Fstore%402.12.0) (2026-11-14)
+
+### Features
+
+* **store:** throw coded StoreError with a link to ERRORS.md ([a2e83ca](https://github.com/microph1/microphi/commit/a2e83ca6f360738dc0cb9171cae6eb7989a5db84))
+
 ## [2.11.5](https://github.com/microph1/microphi/compare/%40microphi%2Fstore%402.11.4...%40microphi%2Fstore%402.11.5) (2026-10-29)
 
 **Note:** Version bump only for package @microphi/store

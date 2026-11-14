@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.2](https://github.com/microph1/microphi/compare/%40microphi%2Fstyles%401.5.1...%40microphi%2Fstyles%401.5.2) (2026-11-14)
+
+**Note:** Version bump only for package @microphi/styles
+
 ## [1.5.1](https://github.com/microph1/microphi/compare/%40microphi%2Fstyles%401.5.0...%40microphi%2Fstyles%401.5.1) (2026-10-21)
 
 ### Bug Fixes

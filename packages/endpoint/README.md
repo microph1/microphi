@@ -224,6 +224,8 @@ Headers come from the transport (`extra.requestInfo.headers` on HTTP transports)
 
 `getEndpointMetadataFromClass`, `getLambdaMetadataFromClass`, `getAuthorizerMetadataFromClass` and `getServerlessMetadataFromClass` return what the decorators recorded; serverless-apigator uses them to generate `serverless.yml`.
 
+The `service` option of `@Serverless` is a class or a list of classes: `serviceList(getServerlessMetadataFromClass(App).service)` always gives the list.
+
 ## Testing
 
 Provide `LambdaTestingHandler` to call `@Lambda` methods with plain arguments:

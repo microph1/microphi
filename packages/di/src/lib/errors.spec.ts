@@ -1,4 +1,4 @@
-import { DiError } from './errors';
+import { className, DiError } from './errors';
 import { Injectable } from './injctable/injectable.decorator';
 import { injector } from './injctable/injector';
 import { TestBed } from '../testing/test-bed';
@@ -32,5 +32,16 @@ describe('DiError', () => {
 
   it('DI002: injecting an @Injectable() nobody provides', () => {
     expect(() => injector(NotProvided)).toThrow(/^DI002: NotProvided is not provided/);
+  });
+
+  it('should name the declared class, not the name a bundler gave the decorated one', () => {
+    @Injectable()
+    class Repository {}
+    // esbuild lowers `return class extends klass { static ... }` to `_b = class ...`
+    Object.defineProperty(Repository, 'name', { value: '_b' });
+
+    expect(className(Repository)).toEqual('Repository');
+    expect(() => injector(Repository)).toThrow(/^DI002: Repository is not provided/);
+    expect(() => TestBed.inject(Repository)).toThrow(/^DI004: Unable to instantiate Repository:/);
   });
 });

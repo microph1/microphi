@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@microphi/di": "^2.12.3",
-    "jest-environment-jsdom": "^29.6.4",
+    "jest-environment-jsdom": "^30.5.2",
     "typescript": "^5.4.2"
   },
   "peerDependencies": {

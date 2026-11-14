@@ -37,7 +37,7 @@
   "devDependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.29.14",
     "@microphi/debug": "^2.11.2",
-    "@types/node": "^20.11.30",
+    "@types/node": "^24.19.2",
     "utility-types": "^3.10.0"
   },
   "peerDependencies": {

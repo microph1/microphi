@@ -40,7 +40,7 @@
     "@babel/plugin-transform-modules-commonjs": "^7.29.14",
     "@datakitchen/rxjs-marbles": "^17.0.0",
     "@microphi/list": "^2.11.0",
-    "@types/node": "^20.11.30",
+    "@types/node": "^24.19.2",
     "minisearch": "^7.2.0",
     "utility-types": "^3.10.0"
   },

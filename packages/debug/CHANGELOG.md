@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.2](https://github.com/microph1/microphi/compare/%40microphi%2Fdebug%402.11.1...%40microphi%2Fdebug%402.11.2) (2026-11-14)
+
+### Bug Fixes
+
+* **debug:** read DEBUG only where localStorage exists ([df95890](https://github.com/microph1/microphi/commit/df95890ceb500842c4a535810667eef6190b8bf3))
+
 ## [2.11.1](https://github.com/microph1/microphi/compare/%40microphi%2Fdebug%402.11.0...%40microphi%2Fdebug%402.11.1) (2026-10-21)
 
 ### Bug Fixes

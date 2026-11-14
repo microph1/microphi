@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.14.0](https://github.com/microph1/microphi/compare/%40microphi%2Fflux%402.13.2...%40microphi%2Fflux%402.14.0) (2026-11-14)
+
+### Features
+
+* **flux:** throw coded FluxError with a link to ERRORS.md ([aba9587](https://github.com/microph1/microphi/commit/aba95879a6e278928a5bf7a0751c04b3275ecbda))
+
 ## [2.13.2](https://github.com/microph1/microphi/compare/%40microphi%2Fflux%402.13.1...%40microphi%2Fflux%402.13.2) (2026-10-29)
 
 **Note:** Version bump only for package @microphi/flux

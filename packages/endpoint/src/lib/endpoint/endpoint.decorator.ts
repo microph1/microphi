@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import { Klass } from '@microphi/di';
 
 const EndpointMetadata = Symbol.for('Endpoint');
 
@@ -45,7 +46,7 @@ export function Endpoint(options: EndpointOptions): ClassDecorator {
  * @param instance - the instance of the decorated class
  * @return EndpointOptions
  */
-export function getEndpointMetadata(instance): EndpointOptions {
+export function getEndpointMetadata(instance: object): EndpointOptions | undefined {
   return Reflect.getMetadata(EndpointMetadata, instance.constructor);
 }
 
@@ -54,7 +55,7 @@ export function getEndpointMetadata(instance): EndpointOptions {
  * @param klass - the class
  * @return EndpointOptions
  */
-export function getEndpointMetadataFromClass(klass): EndpointOptions {
+export function getEndpointMetadataFromClass(klass: Klass): EndpointOptions | undefined {
   return Reflect.getMetadata(EndpointMetadata, klass);
 }
 

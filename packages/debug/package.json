@@ -1,6 +1,6 @@
 {
   "name": "@microphi/debug",
-  "version": "2.11.1",
+  "version": "2.11.2",
   "description": "Namespaced console.log wrapper, filtered by the DEBUG env var",
   "main": "lib/cjs/index.js",
   "typings": "lib/esm/index.d.ts",
@@ -21,7 +21,8 @@
     "lib": "lib"
   },
   "files": [
-    "lib"
+    "lib",
+    "AGENTS.md"
   ],
   "license": "MIT",
   "private": false,

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.11.0](https://github.com/microph1/microphi/compare/%40microphi%2Flist%402.10.5...%40microphi%2Flist%402.11.0) (2026-11-14)
+
+### Features
+
+* **list:** throw coded ListError with a link to ERRORS.md ([eb1aecb](https://github.com/microph1/microphi/commit/eb1aecb5ae3120fefb12848c9c7e952f3c455e32))
+
 ## [2.10.5](https://github.com/microph1/microphi/compare/%40microphi%2Flist%402.10.4...%40microphi%2Flist%402.10.5) (2026-10-21)
 
 ### Bug Fixes

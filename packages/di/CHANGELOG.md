@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.13.0](https://github.com/microph1/microphi/compare/%40microphi%2Fdi%402.12.3...%40microphi%2Fdi%402.13.0) (2026-11-14)
+
+### Bug Fixes
+
+* **di:** detect dependency cycles when instantiating ([88479e7](https://github.com/microph1/microphi/commit/88479e7be624a453e38e71567107343f6699dc68))
+* **di:** key providers by class identity ([6380567](https://github.com/microph1/microphi/commit/6380567efb7d5787883a452a6622d1893fac3131))
+
+### Features
+
+* **di:** throw coded DiError with a link to ERRORS.md ([651afeb](https://github.com/microph1/microphi/commit/651afeb5f8418cdf31e28642a749b25649311105))
+
 ## [2.12.3](https://github.com/microph1/microphi/compare/%40microphi%2Fdi%402.12.2...%40microphi%2Fdi%402.12.3) (2026-10-29)
 
 **Note:** Version bump only for package @microphi/di

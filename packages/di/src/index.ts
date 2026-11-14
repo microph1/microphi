@@ -16,3 +16,4 @@ export * from './lib/scan';
 
 export * from './testing/mocked';
 export * from './testing/test-bed';
+export * from './lib/errors';

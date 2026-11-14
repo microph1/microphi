@@ -1,8 +1,9 @@
 import 'reflect-metadata';
 import { getArguments } from '../utils';
-import { injector } from '@microphi/di';
+import { injector, Klass } from '@microphi/di';
 import { getBodyMetadata, getHeaderMetadata, getPathMetadata } from '../parameters/parameters.decorator';
-import { LambdaDefaultHandler } from './handler';
+import { getParameterSchemas, validateArguments } from '../parameters/parameter-schema';
+import { LambdaDefaultHandler, LambdaFunction } from './handler/lambda-default.handler';
 import { Http } from 'serverless/aws';
 import { getDebugger } from '@microphi/debug';
 
@@ -25,23 +26,29 @@ export function Lambda(options: LambdaOptions) {
   // serverless-apigator sets integration = 'lambda' if integration is not defined
   options.integration = options.integration || 'lambda';
 
-  return (target: any, key: string, descriptor) => {
+  return (target: object, key: string | symbol, descriptor: PropertyDescriptor) => {
 
-    options.name = options.name || key;
+    options.name = options.name || String(key);
 
     const lambdas = getLambdaMetadata(target).concat(options);
 
     Reflect.defineMetadata(LambdaMetadata, lambdas, target);
 
-    const originalFunction = descriptor.value;
+    const originalFunction: LambdaFunction = descriptor.value;
 
-    descriptor.value = async function () {
+    descriptor.value = async function (...args: unknown[]) {
       const functionArgumentsNames = getArguments(originalFunction);
 
-      const handler: LambdaDefaultHandler = injector(LambdaDefaultHandler);
+      // validation runs inside the handler's runOriginalFunction, so a 400
+      // goes through the same error mapping as the method's own errors
+      const schemas = getParameterSchemas(target, key);
+      const validatedFunction: LambdaFunction = Object.keys(schemas).length
+        ? async function (this: object, ...methodArgs: unknown[]) {
+          return originalFunction.apply(this, await validateArguments(schemas, methodArgs));
+        }
+        : originalFunction;
 
-      // eslint-disable-next-line prefer-rest-params
-      const args = arguments;
+      const handler: LambdaDefaultHandler = injector(LambdaDefaultHandler);
 
       d({ args });
 
@@ -82,9 +89,9 @@ export function Lambda(options: LambdaOptions) {
 
       // Important: surprisingly here `this` is not respected!
       // do not try to use it.
-      const instance = injector(target.constructor);
+      const instance = injector(target.constructor as Klass);
 
-      d(`got instance will use "${key}" method`);
+      d(`got instance will use "${String(key)}" method`);
 
       // const methodMetadata = getLambdaMetadata(this);
 
@@ -120,9 +127,9 @@ export function Lambda(options: LambdaOptions) {
 
       // Make sure to add this so you can re-use `conn` between function calls.
       // See https://www.mongodb.com/blog/post/serverless-development-with-nodejs-aws-lambda-mongodb-atlas
-      // eslint-disable-next-line no-prototype-builtins
-      if (args[1] && args[1].hasOwnProperty('callbackWaitsForEmptyEventLoop')) {
-        args[1].callbackWaitsForEmptyEventLoop = false;
+      const context = args[1];
+      if (typeof context === 'object' && context !== null && Object.hasOwn(context, 'callbackWaitsForEmptyEventLoop')) {
+        (context as { callbackWaitsForEmptyEventLoop: boolean }).callbackWaitsForEmptyEventLoop = false;
       }
 
       const newArgs = new Array(functionArgumentsNames.length);
@@ -146,7 +153,7 @@ export function Lambda(options: LambdaOptions) {
 
       d({ newArgs });
 
-      return handler.runOriginalFunction(originalFunction, instance, newArgs, args);
+      return handler.runOriginalFunction(validatedFunction, instance, newArgs, args);
 
     };
 
@@ -155,12 +162,12 @@ export function Lambda(options: LambdaOptions) {
 
 }
 
-export function getLambdaMetadata(instance) {
+export function getLambdaMetadata(instance: object): LambdaOptions[] {
   const metadata = Reflect.getMetadata(LambdaMetadata, instance);
   return metadata ? ([] as LambdaOptions[]).concat(metadata) : [];
 }
 
-export function getLambdaMetadataFromClass(klass) {
+export function getLambdaMetadataFromClass(klass: Klass): LambdaOptions[] {
   const metadata = Reflect.getMetadata(LambdaMetadata, klass.prototype);
   return metadata ? ([] as LambdaOptions[]).concat(metadata) : [];
 }

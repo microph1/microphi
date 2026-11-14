@@ -1,12 +1,14 @@
 {
   "name": "@microphi/endpoint",
-  "version": "2.3.1",
-  "description": "Decorators for API endpoints (@Endpoint, @Lambda, @Body, @Path) whose metadata drives AWS Lambda and Express handlers and the serverless.yml functions block",
+  "version": "2.4.0",
+  "description": "Decorators for API endpoints (@Endpoint, @Lambda, @Body, @Path) served on AWS Lambda, Express, Cloudflare Workers or as MCP tools, with Standard Schema validation; their metadata also drives the serverless.yml functions block",
   "main": "lib/cjs/index.js",
   "typings": "lib/esm/index.d.ts",
   "module": "lib/esm/index.js",
   "files": [
-    "lib"
+    "lib",
+    "AGENTS.md",
+    "ERRORS.md"
   ],
   "license": "MIT",
   "author": {
@@ -31,7 +33,10 @@
     "express",
     "serverless",
     "api",
-    "endpoint"
+    "endpoint",
+    "cloudflare-workers",
+    "mcp",
+    "standard-schema"
   ],
   "publishConfig": {
     "access": "public"
@@ -43,6 +48,7 @@
     "lint": "eslint ./src"
   },
   "dependencies": {
+    "@standard-schema/spec": "^1.1.0",
     "@types/aws-lambda": "^8.10.96",
     "@types/serverless": "^3.12.0"
   },
@@ -52,9 +58,11 @@
     "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
-    "@microphi/debug": "^2.11.0",
-    "@microphi/di": "^2.12.3",
-    "utility-types": "^3.10.0"
+    "@microphi/debug": "^2.11.2",
+    "@microphi/di": "^2.13.0",
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "utility-types": "^3.10.0",
+    "zod": "^4.6.7"
   },
   "sideEffects": false
 }

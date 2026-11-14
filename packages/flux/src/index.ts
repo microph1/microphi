@@ -15,3 +15,4 @@ export * from './lib/utils';
 export * from './lib/components/fx-if.component';
 export * from './lib/components/fx-for.component';
 export * from './lib/components/fx-item.component';
+export * from './lib/errors';

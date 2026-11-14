@@ -1,6 +1,6 @@
 {
   "name": "@microphi/styles",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Flex-first SCSS utilities",
   "scripts": {},
   "private": false,
@@ -32,6 +32,7 @@
     "url": "https://github.com/microph1/microphi/issues"
   },
   "files": [
-    "scss"
+    "scss",
+    "AGENTS.md"
   ]
 }

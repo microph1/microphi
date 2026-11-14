@@ -1,5 +1,5 @@
 import { bootstrap as _bootstrap, injector, Klass } from '@microphi/di';
-import { getServerlessMetadataFromClass } from '../serverless/serverless.decorator';
+import { getServerlessMetadataFromClass, serviceList } from '../serverless/serverless.decorator';
 import { getDebugger } from '@microphi/debug';
 
 const d = getDebugger('microgamma:apigator:bootstrap');
@@ -12,5 +12,5 @@ export function bootstrap(serverlessApp: Klass) {
   d('getting service');
 
   const { service } = getServerlessMetadataFromClass(serverlessApp);
-  return injector(service);
+  return injector(serviceList(service)[0]);
 }

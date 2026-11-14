@@ -1,0 +1,69 @@
+{
+  "name": "@microphi/sql",
+  "version": "0.0.0",
+  "description": "Decorator-driven SQLite storage (@Entity, @Column, @PrimaryKey) over node:sqlite or Cloudflare D1",
+  "main": "lib/cjs/index.js",
+  "typings": "lib/esm/index.d.ts",
+  "module": "lib/esm/index.js",
+  "exports": {
+    ".": {
+      "import": "./lib/esm/index.js",
+      "require": "./lib/cjs/index.js",
+      "types": "./lib/esm/index.d.ts"
+    },
+    "./node": {
+      "import": "./lib/esm/node.js",
+      "require": "./lib/cjs/node.js",
+      "types": "./lib/esm/node.d.ts"
+    }
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib",
+    "AGENTS.md"
+  ],
+  "license": "MIT",
+  "private": false,
+  "keywords": [
+    "sqlite",
+    "d1",
+    "cloudflare",
+    "decorators",
+    "orm"
+  ],
+  "author": {
+    "name": "Davide Cavaliere",
+    "email": "cavaliere.davide@gmail.com",
+    "url": "https://github.com/microph1"
+  },
+  "homepage": "https://github.com/microph1/microphi/tree/master/packages/sql#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/microph1/microphi.git",
+    "directory": "packages/sql"
+  },
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json && tsc -b tsconfig.cjs.json",
+    "build:ci": "npm run build",
+    "test:ci": "vitest run --coverage",
+    "lint": "eslint ./src"
+  },
+  "dependencies": {
+    "tslib": "^2.5.0"
+  },
+  "peerDependencies": {
+    "reflect-metadata": "^0.2.2"
+  },
+  "devDependencies": {
+    "miniflare": "^4.0.0",
+    "reflect-metadata": "^0.2.2"
+  },
+  "bugs": {
+    "url": "https://github.com/microph1/microphi/issues"
+  }
+}

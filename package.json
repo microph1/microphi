@@ -32,7 +32,7 @@
     "@angular/platform-browser": "~17.3.12",
     "@angular/platform-browser-dynamic": "~17.3.12",
     "@eslint/js": "^10.0.1",
-    "@faker-js/faker": "^7.3.0",
+    "@faker-js/faker": "^10.6.0",
     "@lerna-lite/changed": "^5.8.0",
     "@lerna-lite/cli": "^5.8.0",
     "@lerna-lite/diff": "^5.8.0",

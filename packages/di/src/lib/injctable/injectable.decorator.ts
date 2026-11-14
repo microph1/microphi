@@ -2,7 +2,15 @@ import 'reflect-metadata';
 import { injector } from './injector';
 import { getInjectMetadata } from './inject.decorator';
 import { Klass } from '../types';
+import { className } from '../errors';
+import { getProviderName, setProviderToken } from './provider-token';
 
+/**
+ * Static set on every @Injectable() class, holding the name it was declared with.
+ * @deprecated providers are keyed by class identity, not by this name; use
+ * `className()` for a readable name. Kept so `ClassNameSymbol in klass` still
+ * tells an @Injectable() class apart.
+ */
 export const ClassNameSymbol = Symbol('ClassName');
 
 /**
@@ -17,21 +25,11 @@ export function Injectable() {
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export function InjectableDecorator<T extends {new(...args: any[]): {}}>(klass: T) {
-  // this is needed because minified code can have different classes with the same name
-  // leading to a dependency cycle error which is not really there
-  // appending a random number will fix this problem
-  // TODO ideally this should be collision free hashing
-  const suffix = (Math.random() * 10_000).toFixed(0).toString();
-  const name = `${klass.name}_${suffix}`;
-
-  // the undecorated class resolves to the same provider as the returned one:
-  // member decorators only ever see the original class (e.g. `target.constructor`)
-  Reflect.defineMetadata(ClassNameSymbol, name, klass);
+  // decorating the subclass returned by an earlier decoration: its own name is empty
+  const name = klass.name || className(klass);
   const injectMetadata = getInjectMetadata(klass);
 
-  return class extends klass {
-    static [ClassNameSymbol] = name;
-
+  const decorated = class extends klass {
     constructor(...args: any[]) {
 
       for (const {parameterIndex, klass} of injectMetadata) {
@@ -42,13 +40,25 @@ export function InjectableDecorator<T extends {new(...args: any[]): {}}>(klass: 
       }
 
       super(...args);
-
-      // d('class name', this[ClassNameSymbol]);
-
     }
   };
+
+  // assigned rather than declared as a static field: bundlers lower static
+  // fields into `_b = class extends ...`, which names the class `_b`
+  (decorated as unknown as Record<symbol, string>)[ClassNameSymbol] = name;
+
+  // the undecorated class resolves to the same provider as the returned one:
+  // member decorators only ever see the original class (e.g. `target.constructor`)
+  setProviderToken(klass, klass, name);
+  setProviderToken(decorated, klass, name);
+
+  return decorated;
 }
 
+/**
+ * The name `klass` was declared with, if it is @Injectable().
+ * @deprecated providers are keyed by class identity; use `className()`.
+ */
 export function getInjectableMetadata(klass: Klass): string {
-  return Reflect.getMetadata(ClassNameSymbol, klass);
+  return getProviderName(klass) as string;
 }

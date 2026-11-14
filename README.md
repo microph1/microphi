@@ -9,7 +9,7 @@ Monorepo for the microphi (μφ) project: small, decorator-driven TypeScript lib
 | Package | | Description |
 |---|---|---|
 | [`@microphi/di`](packages/di) | [![npm](https://img.shields.io/npm/v/@microphi/di)](https://www.npmjs.com/package/@microphi/di) | Handcrafted DI container: `@Injectable`, `@Inject`, `@DI`, aspects (`@Before`, `@After`, `@Cache`) and a `TestBed` |
-| [`@microphi/endpoint`](packages/endpoint) | [![npm](https://img.shields.io/npm/v/@microphi/endpoint)](https://www.npmjs.com/package/@microphi/endpoint) | API endpoint decorators (`@Endpoint`, `@Lambda`, `@Body`, `@Path`) for AWS Lambda / Express, driving serverless.yml (formerly `@microgamma/apigator`) |
+| [`@microphi/endpoint`](packages/endpoint) | [![npm](https://img.shields.io/npm/v/@microphi/endpoint)](https://www.npmjs.com/package/@microphi/endpoint) | API endpoint decorators (`@Endpoint`, `@Lambda`, `@Body`, `@Path`) served on AWS Lambda, Express, Cloudflare Workers or as MCP tools, with Standard Schema validation (formerly `@microgamma/apigator`) |
 | [`@microphi/store`](packages/store) | [![npm](https://img.shields.io/npm/v/@microphi/store)](https://www.npmjs.com/package/@microphi/store) | Pure RxJS state manager driven by `@Effect` / `@Reduce` decorators |
 | [`@microphi/flux`](packages/flux) | [![npm](https://img.shields.io/npm/v/@microphi/flux)](https://www.npmjs.com/package/@microphi/flux) | Web-component framework: `@Component`, template bindings, `fx-for` / `fx-if` |
 | [`@microphi/styles`](packages/styles) | [![npm](https://img.shields.io/npm/v/@microphi/styles)](https://www.npmjs.com/package/@microphi/styles) | Flex-first SCSS utilities |
@@ -18,6 +18,10 @@ Monorepo for the microphi (μφ) project: small, decorator-driven TypeScript lib
 | [`@microphi/debug`](packages/debug) | [![npm](https://img.shields.io/npm/v/@microphi/debug)](https://www.npmjs.com/package/@microphi/debug) | Namespaced `console.log` wrapper, filtered by the `DEBUG` env var |
 
 Work in progress, not published: [`@microphi/flux-language-service`](packages/flux-language-service), a TypeScript language service plugin for flux templates (the flux counterpart of `@angular/language-service`).
+
+## For AI coding agents
+
+Every package ships an `AGENTS.md` in its npm tarball: the rules and pitfalls of its API, and the test doubles to use, so agents read them from `node_modules/@microphi/<package>/AGENTS.md`. Errors thrown by `di`, `store`, `list` and `flux` carry a stable code (`DI002`, `STORE004`, ...) and end with a link to that package's `ERRORS.md`, which explains the cause and the fix.
 
 ## Development
 

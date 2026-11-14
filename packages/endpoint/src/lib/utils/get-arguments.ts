@@ -14,7 +14,7 @@ export type FunctionArg = string;
  * @param fn
  * @returns {string[]}
  */
-export function getArguments(fn: (...args) => any): FunctionArg[] {
+export function getArguments(fn: (...args: never[]) => unknown): FunctionArg[] {
 
   const FN_ARGS = /^[a-zA_Z]\s*[^(]*\(\s*([^)]*)\)/m;
   const FN_ARG_SPLIT = /,/;
@@ -29,11 +29,11 @@ export function getArguments(fn: (...args) => any): FunctionArg[] {
   if (typeof fn === 'function') {
     fnText = fn.toString().replace(STRIP_COMMENTS, '');
     argDecl = fnText.match(FN_ARGS);
-    argDecl[1].split(FN_ARG_SPLIT).forEach(function (arg: any) {
-      arg.replace(FN_ARG, function (all: any, underscore: any, name: any) {
-        // d(all, underscore);
+    argDecl[1].split(FN_ARG_SPLIT).forEach(function (arg: string) {
+      const name = arg.match(FN_ARG)?.[2];
+      if (name) {
         $inject.push(name);
-      });
+      }
     });
   } else {
     throw Error(`${fn} is not a function`);

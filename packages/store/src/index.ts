@@ -9,3 +9,4 @@ export * from './lib/operators/cache';
 export * from './lib/operators/debounce';
 export * from './lib/operators/delay';
 export * from './lib/store/types';
+export * from './lib/errors';

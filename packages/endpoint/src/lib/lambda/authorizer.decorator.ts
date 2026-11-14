@@ -1,6 +1,8 @@
 import 'reflect-metadata';
 import { CustomAuthorizerEvent, CustomAuthorizerResult } from 'aws-lambda';
-import { injector } from '@microphi/di';
+import { injector, Klass } from '@microphi/di';
+import { HttpError } from '../errors';
+import { LambdaFunction } from './handler/lambda-default.handler';
 
 export const AuthorizerMetadata = Symbol.for('Authorizer');
 
@@ -8,32 +10,28 @@ export interface AuthorizerOptions {
   name: string;
 }
 
-export function Authorizer(options?: AuthorizerOptions) {
-  return (target: any, key: string, descriptor) => {
+/**
+ * Turn a method into an API Gateway custom authorizer. The method is called
+ * with `(authorizationToken, methodArn)`; a truthy return value allows the
+ * request and becomes the policy's `principalId` and `context.user`. Throw an
+ * `HttpError` (or an error whose message starts with `[nnn]`) to deny with
+ * that status.
+ */
+export function Authorizer(options?: AuthorizerOptions): MethodDecorator {
+  return (target: object, key: string | symbol, descriptor: PropertyDescriptor) => {
 
     Reflect.defineMetadata(AuthorizerMetadata, {
-      name: options ? options.name : key
+      name: options ? options.name : String(key)
     }, target);
 
-    const originalFunction = descriptor.value;
+    const originalFunction: LambdaFunction = descriptor.value;
 
-    descriptor.value = async function () {
-      // eslint-disable-next-line prefer-rest-params
-      const args = arguments;
+    descriptor.value = async function (event: CustomAuthorizerEvent): Promise<CustomAuthorizerResult> {
 
       try {
-        const instance = injector(target.constructor);
+        const instance = injector(target.constructor as Klass);
 
-        const event: CustomAuthorizerEvent = args[0] as CustomAuthorizerEvent;
-
-        const newArgs = [event.authorizationToken, event.methodArn];
-
-        const retValue = await originalFunction.apply(instance, newArgs);
-
-        // authContext.requestContext.identity.user = retValue;
-
-        // context.indentity = retValue;
-        // d('setting identity', context.indentity);
+        const retValue = await originalFunction.apply(instance, [event.authorizationToken, event.methodArn]);
 
         const statement = {
           Action: 'execute-api:Invoke',
@@ -41,7 +39,7 @@ export function Authorizer(options?: AuthorizerOptions) {
           Resource: event.methodArn.split('/')[0] + '/*',
         };
 
-        const policy = {
+        return {
           principalId: retValue,
           policyDocument: {
             Version: '2012-10-17',
@@ -52,19 +50,10 @@ export function Authorizer(options?: AuthorizerOptions) {
           context: {
             user: retValue
           }
-
         } as CustomAuthorizerResult;
 
-
-        return policy;
       } catch (e) {
-
-        const message = e instanceof Error ? e.message : String(e);
-        if (message.match(/^\[[0-9]{3,}\](.)+/)) {
-          throw new Error(String(e), { cause: e });
-        }
-
-        throw new Error(`[500] ${e}`, { cause: e });
+        throw HttpError.from(e);
       }
     };
 
@@ -72,10 +61,10 @@ export function Authorizer(options?: AuthorizerOptions) {
   };
 }
 
-export function getAuthorizerMetadata(instance): AuthorizerOptions {
+export function getAuthorizerMetadata(instance: object): AuthorizerOptions {
   return Reflect.getMetadata(AuthorizerMetadata, instance);
 }
 
-export function getAuthorizerMetadataFromClass(klass): AuthorizerOptions {
+export function getAuthorizerMetadataFromClass(klass: Klass): AuthorizerOptions {
   return Reflect.getMetadata(AuthorizerMetadata, klass.prototype);
 }

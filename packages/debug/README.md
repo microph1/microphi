@@ -40,6 +40,10 @@ localStorage.debug = 'musicbox:.*';
 
 ![browser example output](https://raw.githubusercontent.com/microph1/microphi/master/.github/assets/debug_browser_output.png)
 
+### Other runtimes
+
+Without `process` or `localStorage`, e.g. on Cloudflare Workers without the `nodejs_compat` flag, every namespace is off. With `nodejs_compat`, `DEBUG` is read from `process.env` as in Node; Workers fill `process.env` from the vars only from compatibility date 2025-04-01 (or with the `nodejs_compat_populate_process_env` flag).
+
 ## `onMessage`
 
 Registers a callback that receives every message, matching or not, as long as `DEBUG` is set. Handy to ship logs to a server or a file.

@@ -2,7 +2,7 @@ import { HttpError } from '../errors';
 import { LambdaDefaultHandler, LambdaFunction, LambdaParams } from '../lambda/handler/lambda-default.handler';
 
 /**
- * The arguments of an MCP `tools/call`: one property per `@Path` parameter
+ * The arguments of an MCP `tools/call`: one property per `@Path` and `@Query` parameter
  * and `body` for the `@Body` one.
  */
 export type McpToolInput = Record<string, unknown> & { body?: unknown };
@@ -41,6 +41,11 @@ export class McpEventHandler extends LambdaDefaultHandler {
 
   public override getHeaderParams([, extra]: McpArguments): LambdaParams {
     return extra?.requestInfo?.headers ?? {};
+  }
+
+  /** query parameters are tool arguments, like path parameters */
+  public override getQueryParams([input]: McpArguments): LambdaParams {
+    return input ?? {};
   }
 
   public override async runOriginalFunction(originalFunction: LambdaFunction, instance: object, newArgs: unknown[]): Promise<McpToolResult> {

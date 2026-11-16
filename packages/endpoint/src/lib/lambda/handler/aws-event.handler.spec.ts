@@ -32,6 +32,11 @@ describe('AwsEventHandler', () => {
 
   });
 
+  it('should get query parameters from REST and HTTP API events, or none', () => {
+    expect(handler.getQueryParams([{ queryStringParameters: { q: 'x' } }])).toEqual({ q: 'x' });
+    expect(handler.getQueryParams([{ queryStringParameters: null }])).toEqual({});
+  });
+
   it('should get headerParams', () => {
     expect(handler.getHeaderParams([{
       headers: {

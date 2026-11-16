@@ -18,6 +18,11 @@ export class AwsEventHandler extends LambdaDefaultHandler {
     return event.headers;
   }
 
+  /** REST (v1) and HTTP API / function URL (v2) events both carry `queryStringParameters` */
+  public override getQueryParams([event]: AwsLambdaArguments): LambdaParams {
+    return event.queryStringParameters ?? {};
+  }
+
   public override async runOriginalFunction(originalFunction: LambdaFunction, instance: object, newArgs: unknown[]): Promise<unknown> {
     try {
       return await originalFunction.apply(instance, newArgs);

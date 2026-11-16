@@ -32,6 +32,10 @@ export class LambdaDefaultHandler {
     return args as unknown as LambdaParams;
   }
 
+  public getQueryParams(args: unknown[]): LambdaParams {
+    return args as unknown as LambdaParams;
+  }
+
   /**
    * @param originalFunction - the decorated method
    * @param instance - the endpoint instance to call it on

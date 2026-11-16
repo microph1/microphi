@@ -65,5 +65,8 @@
   },
   "bugs": {
     "url": "https://github.com/microph1/microphi/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

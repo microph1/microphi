@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { getArguments } from '../utils';
 import { injector, Klass } from '@microphi/di';
-import { getBodyMetadata, getHeaderMetadata, getPathMetadata } from '../parameters/parameters.decorator';
+import { getBodyMetadata, getHeaderMetadata, getPathMetadata, getQueryMetadata } from '../parameters/parameters.decorator';
 import { getParameterSchemas, validateArguments } from '../parameters/parameter-schema';
 import { LambdaDefaultHandler, LambdaFunction } from './handler/lambda-default.handler';
 import { Http } from 'serverless/aws';
@@ -121,7 +121,10 @@ export function Lambda(options: LambdaOptions) {
 
       const headerParams = handler.getHeaderParams(args);
 
-      // TODO: extract query params
+      // extract query params
+      const queryAnnotatedParams = getQueryMetadata(instance, key);
+
+      const queryParams = handler.getQueryParams(args);
 
       // TODO: being able to alter the context or pass context to originalFunction
 
@@ -149,6 +152,11 @@ export function Lambda(options: LambdaOptions) {
       Object.keys(headerAnnotatedParams).forEach((param) => {
         const index = headerAnnotatedParams[param];
         newArgs[index] = headerParams[param];
+      });
+
+      Object.keys(queryAnnotatedParams).forEach((param) => {
+        const index = queryAnnotatedParams[param];
+        newArgs[index] = queryParams?.[param];
       });
 
       d({ newArgs });

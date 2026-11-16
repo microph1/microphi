@@ -26,6 +26,13 @@ export class WorkerEventHandler extends LambdaDefaultHandler {
     return call.params;
   }
 
+  /** from the request URL; a repeated parameter gives its first value */
+  public override getQueryParams([call]: WorkerArguments): LambdaParams {
+    const query: LambdaParams = {};
+    new URL(call.request.url).searchParams.forEach((value, name) => { if (!(name in query)) query[name] = value; });
+    return query;
+  }
+
   /** header names are lowercase: use `@Header('authorization')` */
   public override getHeaderParams([call]: WorkerArguments): LambdaParams {
     const headers: LambdaParams = {};

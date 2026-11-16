@@ -4,7 +4,7 @@ import { Endpoint } from '../endpoint/endpoint.decorator';
 import { HttpError } from '../errors';
 import { LambdaDefaultHandler } from '../lambda/handler';
 import { Lambda } from '../lambda/lambda.decorator';
-import { Body, Header, Path } from '../parameters/parameters.decorator';
+import { Body, Header, Path, Query } from '../parameters/parameters.decorator';
 import { Serverless } from '../serverless/serverless.decorator';
 import { bootstrap } from '../bootstrap/bootstrap';
 import { WorkerEventHandler } from './worker-event.handler';
@@ -25,6 +25,11 @@ class SpeakersEndpoint {
       throw new Error('database down');
     }
     return { id, authorization };
+  }
+
+  @Lambda({ method: 'GET', path: '/speakers' })
+  public list(@Query('q') q: string | undefined, @Query('limit', z.coerce.number().int().positive().optional()) limit: number | undefined) {
+    return { q, limit };
   }
 
   @Lambda({ method: 'GET', path: '/speakers/me' })
@@ -75,6 +80,21 @@ describe('worker', () => {
 
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({ id: 'a b', authorization: 'Bearer t' });
+  });
+
+  it('should pass query parameters, the first of a repeated one, validated by their schema', async () => {
+    const res = await app.fetch(new Request(`${base}/api/speakers?q=dayton%2012%22&limit=20&q=other`));
+
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ q: 'dayton 12"', limit: 20 });
+  });
+
+  it('should leave absent query parameters undefined', async () => {
+    expect(await (await app.fetch(new Request(`${base}/api/speakers`))).json()).toEqual({});
+  });
+
+  it('should answer 400 to a malformed query parameter', async () => {
+    expect((await app.fetch(new Request(`${base}/api/speakers?limit=-1`))).status).toBe(400);
   });
 
   it('should prefer literal segments over parameters', async () => {

@@ -5,6 +5,7 @@ import { LambdaDefaultHandler, LambdaFunction, LambdaParams } from './lambda-def
 export interface ExpressRequestLike {
   params: LambdaParams;
   headers: LambdaParams;
+  query?: LambdaParams;
   body?: unknown;
 }
 
@@ -24,6 +25,11 @@ export class ExpressEventHandler extends LambdaDefaultHandler {
 
   public override getHeaderParams([req]: ExpressArguments): LambdaParams {
     return req.headers;
+  }
+
+  /** Express parses the query string; a repeated parameter gives its first value */
+  public override getQueryParams([req]: ExpressArguments): LambdaParams {
+    return Object.fromEntries(Object.entries(req.query ?? {}).map(([name, value]) => [name, Array.isArray(value) ? value[0] : value]));
   }
 
   public override getBody([req]: ExpressArguments): unknown {

@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "paths": {},
+    "outDir": "../../out-tsc/ngx-shortcuts",
+    "declarationMap": true,
+    "inlineSources": true,
+    "sourceMap": true
+  },
+  "angularCompilerOptions": {
+    "compilationMode": "partial"
+  },
+  "exclude": ["**/*.spec.ts", "src/test-setup.ts", "jest.config.ts", "dist"]
+}

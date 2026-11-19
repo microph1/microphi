@@ -1,0 +1,58 @@
+{
+  "name": "@microphi/ngx-shortcuts",
+  "version": "0.1.0",
+  "description": "Keyboard shortcuts for Angular: mod+k bindings, g p sequences, typing-safe, scoped to components, with a help overlay",
+  "license": "MIT",
+  "keywords": [
+    "angular",
+    "keyboard",
+    "shortcuts",
+    "hotkeys",
+    "keybindings",
+    "command palette"
+  ],
+  "author": {
+    "name": "Davide Cavaliere",
+    "email": "cavaliere.davide@gmail.com",
+    "url": "https://github.com/microph1"
+  },
+  "homepage": "https://github.com/microph1/microphi/tree/master/packages/ngx-shortcuts#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/microph1/microphi.git",
+    "directory": "packages/ngx-shortcuts"
+  },
+  "bugs": {
+    "url": "https://github.com/microph1/microphi/issues"
+  },
+  "scripts": {
+    "build": "ng-packagr -p ng-package.json -c tsconfig.lib.json",
+    "build:ci": "npm run build",
+    "test:ci": "jest --coverage --ci",
+    "lint": "eslint ./src ./testing/src",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "peerDependencies": {
+    "@angular/common": ">=17.0.0 <23.0.0",
+    "@angular/core": ">=17.0.0 <23.0.0",
+    "rxjs": "^6.5.3 || ^7.4.0"
+  },
+  "devDependencies": {
+    "@angular/common": "~17.3.0",
+    "@angular/compiler": "~17.3.0",
+    "@angular/compiler-cli": "~17.3.0",
+    "@angular/core": "~17.3.0",
+    "@angular/platform-browser": "~17.3.0",
+    "@angular/platform-browser-dynamic": "~17.3.0",
+    "ng-packagr": "^17.3.0",
+    "zone.js": "~0.14.0"
+  },
+  "sideEffects": false,
+  "publishConfig": {
+    "directory": "dist",
+    "access": "public"
+  }
+}

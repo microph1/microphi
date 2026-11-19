@@ -66,6 +66,8 @@ interface Binding {
   readonly chords: readonly ShortcutChord[];
   readonly canonical: string;
   readonly scope: object;
+  // the registration it belongs to, for exclusive()
+  readonly owner: ShortcutsRegistration;
 }
 
 const MODIFIER_KEYS = new Set(['Shift', 'Control', 'Alt', 'AltGraph', 'Meta', 'OS', 'CapsLock', 'Fn', 'FnLock', 'Hyper', 'Super']);
@@ -137,6 +139,9 @@ export class Shortcuts {
 
   private listening = false;
 
+  // exclusive() layers, innermost last
+  private readonly exclusives: { registration?: ShortcutsRegistration }[] = [];
+
   constructor() {
     inject(DestroyRef).onDestroy(() => this.stopListening());
   }
@@ -152,6 +157,7 @@ export class Shortcuts {
     const list = (Array.isArray(shortcuts) ? shortcuts : [shortcuts]) as readonly Shortcut[];
     const scope: object = destroyRef ?? {};
     const added: Binding[] = [];
+    const handle: ShortcutsRegistration = { unregister: () => undefined };
 
     // validate everything first: a malformed binding must not leave half a registration behind
     for (const shortcut of list) {
@@ -164,7 +170,7 @@ export class Shortcuts {
         const chords = parseShortcut(binding);
         const canonical = canonicalShortcut(chords, this.platform);
         this.warnIfSuspicious(shortcut, binding, chords, canonical, scope, added);
-        added.push({ shortcut, binding, chords, canonical, scope });
+        added.push({ shortcut, binding, chords, canonical, scope, owner: handle });
       }
     }
 
@@ -173,7 +179,7 @@ export class Shortcuts {
     this.listen();
 
     let registered = true;
-    const unregister = () => {
+    handle.unregister = () => {
       if (!registered) {
         return;
       }
@@ -182,9 +188,28 @@ export class Shortcuts {
       this.publish();
     };
 
-    destroyRef?.onDestroy(unregister);
+    destroyRef?.onDestroy(() => handle.unregister());
 
-    return { unregister };
+    return handle;
+  }
+
+  /**
+   * Lets only `registration`'s shortcuts fire until the returned function is
+   * called: for modal UI (a dialog, a command palette) that must not trigger the
+   * page behind it. Without a registration every shortcut is blocked. Calls nest:
+   * the latest one wins until it is released.
+   */
+  exclusive(registration?: ShortcutsRegistration): () => void {
+    const layer = { registration };
+    this.exclusives.push(layer);
+    this.pending = [];
+    return () => {
+      const index = this.exclusives.indexOf(layer);
+      if (index !== -1) {
+        this.exclusives.splice(index, 1);
+        this.pending = [];
+      }
+    };
   }
 
   private warnIfSuspicious(
@@ -319,7 +344,8 @@ export class Shortcuts {
 
     for (let i = this.bindings.length - 1; i >= 0; i--) {
       const b = this.bindings[i];
-      if (b.chords.length === typed.length
+      if (this.eligible(b)
+        && b.chords.length === typed.length
         && this.allowed(b, editable)
         && matches(b)
         && (!b.shortcut.when || b.shortcut.when())) {
@@ -333,7 +359,7 @@ export class Shortcuts {
       return false;
     }
 
-    const started = this.bindings.filter((b) => b.chords.length > typed.length && matches(b));
+    const started = this.bindings.filter((b) => this.eligible(b) && b.chords.length > typed.length && matches(b));
     if (started.length === 0) {
       return false;
     }
@@ -344,6 +370,11 @@ export class Shortcuts {
       event.preventDefault();
     }
     return true;
+  }
+
+  private eligible(b: Binding): boolean {
+    const layer = this.exclusives[this.exclusives.length - 1];
+    return !layer || (!!layer.registration && b.owner === layer.registration);
   }
 
   private allowed(b: Binding, editable: boolean): boolean {

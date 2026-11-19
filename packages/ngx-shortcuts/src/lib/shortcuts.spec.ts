@@ -606,6 +606,80 @@ describe('Shortcuts', () => {
     });
   });
 
+  describe('exclusive', () => {
+    it('lets only the given registration fire until released', () => {
+      const shortcuts = setup();
+      const page = jest.fn();
+      const modal = jest.fn();
+      shortcuts.register({ keys: 'k', description: 'Page', action: page });
+      const modalKeys = shortcuts.register({ keys: 'escape', description: 'Close', action: modal });
+
+      const release = shortcuts.exclusive(modalKeys);
+      const [k] = pressShortcut('k');
+      pressShortcut('escape');
+      expect(page).not.toHaveBeenCalled();
+      expect(k.defaultPrevented).toBe(false);
+      expect(modal).toHaveBeenCalledTimes(1);
+
+      release();
+      release();
+      pressShortcut('k');
+      expect(page).toHaveBeenCalledTimes(1);
+    });
+
+    it('blocks everything without a registration, sequences included', () => {
+      const shortcuts = setup();
+      const action = jest.fn();
+      shortcuts.register([
+        { keys: 'x', description: 'X', action },
+        { keys: 'g p', description: 'Go', action },
+      ]);
+
+      pressShortcut('g');
+      const release = shortcuts.exclusive();
+      pressShortcut('p');
+      pressShortcut('x');
+      const [g] = pressShortcut('g');
+      expect(g.defaultPrevented).toBe(false);
+      expect(action).not.toHaveBeenCalled();
+
+      release();
+      pressShortcut('p');
+      expect(action).not.toHaveBeenCalled();
+      pressShortcut('g p');
+      expect(action).toHaveBeenCalledTimes(1);
+    });
+
+    it('nests: the latest layer wins until it is released', () => {
+      const shortcuts = setup();
+      const outer = jest.fn();
+      const inner = jest.fn();
+      const outerKeys = shortcuts.register({ keys: 'a', description: 'Outer', action: outer });
+      const innerKeys = shortcuts.register({ keys: 'b', description: 'Inner', action: inner });
+
+      const releaseOuter = shortcuts.exclusive(outerKeys);
+      const releaseInner = shortcuts.exclusive(innerKeys);
+      pressShortcut('a');
+      pressShortcut('b');
+      expect(outer).not.toHaveBeenCalled();
+      expect(inner).toHaveBeenCalledTimes(1);
+
+      releaseInner();
+      pressShortcut('a');
+      pressShortcut('b');
+      expect(outer).toHaveBeenCalledTimes(1);
+      expect(inner).toHaveBeenCalledTimes(1);
+      releaseOuter();
+    });
+
+    it('does not change the active list', () => {
+      const shortcuts = setup();
+      shortcuts.register({ keys: 'k', description: 'Page', action: jest.fn() });
+      shortcuts.exclusive();
+      expect(shortcuts.active()).toHaveLength(1);
+    });
+  });
+
   describe('active list', () => {
     it('is a signal and an observable in registration order', async () => {
       const shortcuts = setup();

@@ -102,7 +102,7 @@ Put it once in the app shell; `?` toggles it:
 <button (click)="help.open()">Shortcuts</button>
 ```
 
-It is a native modal `<dialog>`: focus is trapped and restored, Escape and a backdrop click close it. Restyle it with custom properties:
+It is a native modal `<dialog>`: focus moves to its heading and back when it closes, Escape and a backdrop click close it, and while it is open no other shortcut fires. Restyle it with custom properties:
 
 ```css
 ngx-shortcuts-help {
@@ -136,6 +136,15 @@ readonly commands = inject(Shortcuts).active; // Signal<readonly ActiveShortcut[
 
 // { keys: ['mod+k'], description: 'Search', group?: string, shortcut, run(): boolean }
 this.commands().find((c) => c.description === 'Search')?.run();
+```
+
+While your modal UI is open, keep the page's shortcuts quiet with `exclusive()`: only the registration you pass fires (none without one) until you release it.
+
+```typescript
+const keys = shortcuts.register({ keys: 'escape', description: 'Close palette', action: () => this.close() });
+const release = shortcuts.exclusive(keys);
+// ...on close
+release();
 ```
 
 Render keys with the pipe or the functions behind it:

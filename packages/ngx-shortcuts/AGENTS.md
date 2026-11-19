@@ -11,7 +11,7 @@ Keyboard shortcuts for Angular 17+. Full docs: [README.md](README.md); every err
 - Don't bind browser-reserved combos (Ctrl/⌘ + T, W, N, L, D, H, P, U, F, R, Q, Tab; Ctrl/⌘ + Shift + N, T, W); dev mode warns about them.
 - A page overriding an app-wide binding just registers the same gesture: the newest registration wins while it lives. Use `when: () => ...` for a binding that applies only in some state, not `if` inside the action (a `when()` that is false lets the key reach older bindings and the browser).
 - `preventDefault` defaults to true. Set it to false only when the browser's own behaviour must still happen.
-- For a help dialog or command palette read `inject(Shortcuts).active` (signal) and format keys with the `shortcutKeys` pipe; `<ngx-shortcuts-help />` is the ready-made one.
+- For a help dialog or command palette read `inject(Shortcuts).active` (signal) and format keys with the `shortcutKeys` pipe; `<ngx-shortcuts-help />` is the ready-made one. A custom modal (dialog, palette) must call `shortcuts.exclusive(itsRegistration)` while open and release it on close, so the page behind does not react.
 
 ## Testing
 

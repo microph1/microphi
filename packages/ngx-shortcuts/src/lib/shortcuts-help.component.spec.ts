@@ -179,6 +179,74 @@ describe('ShortcutsHelpComponent', () => {
       expect(shortcuts.active().map((a) => a.description)).not.toContain('Show keyboard shortcuts');
     });
 
+    it('puts focus on its heading, not on the dialog box', () => {
+      pressShortcut('?');
+      fixture.detectChanges();
+      const heading = dialogOf(fixture).querySelector('h2') as HTMLElement;
+      expect(heading.getAttribute('tabindex')).toBe('-1');
+      expect(document.activeElement).toBe(heading);
+    });
+
+    it('keeps the page shortcuts from firing while open', () => {
+      const search = jest.fn();
+      shortcuts.register({ keys: 'k', description: 'Search', action: search });
+      pressShortcut('?');
+      fixture.detectChanges();
+
+      pressShortcut('k');
+      pressShortcut('mod+k');
+      expect(search).not.toHaveBeenCalled();
+      expect(dialogOf(fixture).hasAttribute('open')).toBe(true);
+
+      // its own key still closes it, and the page gets its shortcuts back
+      pressShortcut('?');
+      fixture.detectChanges();
+      expect(dialogOf(fixture).hasAttribute('open')).toBe(false);
+      pressShortcut('k');
+      expect(search).toHaveBeenCalledTimes(1);
+    });
+
+    it('stays exclusive when its key changes while open', () => {
+      const search = jest.fn();
+      shortcuts.register({ keys: 'k', description: 'Search', action: search });
+      pressShortcut('?');
+      fixture.componentInstance.key = 'f1';
+      fixture.detectChanges();
+
+      pressShortcut('k');
+      expect(search).not.toHaveBeenCalled();
+      pressShortcut('f1');
+      fixture.detectChanges();
+      expect(dialogOf(fixture).hasAttribute('open')).toBe(false);
+      pressShortcut('k');
+      expect(search).toHaveBeenCalledTimes(1);
+    });
+
+    it('blocks every shortcut while open without a key', () => {
+      const search = jest.fn();
+      shortcuts.register({ keys: 'k', description: 'Search', action: search });
+      fixture.componentInstance.key = null;
+      fixture.detectChanges();
+      const help = fixture.debugElement.children[1].componentInstance as ShortcutsHelpComponent;
+      help.open();
+
+      pressShortcut('k');
+      expect(search).not.toHaveBeenCalled();
+      help.close();
+      pressShortcut('k');
+      expect(search).toHaveBeenCalledTimes(1);
+    });
+
+    it('gives the page its shortcuts back when destroyed while open', () => {
+      const search = jest.fn();
+      shortcuts.register({ keys: 'k', description: 'Search', action: search });
+      pressShortcut('?');
+      fixture.destroy();
+
+      pressShortcut('k');
+      expect(search).toHaveBeenCalledTimes(1);
+    });
+
     it('unregisters its key when destroyed', () => {
       fixture.destroy();
       expect(shortcuts.active().map((a) => a.description)).not.toContain('Show keyboard shortcuts');

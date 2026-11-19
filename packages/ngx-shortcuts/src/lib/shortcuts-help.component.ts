@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   computed,
   DestroyRef,
@@ -51,7 +52,7 @@ let nextId = 0;
     >
       @if (opened()) {
         <header class="ngx-shortcuts-help__header">
-          <h2 class="ngx-shortcuts-help__title" [id]="titleId">{{ heading }}</h2>
+          <h2 class="ngx-shortcuts-help__title" tabindex="-1" [id]="titleId">{{ heading }}</h2>
           <button type="button" class="ngx-shortcuts-help__close" aria-label="Close" (click)="close()">&times;</button>
         </header>
         @for (group of groups(); track group.name) {
@@ -101,6 +102,12 @@ let nextId = 0;
       color: var(--ngx-shortcuts-help-fg, CanvasText);
       font: var(--ngx-shortcuts-help-font, inherit);
       box-shadow: var(--ngx-shortcuts-help-shadow, 0 1rem 3rem rgb(0 0 0 / 0.25));
+    }
+
+    /* the dialog and its heading take focus only programmatically: no ring around the whole box */
+    .ngx-shortcuts-help:focus-visible,
+    .ngx-shortcuts-help__title:focus {
+      outline: none;
     }
 
     .ngx-shortcuts-help::backdrop {
@@ -206,6 +213,7 @@ export class ShortcutsHelpComponent implements OnInit, OnChanges {
   private readonly shortcuts = inject(Shortcuts);
   private readonly destroyRef = inject(DestroyRef);
   private readonly document = inject(DOCUMENT);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   private readonly _opened = signal(false);
   readonly opened = this._opened.asReadonly();
@@ -228,6 +236,11 @@ export class ShortcutsHelpComponent implements OnInit, OnChanges {
   private registration?: ShortcutsRegistration;
   private initialized = false;
   private returnFocus: HTMLElement | null = null;
+  private releaseExclusive?: () => void;
+
+  constructor() {
+    this.destroyRef.onDestroy(() => this.releaseExclusive?.());
+  }
 
   ngOnInit(): void {
     this.initialized = true;
@@ -247,11 +260,17 @@ export class ShortcutsHelpComponent implements OnInit, OnChanges {
     }
     this.returnFocus = this.document.activeElement as HTMLElement | null;
     this._opened.set(true);
+    // render the content now, so focus can land on the heading rather than on the dialog box
+    this.cdr.detectChanges();
     if (typeof dialog.showModal === 'function') {
       dialog.showModal();
     } else {
       dialog.setAttribute('open', '');
     }
+    // the heading, not the close button: screen readers announce the title and a stray Enter closes nothing
+    dialog.querySelector<HTMLElement>('.ngx-shortcuts-help__title')?.focus();
+    // the page behind a modal must not react to its shortcuts; only the overlay's own key works
+    this.releaseExclusive = this.shortcuts.exclusive(this.registration);
   }
 
   close(): void {
@@ -278,6 +297,8 @@ export class ShortcutsHelpComponent implements OnInit, OnChanges {
       return;
     }
     this._opened.set(false);
+    this.releaseExclusive?.();
+    this.releaseExclusive = undefined;
     this.returnFocus?.focus?.();
     this.returnFocus = null;
   }
@@ -309,6 +330,10 @@ export class ShortcutsHelpComponent implements OnInit, OnChanges {
         group: this.group,
         action: () => this.toggle(),
       }, this.destroyRef);
+    }
+    if (this.releaseExclusive) {
+      this.releaseExclusive();
+      this.releaseExclusive = this.shortcuts.exclusive(this.registration);
     }
   }
 }

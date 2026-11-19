@@ -14,7 +14,7 @@ Playbook for automated contributors working inside the Microphi monorepo. Follow
 - `npm run build:ci` — runs CI-safe build pipeline (`lerna run build:ci`) with production configs (Angular apps use `production` configurations defined in `angular.json`).
 - `npm run start` — proxied to `ng serve`; `flux` (the Angular app in `apps/flux`) is the only Angular CLI project left.
 - `npm run lint:ci` — runs `lerna run lint --parallel`; lint before opening PRs or staging large diffs.
-- `npm run test` — root entry: Jest for `flux` (jsdom, listed in `jest.config.ts`), then Vitest for the node packages (`debug`, `di`, `list`, `store`, `json-db`, listed via `vitest.config.mts` projects).
+- `npm run test` — root entry: Jest for `flux` and `ngx-shortcuts` (jsdom, listed in `jest.config.ts`), then Vitest for the node packages (`debug`, `di`, `list`, `store`, `json-db`, listed via `vitest.config.mts` projects).
 - `npm run test:ci` — `lerna run test:ci` fan-out; required pre-commit.
 
 ## Running a Single Test
@@ -26,13 +26,14 @@ Playbook for automated contributors working inside the Microphi monorepo. Follow
 
 ## Project Layout
 - `packages/store`, `packages/flux`, `packages/debug`, etc. house publishable libraries; each exposes a `src/lib` entry and a generated `lib/esm` output for consumers via path aliases in `tsconfig.json`.
+- `packages/ngx-shortcuts` is the one Angular library: built with ng-packagr (partial Ivy, compiled against Angular 17 so one build serves 17–22) into `dist/`, which is what gets published (`publishConfig.directory`; its `prepack` rebuilds after lerna bumps the version). Angular 17 dev dependencies are pinned in that package only.
 - `apps/*` folders are frontends: `www.dcsoftware.io` (consulting site, deployed to Deno Deploy by `deploy_dcsoftware.yml`), `flux` (Angular loudspeaker-design app), `metronoman-flux` (flux metronome experiment).
 - `dist/`, `coverage/`, `lerna-debug.log`, `node_modules/` are artifacts—never edit by hand.
 
 ## Toolchain Reference
 - Angular CLI config lives in `angular.json`; prefer `ng g` schematics for components/services.
 - Lerna-lite handles versioning (`npm run release`) and deployment (`npm run deploy:ci`).
-- Testing: Vitest (`vitest.config.mts` per package, v8 coverage) for the node packages; Jest + `ts-jest` + `jest-preset-angular` for `flux`. New packages need a `vitest.config.mts` (or a Jest project entry in `jest.config.ts`).
+- Testing: Vitest (`vitest.config.mts` per package, v8 coverage) for the node packages; Jest + `ts-jest` for `flux`; Jest + `jest-preset-angular` (TestBed, zone.js) for `ngx-shortcuts`. New packages need a `vitest.config.mts` (or a Jest project entry in `jest.config.ts`).
 - Linting: `.eslintrc.js` enforces `eslint:recommended` + `@typescript-eslint/recommended` with repo-specific rules (2-space indent, single quotes, mandatory semicolons).
 - RxJS is ubiquitous; use `rxjs/operators` imports to keep tree-shaking effective.
 

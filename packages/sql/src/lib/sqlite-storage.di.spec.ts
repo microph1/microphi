@@ -3,10 +3,10 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterAll, beforeEach, describe, expect, test } from 'vitest';
 import { Injectable, injector, TestBed } from '@microphi/di';
-import { Column, Entity, PrimaryKey, SqlStorage } from './entity';
-import { SqlDriver } from './driver';
-import { SqliteStorage } from './sqlite-storage';
-import { NodeSqliteDriver } from './drivers/node-sqlite.driver';
+import { Column, Entity, PrimaryKey, SqlStorage } from './entity.js';
+import { SqlDriver } from './driver.js';
+import { SqliteStorage } from './sqlite-storage.js';
+import { NodeSqliteDriver } from './drivers/node-sqlite.driver.js';
 
 @Entity('notes')
 class Note {

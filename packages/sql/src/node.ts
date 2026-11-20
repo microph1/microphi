@@ -1,1 +1,1 @@
-export * from './lib/drivers/node-sqlite.driver';
+export * from './lib/drivers/node-sqlite.driver.js';

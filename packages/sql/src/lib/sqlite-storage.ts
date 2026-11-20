@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { className, Inject, Token } from '@microphi/di';
-import { SqlDriver, SqlStatement, SqlValue } from './driver';
-import { EntitySchema, SqlEntity, createTableSql, getEntityClasses, quoteIdentifier, resolveSchema } from './entity';
+import { SqlDriver, SqlStatement, SqlValue } from './driver.js';
+import { EntitySchema, SqlEntity, createTableSql, getEntityClasses, quoteIdentifier, resolveSchema } from './entity.js';
 
 type ResolvedSchema = EntitySchema & { primaryKey: string };
 

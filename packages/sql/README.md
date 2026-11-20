@@ -2,7 +2,7 @@
 
 Decorator-driven SQLite storage. Declare tables with `@Entity`, `@PrimaryKey`,
 `@Column` and `@JsonColumn`, group them with `@SqlStorage`, and run the same
-async storage over Node's built-in `node:sqlite` or Cloudflare D1.
+async storage over Node's built-in `node:sqlite`, libSQL/Turso or Cloudflare D1.
 
 ```sh
 npm install @microphi/sql @microphi/di reflect-metadata
@@ -74,6 +74,29 @@ export default {
 import { schemaSql } from '@microphi/sql';
 process.stdout.write(schemaSql([Book]));
 ```
+
+**libSQL / Turso**: pass a `@libsql/client` client. It is a structural type, so
+pick the build: `@libsql/client` (native, `file:` databases) or
+`@libsql/client/web` (fetch only, for Lambda, Workers and Deno). `LibsqlDriver`
+is in the root entry; the file migrator, which reads the disk, is in `/libsql`:
+
+```ts
+import { createClient } from '@libsql/client/web';
+import { LibsqlDriver } from '@microphi/sql';
+
+const library = new Library(new LibsqlDriver(createClient({ url: 'libsql://<db>.turso.io', authToken })));
+```
+
+```ts
+// deploy step or dev server start: apply api/migrations/NNNN_*.sql not applied yet
+import { createClient } from '@libsql/client';
+import { migrate } from '@microphi/sql/libsql';
+
+const applied = await migrate(createClient({ url: process.env.DATABASE_URL! }), 'api/migrations');
+```
+
+Each file runs in its own transaction with its row in `_migrations`: applied
+completely or not at all. Never edit an applied file; add the next number.
 
 Any other SQLite connection works by extending `SqlDriver`: `all`, `first`, `run`,
 an atomic `batch` and `maxParams` (`close` is optional).

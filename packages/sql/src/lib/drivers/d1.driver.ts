@@ -1,4 +1,4 @@
-import { SqlDriver, SqlStatement, SqlValue } from '../driver';
+import { SqlDriver, SqlStatement, SqlValue } from '../driver.js';
 
 /**
  * The slice of Cloudflare's `D1Database` this driver uses. Declared here so the

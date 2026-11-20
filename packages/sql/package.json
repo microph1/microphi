@@ -1,20 +1,25 @@
 {
   "name": "@microphi/sql",
   "version": "0.2.1",
-  "description": "Decorator-driven SQLite storage (@Entity, @Column, @PrimaryKey) over node:sqlite or Cloudflare D1",
+  "description": "Decorator-driven SQLite storage (@Entity, @Column, @PrimaryKey) over node:sqlite, libSQL/Turso or Cloudflare D1",
   "main": "lib/cjs/index.js",
   "typings": "lib/esm/index.d.ts",
   "module": "lib/esm/index.js",
   "exports": {
     ".": {
+      "types": "./lib/esm/index.d.ts",
       "import": "./lib/esm/index.js",
-      "require": "./lib/cjs/index.js",
-      "types": "./lib/esm/index.d.ts"
+      "require": "./lib/cjs/index.js"
+    },
+    "./libsql": {
+      "types": "./lib/esm/libsql.d.ts",
+      "import": "./lib/esm/libsql.js",
+      "require": "./lib/cjs/libsql.js"
     },
     "./node": {
+      "types": "./lib/esm/node.d.ts",
       "import": "./lib/esm/node.js",
-      "require": "./lib/cjs/node.js",
-      "types": "./lib/esm/node.d.ts"
+      "require": "./lib/cjs/node.js"
     }
   },
   "directories": {
@@ -29,6 +34,8 @@
   "keywords": [
     "sqlite",
     "d1",
+    "libsql",
+    "turso",
     "cloudflare",
     "decorators",
     "orm"
@@ -48,7 +55,7 @@
     "node": ">=22.13"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.build.json && tsc -b tsconfig.cjs.json",
+    "build": "tsc -b tsconfig.build.json && tsc -b tsconfig.cjs.json && node scripts/module-types.mjs",
     "build:ci": "npm run build",
     "test:ci": "vitest run --coverage",
     "lint": "eslint ./src"
@@ -61,6 +68,7 @@
     "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
+    "@libsql/client": "^0.18.0",
     "@microphi/di": "^2.15.0",
     "miniflare": "^4.0.0",
     "reflect-metadata": "^0.2.2"

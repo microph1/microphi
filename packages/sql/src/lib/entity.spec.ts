@@ -2,9 +2,9 @@ import { describe, expect, test } from 'vitest';
 import {
   Column, Entity, JsonColumn, PrimaryKey, SqlStorage, createTableSql, getEntityClasses, getEntitySchema,
   inferType, resolveSchema, schemaSql,
-} from './entity';
-import { SqliteStorage } from './sqlite-storage';
-import { NodeSqliteDriver } from './drivers/node-sqlite.driver';
+} from './entity.js';
+import { SqliteStorage } from './sqlite-storage.js';
+import { NodeSqliteDriver } from './drivers/node-sqlite.driver.js';
 
 @Entity('things')
 class Thing {

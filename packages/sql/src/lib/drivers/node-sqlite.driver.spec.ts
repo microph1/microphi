@@ -2,7 +2,7 @@ import { mkdtempSync, rmSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, test } from 'vitest';
-import { NodeSqliteDriver } from './node-sqlite.driver';
+import { NodeSqliteDriver } from './node-sqlite.driver.js';
 
 describe('NodeSqliteDriver', () => {
   const dirs: string[] = [];

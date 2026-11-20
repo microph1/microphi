@@ -1,7 +1,7 @@
 import { mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
-import { SqlDriver, SqlStatement, SqlValue } from '../driver';
+import { SqlDriver, SqlStatement, SqlValue } from '../driver.js';
 
 /**
  * SqlDriver over Node's built-in `node:sqlite`. Exported from

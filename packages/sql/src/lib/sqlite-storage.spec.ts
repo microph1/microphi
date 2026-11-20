@@ -1,10 +1,12 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } from 'vitest';
 import { Miniflare } from 'miniflare';
-import { Column, Entity, JsonColumn, PrimaryKey, SqlStorage } from './entity';
-import { SqlDriver } from './driver';
-import { SqliteStorage } from './sqlite-storage';
-import { D1DatabaseLike, D1Driver } from './drivers/d1.driver';
-import { NodeSqliteDriver } from './drivers/node-sqlite.driver';
+import { Column, Entity, JsonColumn, PrimaryKey, SqlStorage } from './entity.js';
+import { SqlDriver } from './driver.js';
+import { SqliteStorage } from './sqlite-storage.js';
+import { D1DatabaseLike, D1Driver } from './drivers/d1.driver.js';
+import { NodeSqliteDriver } from './drivers/node-sqlite.driver.js';
+import { createClient } from '@libsql/client';
+import { LibsqlDriver } from './drivers/libsql.driver.js';
 
 @Entity('authors')
 class Author {
@@ -66,6 +68,7 @@ afterAll(async () => {
 const drivers: [string, () => Promise<SqlDriver>][] = [
   ['node:sqlite', async () => NodeSqliteDriver.open(':memory:')],
   ['D1 (miniflare)', async () => new D1Driver(await mf.getD1Database('DB') as unknown as D1DatabaseLike)],
+  ['libSQL', async () => new LibsqlDriver(createClient({ url: ':memory:' }))],
 ];
 
 describe.each(drivers)('SqliteStorage over %s', (_name, createDriver) => {

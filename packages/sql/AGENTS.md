@@ -1,6 +1,6 @@
 # @microphi/sql — notes for coding agents
 
-Decorator-driven SQLite storage over `node:sqlite` or Cloudflare D1. Full docs: [README.md](README.md).
+Decorator-driven SQLite storage over `node:sqlite`, libSQL/Turso or Cloudflare D1. Full docs: [README.md](README.md).
 
 ## Rules
 
@@ -13,4 +13,5 @@ Decorator-driven SQLite storage over `node:sqlite` or Cloudflare D1. Full docs: 
 - D1 has no `BEGIN`/`COMMIT`. Atomic multi-statement writes go through `driver.batch()`.
 - D1 caps bound parameters at 100 per statement: anything building `IN (...)` must chunk by `driver.maxParams`.
 - `where` / `orderBy` options are raw SQL. Bind values through `whereParams`.
-- Tests run every storage case against both drivers (D1 through miniflare); keep new storage tests inside the `describe.each`.
+- `LibsqlDriver` takes any `@libsql/client` client structurally; the package never imports `@libsql/client` at runtime. The file `migrate()` (reads the disk) lives in `@microphi/sql/libsql`, not the root.
+- Tests run every storage case against every driver (D1 through miniflare, libSQL in memory); keep new storage tests inside the `describe.each`.

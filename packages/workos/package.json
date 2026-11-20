@@ -1,0 +1,89 @@
+{
+  "name": "@microphi/workos",
+  "version": "0.0.0",
+  "description": "WorkOS AuthKit for APIs and Angular apps: verify access tokens, sign in from the browser, and a fake WorkOS for tests and local dev",
+  "type": "module",
+  "module": "lib/esm/index.js",
+  "typings": "lib/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/esm/index.d.ts",
+      "import": "./lib/esm/index.js"
+    },
+    "./angular": {
+      "types": "./lib/esm/angular.d.ts",
+      "import": "./lib/esm/angular.js"
+    },
+    "./testing": {
+      "types": "./lib/esm/testing.d.ts",
+      "import": "./lib/esm/testing.js"
+    }
+  },
+  "sideEffects": false,
+  "files": [
+    "lib",
+    "AGENTS.md"
+  ],
+  "license": "MIT",
+  "private": false,
+  "keywords": [
+    "workos",
+    "authkit",
+    "jwt",
+    "angular",
+    "auth"
+  ],
+  "author": {
+    "name": "Davide Cavaliere",
+    "email": "cavaliere.davide@gmail.com",
+    "url": "https://github.com/microph1"
+  },
+  "homepage": "https://github.com/microph1/microphi/tree/master/packages/workos#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/microph1/microphi.git",
+    "directory": "packages/workos"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json",
+    "build:ci": "npm run build",
+    "test:ci": "vitest run --coverage",
+    "lint": "eslint ./src"
+  },
+  "dependencies": {
+    "jose": "^6.2.0"
+  },
+  "peerDependencies": {
+    "@angular/common": ">=19",
+    "@angular/core": ">=19",
+    "@angular/router": ">=19",
+    "@workos-inc/authkit-js": ">=0.20",
+    "rxjs": "^7.8.0"
+  },
+  "peerDependenciesMeta": {
+    "@angular/common": { "optional": true },
+    "@angular/core": { "optional": true },
+    "@angular/router": { "optional": true },
+    "@workos-inc/authkit-js": { "optional": true },
+    "rxjs": { "optional": true }
+  },
+  "devDependencies": {
+    "@angular/common": "^22.2.5",
+    "@angular/compiler": "^22.2.5",
+    "@angular/core": "^22.2.5",
+    "@angular/platform-browser": "^22.2.5",
+    "@angular/router": "^22.2.5",
+    "@workos-inc/authkit-js": "^0.20.5",
+    "jsdom": "^25.0.1",
+    "rxjs": "~7.8.1"
+  },
+  "bugs": {
+    "url": "https://github.com/microph1/microphi/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

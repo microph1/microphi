@@ -1,0 +1,21 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "declarationMap": true,
+    "declaration": true,
+    "inlineSources": true,
+    // jose 6 and Angular publish their types through `exports` only
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    // no decorators here: nothing for Angular's compiler to see
+    "experimentalDecorators": false,
+    "emitDecoratorMetadata": false,
+    "useDefineForClassFields": true,
+    "paths": {},
+    // Angular 22's typings use DOM types newer than the workspace TypeScript's lib
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["**/*.spec.ts"]
+}

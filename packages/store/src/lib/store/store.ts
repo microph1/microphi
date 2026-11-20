@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { asapScheduler, BehaviorSubject, EMPTY, Observable, of, SchedulerLike, Subject } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, of, SchedulerLike, Subject } from 'rxjs';
 import { catchError, concatMap, distinctUntilChanged, filter, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { Effect, EffectStrategy, getEffects } from '../effect/effect';
-import { CacheMap, CacheSymbol } from '../operators/cache';
+import { CacheClockSymbol, CacheMap, CacheSymbol } from '../operators/cache';
 import { debounceOrNothing, getDebounce } from '../operators/debounce';
 import { delayOrNothing, getDelay } from '../operators/delay';
 import { getReducers, Reducer } from '../reduce/reduce';
 import { StoreError } from '../errors';
 import { Fn, getPayloadFromActionType, LoadingState } from './types';
+import { storeScheduler } from './store-scheduler';
 
 
 export abstract class Store<State, A> {
@@ -36,7 +37,16 @@ export abstract class Store<State, A> {
     return this._store$.asObservable();
   }
 
-  constructor(private initialState: State, _scheduler: SchedulerLike = asapScheduler) {
+  /**
+   * the clock of `@DebounceTime`, `@DelayTime` and `@Cache`: the one passed here,
+   * else the provided `StoreScheduler`, else rxjs's `asyncScheduler`
+   */
+  protected readonly scheduler: SchedulerLike;
+
+  constructor(private initialState: State, scheduler?: SchedulerLike) {
+
+    this.scheduler = scheduler ?? storeScheduler();
+    (this as { [CacheClockSymbol]?: SchedulerLike })[CacheClockSymbol] = this.scheduler;
 
     this.effects = getEffects(this);
     this.reducers = getReducers(this);
@@ -71,7 +81,7 @@ export abstract class Store<State, A> {
 
         action.pipe(
           withLatestFrom(this._store$),
-          debounceOrNothing(debounced),
+          debounceOrNothing(debounced, this.scheduler),
 
           tap(([{payload}]) => {
             this._loading$.next({
@@ -85,7 +95,7 @@ export abstract class Store<State, A> {
             const method = name as keyof this;
 
             return (this[method] as Fn)(...payload).pipe(
-              delayOrNothing(delayTime),
+              delayOrNothing(delayTime, this.scheduler),
               tap((response) => {
                 this._loading$.next({
                   payload,

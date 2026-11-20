@@ -1,8 +1,10 @@
 import { TestScheduler } from '@datakitchen/rxjs-marbles';
+import { injector, TestBed } from '@microphi/di';
 import { Observable, of } from 'rxjs';
 import { Effect } from '../effect/effect';
 import { Reduce } from '../reduce/reduce';
 import { Store } from '../store/store';
+import { StoreScheduler } from '../store/store-scheduler';
 import { Cache } from './cache';
 
 describe('@Cache', () => {
@@ -73,9 +75,11 @@ describe('@Cache', () => {
   let scheduler: TestScheduler;
 
   beforeEach(() => {
+    // the store keeps the ttl on the provided scheduler's clock: virtual time
+    TestBed.configure({ providers: [{ provide: StoreScheduler, useClass: TestScheduler }] });
+    scheduler = injector(StoreScheduler) as unknown as TestScheduler;
 
     instance = new TestClass({ items: [] });
-    scheduler = new TestScheduler();
     spy.mockReset();
 
   });
@@ -105,22 +109,21 @@ describe('@Cache', () => {
 
     });
 
-    it('should call the method if ttl is expired', async () => {
+    it('should call the method if ttl is expired', () => {
 
-      instance.dispatch('cachedMethod');
+      scheduler.run(({expectObservable}) => {
 
-      await new Promise((resolve) => {
+        instance.dispatch('cachedMethod');
+        // ttl is 10ms
+        scheduler.schedule(() => instance.dispatch('cachedMethod'), 11);
 
-        setTimeout(() => {
-          resolve(true);
-        }, 300);
+        expectObservable(instance.state$).toBe('a 10ms b', {
+          a: {items: ['0']},
+          b: {items: ['1']},
+        });
       });
 
-      instance.dispatch('cachedMethod');
-
       expect(spy).toHaveBeenCalledTimes(2);
-
-      scheduler.expect$(instance.state$).toContain({items: ['1']});
     });
 
   });
@@ -149,22 +152,20 @@ describe('@Cache', () => {
 
       });
 
-      it('should call the method if ttl is expired', async () => {
+      it('should call the method if ttl is expired', () => {
 
-        instance.dispatch('getBy', 'alice', ['bob', 'alice', 'renoult']);
+        scheduler.run(({expectObservable}) => {
 
-        await new Promise((resolve) => {
+          instance.dispatch('getBy', 'alice', ['bob', 'alice', 'renoult']);
+          scheduler.schedule(() => instance.dispatch('getBy', 'alice', ['bob', 'alice', 'renoult']), 11);
 
-          setTimeout(() => {
-            resolve(true);
-          }, 300);
+          expectObservable(instance.state$).toBe('a 10ms b', {
+            a: {items: ['alice']},
+            b: {items: ['alice']},
+          });
         });
 
-        instance.dispatch('getBy', 'alice', ['bob', 'alice', 'renoult']);
-
         expect(spy).toHaveBeenCalledTimes(2);
-
-        scheduler.expect$(instance.state$).toContain({items: ['alice']});
       });
 
 
@@ -204,22 +205,20 @@ describe('@Cache', () => {
 
       });
 
-      it('should call the method if ttl is expired', async () => {
+      it('should call the method if ttl is expired', () => {
 
-        instance.dispatch('getByNames', ['bob', 'alice', 'renoult']);
+        scheduler.run(({expectObservable}) => {
 
-        await new Promise((resolve) => {
+          instance.dispatch('getByNames', ['bob', 'alice', 'renoult']);
+          scheduler.schedule(() => instance.dispatch('getByNames', ['bob', 'alice', 'renoult']), 11);
 
-          setTimeout(() => {
-            resolve(true);
-          }, 300);
+          expectObservable(instance.state$).toBe('a 10ms b', {
+            a: {items: ['3']},
+            b: {items: ['3']},
+          });
         });
 
-        instance.dispatch('getByNames', ['bob', 'alice', 'renoult']);
-
         expect(spy).toHaveBeenCalledTimes(2);
-
-        scheduler.expect$(instance.state$).toContain({items: ['3']});
       });
 
 

@@ -14,6 +14,7 @@ Pure RxJS state manager. Full docs: [README.md](README.md); every error code: [E
 - Effect errors do not throw: they are logged and emitted on `loading$` with `status: false`; read them with `getLoadingFor(action)` or `loading$`.
 - Read state with `store.select((state) => state.x)` (distinct values) or `state$`; don't keep a copy of the state elsewhere.
 - `@Cache`, `@DebounceTime(ms)`, `@DelayTime(ms)` go between `@Effect()` and the method. `@Cache` caches the Observable, not its values: add `shareReplay(1)` to cold Observables.
+- Never wait on real time in tests: provide `{ provide: StoreScheduler, useClass: TestScheduler }` (from `@datakitchen/rxjs-marbles`) with `TestBed.configure`, take it with `injector(StoreScheduler)`, and drive debounces, delays and `@Cache` ttls with `scheduler.run`. A scheduler passed as the constructor's second argument wins over the provided one.
 
 ## Testing
 

@@ -1,6 +1,6 @@
 {
   "name": "@microphi/list",
-  "version": "2.11.0",
+  "version": "2.11.1",
   "description": "List with array ordering and direct lookup by id (Map + id array)",
   "main": "lib/cjs/index.js",
   "typings": "lib/esm/index.d.ts",

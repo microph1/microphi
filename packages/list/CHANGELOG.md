@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.1](https://github.com/microph1/microphi/compare/%40microphi%2Flist%402.11.0...%40microphi%2Flist%402.11.1) (2026-11-20)
+
+### Bug Fixes
+
+* **store,list,flux:** declare utility-types as a dependency ([e00c8ce](https://github.com/microph1/microphi/commit/e00c8ce6f202e86f16aa78df813fda4f75fc3e63))
+
 # [2.11.0](https://github.com/microph1/microphi/compare/%40microphi%2Flist%402.10.5...%40microphi%2Flist%402.11.0) (2026-11-14)
 
 ### Features

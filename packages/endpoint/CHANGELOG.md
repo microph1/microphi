@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.1](https://github.com/microph1/microphi/compare/%40microphi%2Fendpoint%402.5.0...%40microphi%2Fendpoint%402.5.1) (2026-11-20)
+
+### Bug Fixes
+
+* **endpoint:** stop referencing utility-types from the published typings ([27c1320](https://github.com/microph1/microphi/commit/27c1320183957b3700478db79e8c05c8d908554a))
+
 # [2.5.0](https://github.com/microph1/microphi/compare/%40microphi%2Fendpoint%402.4.0...%40microphi%2Fendpoint%402.5.0) (2026-11-16)
 
 ### Features

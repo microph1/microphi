@@ -1,6 +1,6 @@
 {
   "name": "@microphi/json-db",
-  "version": "2.12.2",
+  "version": "2.12.3",
   "description": "Small file-based JSON database with full-text search (minisearch)",
   "main": "lib/cjs/index.js",
   "typings": "lib/esm/index.d.ts",
@@ -39,7 +39,7 @@
   "devDependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.29.14",
     "@datakitchen/rxjs-marbles": "^17.0.0",
-    "@microphi/list": "^2.11.0",
+    "@microphi/list": "^2.11.1",
     "@types/node": "^24.19.2",
     "minisearch": "^7.2.0",
     "utility-types": "^3.10.0"

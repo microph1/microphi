@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.13.1](https://github.com/microph1/microphi/compare/%40microphi%2Fdi%402.13.0...%40microphi%2Fdi%402.13.1) (2026-11-20)
+
+### Bug Fixes
+
+* **di:** stop referencing utility-types from the published typings ([50706e3](https://github.com/microph1/microphi/commit/50706e3d0bfb203f8cead96fb18d5a6d74ab72bb))
+
 # [2.13.0](https://github.com/microph1/microphi/compare/%40microphi%2Fdi%402.12.3...%40microphi%2Fdi%402.13.0) (2026-11-14)
 
 ### Bug Fixes

@@ -4,6 +4,7 @@ const jestConfig: Config = {
   testEnvironment: 'node',
   projects: [
     'packages/flux',
+    'packages/ngx-shortcuts',
   ],
   transform: {
     '^.+.tsx?$': ['ts-jest',{}],

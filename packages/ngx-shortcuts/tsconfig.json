@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "lib": ["ES2022", "dom", "dom.iterable"],
+    "paths": {
+      "@microphi/ngx-shortcuts": ["./src/public-api.ts"],
+      "@microphi/ngx-shortcuts/testing": ["./testing/src/public-api.ts"]
+    },
+    "emitDecoratorMetadata": false,
+    "declaration": true,
+    "types": []
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  }
+}

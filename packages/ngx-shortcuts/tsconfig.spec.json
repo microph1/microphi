@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../out-tsc/ngx-shortcuts-spec",
+    "types": ["jest", "node"],
+    "esModuleInterop": true
+  },
+  "include": ["src/**/*.ts", "testing/**/*.ts"]
+}

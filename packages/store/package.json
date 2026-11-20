@@ -45,11 +45,11 @@
     "lint": "eslint ./src"
   },
   "dependencies": {
-    "tslib": "^2.5.0"
+    "tslib": "^2.5.0",
+    "utility-types": "^3.10.0"
   },
   "devDependencies": {
-    "@microphi/di": "^2.13.0",
-    "utility-types": "^3.10.0"
+    "@microphi/di": "^2.13.0"
   },
   "peerDependencies": {
     "@microphi/di": "^2.12.0",

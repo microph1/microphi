@@ -33,7 +33,8 @@
     "lint": "eslint ./src"
   },
   "dependencies": {
-    "tslib": "^2.6.2"
+    "tslib": "^2.6.2",
+    "utility-types": "^3.10.0"
   },
   "devDependencies": {
     "@microphi/di": "^2.13.0",

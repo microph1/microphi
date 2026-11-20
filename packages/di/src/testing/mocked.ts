@@ -1,8 +1,10 @@
 import { Instance, Klass } from '../lib/types';
-import { FunctionKeys } from 'utility-types';
 
 
 const MockedSymbol = Symbol('Mocked');
+
+/** the keys of `T` that hold methods */
+type FunctionKeys<T extends object> = { [K in keyof T]-?: NonNullable<T[K]> extends (...args: any[]) => any ? K : never }[keyof T];
 
 export type MockedOptions<InstanceType extends object> = Partial<Record<FunctionKeys<InstanceType>, ((...args: any[]) => any) | 'NO_MOCK'>>;
 

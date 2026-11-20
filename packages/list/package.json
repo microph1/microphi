@@ -37,13 +37,15 @@
   "devDependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.29.14",
     "@microphi/debug": "^2.11.2",
-    "@types/node": "^24.19.2",
-    "utility-types": "^3.10.0"
+    "@types/node": "^24.19.2"
   },
   "peerDependencies": {
     "rxjs": "~7.8.0"
   },
   "bugs": {
     "url": "https://github.com/microph1/microphi/issues"
+  },
+  "dependencies": {
+    "utility-types": "^3.10.0"
   }
 }

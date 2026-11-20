@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.15.0](https://github.com/microph1/microphi/compare/%40microphi%2Fdi%402.14.0...%40microphi%2Fdi%402.15.0) (2026-11-20)
+
+### Features
+
+* **di:** let @Cache measure its ttl on an instance clock ([76faa52](https://github.com/microph1/microphi/commit/76faa52469e75ee986a69d49c0bc8a40fdf0c00c))
+
 # [2.14.0](https://github.com/microph1/microphi/compare/%40microphi%2Fdi%402.13.1...%40microphi%2Fdi%402.14.0) (2026-11-20)
 
 ### Features

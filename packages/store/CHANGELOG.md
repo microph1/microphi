@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.13.0](https://github.com/microph1/microphi/compare/%40microphi%2Fstore%402.12.2...%40microphi%2Fstore%402.13.0) (2026-11-20)
+
+### Features
+
+* **store:** keep time on an injectable StoreScheduler ([19fb6a6](https://github.com/microph1/microphi/commit/19fb6a6a7d0feef11855d3b38ae1c6a9c2cc9620))
+
 ## [2.12.2](https://github.com/microph1/microphi/compare/%40microphi%2Fstore%402.12.1...%40microphi%2Fstore%402.12.2) (2026-11-20)
 
 **Note:** Version bump only for package @microphi/store

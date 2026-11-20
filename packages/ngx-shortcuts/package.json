@@ -1,6 +1,6 @@
 {
   "name": "@microphi/ngx-shortcuts",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Keyboard shortcuts for Angular: mod+k bindings, g p sequences, typing-safe, scoped to components, with a help overlay",
   "license": "MIT",
   "keywords": [

@@ -1,4 +1,4 @@
-import { Klass } from './types';
+import { Token } from './types';
 import { getProviderName } from './injctable/provider-token';
 
 const DOCS = 'https://github.com/microph1/microphi/blob/master/packages/di/ERRORS.md';
@@ -31,6 +31,6 @@ export class DiError extends Error {
  * name is empty, or a temp name such as `_b` once a bundler lowers it, so name
  * the class it was decorated from
  */
-export function className(klass: Klass): string {
+export function className(klass: Token): string {
   return getProviderName(klass) || klass.name || Object.getPrototypeOf(klass)?.name || String(klass);
 }

@@ -9,7 +9,7 @@ Decorator-based DI container. Full docs: [README.md](README.md); every error cod
 - Constructor dependencies are explicit: `constructor(@Inject(Greeter) private greeter: Greeter)`. Type-based injection without `@Inject` does not work.
 - A class is only instantiable once it is listed in `providers` of `@DI()` (or `TestBed.configure`). `@Injectable()` alone is not enough (error `DI002`).
 - Every provider is a singleton; `injector(Class)` returns it outside constructors.
-- Swap an implementation with `{ provide: Base, useClass: Impl }`: only `Base` needs `@Injectable()`.
+- Swap an implementation with `{ provide: Base, useClass: Impl }`: only `Base` needs `@Injectable()`. `Base` may be abstract.
 - The container is module-level state: one app per process (or per test file).
 
 ## Aspects

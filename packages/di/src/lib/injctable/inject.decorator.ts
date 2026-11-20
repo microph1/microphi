@@ -1,9 +1,9 @@
-import { Klass } from '../types';
+import { Token } from '../types';
 
 
 const InjectSymbol = Symbol.for('@Inject');
 
-export function Inject<K extends Klass<unknown>>(klass: K): ParameterDecorator {
+export function Inject<K extends Token<unknown>>(klass: K): ParameterDecorator {
 
   return (target, propertyKey, parameterIndex) => {
 
@@ -17,6 +17,6 @@ export function Inject<K extends Klass<unknown>>(klass: K): ParameterDecorator {
   };
 }
 
-export function getInjectMetadata(target: any): {parameterIndex: number, klass: Klass<unknown>}[] {
+export function getInjectMetadata(target: any): {parameterIndex: number, klass: Token<unknown>}[] {
   return Reflect.getMetadata(InjectSymbol, target) || [];
 }

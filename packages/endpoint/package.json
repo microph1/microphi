@@ -61,7 +61,6 @@
     "@microphi/debug": "^2.11.2",
     "@microphi/di": "^2.13.0",
     "@modelcontextprotocol/sdk": "^1.32.2",
-    "utility-types": "^3.10.0",
     "zod": "^4.6.7"
   },
   "sideEffects": false

@@ -1,8 +1,7 @@
 import 'reflect-metadata';
 import { DI, DIOptions, getDIMetadata, Klass } from '@microphi/di';
-import { Optional } from 'utility-types';
 
-export interface ServerlessOptions extends Optional<DIOptions> {
+export interface ServerlessOptions extends Partial<DIOptions> {
   /** the endpoint, or the endpoints, this app serves; `bootstrap` returns the (first) one */
   service: Klass | Klass[];
 }

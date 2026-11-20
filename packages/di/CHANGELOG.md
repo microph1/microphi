@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.14.0](https://github.com/microph1/microphi/compare/%40microphi%2Fdi%402.13.1...%40microphi%2Fdi%402.14.0) (2026-11-20)
+
+### Features
+
+* **di:** accept abstract classes as provider tokens ([34dfa55](https://github.com/microph1/microphi/commit/34dfa552aaf58594824c81a73d46ec67fa23a8fa))
+
 ## [2.13.1](https://github.com/microph1/microphi/compare/%40microphi%2Fdi%402.13.0...%40microphi%2Fdi%402.13.1) (2026-11-20)
 
 ### Bug Fixes

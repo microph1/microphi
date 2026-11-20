@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/microph1/microphi/compare/%40microphi%2Fsql%400.1.1...%40microphi%2Fsql%400.2.0) (2026-11-20)
+
+### Features
+
+* **sql:** inject the driver with @microphi/di ([e0b752c](https://github.com/microph1/microphi/commit/e0b752ca70e13dc20abed8b4f2b0d62584ad4bf0))
+
 ## [0.1.1](https://github.com/microph1/microphi/compare/%40microphi%2Fsql%400.1.0...%40microphi%2Fsql%400.1.1) (2026-11-16)
 
 ### Bug Fixes

@@ -8,7 +8,7 @@ import { Endpoint } from '../endpoint/endpoint.decorator';
 import { HttpError } from '../errors';
 import { LambdaDefaultHandler } from '../lambda/handler';
 import { Lambda } from '../lambda/lambda.decorator';
-import { Body, Header, Path } from '../parameters/parameters.decorator';
+import { Body, Header, Path, Query } from '../parameters/parameters.decorator';
 import { McpEventHandler } from './mcp-event.handler';
 import { getMcpToolDefinitions, mcpTools } from './mcp-tools';
 
@@ -130,5 +130,39 @@ describe('MCP', () => {
       expect(status).toEqual(400);
       expect(details).toEqual([expect.stringMatching(/^body\.name: /)]);
     });
+  });
+});
+
+@Endpoint({ name: 'search' })
+@Injectable()
+class SearchEndpoint {
+
+  @Lambda({ method: 'GET', path: '/users' })
+  public find(@Query('q') q: string | undefined, @Query('limit', z.coerce.number().int().positive().optional()) limit: number | undefined) {
+    return { q, limit };
+  }
+}
+
+describe('MCP with @Query', () => {
+
+  beforeEach(() => {
+    TestBed.configure({
+      providers: [SearchEndpoint, { provide: LambdaDefaultHandler, useClass: McpEventHandler }],
+    });
+  });
+
+  it('should describe query parameters as optional tool arguments', () => {
+    const [tool] = getMcpToolDefinitions(SearchEndpoint);
+
+    expect(Object.keys(tool.inputSchema.properties)).toEqual(['q', 'limit']);
+    expect(tool.inputSchema.properties['q']).toEqual({ type: 'string' });
+    expect(tool.inputSchema.required).toEqual([]);
+  });
+
+  it('should pass them to the method', async () => {
+    const result = await mcpTools(SearchEndpoint).call('search_find', { q: 'ada', limit: '5' });
+
+    expect(result.isError).toBeUndefined();
+    expect(result.content).toEqual([{ type: 'text', text: '{"q":"ada","limit":5}' }]);
   });
 });

@@ -21,6 +21,11 @@ describe('ExpressEventHandler', () => {
     });
   });
 
+  it('should get query parameters, the first of a repeated one', () => {
+    expect(handler.getQueryParams([{ params: {}, headers: {}, query: { q: 'x', tag: ['a', 'b'] } }])).toEqual({ q: 'x', tag: 'a' });
+    expect(handler.getQueryParams([{ params: {}, headers: {} }])).toEqual({});
+  });
+
   it('should get headerParams', () => {
     expect(handler.getHeaderParams([{
       headers: {

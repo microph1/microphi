@@ -91,6 +91,7 @@ Records the metadata and wraps the method in an async function that pulls its ar
 | `@Path('id')` | a path parameter |
 | `@Body()` | the request body |
 | `@Header('Authorization')` | a header |
+| `@Query('q')` | a query-string parameter: a string, `undefined` when absent, the first value when repeated (an optional argument on MCP) |
 
 #### Validation
 

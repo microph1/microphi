@@ -3,7 +3,7 @@ import { getEndpointMetadataFromClass } from '../endpoint/endpoint.decorator';
 import { LambdaDefaultHandler } from '../lambda/handler/lambda-default.handler';
 import { getLambdaMetadataFromClass, LambdaOptions } from '../lambda/lambda.decorator';
 import { getParameterSchemas, toJsonSchema } from '../parameters/parameter-schema';
-import { getBodyMetadata, getPathMetadata } from '../parameters/parameters.decorator';
+import { getBodyMetadata, getPathMetadata, getQueryMetadata } from '../parameters/parameters.decorator';
 import { McpEventHandler, McpToolExtra, McpToolInput, McpToolResult } from './mcp-event.handler';
 
 /** an entry of the MCP `tools/list` result */
@@ -61,6 +61,12 @@ function toolDefinition(endpoint: Klass, lambda: LambdaOptions): McpToolDefiniti
   for (const [name, index] of Object.entries(getPathMetadata(prototype, key))) {
     properties[name] = toJsonSchema(schemas[index]?.schema) ?? { type: 'string' };
     required.push(name);
+  }
+
+  // optional, as on the query string
+  // in parameter order: decorators record them last to first
+  for (const [name, index] of Object.entries(getQueryMetadata(prototype, key)).sort(([, a], [, b]) => a - b)) {
+    properties[name] = toJsonSchema(schemas[index]?.schema) ?? { type: 'string' };
   }
 
   for (const index of Object.values(getBodyMetadata(prototype, key))) {

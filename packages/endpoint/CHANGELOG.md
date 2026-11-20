@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.5.0](https://github.com/microph1/microphi/compare/%40microphi%2Fendpoint%402.4.0...%40microphi%2Fendpoint%402.5.0) (2026-11-16)
+
+### Features
+
+* **endpoint:** inject query-string parameters with @Query ([347ed0d](https://github.com/microph1/microphi/commit/347ed0de4b067e789a14ea2b560bcedf33237615))
+
 # [2.4.0](https://github.com/microph1/microphi/compare/%40microphi%2Fendpoint%402.3.1...%40microphi%2Fendpoint%402.4.0) (2026-11-14)
 
 ### Features

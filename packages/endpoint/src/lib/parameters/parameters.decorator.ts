@@ -86,3 +86,31 @@ export function getBodyMetadata(instance: object, key: string | symbol | undefin
   const metadata = Reflect.getMetadata(BodyParameterMetadata, instance, key as string | symbol);
   return metadata || {};
 }
+
+export const QueryParameterMetadata = Symbol.for('Query');
+
+/**
+ * Inject a query-string parameter (`?name=value`). Absent parameters are
+ * `undefined`; a repeated one gives its first value. Values are strings:
+ * pass a schema to coerce them (e.g. `z.coerce.number()`).
+ * @param name - the parameter name
+ * @param schema - optional Standard Schema, as in `@Path`
+ */
+export function Query(name: string, schema?: ParameterSchema): ParameterDecorator {
+  return (target: object, key: string | symbol | undefined, index: number) => {
+    const stored = getQueryMetadata(target, key);
+
+    stored[name] = index;
+
+    Reflect.defineMetadata(QueryParameterMetadata, stored, target, key as string | symbol);
+
+    if (schema) {
+      setParameterSchema(target, key, index, { name, schema });
+    }
+  };
+}
+
+export function getQueryMetadata(instance: object, key: string | symbol | undefined): ParameterMetadata {
+  const metadata = Reflect.getMetadata(QueryParameterMetadata, instance, key as string | symbol);
+  return metadata || {};
+}

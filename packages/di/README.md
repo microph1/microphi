@@ -80,6 +80,8 @@ A dependency cycle (`A` injects `B` injects `A`) throws `DI003` when one of its 
 class App {}
 ```
 
+The token can be an abstract class: `@Injectable() abstract class Clock { abstract now(): number; }`, injected with `@Inject(Clock)` and provided with `{ provide: Clock, useClass: SystemClock }`.
+
 ## Aspects
 
 Method decorators that work on any class, injectable or not.

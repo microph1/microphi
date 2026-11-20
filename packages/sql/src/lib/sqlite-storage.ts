@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { className, Inject, Token } from '@microphi/di';
 import { SqlDriver, SqlStatement, SqlValue } from './driver';
 import { EntitySchema, SqlEntity, createTableSql, getEntityClasses, quoteIdentifier, resolveSchema } from './entity';
 
@@ -46,15 +47,19 @@ function chunk<T>(items: T[], size: number): T[][] {
  *
  * Tables are not created implicitly: call `migrate()` (local / tests), or apply
  * the DDL from `schemaSql()` as a migration (D1).
+ *
+ * With @microphi/di, decorate the subclass with `@Injectable()` and list it in
+ * the providers next to `{ provide: SqlDriver, useClass: Db }`: the driver is
+ * injected, so the subclass needs no constructor. Without DI, `new Store(driver)`.
  */
 export abstract class SqliteStorage {
   protected readonly schemas = new Map<string, ResolvedSchema>();
   protected readonly entityClasses = new Map<string, SqlEntity>();
 
-  protected constructor(protected readonly driver: SqlDriver) {
+  constructor(@Inject(SqlDriver) protected readonly driver: SqlDriver) {
     const entities = getEntityClasses(this.constructor);
     if (!entities.length) {
-      throw new Error(`${this.constructor.name} manages no entities. Did you decorate it with @SqlStorage([...])?`);
+      throw new Error(`${className(this.constructor as Token)} manages no entities. Did you decorate it with @SqlStorage([...])?`);
     }
     for (const EntityClass of entities) {
       const schema = resolveSchema(EntityClass);
@@ -279,7 +284,7 @@ export abstract class SqliteStorage {
     const name = tableName ?? this.schemas.keys().next().value!;
     const schema = this.schemas.get(name);
     if (!schema) {
-      throw new Error(`Table "${name}" is not managed by ${this.constructor.name}. Known tables: ${[...this.schemas.keys()].join(', ')}`);
+      throw new Error(`Table "${name}" is not managed by ${className(this.constructor as Token)}. Known tables: ${[...this.schemas.keys()].join(', ')}`);
     }
     return schema;
   }

@@ -1,6 +1,6 @@
 import { getProviderToken } from '../injctable/provider-token';
 import { className, DiError } from '../errors';
-import { Instance, isSingletonDefinition, Klass, Provider } from '../types';
+import { Instance, isSingletonDefinition, Klass, Provider, Token } from '../types';
 
 
 /**
@@ -8,11 +8,12 @@ import { Instance, isSingletonDefinition, Klass, Provider } from '../types';
  * the decorated subclass and the original class both resolve to.
  */
 export class Providers {
-  private providers: Map<Klass, Klass> = new Map();
-  private useClass: Map<Klass, Klass> = new Map();
-  private instances: Map<Klass, Instance> = new Map();
+  // a token provided without `useClass` is instantiated itself
+  private providers: Map<Token, Token> = new Map();
+  private useClass: Map<Token, Klass> = new Map();
+  private instances: Map<Token, Instance> = new Map();
   /** the tokens being instantiated, outermost first */
-  private resolving: Klass[] = [];
+  private resolving: Token[] = [];
 
 
   addInjectable(provider: Provider): void {
@@ -36,25 +37,25 @@ export class Providers {
     }
   }
 
-  hasInjectable(klass: Klass) {
+  hasInjectable(klass: Token) {
     const token = getProviderToken(klass);
 
     return !!token && this.providers.has(token);
   }
 
-  hasInstance(klass: Klass) {
+  hasInstance(klass: Token) {
     const token = getProviderToken(klass);
 
     return !!token && this.instances.has(token);
   }
 
-  getInstance(klass: Klass) {
+  getInstance(klass: Token) {
     const token = getProviderToken(klass);
     if (token && this.instances.has(token)) {
       return this.instances.get(token);
     }
 
-    const k = token && (this.useClass.has(token) ? this.useClass.get(token) : this.providers.get(token));
+    const k = token && (this.useClass.get(token) ?? this.providers.get(token)) as Klass | undefined;
     if (!token || !k) {
       throw new DiError('DI004', `Unable to instantiate ${className(klass)}: its provider resolved to no class.`);
     }
@@ -79,13 +80,13 @@ export class Providers {
     }
   }
 
-  hasUseClass(klass: Klass) {
+  hasUseClass(klass: Token) {
     const token = getProviderToken(klass);
 
     return !!token && this.useClass.has(token);
   }
 
-  getUseClass(klass: Klass) {
+  getUseClass(klass: Token) {
     const token = getProviderToken(klass);
 
     return token && this.useClass.get(token);

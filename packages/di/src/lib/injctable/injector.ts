@@ -1,10 +1,10 @@
-import { Klass } from '../types';
+import { Token } from '../types';
 import { className, DiError } from '../errors';
 import { getProviderToken } from './provider-token';
 import { providers } from '../container/di.decorator';
 
 
-export function injector<K extends Klass<any>>(klass: K): InstanceType<K> {
+export function injector<K extends Token<any>>(klass: K): InstanceType<K> {
   if (providers.hasInjectable(klass)) {
     return providers.getInstance(klass);
   } else {

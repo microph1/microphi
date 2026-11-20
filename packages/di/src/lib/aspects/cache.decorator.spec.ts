@@ -1,4 +1,4 @@
-import { Cache, CacheSymbol } from './cache.decorator';
+import { Cache, CacheClockSymbol, CacheSymbol } from './cache.decorator';
 
 describe('@Cache', () => {
 
@@ -92,6 +92,31 @@ describe('@Cache', () => {
     new SongDb().sum(1, 2);
 
     expect(spy).toHaveBeenCalledTimes(2);
+  });
+
+  it('should measure the ttl on the instance clock when it has one', () => {
+    const clock = { time: 0, now() { return this.time; } };
+    const calls = vi.fn();
+
+    class Clocked {
+      [CacheClockSymbol] = clock;
+
+      @Cache({ ttl: 10 })
+      read() {
+        calls();
+        return 'value';
+      }
+    }
+
+    const clocked = new Clocked();
+    clocked.read();
+    clock.time = 10;
+    clocked.read();
+    expect(calls).toHaveBeenCalledTimes(1);
+
+    clock.time = 11;
+    clocked.read();
+    expect(calls).toHaveBeenCalledTimes(2);
   });
 
 });

@@ -3,6 +3,7 @@
  */
 
 export * from './lib/store/store';
+export * from './lib/store/store-scheduler';
 export * from './lib/effect/effect';
 export * from './lib/reduce/reduce';
 export * from './lib/operators/cache';

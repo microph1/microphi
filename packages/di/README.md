@@ -132,6 +132,8 @@ class SongDb {
 
 The returned value itself is cached, so for a `Promise` concurrent callers share the same pending call, and a rejection is cached for the `ttl` too. An `Observable` is cached as is: a cold one re-runs its work on every subscription unless it is shared (e.g. `shareReplay(1)`).
 
+The ttl is measured with `Date.now()` unless the instance has a clock under `CacheClockSymbol` (`{ now(): number }`, which any rxjs scheduler satisfies): set it to a `TestScheduler` and the ttl runs on virtual time. `@microphi/store` does this with the store's scheduler.
+
 ## Testing
 
 `TestBed.configure()` resets the container and registers the given providers, so each test starts with fresh singletons and its own overrides. The container itself is module-level state: test files are isolated from each other by the test runner, but tests in the same file must not run concurrently (`it.concurrent`).

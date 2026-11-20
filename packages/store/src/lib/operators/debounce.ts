@@ -3,7 +3,7 @@ import { Class } from 'utility-types';
 import { scanInstance } from '../utilities/scan-instance';
 import { Store } from '../store/store';
 import { Fn, Key } from '../store/types';
-import { MonoTypeOperatorFunction, debounceTime, identity } from 'rxjs';
+import { MonoTypeOperatorFunction, SchedulerLike, debounceTime, identity } from 'rxjs';
 
 const DebounceSymbol = Symbol.for('@DebounceTime');
 
@@ -49,6 +49,6 @@ export function getDebounce<T extends object>(instance: T, key: string): number 
   return debounce;
 }
 
-export function debounceOrNothing<T>(dueTime: number): MonoTypeOperatorFunction<T> {
-  return dueTime ? debounceTime(dueTime) : identity;
+export function debounceOrNothing<T>(dueTime: number, scheduler?: SchedulerLike): MonoTypeOperatorFunction<T> {
+  return dueTime ? debounceTime(dueTime, scheduler) : identity;
 }

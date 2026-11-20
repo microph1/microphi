@@ -181,6 +181,30 @@ track(id: string) {
 
 `@DebounceTime` and `@DelayTime` are read by the store's dispatch pipeline, so they only have an effect on a `Store` subclass.
 
+### Scheduler
+
+`@DebounceTime`, `@DelayTime` and the ttl of `@Cache` run on the store's scheduler: the one passed as the constructor's second argument, else the `StoreScheduler` provided through `@microphi/di`, else rxjs's `asyncScheduler`. In tests, provide a `TestScheduler` and every store keeps time on it, so ttls and delays are driven with marbles instead of real waits:
+
+```typescript
+import { TestScheduler } from '@datakitchen/rxjs-marbles';
+import { injector, TestBed } from '@microphi/di';
+import { StoreScheduler } from '@microphi/store';
+
+beforeEach(() => {
+  TestBed.configure({ providers: [{ provide: StoreScheduler, useClass: TestScheduler }] });
+  scheduler = injector(StoreScheduler) as unknown as TestScheduler;
+  store = new ItemsStore(initialState);
+});
+
+it('should fetch again once the ttl is over', () => {
+  scheduler.run(({ expectObservable }) => {
+    store.dispatch('findAll');
+    scheduler.schedule(() => store.dispatch('findAll'), 1_001);
+    expectObservable(store.state$).toBe('a 1000ms b', { a: first, b: second });
+  });
+});
+```
+
 ## .skills
 
 Automation agents can invoke the following skills when working inside `packages/store`.

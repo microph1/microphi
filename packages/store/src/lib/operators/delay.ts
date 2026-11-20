@@ -3,7 +3,7 @@ import { Class } from 'utility-types';
 import { scanInstance } from '../utilities/scan-instance';
 import { Store } from '../store/store';
 import { Fn, Key } from '../store/types';
-import { MonoTypeOperatorFunction, delay, identity } from 'rxjs';
+import { MonoTypeOperatorFunction, SchedulerLike, delay, identity } from 'rxjs';
 
 const DelaySymbol = Symbol.for('@DelayTime');
 
@@ -49,6 +49,6 @@ export function getDelay<T extends object>(instance: T, key: string): number {
   return delay;
 }
 
-export function delayOrNothing<T>(delayTime: number): MonoTypeOperatorFunction<T> {
-  return delayTime ? delay(delayTime) : identity;
+export function delayOrNothing<T>(delayTime: number, scheduler?: SchedulerLike): MonoTypeOperatorFunction<T> {
+  return delayTime ? delay(delayTime, scheduler) : identity;
 }

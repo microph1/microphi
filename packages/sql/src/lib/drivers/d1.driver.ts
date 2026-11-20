@@ -17,10 +17,12 @@ export interface D1DatabaseLike {
   batch(statements: D1PreparedStatementLike[]): Promise<unknown[]>;
 }
 
-export class D1Driver implements SqlDriver {
+export class D1Driver extends SqlDriver {
   readonly maxParams = 100;
 
-  constructor(private readonly db: D1DatabaseLike) {}
+  constructor(private readonly db: D1DatabaseLike) {
+    super();
+  }
 
   private statement(sql: string, params: SqlValue[] = []): D1PreparedStatementLike {
     const stmt = this.db.prepare(sql);

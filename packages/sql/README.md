@@ -5,13 +5,13 @@ Decorator-driven SQLite storage. Declare tables with `@Entity`, `@PrimaryKey`,
 async storage over Node's built-in `node:sqlite` or Cloudflare D1.
 
 ```sh
-npm install @microphi/sql reflect-metadata
+npm install @microphi/sql @microphi/di reflect-metadata
 ```
 
 ## Entities
 
 ```ts
-import { Column, Entity, JsonColumn, PrimaryKey, SqlStorage, SqliteStorage, SqlDriver } from '@microphi/sql';
+import { Column, Entity, JsonColumn, PrimaryKey, SqlStorage, SqliteStorage } from '@microphi/sql';
 
 @Entity('books')
 export class Book {
@@ -32,11 +32,7 @@ export class Book {
 }
 
 @SqlStorage([Book])
-export class Library extends SqliteStorage {
-  constructor(driver: SqlDriver) {
-    super(driver);
-  }
-}
+export class Library extends SqliteStorage {}
 ```
 
 - Every entity needs exactly one `@PrimaryKey()` (TEXT).
@@ -79,8 +75,40 @@ import { schemaSql } from '@microphi/sql';
 process.stdout.write(schemaSql([Book]));
 ```
 
-Any other SQLite connection works by implementing `SqlDriver`: `all`, `first`, `run`,
-an atomic `batch` and `maxParams`.
+Any other SQLite connection works by extending `SqlDriver`: `all`, `first`, `run`,
+an atomic `batch` and `maxParams` (`close` is optional).
+
+## With @microphi/di
+
+`SqlDriver` is an injectable token and `SqliteStorage` injects it, the way
+`@microphi/endpoint` lets the app provide its `LambdaDefaultHandler`. Make the
+storage `@Injectable()` and provide the driver as a subclass that opens its own
+connection:
+
+```ts
+import { DI, Injectable } from '@microphi/di';
+import { env } from 'cloudflare:workers';
+import { D1Driver, SqlDriver, SqlStorage, SqliteStorage } from '@microphi/sql';
+
+class Db extends D1Driver {
+  constructor() {
+    super(env.DB);
+  }
+}
+
+@SqlStorage([Book])
+@Injectable()
+export class Library extends SqliteStorage {}
+
+@DI({ providers: [{ provide: SqlDriver, useClass: Db }, Library] })
+class App {}
+```
+
+On Node, `class Db extends NodeSqliteDriver { constructor() { super('./data/library.db'); } }`:
+the constructor takes a path as well as an open `DatabaseSync`. In tests, provide a
+`:memory:` driver the same way through `TestBed.configure`.
+
+Without DI, leave the storage undecorated and pass the driver: `new Library(driver)`.
 
 ## Storage API
 

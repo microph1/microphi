@@ -1,8 +1,8 @@
-import { Class } from 'utility-types';
+import { Klass } from './types';
 
 const builtInMethods = Object.keys(Object.getOwnPropertyDescriptors(Object.getPrototypeOf({})));
 
-export function scan<T extends object>(instance: T, cb: (proto: Class<T>, key: string) => void) {
+export function scan<T extends object>(instance: T, cb: (proto: Klass<T>, key: string) => void) {
 
   let proto = Object.getPrototypeOf(instance);
 

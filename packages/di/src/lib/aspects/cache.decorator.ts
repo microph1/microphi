@@ -19,8 +19,20 @@ export interface CacheOptions {
   trackBy?: (...args: any[]) => string|number;
 }
 
+/**
+ * Where `@Cache` reads the time from, instead of `Date`: set it on the instance
+ * to put the ttl on a scheduler's clock (an rxjs `SchedulerLike` fits, a
+ * `TestScheduler` makes it virtual).
+ */
+export const CacheClockSymbol = Symbol('@Cache clock');
+
+export interface CacheClock {
+  now(): number;
+}
+
 interface Cacheable {
   [CacheSymbol]?: CacheMap;
+  [CacheClockSymbol]?: CacheClock;
 }
 
 /**
@@ -58,11 +70,12 @@ export function Cache(options?: CacheOptions): MethodDecorator {
         const id = `${String(property)}:${key}`;
 
         const cached = cache.get(id);
+        const now = (this[CacheClockSymbol] ?? Date).now();
 
         if (cached) {
 
           // check ttl given timestamp
-          const ttl = Date.now() - cached.timestamp;
+          const ttl = now - cached.timestamp;
           const maxTtl = options?.ttl || 300_000; // 5 minutes
 
           if (ttl <= maxTtl) {
@@ -72,7 +85,7 @@ export function Cache(options?: CacheOptions): MethodDecorator {
         }
 
         const retValue = originalFn.apply(this, args);
-        cache.set(id, { value: retValue, timestamp: Date.now() });
+        cache.set(id, { value: retValue, timestamp: now });
         return retValue;
 
       };

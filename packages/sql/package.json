@@ -1,6 +1,6 @@
 {
   "name": "@microphi/sql",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Decorator-driven SQLite storage (@Entity, @Column, @PrimaryKey) over node:sqlite, libSQL/Turso or Cloudflare D1",
   "main": "lib/cjs/index.js",
   "typings": "lib/esm/index.d.ts",

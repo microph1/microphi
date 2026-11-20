@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/microph1/microphi/compare/%40microphi%2Fsql%400.2.1...%40microphi%2Fsql%400.3.0) (2026-11-20)
+
+### Features
+
+* **sql:** add a libSQL/Turso driver and a file migrator ([80418f0](https://github.com/microph1/microphi/commit/80418f075e5e99ece64392cc3992095f2234461d))
+
 ## [0.2.1](https://github.com/microph1/microphi/compare/%40microphi%2Fsql%400.2.0...%40microphi%2Fsql%400.2.1) (2026-11-20)
 
 **Note:** Version bump only for package @microphi/sql

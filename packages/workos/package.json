@@ -1,6 +1,6 @@
 {
   "name": "@microphi/workos",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "WorkOS AuthKit for APIs and Angular apps: verify access tokens, sign in from the browser, and a fake WorkOS for tests and local dev",
   "type": "module",
   "module": "lib/esm/index.js",
@@ -64,11 +64,21 @@
     "rxjs": "^7.8.0"
   },
   "peerDependenciesMeta": {
-    "@angular/common": { "optional": true },
-    "@angular/core": { "optional": true },
-    "@angular/router": { "optional": true },
-    "@workos-inc/authkit-js": { "optional": true },
-    "rxjs": { "optional": true }
+    "@angular/common": {
+      "optional": true
+    },
+    "@angular/core": {
+      "optional": true
+    },
+    "@angular/router": {
+      "optional": true
+    },
+    "@workos-inc/authkit-js": {
+      "optional": true
+    },
+    "rxjs": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@angular/common": "^22.2.5",

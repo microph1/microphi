@@ -17,6 +17,43 @@ export interface CacheOptions {
    * This function has the same arguments as the decorated method
    */
   trackBy?: (...args: any[]) => string|number;
+  /**
+   * Keep a rejected `Promise` / errored `Observable` in the cache for the ttl.
+   * With `false` the entry is evicted when it fails, so the next call runs again.
+   * Default `true`.
+   */
+  cacheErrors?: boolean;
+}
+
+interface ObservableLike {
+  subscribe(observer: { next(v: unknown): void; error(e: unknown): void; complete(): void }): { unsubscribe(): void };
+  pipe(...fns: unknown[]): unknown;
+}
+
+function isObservable(value: any): value is ObservableLike {
+  return typeof value?.subscribe === 'function' && typeof value?.pipe === 'function';
+}
+
+/**
+ * di does not depend on rxjs, so the wrapper is built with the value's own base
+ * class: the topmost constructor in its prototype chain below `Object` (rxjs
+ * `Observable` for a `Subject`, a `BehaviorSubject`, ...), which takes a subscribe function.
+ */
+function onObservableError(source: ObservableLike, onError: () => void): unknown {
+  let proto = Object.getPrototypeOf(source);
+  while (Object.getPrototypeOf(proto) && Object.getPrototypeOf(proto) !== Object.prototype) {
+    proto = Object.getPrototypeOf(proto);
+  }
+  const ObservableCtor = proto.constructor as new (subscribe: (subscriber: any) => () => void) => unknown;
+
+  return new ObservableCtor((subscriber) => {
+    const subscription = source.subscribe({
+      next: (v) => subscriber.next(v),
+      error: (e) => { onError(); subscriber.error(e); },
+      complete: () => subscriber.complete(),
+    });
+    return () => subscription.unsubscribe();
+  });
 }
 
 /**
@@ -40,7 +77,8 @@ interface Cacheable {
  *
  * @remarks
  * The returned value itself is cached, so when the method returns a `Promise` or an `Observable`
- * concurrent callers share the same pending call, and a rejected/errored result is cached too.
+ * concurrent callers share the same pending call, and a rejected/errored result is cached too
+ * unless `cacheErrors: false`.
  * The cache lives on the instance under `CacheSymbol` and is created on first call.
  *
  * @example
@@ -84,8 +122,22 @@ export function Cache(options?: CacheOptions): MethodDecorator {
 
         }
 
-        const retValue = originalFn.apply(this, args);
-        cache.set(id, { value: retValue, timestamp: now });
+        let retValue = originalFn.apply(this, args);
+        const entry: CacheEntry = { value: retValue, timestamp: now };
+
+        if (options?.cacheErrors === false) {
+          // only evict our own entry: a later call may already have replaced it
+          const evict = () => { if (cache.get(id) === entry) cache.delete(id); };
+
+          if (typeof retValue?.then === 'function') {
+            // a separate branch: the caller still gets the rejection, and it is not reported as unhandled
+            retValue.then(undefined, evict);
+          } else if (isObservable(retValue)) {
+            retValue = entry.value = onObservableError(retValue, evict);
+          }
+        }
+
+        cache.set(id, entry);
         return retValue;
 
       };

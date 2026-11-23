@@ -1,3 +1,5 @@
+import { firstValueFrom, Observable, of, throwError } from 'rxjs';
+
 import { Cache, CacheClockSymbol, CacheSymbol } from './cache.decorator';
 
 describe('@Cache', () => {
@@ -77,6 +79,65 @@ describe('@Cache', () => {
     await expect(instance.failing('x')).rejects.toThrow('not found x');
 
     expect(spy).toHaveBeenCalledTimes(1);
+  });
+
+  describe('with cacheErrors: false', () => {
+
+    let fail: boolean;
+
+    class Keyed {
+
+      @Cache({ ttl: 10, cacheErrors: false })
+      async describe(id: string): Promise<string> {
+        spy(id);
+        if (fail) throw new Error('no api key');
+        return `text:${id}`;
+      }
+
+      @Cache({ ttl: 10, cacheErrors: false })
+      stream(id: string): Observable<string> {
+        spy(id);
+        return fail ? throwError(() => new Error('no api key')) : of(`text:${id}`);
+      }
+    }
+
+    let keyed: Keyed;
+
+    beforeEach(() => {
+      fail = true;
+      keyed = new Keyed();
+    });
+
+    it('should evict a rejected promise so the next call runs again', async () => {
+      await expect(keyed.describe('x')).rejects.toThrow('no api key');
+      fail = false;
+
+      await expect(keyed.describe('x')).resolves.toBe('text:x');
+      await expect(keyed.describe('x')).resolves.toBe('text:x');
+      expect(spy).toHaveBeenCalledTimes(2);
+    });
+
+    it('should still share the pending promise with concurrent callers', async () => {
+      const first = keyed.describe('x');
+      expect(keyed.describe('x')).toBe(first);
+      await expect(first).rejects.toThrow('no api key');
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should evict an errored observable so the next call runs again', async () => {
+      await expect(firstValueFrom(keyed.stream('x'))).rejects.toThrow('no api key');
+      fail = false;
+
+      await expect(firstValueFrom(keyed.stream('x'))).resolves.toBe('text:x');
+      await expect(firstValueFrom(keyed.stream('x'))).resolves.toBe('text:x');
+      expect(spy).toHaveBeenCalledTimes(2);
+    });
+
+    it('should return a real Observable', () => {
+      fail = false;
+      expect(keyed.stream('x')).toBeInstanceOf(Observable);
+    });
+
   });
 
   it('should cache synchronous return values keyed by serialized arguments', () => {

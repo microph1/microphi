@@ -14,7 +14,7 @@ Decorator-based DI container. Full docs: [README.md](README.md); every error cod
 
 ## Aspects
 
-`@Before(fn)`, `@After(fn)` and `@Cache({ ttl, trackBy })` are method decorators that work on any class, injectable or not. `@Cache` caches the returned value itself: a Promise is shared by concurrent callers, and a rejection is cached for the `ttl`. The ttl uses `Date.now()` unless the instance sets a `{ now() }` clock under `CacheClockSymbol` (e.g. a `TestScheduler`): never sleep in a test to expire it.
+`@Before(fn)`, `@After(fn)` and `@Cache({ ttl, trackBy })` are method decorators that work on any class, injectable or not. `@Cache` caches the returned value itself: a Promise is shared by concurrent callers, and a rejection is cached for the `ttl` unless `cacheErrors: false` (then a failed Promise/Observable is evicted and the next call retries). The ttl uses `Date.now()` unless the instance sets a `{ now() }` clock under `CacheClockSymbol` (e.g. a `TestScheduler`): never sleep in a test to expire it.
 
 ## Testing
 

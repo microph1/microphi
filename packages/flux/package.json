@@ -44,7 +44,7 @@
   "peerDependencies": {
     "@microphi/di": "^2.3.0",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.2"
   },
   "sideEffects": false,
   "homepage": "https://github.com/microph1/microphi/tree/master/packages/flux#readme",

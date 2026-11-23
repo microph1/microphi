@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.4](https://github.com/microph1/microphi/compare/%40microphi%2Fendpoint%402.5.3...%40microphi%2Fendpoint%402.5.4) (2026-11-23)
+
+**Note:** Version bump only for package @microphi/endpoint
+
 ## [2.5.3](https://github.com/microph1/microphi/compare/%40microphi%2Fendpoint%402.5.2...%40microphi%2Fendpoint%402.5.3) (2026-11-20)
 
 **Note:** Version bump only for package @microphi/endpoint

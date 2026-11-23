@@ -1,6 +1,6 @@
 {
   "name": "@microphi/sql",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Decorator-driven SQLite storage (@Entity, @Column, @PrimaryKey) over node:sqlite, libSQL/Turso or Cloudflare D1",
   "main": "lib/cjs/index.js",
   "typings": "lib/esm/index.d.ts",
@@ -69,7 +69,7 @@
   },
   "devDependencies": {
     "@libsql/client": "^0.18.0",
-    "@microphi/di": "^2.15.0",
+    "@microphi/di": "^2.16.0",
     "miniflare": "^4.0.0",
     "reflect-metadata": "^0.2.2"
   },

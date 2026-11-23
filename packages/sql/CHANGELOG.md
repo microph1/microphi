@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1](https://github.com/microph1/microphi/compare/%40microphi%2Fsql%400.3.0...%40microphi%2Fsql%400.3.1) (2026-11-23)
+
+**Note:** Version bump only for package @microphi/sql
+
 # [0.3.0](https://github.com/microph1/microphi/compare/%40microphi%2Fsql%400.2.1...%40microphi%2Fsql%400.3.0) (2026-11-20)
 
 ### Features

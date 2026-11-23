@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.16.0](https://github.com/microph1/microphi/compare/%40microphi%2Fdi%402.15.0...%40microphi%2Fdi%402.16.0) (2026-11-23)
+
+### Features
+
+* **di:** add cacheErrors option to @Cache ([92d65ca](https://github.com/microph1/microphi/commit/92d65ca99a10987d54cb8ed9ee31b174ab346950))
+
 # [2.15.0](https://github.com/microph1/microphi/compare/%40microphi%2Fdi%402.14.0...%40microphi%2Fdi%402.15.0) (2026-11-20)
 
 ### Features
